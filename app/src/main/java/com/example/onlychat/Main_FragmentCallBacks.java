@@ -1,2 +1,5 @@
-package com.example.onlychat;public interface Main_FragmentCallBacks {
+package com.example.onlychat;
+
+public interface Main_FragmentCallBacks {
+//    public void onMsgFromMainToFragment(String strValue);
 }

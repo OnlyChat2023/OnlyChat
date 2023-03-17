@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_dark">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/chat_search_box"
+        android:hint="Search by name"
+        android:layout_margin="15dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:drawablePadding="15dp"
+        android:drawableLeft="@drawable/magnifying_glass_solid"
+        android:fontFamily="@font/montserratregular"
+        android:textSize="14dp"
+        android:background="@drawable/search_box"/>
+
+    <ListView
+        android:id="@+id/chat_content_listview"
+        android:layout_width="match_parent"
+        android:layout_margin="15dp"
+        android:dividerHeight="15dp"
+        android:divider="@null"
+        android:layout_height="match_parent"/>
+</LinearLayout>
