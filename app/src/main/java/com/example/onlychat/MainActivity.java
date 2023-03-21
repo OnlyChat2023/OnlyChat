@@ -11,7 +11,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (isLogin == false) {
-            setContentView(R.layout.register_form);
+            setContentView(R.layout.otp_form);
         }
     }
 }
