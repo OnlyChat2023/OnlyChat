@@ -19,13 +19,14 @@
             android:paddingEnd="20dp"
             tools:ignore="MissingConstraints">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/avatar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:src="@drawable/avatar_img"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
+                app:shapeAppearanceOverlay="@style/roundedImagesStyle"
             />
 
             <ImageButton
