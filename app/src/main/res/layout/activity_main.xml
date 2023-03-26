@@ -71,28 +71,44 @@
                 android:inputType="number"
                 android:textSize="15sp" />
 
-            <EditText
-                android:id="@+id/passwordInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/phoneNumberInput"
+            <RelativeLayout
+                android:id="@+id/passwordGroup"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/auth_input"
-                android:fontFamily="@font/montserrat_semibold"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:paddingStart="15dp"
-                android:paddingTop="12dp"
-                android:paddingEnd="15dp"
-                android:paddingBottom="13dp"
-                android:textColor="@color/white"
-                android:textColorHint="#848484"
-                android:textSize="15sp" />
+                android:layout_below="@id/phoneNumberInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/passwordInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/auth_input"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:paddingStart="15dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="13dp"
+                    android:textColor="@color/white"
+                    android:textColorHint="#848484"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:id="@+id/showPassword"
+                    android:layout_alignEnd="@id/passwordInput"
+                    android:layout_centerInParent="true"
+                    android:layout_marginEnd="18dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/eyes_icon" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/rememberCheck"
-                android:layout_below="@id/passwordInput"
+                android:layout_below="@id/passwordGroup"
                 android:gravity="center_vertical"
                 android:layout_marginTop="15dp"
                 android:layout_width="wrap_content"
@@ -111,8 +127,9 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/forgotPasswordBtn"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@id/passwordInput"
+                android:layout_below="@id/passwordGroup"
                 android:layout_alignTop="@id/rememberCheck"
                 android:layout_alignBottom="@id/rememberCheck"
                 android:layout_width="wrap_content"
