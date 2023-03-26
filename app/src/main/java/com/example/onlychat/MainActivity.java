@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(MainActivity.this, edit_profile.class);
+        Intent intent = new Intent(MainActivity.this, groupchat_setting.class);
 //        intent.putExtras(bundle);
         startActivity(intent);
     }

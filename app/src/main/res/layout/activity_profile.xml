@@ -35,10 +35,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/avatar"
-                android:text="@string/phogg_tran"
-                android:textSize="35sp"
                 android:layout_centerHorizontal="true"
-                />
+                android:fontFamily="@font/montserrat_bold2"
+                android:text="@string/phogg_tran"
+                android:textColor="@color/white"
+                android:textSize="35sp" />
 
             <LinearLayout
                 android:id="@+id/btn_section"
@@ -50,31 +51,37 @@
 
                 <Button
                     android:id="@+id/button2"
-                    android:layout_width="114dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/auth_button"
-                    android:drawableEnd="@drawable/ic_add"
-                    android:text="Add friend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="43dp"
                     android:layout_marginEnd="15dp"
-                    android:textSize="13sp"
-                    android:padding="5dp"
+                    android:background="@drawable/profile_btn_add"
+                    android:drawableEnd="@drawable/ic_add_friend"
+                    android:fontFamily="@font/montserrat_semibold2"
+                    android:padding="10dp"
+                    android:text="Add friend"
+                    android:textSize="12sp"
                     tools:ignore="MissingConstraints"
                     tools:layout_editor_absoluteX="77dp"
                     tools:layout_editor_absoluteY="237dp" />
 
                 <Button
                     android:id="@+id/button3"
-                    android:layout_width="129dp"
-                    android:layout_height="49dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="43dp"
                     android:drawableLeft="@drawable/ic_chat"
                     android:text="Send chat"
+                    android:textColor="#44216F"
+                    android:background="@drawable/profile_btn_send_chat"
                     android:textSize="12sp"
+                    android:fontFamily="@font/montserrat_semibold2"
+                    android:padding="12dp"
                     tools:ignore="MissingConstraints"
                     tools:layout_editor_absoluteX="226dp"
                     tools:layout_editor_absoluteY="237dp" />
             </LinearLayout>
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
+                android:fontFamily="@font/montserrat_medium"
                 android:layout_below="@id/btn_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

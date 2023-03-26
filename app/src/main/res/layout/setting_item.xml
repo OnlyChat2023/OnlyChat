@@ -10,23 +10,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
-        android:background="#353546"
+        android:background="#181828"
 
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:paddingLeft="2dp"
         tools:ignore="MissingConstraints,UseCompoundDrawables">
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:background="#44216F"
-            android:padding="10dp"
-            android:layout_marginStart="10dp"
-
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="9dp" />
 
         <TextView
             android:id="@+id/content"
@@ -40,6 +29,19 @@
             android:textSize="20sp"
             tools:layout_editor_absoluteX="77dp"
             tools:layout_editor_absoluteY="16dp" />
+
+        <View android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="10dp"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="9dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
