@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="283dp"
+    android:layout_height="match_parent"
+
+    android:layout_gravity="center"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:background="#242435"
+
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="2dp"
+        tools:ignore="MissingConstraints,UseCompoundDrawables">
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/avatar_img"
+            android:padding="5dp"
+            android:layout_marginStart="10dp"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="9dp" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Robert Granne"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/montserrat_medium"
+            android:layout_marginTop="10dp"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            tools:layout_editor_absoluteX="77dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <View android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/ic_chat"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_chat_white"
+            android:padding="10dp"
+            android:layout_marginStart="10dp"
+
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="9dp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
