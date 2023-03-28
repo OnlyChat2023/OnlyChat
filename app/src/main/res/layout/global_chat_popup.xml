@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="300dp"
     android:layout_height="500dp"
-    android:background="@drawable/popup_layout"
+    android:background="@drawable/global_chat_popup_layout"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -20,7 +20,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:fontFamily="@font/montserrat"
+        android:fontFamily="@font/montserrat_light"
         android:text="Khang Dinh"
         android:textColor="#A9A9A9"
         android:textSize="18sp" />
@@ -43,35 +43,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/a1" />
+             />
 
         <ImageView
             android:id="@+id/imageView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/a2" />
+            />
 
         <ImageView
             android:id="@+id/imageView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/a3" />
+             />
 
         <ImageView
             android:id="@+id/imageView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/a4" />
+             />
 
         <ImageView
             android:id="@+id/imageView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/a5" />
+             />
     </LinearLayout>
 
 </LinearLayout>

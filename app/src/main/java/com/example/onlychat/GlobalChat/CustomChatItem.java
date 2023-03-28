@@ -24,7 +24,7 @@ public class CustomChatItem extends ArrayAdapter<String> {
     TextView messageTime;
 
     public CustomChatItem(Context context,Integer[] avatars, String[] names,String[] messages,String[] times){
-        super(context,R.layout.custom_message,names);
+        super(context,R.layout.global_chat_custom_chat_item,names);
         this.context = context;
         this.avatars = avatars;
         this.names = names;
@@ -35,7 +35,7 @@ public class CustomChatItem extends ArrayAdapter<String> {
     public View getView(int position, View convertView, ViewGroup parent){
         View row;
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-        row = inflater.inflate(R.layout.custom_message,null);
+        row = inflater.inflate(R.layout.global_chat_custom_chat_item,null);
         messageAvatar = (ImageView) row.findViewById(R.id.messageAvatar);
         messageName = (TextView) row.findViewById(R.id.messageName);
         messageContent = (TextView) row.findViewById(R.id.messageContent);
