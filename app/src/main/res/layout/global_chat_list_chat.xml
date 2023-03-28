@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:paddingTop="20dp"
+    android:background="#181828"
+    android:paddingHorizontal="18dp">
+
+    <RelativeLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="GLOBAL CHAT CHANEL"
+            android:textColor="#D8D8D8"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            app:srcCompat="@drawable/global_chat_icon" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/searchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/titleLayout"
+        android:layout_marginTop="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="85dp"
+            android:background="@drawable/global_chat_searchbackground"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="18dp">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/global_chat_searchicon" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="12dp"
+                android:background="@null"
+                android:fontFamily="@font/montserrat_medium"
+                android:hint="Search for your chat..."
+                android:maxLines="1"
+                android:textColorHint="#B4B4BA"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentEnd="true"
+            android:onClick="onButtonShowPopupWindowClick"
+            app:srcCompat="@drawable/global_chat_avatar" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/addLayout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_below="@+id/searchLayout"
+        android:paddingRight="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="MESSAGES"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            app:srcCompat="@drawable/global_chat_addicon" />
+    </RelativeLayout>
+    <ListView
+        android:id="@+id/listMessage"
+        android:layout_below="@+id/addLayout"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>
