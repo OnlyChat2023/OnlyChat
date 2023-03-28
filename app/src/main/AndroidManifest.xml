@@ -29,9 +29,11 @@
         <activity
             android:name=".GlobalChat.ListChat"
             android:exported="true" />
-
         <activity
             android:name=".GlobalChat.ListMessage.ListMessage"
+            android:exported="true" />
+        <activity
+            android:name=".GlobalChat.ListMessage.Options.Options"
             android:exported="true" />
 
         <meta-data
