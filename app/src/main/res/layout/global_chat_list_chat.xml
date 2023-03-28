@@ -94,7 +94,7 @@
             android:textSize="15sp" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/addIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
