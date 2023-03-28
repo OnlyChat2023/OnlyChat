@@ -51,7 +51,6 @@ public class RegisterActivity extends AppCompatActivity {
                 {
                     passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                     passwordConfirmInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-
                 }
                 else {
                     passwordInput.setTransformationMethod(PasswordTransformationMethod.getInstance());
