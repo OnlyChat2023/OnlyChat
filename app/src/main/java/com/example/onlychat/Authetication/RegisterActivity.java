@@ -1,4 +1,4 @@
-package com.example.onlychat;
+package com.example.onlychat.Authetication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.onlychat.MainActivity;
+import com.example.onlychat.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -51,7 +54,6 @@ public class RegisterActivity extends AppCompatActivity {
                 {
                     passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                     passwordConfirmInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-
                 }
                 else {
                     passwordInput.setTransformationMethod(PasswordTransformationMethod.getInstance());
