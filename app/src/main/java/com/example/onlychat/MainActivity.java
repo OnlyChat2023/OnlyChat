@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.onlychat.Authetication.ForgotActivity;
 import com.example.onlychat.Authetication.RegisterActivity;
 import com.example.onlychat.EditProfile.EditProfile;
+import com.example.onlychat.GroupChat.GroupChatSetting;
 import com.example.onlychat.Profile.Profile;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-//        Intent intent = new Intent(MainActivity.this, EditProfile.class);
-//        startActivity(intent);
+        Intent intent = new Intent(MainActivity.this, GroupChatSetting.class);
+        startActivity(intent);
 
         if (isLogin == false) {
             setContentView(R.layout.activity_main);

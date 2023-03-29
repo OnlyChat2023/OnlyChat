@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="283dp"
+    android:background="@drawable/groupchat_dialog"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:id="@+id/memberL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="Members (4)"
+        android:textColor="@color/white"
+        android:textSize="16dp" />
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="290dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"/>
+</LinearLayout>
