@@ -8,13 +8,14 @@
     tools:context=".MainActivity"
     android:paddingTop="20dp"
     android:background="#181828"
-    android:paddingHorizontal="18dp">
+    >
 
     <RelativeLayout
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="15dp">
+        android:paddingHorizontal="18dp"
+        android:paddingEnd="33dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -37,6 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@+id/titleLayout"
+        android:paddingHorizontal="18dp"
         android:layout_marginTop="20dp">
 
         <LinearLayout
@@ -72,7 +74,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentEnd="true"
-            android:onClick="onButtonShowPopupWindowClick"
             app:srcCompat="@drawable/global_chat_avatar" />
 
     </RelativeLayout>
@@ -82,7 +83,8 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_below="@+id/searchLayout"
-        android:paddingRight="15dp">
+        android:paddingHorizontal="18dp"
+        android:paddingEnd="36dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -95,8 +97,8 @@
 
         <ImageView
             android:id="@+id/addIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             app:srcCompat="@drawable/global_chat_addicon" />
@@ -106,5 +108,7 @@
         android:layout_below="@+id/addLayout"
         android:scrollbars="none"
         android:layout_width="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
         android:layout_height="match_parent"/>
 </RelativeLayout>
