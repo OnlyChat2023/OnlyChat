@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Profile.Profile">
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/avatar_img"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="10dp"
+                />
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/avatar"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/montserrat_bold2"
+                android:text="Phong Tran"
+                android:textColor="@color/white"
+                android:textSize="35sp" />
+
+            <LinearLayout
+                android:id="@+id/btn_section"
+                android:layout_below="@id/username"
+                android:layout_marginTop="15dp"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="43dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/profile_btn_add"
+                    android:drawableEnd="@drawable/ic_add_friend"
+                    android:fontFamily="@font/montserrat_semibold2"
+                    android:padding="10dp"
+                    android:text="Add friend"
+                    android:textSize="12sp"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteX="77dp"
+                    tools:layout_editor_absoluteY="237dp" />
+
+                <Button
+                    android:id="@+id/button3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="43dp"
+                    android:drawableLeft="@drawable/ic_chat"
+                    android:text="Send chat"
+                    android:textColor="#44216F"
+                    android:background="@drawable/profile_btn_send_chat"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/montserrat_semibold2"
+                    android:padding="12dp"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteX="226dp"
+                    tools:layout_editor_absoluteY="237dp" />
+            </LinearLayout>
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_below="@id/btn_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabSelectedTextColor="@color/my_purple"/>
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager"
+                android:layout_below="@id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="500dp" />
+        </RelativeLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
