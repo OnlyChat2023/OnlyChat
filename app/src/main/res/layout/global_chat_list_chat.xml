@@ -72,7 +72,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentEnd="true"
-            android:onClick="onButtonShowPopupWindowClick"
             app:srcCompat="@drawable/global_chat_avatar" />
 
     </RelativeLayout>
