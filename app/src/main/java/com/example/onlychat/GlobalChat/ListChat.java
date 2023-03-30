@@ -22,17 +22,37 @@ public class ListChat extends AppCompatActivity {
     ImageView profileImage;
     ImageView addIcon;
     String names[] = {
-            "Anonymous","Anonymous Private","Anonymous Publish"
+            "Anonymous","Anonymous Private","Anonymous Publish",
+            "Anonymous","Anonymous Private","Anonymous Publish",
+            "Anonymous","Anonymous Private","Anonymous Publish",
+            "Anonymous","Anonymous Private","Anonymous Publish",
+            "Anonymous","Anonymous Private","Anonymous Publish",
+            "Anonymous","Anonymous Private","Anonymous Publish",
     };
     Integer avatars[]={
-            R.drawable.global_chat_message_avatar,R.drawable.global_chat_message_avatar,R.drawable.global_chat_message_avatar
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
     };
     String messages[] = {
-            "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
     };
-    String times[]={"2:00 PM","4:00 PM","6:00 PM"};
+    String times[]={
+            "2:00 PM","4:00 PM","6:00 PM",
+            "2:00 PM","4:00 PM","6:00 PM",
+            "2:00 PM","4:00 PM","6:00 PM",
+            "2:00 PM","4:00 PM","6:00 PM",
+            "2:00 PM","4:00 PM","6:00 PM",
+            "2:00 PM","4:00 PM","6:00 PM",
+    };
 
     Integer avatarsImage[] = {
 //            R.drawable.a1,

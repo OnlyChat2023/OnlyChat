@@ -5,7 +5,9 @@
     android:layout_height="500dp"
     android:background="@drawable/global_chat_popup_layout"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:paddingVertical="16dp"
+    android:paddingHorizontal="22dp"
+    >
 
     <TextView
         android:layout_width="match_parent"
@@ -14,7 +16,7 @@
         android:textColor="#ffffff"
         android:fontFamily="@font/montserrat_semibold"
         android:textSize="18sp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="20dp"
         />
 
     <ListView

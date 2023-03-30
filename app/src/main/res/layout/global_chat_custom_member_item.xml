@@ -27,8 +27,8 @@
 
     <ImageView
         android:id="@+id/imageView22"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         app:srcCompat="@drawable/global_chat_direct_chat_icon" />
