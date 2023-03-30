@@ -1,12 +1,18 @@
 package com.example.onlychat.GlobalChat;
 
+import android.content.Context;
 import android.app.Activity;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -55,13 +61,14 @@ public class ListChat extends AppCompatActivity {
     };
 
     Integer avatarsImage[] = {
-//            R.drawable.a1,
-//            R.drawable.a1, R.drawable.a2, R.drawable.a3, R.drawable.a4, R.drawable.a5,
-//            R.drawable.a6, R.drawable.a7, R.drawable.a8, R.drawable.a9, R.drawable.a10,
-//            R.drawable.a11, R.drawable.a12, R.drawable.a13, R.drawable.a14, R.drawable.a15,
-//            R.drawable.a16,R.drawable.a17, R.drawable.a18, R.drawable.a19, R.drawable.a20,
-//            R.drawable.a21, R.drawable.a22, R.drawable.a23, R.drawable.a24, R.drawable.a25,
+            R.raw.a_1, R.raw.a_2, R.raw.a_3, R.raw.a_4, R.raw.a_5,
+            R.raw.a_6, R.raw.a_7, R.raw.a_8, R.raw.a_9, R.raw.a_10,
+            R.raw.a_11, R.raw.a_12, R.raw.a_13, R.raw.a_14, R.raw.a_15,
+            R.raw.a_16,R.raw.a_17, R.raw.a_18, R.raw.a_19, R.raw.a_20,
+            R.raw.a_21, R.raw.a_22, R.raw.a_23, R.raw.a_24, R.raw.a_25,
     };
+
+    GridView androidGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,9 +132,17 @@ public class ListChat extends AppCompatActivity {
 
                 // Popup
                 View popupView = inflater.inflate(R.layout.global_chat_popup, null);
+                androidGridView = (GridView) popupView.findViewById(R.id.gridview_android_example);
+                androidGridView.setAdapter(new ImageAdapterGridView(popupView.getContext()));
+
+                androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                    }
+                });
+
                 boolean focusable = true; // lets taps outside the popup also dismiss it
                 final PopupWindow popupWindow = new PopupWindow(popupView,900,1200,focusable);
-                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
@@ -136,6 +151,7 @@ public class ListChat extends AppCompatActivity {
                     }
                 });
 
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
             }
         });
 
@@ -169,5 +185,39 @@ public class ListChat extends AppCompatActivity {
 
     }
 
+    public class ImageAdapterGridView extends BaseAdapter {
+        private Context mContext;
+
+        public ImageAdapterGridView(Context c) {
+            mContext = c;
+        }
+
+        public int getCount() {
+            return avatarsImage.length;
+        }
+
+        public Object getItem(int position) {
+            return null;
+        }
+
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ImageView mImageView;
+
+            if (convertView == null) {
+                mImageView = new ImageView(mContext);
+                mImageView.setLayoutParams(new GridView.LayoutParams(160, 160));
+                mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                mImageView.setPadding(16, 16, 16, 16);
+            } else {
+                mImageView = (ImageView) convertView;
+            }
+            mImageView.setImageResource(avatarsImage[position]);
+            return mImageView;
+        }
+    }
 }
 

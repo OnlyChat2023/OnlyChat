@@ -22,6 +22,9 @@
             android:name=".Profile.Profile"
             android:exported="false" />
         <activity
+            android:name=".LockActivity"
+            android:exported="false" />
+        <activity
             android:name=".Authetication.ForgotActivity"
             android:exported="false" />
         <activity
