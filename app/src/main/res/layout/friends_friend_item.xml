@@ -3,13 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:gravity="center_vertical"
-    android:background="@drawable/global_chat_chat_item_background"
     android:layout_height="wrap_content"
+    android:paddingVertical="14dp"
     >
 
     <ImageView
-
-        android:id="@+id/messageAvatar"
+        android:id="@+id/avatar"
         android:layout_width="45dp"
         android:layout_height="45dp"
         />
@@ -18,37 +17,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="14dp"
-        android:layout_toRightOf="@+id/messageAvatar"
+        android:layout_toRightOf="@+id/avatar"
         android:orientation="vertical"
         android:paddingRight="80dp">
 
         <TextView
-            android:id="@+id/messageName"
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_medium"
-            android:text="Anonymous"
-            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Adam M.Mathew"
             android:textColor="@color/white"
+            android:layout_marginBottom="5dp"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/messageContent"
+            android:id="@+id/phoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_light"
-            android:text="Yes, I was working on it last night and..."
-            android:textColor="#FFFFFF"
+            android:text="0976382676"
+            android:textColor="#A9A9A9"
             android:textSize="12sp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/messageTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/more"
+        android:layout_width="24dp"
+        android:layout_height="26dp"
+        android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:fontFamily="@font/montserrat_light"
-        android:text="2:00 PM"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
+        app:srcCompat="@drawable/friends_more_icon" />
+
+
 </RelativeLayout>

@@ -15,6 +15,9 @@ import android.widget.TextView;
 import com.example.onlychat.Authetication.ForgotActivity;
 import com.example.onlychat.Authetication.RegisterActivity;
 import com.example.onlychat.GlobalChat.ListChat;
+import com.example.onlychat.EditProfile.EditProfile;
+import com.example.onlychat.GroupChat.GroupChatSetting;
+import com.example.onlychat.Profile.Profile;
 
 public class MainActivity extends AppCompatActivity {
     private final Boolean isLogin = false;
@@ -29,9 +32,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Intent listChat = new Intent(this, ListChat.class);
-        startActivity(listChat);
 
 //        if (isLogin == false) {
 //            setContentView(R.layout.activity_main);

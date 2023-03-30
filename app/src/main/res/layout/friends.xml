@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#181828"
+    android:paddingHorizontal="14dp"
+    android:orientation="vertical"
+    android:paddingTop="20dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Friends"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textColor="#ffffff"
+        android:textSize="40sp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100 available"
+        android:textColor="#CACACA"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/montserrat_light"
+        />
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            app:tabIndicatorColor="#7124CF"
+            android:layout_marginTop="30dp"
+            app:tabTextAppearance="@style/MineCustomTabText"
+            app:tabRippleColor="@null"
+            app:tabTextColor="#A9A9A9"
+            app:tabSelectedTextColor="@color/white"
+            android:layout_height="wrap_content">
+
+        </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPaper"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

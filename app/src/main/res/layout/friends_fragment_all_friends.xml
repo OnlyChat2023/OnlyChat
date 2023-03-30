@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Friends.AllFriends.AllFriends">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/friends_search_background"
+        >
+
+        <ImageView
+            android:id="@+id/imageView21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/friends_search_icon" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imageView21"
+            android:hint="Search by name..."
+            android:textColorHint="#A9A9A9"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:fontFamily="@font/montserrat_light"
+            android:textColor="#000"
+            android:textSize="15sp" />
+    </RelativeLayout>
+    <ListView
+        android:id="@+id/listFriends"
+        android:layout_marginTop="15dp"
+        android:scrollbars="none"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+
+</LinearLayout>
