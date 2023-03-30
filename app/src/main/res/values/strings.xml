@@ -1,12 +1,8 @@
 <resources>
     <string name="app_name">OnlyChat</string>
-<<<<<<< HEAD
     <string name="all_friends">All friends</string>
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
     <string name="wednesday">Wednesday</string>
-=======
->>>>>>> 6b62b11ce19a99c4dfba55742a3eb6359c734643
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
