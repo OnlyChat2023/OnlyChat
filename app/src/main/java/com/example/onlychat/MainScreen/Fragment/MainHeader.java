@@ -1,4 +1,4 @@
-package com.example.onlychat;
+package com.example.onlychat.MainScreen.Fragment;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.view.View;
@@ -8,8 +8,14 @@ import android.widget.LinearLayout;
 import androidx.fragment.app.Fragment;
 import android.util.Log;
 
+import com.example.onlychat.MainActivity;
+import com.example.onlychat.MainScreen.Interface.Main_FragmentCallBacks;
+import com.example.onlychat.MainScreen.Interface.Main_MainCallBacks;
+import com.example.onlychat.MainScreen.MainScreen;
+import com.example.onlychat.R;
+
 public class MainHeader extends Fragment implements Main_FragmentCallBacks {
-    MainActivity main;
+    MainScreen main;
     TextView txtHeaderTitle, txtSubTitle;
 
     public static MainHeader newInstance(String strArg1) {
@@ -26,7 +32,7 @@ public class MainHeader extends Fragment implements Main_FragmentCallBacks {
         if (!(getActivity() instanceof Main_MainCallBacks)) {
             throw new IllegalStateException("Activity must implement MainCallbacks");
         }
-        main = (MainActivity) getActivity(); // use this reference to invoke main callbacks
+        main = (MainScreen) getActivity(); // use this reference to invoke main callbacks
     }
 
     @Override

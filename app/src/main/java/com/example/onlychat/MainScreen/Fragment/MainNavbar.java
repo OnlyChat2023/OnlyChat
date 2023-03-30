@@ -1,18 +1,23 @@
-package com.example.onlychat;
+package com.example.onlychat.MainScreen.Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Button;
 import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.onlychat.MainActivity;
+import com.example.onlychat.MainScreen.Interface.Main_FragmentCallBacks;
+import com.example.onlychat.MainScreen.Interface.Main_MainCallBacks;
+import com.example.onlychat.MainScreen.MainScreen;
+import com.example.onlychat.R;
+
 public class MainNavbar extends Fragment implements Main_FragmentCallBacks {
-    MainActivity main;
+    MainScreen main;
     Button btnChat, btnGroupChat, btnGlobalChat, btnBotChat, btnFriends;
 
     public static MainNavbar newInstance(String strArg1) {
@@ -29,7 +34,7 @@ public class MainNavbar extends Fragment implements Main_FragmentCallBacks {
         if (!(getActivity() instanceof Main_MainCallBacks)) {
             throw new IllegalStateException("Activity must implement MainCallbacks");
         }
-        main = (MainActivity) getActivity(); // use this reference to invoke main callbacks
+        main = (MainScreen) getActivity(); // use this reference to invoke main callbacks
     }
 
     @Override

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DirectMessage.Option.OptionActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/background_dark">
+
+        <Button
+            android:id="@+id/chat_option_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="@color/background_dark"
+            android:stateListAnimator="@null"
+            android:drawableLeft="@drawable/chevron_left_solid"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_weight="0"
+                android:id="@+id/chat_option_avatar"
+                android:layout_marginHorizontal="10dp"
+                android:background="@color/white"
+                android:layout_gravity="center"
+                app:shapeAppearanceOverlay="@style/circle"
+                />
+            <TextView
+                android:id="@+id/chat_option_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserratsemibold"
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:text="Bill Gates"
+                android:gravity="center"
+                android:layout_marginVertical="5dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:paddingHorizontal="65dp">
+
+                <Button
+                    android:id="@+id/chat_option_btn_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/dm_option_icon_nickname"
+                    android:text="nickname"
+                    android:textAllCaps="false"
+                    android:textSize="10sp"
+                    android:stateListAnimator="@null"
+                    android:textColor="#FAF4FF"
+                    android:fontFamily="@font/montserratregular"
+                    android:backgroundTint="@color/background_dark"
+                    android:layout_gravity="center"/>
+
+                <Button
+                    android:id="@+id/chat_option_btn_profile"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawableTop="@drawable/dm_option_icon_profile"
+                    android:backgroundTint="@color/background_dark"
+                    android:text="personal page"
+                    android:textAllCaps="false"
+                    android:stateListAnimator="@null"
+                    android:textColor="#FAF4FF"
+                    android:fontFamily="@font/montserratregular"
+                    android:textSize="10sp"
+                    android:layout_gravity="center" />
+
+                <Button
+                    android:id="@+id/chat_option_btn_noify"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="#FAF4FF"
+                    android:stateListAnimator="@null"
+                    android:drawableTop="@drawable/dm_option_icon_on_notification"
+                    android:backgroundTint="@color/background_dark"
+                    android:text="off notification"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/montserratregular"
+                    android:textSize="10sp"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
