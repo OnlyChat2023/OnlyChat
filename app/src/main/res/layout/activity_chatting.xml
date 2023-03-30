@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChattingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/background_dark">
+
+        <LinearLayout
+            android:id="@+id/chat_header"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@drawable/header_chatiing"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/chat_header_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:layout_marginRight="10dp"
+                android:backgroundTint="@color/background_dark"
+                android:stateListAnimator="@null"
+                android:drawableLeft="@drawable/chevron_left_solid"
+                />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_weight="0"
+                android:id="@+id/chat_header_avatar"
+                android:layout_marginHorizontal="10dp"
+                android:background="@color/white"
+                app:shapeAppearanceOverlay="@style/circle"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_weight="5">
+
+                <TextView
+                    android:id="@+id/chat_header_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Albert Wilson"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/montserratbold"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/chat_header_online"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Online"
+                    android:textColor="#8DF054"
+                    android:fontFamily="@font/montserratregular"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/chat_header_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="@color/background_dark"
+                android:stateListAnimator="@null"
+                android:drawableRight="@drawable/bars_solid"/>
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/message_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="15dp"
+            android:layout_marginVertical="15dp"
+            android:paddingRight="15dp"
+            android:dividerHeight="15dp"
+            android:divider="@null"/>
+
+        <LinearLayout
+            android:id="@+id/chat_type"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="0"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/chat_navbar_background">
+
+            <Button
+                android:id="@+id/chat_type_file"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginRight="0dp"
+                android:backgroundTint="@android:color/transparent"
+                android:stateListAnimator="@null"
+                android:drawableLeft="@drawable/paperclip_solid"
+                />
+
+            <Button
+                android:id="@+id/chat_type_image"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginRight="0dp"
+                android:backgroundTint="@android:color/transparent"
+                android:stateListAnimator="@null"
+                android:drawableLeft="@drawable/image_solid"
+                />
+
+            <Button
+                android:id="@+id/chat_type_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginRight="0dp"
+                android:backgroundTint="@android:color/transparent"
+                android:stateListAnimator="@null"
+                android:drawableLeft="@drawable/face_smile_solid"
+                />
+
+            <EditText
+                android:layout_marginLeft="10dp"
+                android:id="@+id/chat_type_message"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="4"
+                android:hint="Type here"
+                android:textColorHint="#808080"
+                android:fontFamily="@font/montserratsemibold"
+                android:paddingStart="15dp"
+                android:textSize="13sp"
+                android:background="@drawable/message_box_background"
+                android:paddingLeft="5dp"/>
+
+            <Button
+                android:id="@+id/chat_type_send"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:layout_marginRight="0dp"
+                android:backgroundTint="@android:color/transparent"
+                android:stateListAnimator="@null"
+                android:drawableTop="@drawable/paper_plane_solid"
+                android:layout_gravity="center"
+                android:background="@drawable/button_send_background" />
+
+        </LinearLayout>
+"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
