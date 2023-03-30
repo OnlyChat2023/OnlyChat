@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:paddingVertical="14dp"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/avatar_img" />
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:text="Adam M.Mathew"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textSize="20sp"
+        android:layout_marginLeft="14dp"
+        android:layout_toRightOf="@+id/avatar"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
+        android:layout_toRightOf="@+id/avatar"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="34dp"
+            android:layout_weight=".50"
+            android:text="Add friend"
+            android:textAllCaps="false"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="14sp"
+            android:background="@drawable/friends_add_friend_button"
+            android:layout_marginRight="18dp"
+            />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight=".50"
+            android:text="Remove"
+            android:layout_height="34dp"
+            android:textAllCaps="false"
+            android:background="@drawable/friends_remove_button"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="14sp"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>
