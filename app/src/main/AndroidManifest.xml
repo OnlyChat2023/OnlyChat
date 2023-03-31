@@ -11,7 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:targetApi="31">
-
+        <activity
+            android:name=".DirectMessage.Option.OptionActivity"
+            android:exported="true" />
+        <activity
+            android:name=".MainScreen.MainScreen"
+            android:exported="true" />
         <activity
             android:name=".GroupChat.GroupChatSetting"
             android:exported="false" />
@@ -30,6 +35,10 @@
         <activity
             android:name=".Authetication.RegisterActivity"
             android:exported="false" />
+        <!--
+ android:theme="@style/Theme.OnlyChat"
+        tools:targetApi="31" >
+        -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -39,6 +48,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".DirectMessage.ChattingActivity"
+            android:exported="true" />
         <activity
             android:name=".GlobalChat.ListChat"
             android:exported="true" />

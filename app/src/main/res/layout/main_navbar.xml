@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/background_navbar">
+
+        <Button
+            android:id="@+id/btn_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/comment_dots_regular"
+            android:text="chat"
+            android:textSize="10sp"
+            android:stateListAnimator="@null"
+            android:textColor="#FAF4FF"
+            android:fontFamily="@font/montserratregular"
+            android:backgroundTint="@color/background_navbar"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/btn_groupchat"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/users_line_solid"
+            android:backgroundTint="@color/background_navbar"
+            android:text="group"
+            android:stateListAnimator="@null"
+            android:textColor="#FAF4FF"
+            android:fontFamily="@font/montserratregular"
+            android:textSize="10sp"
+            android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/btn_globalchat"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="#FAF4FF"
+            android:stateListAnimator="@null"
+            android:drawableTop="@drawable/earth_americas_solid"
+            android:backgroundTint="@color/background_navbar"
+            android:text="global"
+            android:fontFamily="@font/montserratregular"
+            android:textSize="10sp"
+            android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/btn_botchat"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/bots"
+            android:textColor="#FAF4FF"
+            android:stateListAnimator="@null"
+            android:backgroundTint="@color/background_navbar"
+            android:text="Bot"
+            android:fontFamily="@font/montserratregular"
+            android:textSize="10sp"
+            android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/btn_friends"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="#FAF4FF"
+            android:stateListAnimator="@null"
+            android:drawableTop="@drawable/user_group_solid"
+            android:backgroundTint="@color/background_navbar"
+            android:text="friends"
+            android:fontFamily="@font/montserratregular"
+            android:textSize="10sp"
+            android:layout_gravity="center" />
+    </LinearLayout>
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

@@ -1,6 +1,9 @@
 package com.example.onlychat;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
+
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +21,8 @@ import com.example.onlychat.GlobalChat.ListChat;
 import com.example.onlychat.EditProfile.EditProfile;
 import com.example.onlychat.GroupChat.GroupChatSetting;
 import com.example.onlychat.Profile.Profile;
+import com.example.onlychat.MainScreen.MainScreen;
+import com.example.onlychat.DirectMessage.ChattingActivity;
 
 public class MainActivity extends AppCompatActivity {
     private final Boolean isLogin = false;
@@ -32,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = new Intent(MainActivity.this, MainScreen.class);
+        startActivity(intent);
 
 //        if (isLogin == false) {
 //            setContentView(R.layout.activity_main);
