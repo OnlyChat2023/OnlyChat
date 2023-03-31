@@ -8,7 +8,6 @@
     >
 
     <ImageView
-
         android:id="@+id/messageAvatar"
         android:layout_width="45dp"
         android:layout_height="45dp"
@@ -26,7 +25,7 @@
             android:id="@+id/messageName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_medium"
+            android:fontFamily="@font/montserratmedium"
             android:text="Anonymous"
             android:layout_marginBottom="5dp"
             android:textColor="@color/white"
@@ -36,10 +35,10 @@
             android:id="@+id/messageContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_light"
+            android:fontFamily="@font/montserratregular"
             android:text="Yes, I was working on it last night and..."
             android:textColor="#FFFFFF"
-            android:textSize="12sp" />
+            android:textSize="11sp" />
     </LinearLayout>
 
     <TextView
@@ -47,8 +46,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:fontFamily="@font/montserrat_light"
+        android:fontFamily="@font/montserratregular"
         android:text="2:00 PM"
         android:textColor="#FFFFFF"
-        android:textSize="12sp" />
+        android:textSize="11sp" />
 </RelativeLayout>

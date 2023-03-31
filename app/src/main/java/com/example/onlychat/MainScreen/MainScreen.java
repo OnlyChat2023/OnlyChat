@@ -32,10 +32,10 @@ public class MainScreen extends FragmentActivity implements Main_MainCallBacks{
          mainContent = MainContent.newInstance("content");
          ft.replace(R.id.main_content, mainContent);
          ft.commit();
-
-         ft = getSupportFragmentManager().beginTransaction();
-         mainNavbar = MainNavbar.newInstance("navbar");
-         ft.replace(R.id.main_navbar, mainNavbar);
-         ft.commit();
+//
+//         ft = getSupportFragmentManager().beginTransaction();
+//         mainNavbar = MainNavbar.newInstance("navbar");
+//         ft.replace(R.id.main_navbar, mainNavbar);
+//         ft.commit();
     }
 }

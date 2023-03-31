@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 
 import com.example.onlychat.DirectMessage.ChattingActivity;
+import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.MainActivity;
 import com.example.onlychat.MainScreen.Interface.Main_FragmentCallBacks;
 import com.example.onlychat.MainScreen.Interface.Main_MainCallBacks;
@@ -33,9 +35,21 @@ public class MainContent extends Fragment implements Main_FragmentCallBacks {
     Spinner spinner;
 
     String[] more_content = {"Delete", "Block", "Profile"};
-    String[] names = {"Adam M.Mathew", "Albert Willson", "Andrew McLeod", "Brittany Smith"};
-    String[] phones = {"0916231763", "0916472323", "0165227367", "0743267612"};
-    Integer[] thumbnails = {R.drawable.p4, R.drawable.avatar_img, R.drawable.p4, R.drawable.avatar_img};
+    String names[] = {
+            "Anonymous","Anonymous Private","Anonymous Publish"
+    };
+
+    Integer avatars[]={
+            R.drawable.global_chat_message_avatar,R.drawable.global_chat_message_avatar,R.drawable.global_chat_message_avatar
+    };
+
+    String messages[] = {
+            "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...",
+    };
+
+    String times[]={"2:00 PM","4:00 PM","6:00 PM"};
 
     public static MainContent newInstance(String strArg1) {
         MainContent fragment = new MainContent();
@@ -57,9 +71,9 @@ public class MainContent extends Fragment implements Main_FragmentCallBacks {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout view_layout_content = (LinearLayout) inflater.inflate(R.layout.main_main_content, null);
-        searchbox = (EditText) view_layout_content.findViewById(R.id.chat_search_box);
-        listChat = (ListView) view_layout_content.findViewById(R.id.chat_content_listview);
+        RelativeLayout view_layout_content = (RelativeLayout) inflater.inflate(R.layout.main_main_content, null);
+
+        listChat = (ListView) view_layout_content.findViewById(R.id.listMessage);
 
         try { Bundle arguments = getArguments();
             assert arguments != null;
@@ -67,10 +81,9 @@ public class MainContent extends Fragment implements Main_FragmentCallBacks {
         }
         catch (Exception e) { Log.e("RED BUNDLE ERROR – ",  e.getMessage()); }
 
-        CustomizeChatItem adapter = new CustomizeChatItem(context,thumbnails,names,phones);
+        CustomChatItem adapter = new CustomChatItem(context,avatars,names,messages,times);
         listChat.setAdapter(adapter);
-        listChat.setSelection(0);
-        listChat.smoothScrollToPosition(0);
+
         listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {

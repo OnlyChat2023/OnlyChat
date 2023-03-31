@@ -3,31 +3,30 @@
 <!--    android:layout_width="match_parent"-->
 <!--    android:layout_height="match_parent">-->
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:background="@color/background_dark">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/titleLayout"
+    android:layout_width="match_parent"
+    android:paddingVertical="20dp"
+    android:paddingHorizontal="20dp"
+    android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/header_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserratbold"
-            android:textColor="@color/white"
-            android:layout_marginLeft="15dp"
-            android:textSize="32dp"
-            android:text="Direct Message" />
+    <TextView
+        android:id="@+id/header_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:fontFamily="@font/montserrat_bold2"
+        android:text="GLOBAL CHAT CHANEL"
+        android:textColor="#D8D8D8"
+        android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/sub_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:fontFamily="@font/montserratregular"
-            android:textColor="#CACACA"
-            android:text="100 friends" />
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/global_chat_icon" />
+
+</RelativeLayout>
 <!--</androidx.constraintlayout.widget.ConstraintLayout>-->

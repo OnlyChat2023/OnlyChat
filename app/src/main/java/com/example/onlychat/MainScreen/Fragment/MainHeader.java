@@ -1,5 +1,7 @@
 package com.example.onlychat.MainScreen.Fragment;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.view.View;
 import android.view.LayoutInflater;
@@ -16,7 +18,8 @@ import com.example.onlychat.R;
 
 public class MainHeader extends Fragment implements Main_FragmentCallBacks {
     MainScreen main;
-    TextView txtHeaderTitle, txtSubTitle;
+    TextView txtHeaderTitle;
+    ImageView icon;
 
     public static MainHeader newInstance(String strArg1) {
         MainHeader fragment = new MainHeader();
@@ -37,9 +40,10 @@ public class MainHeader extends Fragment implements Main_FragmentCallBacks {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout view_layout_header = (LinearLayout) inflater.inflate(R.layout.main_header, null);
+        RelativeLayout view_layout_header = (RelativeLayout) inflater.inflate(R.layout.main_header, null);
         txtHeaderTitle = (TextView) view_layout_header.findViewById(R.id.header_title);
-        txtSubTitle = (TextView) view_layout_header.findViewById(R.id.sub_title);
+        icon = (ImageView) view_layout_header.findViewById(R.id.icon);
+//        txtSubTitle = (TextView) view_layout_header.findViewById(R.id.sub_title);
 
         try { Bundle arguments = getArguments();
             assert arguments != null;

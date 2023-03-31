@@ -22,31 +22,31 @@
             android:gravity="center_vertical"
             android:layout_alignParentTop="true"
             android:windowSoftInputMode="adjustPan"
-            android:paddingHorizontal="14dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="10dp"
+            android:paddingHorizontal="22dp"
             >
 
             <ImageView
                 android:id="@+id/backButton"
                 android:layout_width="20dp"
-                android:layout_height="28dp"
-                android:layout_marginRight="15dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="22dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
                 app:srcCompat="@drawable/global_chat_back" />
 
             <ImageView
                 android:id="@+id/imageView4"
+                android:layout_centerInParent="true"
                 android:layout_toRightOf="@id/backButton"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="12dp"
                 app:srcCompat="@drawable/global_chat_avatar1" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:orientation="vertical"
                 android:layout_toRightOf="@+id/imageView4">
 
@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Anonymous"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="2dp"
                     android:textColor="#ffffff"
                     android:textSize="20sp" />
 
@@ -72,8 +72,8 @@
                 android:id="@+id/optionButton"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_width="32dp"
-                android:layout_height="24dp"
+                android:layout_width="28dp"
+                android:layout_height="22dp"
                 app:srcCompat="@drawable/global_chat_options" />
 
         </RelativeLayout>
@@ -84,7 +84,6 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/linearLayout"
             android:windowSoftInputMode="adjustPan"
-            android:layout_marginTop="0dp"
             android:scrollbars="none"
             android:isScrollContainer="true"
             android:layout_marginBottom="50dp"
