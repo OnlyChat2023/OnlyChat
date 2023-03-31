@@ -142,7 +142,7 @@ public class ListChat extends AppCompatActivity {
                 });
 
                 boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView,900,1200,focusable);
+                final PopupWindow popupWindow = new PopupWindow(popupView,900,1360,focusable);
 
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
