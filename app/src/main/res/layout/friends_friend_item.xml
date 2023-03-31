@@ -41,13 +41,6 @@
             android:textSize="12sp" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/more"
-        android:layout_width="24dp"
-        android:layout_height="26dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        app:srcCompat="@drawable/friends_more_icon" />
 
 
 </RelativeLayout>
