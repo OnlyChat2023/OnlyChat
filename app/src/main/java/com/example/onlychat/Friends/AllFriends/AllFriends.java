@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.R;
 
 public class AllFriends extends Fragment {
@@ -60,7 +61,8 @@ public class AllFriends extends Fragment {
         listFriends.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                FriendBottomDialogFragment friendBottomDialogFragment = new FriendBottomDialogFragment();
+                friendBottomDialogFragment.show(getChildFragmentManager(), friendBottomDialogFragment.getTag());
                 return false;
             }
         });

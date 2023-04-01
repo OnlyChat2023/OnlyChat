@@ -1,14 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" >
-    <solid android:color="#1E1E37" />
-    <padding
-        android:left="16dp"
-        android:right="16dp"
-        android:bottom="12dp"
-        android:top="12dp" />
-
-    <corners android:radius="24dp"
-        android:bottomLeftRadius="0dp"
-        android:bottomRightRadius="0dp"
-        />
-</shape>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="182dp"
+    android:viewportWidth="360"
+    android:viewportHeight="182">
+  <path
+      android:pathData="M0,182H360V0H0V182Z"
+      android:fillColor="#1E1E37"/>
+  <path
+      android:pathData="M158,8L199,8A2,2 0,0 1,201 10L201,10A2,2 0,0 1,199 12L158,12A2,2 0,0 1,156 10L156,10A2,2 0,0 1,158 8z"
+      android:fillColor="#818181"/>
+</vector>

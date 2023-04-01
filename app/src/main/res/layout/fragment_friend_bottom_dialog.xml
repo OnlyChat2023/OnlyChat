@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="20dp"
+    android:paddingTop="30dp"
+    android:background="@drawable/global_chat_popup_above"
+    android:paddingHorizontal="20dp"
+    tools:context=".GlobalChat.MessageBottomDialogFragment">
+
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="100dp"
+        android:layout_height="42dp"
+        android:src="@drawable/delete_of_dialog_bottom" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="92dp"
+        android:layout_height="42dp"
+        android:layout_marginVertical="15dp"
+        android:layout_below="@+id/imageView2"
+        android:src="@drawable/block_of_dialog__bottom" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="136dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/imageView6"
+        android:src="@drawable/restriction_of_bottome_dialog" />
+
+</RelativeLayout>
