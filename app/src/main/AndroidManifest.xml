@@ -12,33 +12,23 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".DirectMessage.Option.OptionActivity"
-            android:exported="true" />
-        <activity
-            android:name=".MainScreen.MainScreen"
-            android:exported="true" />
+            android:name=".EditProfileStep2"
+            android:exported="false" />
         <activity
             android:name=".GroupChat.GroupChatSetting"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".EditProfile.EditProfile"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".Profile.Profile"
-            android:exported="true" />
-        <activity
-            android:name=".SecurityChat.LockActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".Authetication.ForgotActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".Authetication.RegisterActivity"
-            android:exported="true" />
-        <!--
- android:theme="@style/Theme.OnlyChat"
-        tools:targetApi="31" >
-        -->
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -49,9 +39,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DirectMessage.ChattingActivity"
-            android:exported="true" />
-        <activity
             android:name=".GlobalChat.ListChat"
             android:exported="true" />
         <activity
@@ -60,10 +47,6 @@
         <activity
             android:name=".GlobalChat.ListMessage.Options.Options"
             android:exported="true" />
-        <activity
-            android:name=".Friends.Friends"
-            android:exported="true" />
-
 
         <meta-data
             android:name="preloaded_fonts"
