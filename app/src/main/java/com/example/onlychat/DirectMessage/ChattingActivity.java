@@ -25,8 +25,7 @@ import com.example.onlychat.R;
 import java.util.ArrayList;
 
 public class ChattingActivity extends AppCompatActivity {
-    Button btnBack, btnSetting, btnFile, btnImage, btnIcon, btnSend;
-    ImageView imgAvatar;
+    ImageView imgAvatar, btnBack, btnSetting, btnFile, btnImage, btnIcon, btnSend;
     TextView txtName, txtOnline;
     EditText chatMessage;
     ListView chatContent;
@@ -50,26 +49,37 @@ public class ChattingActivity extends AppCompatActivity {
             "SEND",
             "RECEIVE"
     };
+
+    String[] times = {
+            "Sent at 12:57 04/03/2023",
+            "Sent at 12:57 04/03/2023",
+            "Sent at 12:57 04/03/2023",
+            "Sent at 12:57 04/03/2023",
+            "Sent at 12:57 04/03/2023",
+            "Sent at 12:57 04/03/2023",
+            "Sent at 12:57 04/03/2023",
+            "Sent at 12:57 04/03/2023"
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        ActionBar actionBar = getSupportActionBar();
 //        actionBar.hide();
-        setContentView(R.layout.activity_chatting);
+        setContentView(R.layout.global_chat_list_message);
 
-        btnBack = (Button) findViewById(R.id.chat_header_back);
-        btnSetting = (Button) findViewById(R.id.chat_header_setting);
-        imgAvatar = (ImageView) findViewById(R.id.chat_header_avatar);
-        txtName = (TextView) findViewById(R.id.chat_header_name);
-        txtOnline = (TextView) findViewById(R.id.chat_header_online);
+        btnBack = (ImageView) findViewById(R.id.backButton);
+        btnSetting = (ImageView) findViewById(R.id.optionButton);
+        imgAvatar = (ImageView) findViewById(R.id.imageView4);
+        txtName = (TextView) findViewById(R.id.textName);
+        txtOnline = (TextView) findViewById(R.id.textSubName);
 
-        chatContent = (ListView) findViewById(R.id.message_content);
+        chatContent = (ListView) findViewById(R.id.listMessages);
 
-        btnFile = (Button) findViewById(R.id.chat_type_file);
-        btnImage = (Button) findViewById(R.id.chat_type_image);
-        btnIcon = (Button) findViewById(R.id.chat_type_icon);
-        btnSend = (Button) findViewById(R.id.chat_type_send);
-        chatMessage = (EditText) findViewById(R.id.chat_type_message);
+        btnFile = (ImageView) findViewById(R.id.encloseIcon);
+        btnImage = (ImageView) findViewById(R.id.imageIcon);
+        btnIcon = (ImageView) findViewById(R.id.iconIcon);
+        btnSend = (ImageView) findViewById(R.id.sendIcon);
+        chatMessage = (EditText) findViewById(R.id.chatText);
 
         Intent main_chat = getIntent();
         Bundle userInf = main_chat.getExtras();
@@ -77,23 +87,26 @@ public class ChattingActivity extends AppCompatActivity {
         imgAvatar.setImageBitmap(bm_avatar);
         txtName.setText(userInf.getString("name"));
 
-        MessageReceive adapter = new MessageReceive(this, bm_avatar, ArrayString2ArrayList(messages), ArrayString2ArrayList(types));
+        MessageReceive adapter = new MessageReceive(this, bm_avatar, ArrayString2ArrayList(messages), ArrayString2ArrayList(types), ArrayString2ArrayList(times));
         chatContent.setAdapter(adapter);
         chatContent.setSelection(adapter.getCount() - 1);
 //        chatContent.smoothScrollToPosition(0);
         chatContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-//                ChangeColorSelectedItem(v);
-//                main.onMsgFromFragToMain("LEFT-FRAG", Integer.toString(position));
-//                idTextView.setText("Mã số: " + ids[position]);
+                TextView timeMsg = (TextView) v.findViewById(R.id.timeMessage);
+                if (timeMsg.getVisibility() == View.GONE)
+                    timeMsg.setVisibility(View.VISIBLE);
+                else
+                    timeMsg.setVisibility(View.GONE);
             }});
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ChattingActivity.this, MainScreen.class);
-                startActivity(intent);
+//                Intent intent = new Intent(ChattingActivity.this, MainScreen.class);
+//                startActivity(intent);
+                finish();
             }
         });
 
@@ -102,7 +115,7 @@ public class ChattingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String msg = chatMessage.getText().toString();
                 if (msg.length() != 0) {
-                    adapter.AddMessage(msg, "SEND");
+                    adapter.AddMessage(msg, "SEND", "Sent at 12:57 04/03/2023");
                     chatMessage.setText("");
                 }
             }

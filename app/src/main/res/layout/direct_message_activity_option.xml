@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center"
-                android:paddingHorizontal="65dp">
+                android:paddingHorizontal="50dp">
 
                 <Button
                     android:id="@+id/chat_option_btn_nickname"
@@ -103,7 +103,191 @@
 
         </LinearLayout>
 
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:paddingHorizontal="24dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Setting"
+            android:textColor="#818181"
+            android:textSize="16dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserratsemibold" />
 
+        <RelativeLayout
+            android:id="@+id/change_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:paddingVertical="6dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:fontFamily="@font/montserratmedium"
+                android:text="Change nickname"
+                android:layout_centerVertical="true"
+                android:textColor="#ffffff"
+                android:textSize="18dp" />
+
+            <ImageView
+                android:id="@+id/imageView13"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/dm_option_icon_nickname" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/on_off_notify"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="18dp"
+            android:paddingVertical="6dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Turn off notification"
+                android:fontFamily="@font/montserratmedium"
+                android:layout_alignParentStart="true"
+                android:textSize="18dp"
+                android:textColor="#ffffff"
+
+                />
+
+            <ImageView
+                android:id="@+id/imageView14"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/dm_option_icon_on_notification" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profile_page"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:paddingVertical="6dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:fontFamily="@font/montserratmedium"
+                android:text="Personal information page"
+                android:textColor="#ffffff"
+                android:textSize="18dp"
+
+                />
+
+            <ImageView
+                android:id="@+id/imageView15"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/dm_option_icon_profile" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/delete_chat"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="18dp"
+            android:paddingVertical="6dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete chat"
+                android:fontFamily="@font/montserratmedium"
+                android:layout_alignParentStart="true"
+                android:textSize="18dp"
+                android:textColor="#ffffff"
+
+                />
+
+            <ImageView
+                android:id="@+id/imageView16"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/dm_option_icon_delete" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Privacy and support"
+            android:textColor="#818181"
+            android:textSize="16dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserratsemibold" />
+        <RelativeLayout
+            android:id="@+id/block"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="18dp"
+            android:paddingVertical="6dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Block"
+                android:fontFamily="@font/montserratmedium"
+                android:layout_alignParentStart="true"
+                android:textSize="18dp"
+                android:textColor="#ffffff"
+
+                />
+
+            <ImageView
+                android:id="@+id/imageView18"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/dm_option_icon_block" />
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/report"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="18dp"
+            android:paddingVertical="6dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Report"
+                android:fontFamily="@font/montserratmedium"
+                android:layout_alignParentStart="true"
+                android:textSize="18dp"
+                android:textColor="#ffffff"
+
+                />
+
+            <ImageView
+                android:id="@+id/imageView19"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/dm_option_icon_report" />
+
+        </RelativeLayout>
+    </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
