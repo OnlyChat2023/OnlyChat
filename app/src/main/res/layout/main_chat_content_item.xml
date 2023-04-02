@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text="Albert Wilson"
             android:textColor="@color/white"
-            android:fontFamily="@font/montserratbold"
+            android:fontFamily="@font/montserrat_bold"
             android:textSize="16sp"/>
 
         <TextView
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:text="012345679"
             android:textColor="#A9A9A9"
-            android:fontFamily="@font/montserratregular"
+            android:fontFamily="@font/montserrat_regular"
             android:textSize="11sp"/>
     </LinearLayout>
 

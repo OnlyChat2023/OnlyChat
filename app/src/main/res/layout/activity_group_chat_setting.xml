@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/avatar"
                 android:layout_centerHorizontal="true"
-                android:fontFamily="@font/montserrat_bold2"
+                android:fontFamily="@font/montserrat_bold"
                 android:text="Anonymous"
                 android:textColor="@color/white"
                 android:textSize="35sp" />
@@ -63,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:fontFamily="@font/montserrat_bold2"
+                    android:fontFamily="@font/montserrat_bold"
                     android:text="Setting"
                     android:textColor="#818181"
                     android:textSize="20sp" />
@@ -94,7 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:fontFamily="@font/montserrat_bold2"
+                    android:fontFamily="@font/montserrat_bold"
                     android:text="Privacy and Support"
                     android:textColor="#818181"
                     android:textSize="20sp" />

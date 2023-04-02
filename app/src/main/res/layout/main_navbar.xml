@@ -20,7 +20,7 @@
             android:textSize="10sp"
             android:stateListAnimator="@null"
             android:textColor="#FAF4FF"
-            android:fontFamily="@font/montserratregular"
+            android:fontFamily="@font/montserrat_regular"
             android:backgroundTint="@color/background_navbar"
             android:layout_gravity="center"/>
 
@@ -34,7 +34,7 @@
             android:text="group"
             android:stateListAnimator="@null"
             android:textColor="#FAF4FF"
-            android:fontFamily="@font/montserratregular"
+            android:fontFamily="@font/montserrat_regular"
             android:textSize="10sp"
             android:layout_gravity="center" />
 
@@ -48,7 +48,7 @@
             android:drawableTop="@drawable/earth_americas_solid"
             android:backgroundTint="@color/background_navbar"
             android:text="global"
-            android:fontFamily="@font/montserratregular"
+            android:fontFamily="@font/montserrat_regular"
             android:textSize="10sp"
             android:layout_gravity="center" />
 
@@ -62,7 +62,7 @@
             android:stateListAnimator="@null"
             android:backgroundTint="@color/background_navbar"
             android:text="Bot"
-            android:fontFamily="@font/montserratregular"
+            android:fontFamily="@font/montserrat_regular"
             android:textSize="10sp"
             android:layout_gravity="center" />
 
@@ -76,7 +76,7 @@
             android:drawableTop="@drawable/user_group_solid"
             android:backgroundTint="@color/background_navbar"
             android:text="friends"
-            android:fontFamily="@font/montserratregular"
+            android:fontFamily="@font/montserrat_regular"
             android:textSize="10sp"
             android:layout_gravity="center" />
     </LinearLayout>

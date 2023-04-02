@@ -18,45 +18,47 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="85dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
             android:background="#28283A"
             android:gravity="center_vertical"
-            android:layout_alignParentTop="true"
-            android:windowSoftInputMode="adjustPan"
-            android:paddingHorizontal="22dp"
-            >
+            android:paddingHorizontal="10dp"
+            android:windowSoftInputMode="adjustPan">
 
-            <ImageView
+            <Button
                 android:id="@+id/backButton"
-                android:layout_width="20dp"
-                android:layout_height="18dp"
-                android:layout_marginEnd="22dp"
-                android:layout_centerVertical="true"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="50dp"
+                android:layout_height="54dp"
                 android:layout_alignParentStart="true"
-                app:srcCompat="@drawable/global_chat_back" />
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp"
+                android:drawableStart="@drawable/global_chat_back"
+                android:padding="18dp" />
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_centerInParent="true"
-                android:layout_toRightOf="@id/backButton"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
+                android:layout_centerInParent="true"
                 android:layout_marginRight="12dp"
+                android:layout_toRightOf="@id/backButton"
                 app:srcCompat="@drawable/global_chat_avatar1" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:orientation="vertical"
-                android:layout_toRightOf="@+id/imageView4">
+                android:layout_toRightOf="@+id/imageView4"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserratbold"
-                    android:text="Anonymous"
                     android:layout_marginBottom="2dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="Anonymous"
                     android:textColor="#ffffff"
                     android:textSize="20sp" />
 
@@ -64,19 +66,21 @@
                     android:id="@+id/textSubName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserratregular"
+                    android:fontFamily="@font/montserrat_regular"
                     android:text="32157 members"
                     android:textColor="#ffffff"
                     android:textSize="11sp" />
             </LinearLayout>
 
-            <ImageView
+            <Button
                 android:id="@+id/optionButton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="51dp"
+                android:layout_height="54dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_width="28dp"
-                android:layout_height="22dp"
-                app:srcCompat="@drawable/global_chat_options" />
+                android:drawableStart="@drawable/global_chat_options"
+                android:padding="14dp" />
 
         </RelativeLayout>
 
@@ -114,8 +118,8 @@
 
             <ImageView
                 android:id="@+id/encloseIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="6dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
@@ -123,26 +127,26 @@
 
             <ImageView
                 android:id="@+id/imageIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="22dp"
+                android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/encloseIcon"
                 app:srcCompat="@drawable/global_chat_chooseimage" />
 
             <ImageView
                 android:id="@+id/iconIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginLeft="22dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="20dp"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/imageIcon"
                 app:srcCompat="@drawable/global_chat_icon_icon" />
 
             <View
                 android:id="@+id/gap"
-                android:layout_width="2dp"
-                android:layout_height="42dp"
+                android:layout_width="1dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:layout_centerVertical="true"
@@ -157,8 +161,9 @@
                 android:layout_toRightOf="@id/gap"
                 android:background="@null"
                 android:ems="10"
+                android:textSize="15sp"
                 android:layout_centerVertical="true"
-                android:fontFamily="@font/montserratregular"
+                android:fontFamily="@font/montserrat_regular"
                 android:hint="Type here..."
                 android:paddingVertical="7dp"
                 android:textColorHint="#A9A9A9"

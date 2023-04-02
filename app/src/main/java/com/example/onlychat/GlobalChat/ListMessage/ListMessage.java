@@ -129,11 +129,11 @@ public class ListMessage extends AppCompatActivity {
                     listView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            enclose.animate().translationX(-235).setDuration(120);
-                            image.animate().translationX(-235).setDuration(120);
-                            icon.animate().translationX(-235).setDuration(120);
-                            gap.animate().translationX(-235).setDuration(120);
-                            chatText.animate().translationX(-235).setDuration(120);
+                            enclose.animate().translationX(-220).setDuration(120);
+                            image.animate().translationX(-220).setDuration(120);
+                            icon.animate().translationX(-220).setDuration(120);
+                            gap.animate().translationX(-220).setDuration(120);
+                            chatText.animate().translationX(-220).setDuration(120);
                             chatText.setPadding(0,0,0,0);
                         }
                     }, 160);
