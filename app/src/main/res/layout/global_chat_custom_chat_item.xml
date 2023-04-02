@@ -27,7 +27,7 @@
             android:id="@+id/messageName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_semibold2"
+            android:fontFamily="@font/montserrat_semibold"
             android:text="Anonymous"
             android:maxLines="1"
             android:layout_marginBottom="5dp"
@@ -39,8 +39,8 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:fontFamily="@font/montserratregular"
-            android:text="Yes, I was working on it lht and..."
+            android:fontFamily="@font/montserrat_regular"
+            android:text="Yes, I was working on it last night and..."
             android:textColor="#FFFFFF"
             android:textSize="13sp" />
     </LinearLayout>
@@ -51,7 +51,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+<<<<<<< HEAD
         android:fontFamily="@font/montserratregular"
+=======
+        android:layout_alignBottom="@id/information"
+        android:layout_alignTop="@id/information"
+        android:fontFamily="@font/montserrat_regular"
+>>>>>>> e2cc45e322a69eb154b042f11209b7ecb56a3382
         android:text="2:00 PM"
         android:textColor="#FFFFFF"
         android:textSize="11sp" />
