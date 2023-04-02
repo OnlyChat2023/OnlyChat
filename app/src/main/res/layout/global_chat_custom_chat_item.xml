@@ -5,12 +5,13 @@
     android:gravity="center_vertical"
     android:background="@drawable/global_chat_chat_item_background"
     android:layout_height="wrap_content"
+    android:paddingVertical="8dp"
     >
 
     <ImageView
         android:id="@+id/messageAvatar"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         />
 
     <LinearLayout
@@ -35,7 +36,7 @@
 
         <TextView
             android:id="@+id/messageContent"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:fontFamily="@font/montserratregular"
@@ -50,11 +51,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@id/information"
-        android:layout_alignTop="@id/information"
         android:fontFamily="@font/montserratregular"
         android:text="2:00 PM"
-        android:layout_marginTop="2dp"
         android:textColor="#FFFFFF"
         android:textSize="11sp" />
 </RelativeLayout>

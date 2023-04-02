@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/background_dark"
-    android:id="@+id/main_layout">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <FrameLayout
-            android:id="@+id/main_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0">
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPaper"
+        android:layout_above="@id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-        </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/main_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-        </FrameLayout>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:background="#242435"
+        app:tabIndicatorHeight="3dp"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorColor="#E5AEFF"
+        app:tabIndicatorGravity="bottom"
+        app:tabBackground="@drawable/tab_color_selected"
+        app:tabRippleColor="@null"
+        app:tabTextColor="#A9A9A9"
+        app:tabSelectedTextColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="5dp"
+        android:layout_height="80dp">
 
-        <FrameLayout
-            android:id="@+id/main_navbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            >
-        </FrameLayout>
-    </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.tabs.TabLayout>
+
+</RelativeLayout>

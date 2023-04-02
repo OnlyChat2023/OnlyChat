@@ -10,4 +10,5 @@
     <color name="my_purple">#44216F</color>
     <color name="background_dark">#181828</color>
     <color name="background_navbar">#242435</color>
+    <color name="tab_background_selected">#352159</color>
 </resources>

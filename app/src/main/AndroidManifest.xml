@@ -54,7 +54,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GlobalChat.ListChat"
+            android:name=".GlobalChat.GlobalChat"
             android:exported="true" />
         <activity
             android:name=".GlobalChat.ListMessage.ListMessage"

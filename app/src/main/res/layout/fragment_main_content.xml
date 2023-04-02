@@ -22,12 +22,13 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:fontFamily="@font/montserrat_bold2"
-            android:text="GLOBAL CHAT CHANEL"
+            android:text="chat title"
+            android:textAllCaps="true"
             android:textColor="#D8D8D8"
             android:textSize="16sp" />
 
         <ImageView
-            android:id="@+id/icon"
+            android:id="@+id/chatIcon"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
@@ -71,7 +72,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/profileImage"
+            android:id="@+id/profile"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentEnd="true"
@@ -83,6 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="15dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/searchLayout"
         android:paddingHorizontal="20dp"
         android:paddingEnd="36dp">
@@ -91,13 +93,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:fontFamily="@font/montserrat_bold2"
+            android:fontFamily="@font/montserrat_semibold2"
             android:text="MESSAGES"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
         <ImageView
-            android:id="@+id/addIcon"
+            android:id="@+id/addChat"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentEnd="true"
@@ -106,7 +108,7 @@
     </RelativeLayout>
 
     <ListView
-        android:id="@+id/listMessage"
+        android:id="@+id/listChat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/addLayout"

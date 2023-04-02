@@ -1,6 +1,7 @@
 package com.example.onlychat.MainScreen.Fragment;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,7 +38,12 @@ public class MainContent extends Fragment {
     String typeChat;
 
     String names[] = {
-            "Anonymous","Anonymous Private","Anonymous Publish"
+            "Anonymous","Anonymous Private","Anonymous Publish",
+            "Anonymous","Anonymous Private","Anonymous Publish",
+            "Anonymous","Anonymous Private","Anonymous Publish",
+            "Anonymous","Anonymous Private","Anonymous Publish",
+            "Anonymous","Anonymous Private","Anonymous Publish",
+            "Anonymous","Anonymous Private","Anonymous Publish",
     };
 
     Integer avatars[]={
@@ -49,7 +55,7 @@ public class MainContent extends Fragment {
             R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
     };
     String messages[] = {
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+            "acc to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
             "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
             "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
             "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
@@ -81,18 +87,16 @@ public class MainContent extends Fragment {
         }
         typeChat = "CHAT";
         context = getActivity();
-        main = (MainScreen) getActivity(); // use this reference to invoke main callbacks
+//        main = (MainScreen) getActivity(); // use this reference to invoke main callbacks
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RelativeLayout view_layout_content = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
 
-        listChat = (ListView) view_layout_content.findViewById(R.id.listMessage);
+        listChat = (ListView) view_layout_content.findViewById(R.id.listChat);
         searchbox = (EditText) view_layout_content.findViewById(R.id.main_content_searchbox);
-        profileImage = (ImageView)view_layout_content.findViewById(R.id.profileImage);
-
-        profileImage.setVisibility(View.INVISIBLE);
+        profileImage = (ImageView)view_layout_content.findViewById(R.id.profile);
 
 //        try { Bundle arguments = getArguments();
 //            assert arguments != null;
@@ -103,23 +107,23 @@ public class MainContent extends Fragment {
         adapter = new CustomChatItem(context,avatars,names,messages,times);
         listChat.setAdapter(adapter);
 
-        listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                if (typeChat == "CHAT") {
-                    Intent intent = new Intent(context, ChattingActivity.class);
-                    Bundle userInf = new Bundle();
-                    TextView name = (TextView) v.findViewById(R.id.messageName);
-                    ImageView avatar = (ImageView) v.findViewById(R.id.messageAvatar);
-
-                    userInf.putString("name", name.getText().toString());
-                    avatar.setDrawingCacheEnabled(true);
-                    Bitmap b = avatar.getDrawingCache();
-                    intent.putExtras(userInf);
-                    intent.putExtra("Bitmap", b);
-                    startActivity(intent);
-                }
-            }});
+//        listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+//                if (typeChat == "CHAT") {
+//                    Intent intent = new Intent(context, ChattingActivity.class);
+//                    Bundle userInf = new Bundle();
+//                    TextView name = (TextView) v.findViewById(R.id.messageName);
+//                    ImageView avatar = (ImageView) v.findViewById(R.id.messageAvatar);
+//
+//                    userInf.putString("name", name.getText().toString());
+//                    avatar.setDrawingCacheEnabled(true);
+//                    Bitmap b = avatar.getDrawingCache();
+//                    intent.putExtras(userInf);
+//                    intent.putExtra("Bitmap", b);
+//                    startActivity(intent);
+//                }
+//            }});
 
 //        spinner = (Spinner) listChat.findViewById(R.id.main_chat_item_more);
 //        ArrayAdapter<String> adt = new ArrayAdapter<String>(getContext(), R.layout.spinner_friend_item, more_content);

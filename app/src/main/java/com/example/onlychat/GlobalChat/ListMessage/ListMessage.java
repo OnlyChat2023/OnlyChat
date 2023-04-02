@@ -1,5 +1,6 @@
 package com.example.onlychat.GlobalChat.ListMessage;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -17,6 +18,8 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.onlychat.DirectMessage.Option.OptionActivity;
+import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
 import com.example.onlychat.R;
 
 public class ListMessage extends AppCompatActivity {
@@ -27,7 +30,7 @@ public class ListMessage extends AppCompatActivity {
     ImageView icon;
     View gap;
     EditText chatText;
-
+    ImageView optionButton;
 
     String names[] = {
             "Paimon","me","Xiao","Klee Bunbara","Paimon",
@@ -107,6 +110,25 @@ public class ListMessage extends AppCompatActivity {
         icon =(ImageView) findViewById(R.id.iconIcon);
         gap =(View) findViewById(R.id.gap);
         chatText = (EditText) findViewById(R.id.chatText);
+        optionButton = (ImageView) findViewById(R.id.optionButton);
+
+        optionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(optionButton.getContext(), Options.class);
+//                    Bundle userInf = new Bundle();
+//                    TextView name = (TextView) v.findViewById(R.id.messageName);
+//                    ImageView avatar = (ImageView) v.findViewById(R.id.messageAvatar);
+//
+//                    userInf.putString("name", name.getText().toString());
+//                    avatar.setDrawingCacheEnabled(true);
+//                    Bitmap b = avatar.getDrawingCache();
+//                    intent.putExtras(userInf);
+//                    intent.putExtra("Bitmap", b);
+                startActivity(intent);
+            }
+        });
+
 
         final boolean[] state = {true};
 

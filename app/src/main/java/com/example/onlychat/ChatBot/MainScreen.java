@@ -54,9 +54,9 @@ public class MainScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.global_chat_list_chat);
+        setContentView(R.layout.fragment_main_content);
 
-        listMessage = (ListView) findViewById(R.id.listMessage);
+        listMessage = (ListView) findViewById(R.id.listChat);
 
         listMessage.setSelection(0);
         listMessage.smoothScrollToPosition(0);
