@@ -39,7 +39,7 @@ public class MainNavbar extends Fragment implements Main_FragmentCallBacks {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout view_layout_navbar = (LinearLayout) inflater.inflate(R.layout.main_navbar, null);
+        LinearLayout view_layout_navbar = (LinearLayout) inflater.inflate(R.layout.fragment_main_navbar, null);
         btnChat = (Button) view_layout_navbar.findViewById(R.id.btn_chat);
         btnGroupChat = (Button) view_layout_navbar.findViewById(R.id.btn_groupchat);
         btnGlobalChat = (Button) view_layout_navbar.findViewById(R.id.btn_globalchat);

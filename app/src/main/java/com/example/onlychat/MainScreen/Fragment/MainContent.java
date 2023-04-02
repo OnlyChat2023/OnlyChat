@@ -27,7 +27,7 @@ import com.example.onlychat.MainScreen.Interface.Main_MainCallBacks;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.R;
 
-public class MainContent extends Fragment implements Main_FragmentCallBacks {
+public class MainContent extends Fragment {
     MainScreen main;
     Context context = null;
     EditText searchbox;
@@ -40,16 +40,29 @@ public class MainContent extends Fragment implements Main_FragmentCallBacks {
     };
 
     Integer avatars[]={
-            R.drawable.global_chat_message_avatar,R.drawable.global_chat_message_avatar,R.drawable.global_chat_message_avatar
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
     };
-
     String messages[] = {
-            "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
     };
-
-    String times[]={"2:00 PM","4:00 PM","6:00 PM"};
+    String times[]={
+            "2:00 PM","4:00 PM","6:00 PM",
+            "2:00 PM","4:00 PM","6:00 PM",
+            "2:00 PM","4:00 PM","6:00 PM",
+            "2:00 PM","4:00 PM","6:00 PM",
+            "2:00 PM","4:00 PM","6:00 PM",
+            "2:00 PM","4:00 PM","6:00 PM",
+    };
 
     public static MainContent newInstance(String strArg1) {
         MainContent fragment = new MainContent();
@@ -71,7 +84,7 @@ public class MainContent extends Fragment implements Main_FragmentCallBacks {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RelativeLayout view_layout_content = (RelativeLayout) inflater.inflate(R.layout.main_main_content, null);
+        RelativeLayout view_layout_content = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
 
         listChat = (ListView) view_layout_content.findViewById(R.id.listMessage);
 

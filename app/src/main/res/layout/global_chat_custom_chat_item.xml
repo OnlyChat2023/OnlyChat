@@ -25,7 +25,7 @@
             android:id="@+id/messageName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserratmedium"
+            android:fontFamily="@font/montserrat_semibold2"
             android:text="Anonymous"
             android:layout_marginBottom="5dp"
             android:textColor="@color/white"
@@ -36,9 +36,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserratregular"
-            android:text="Yes, I was working on it last night and..."
+            android:text="Yes, I was working on it lht and..."
             android:textColor="#FFFFFF"
-            android:textSize="11sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
     <TextView
@@ -48,6 +48,7 @@
         android:layout_alignParentEnd="true"
         android:fontFamily="@font/montserratregular"
         android:text="2:00 PM"
+        android:layout_marginTop="2dp"
         android:textColor="#FFFFFF"
         android:textSize="11sp" />
 </RelativeLayout>
