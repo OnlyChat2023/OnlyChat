@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditProfile.EditProfile">
+    tools:context=".EditProfileStep2">
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -19,82 +19,54 @@
             android:paddingEnd="20dp"
             tools:ignore="MissingConstraints">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/avatar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/avatar_img"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
-                app:shapeAppearanceOverlay="@style/roundedImagesStyle"
-                />
-
-            <ImageButton
-                android:id="@+id/up_image_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_below="@id/avatar"
-                android:layout_alignEnd="@id/avatar"
-                android:layout_gravity="bottom|right"
-                android:layout_marginTop="-27dp"
-                android:layout_marginEnd="-2dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/up_img_btn"
-                android:src="@drawable/ic_add" />
-
             <LinearLayout
                 android:id="@+id/input_section"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/up_image_btn"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/nameL"
-
+                    android:id="@+id/fbL"
                     android:fontFamily="@font/montserrat_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name"
+                    android:text="Facebook Link"
                     android:textColor="#ffffff"
                     android:textSize="20sp"
                     android:layout_marginBottom="10dp"/>
 
                 <EditText
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_medium"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/edit_input"
                     android:padding="15dp"
                     android:layout_marginBottom="30dp"/>
-
                 <TextView
-                    android:id="@+id/emailL"
+                    android:id="@+id/insL"
+                    android:fontFamily="@font/montserrat_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:text="Email"
+                    android:text="Instagram Link"
                     android:textColor="#ffffff"
                     android:textSize="20sp"
                     android:layout_marginBottom="10dp"/>
 
                 <EditText
                     android:layout_width="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_medium"
                     android:background="@drawable/edit_input"
                     android:padding="15dp"
                     android:layout_marginBottom="30dp"/>
-
                 <TextView
-                    android:id="@+id/phoneL"
+                    android:id="@+id/twitterL"
                     android:fontFamily="@font/montserrat_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Phone Number"
+                    android:text="Twitter Link"
                     android:textColor="#ffffff"
                     android:textSize="20sp"
                     android:layout_marginBottom="10dp"/>
@@ -106,13 +78,12 @@
                     android:background="@drawable/edit_input"
                     android:padding="15dp"
                     android:layout_marginBottom="30dp"/>
-
                 <TextView
-                    android:id="@+id/graduatedL"
+                    android:id="@+id/desL"
                     android:fontFamily="@font/montserrat_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Graduated"
+                    android:text="Description"
                     android:textColor="#ffffff"
                     android:textSize="20sp"
                     android:layout_marginBottom="10dp"/>
@@ -120,26 +91,29 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:fontFamily="@font/montserrat_medium"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edit_input"
+                    android:layout_height="150dp"
                     android:padding="15dp"
+                    android:background="@drawable/edit_input"
                     android:layout_marginBottom="30dp"/>
+
             </LinearLayout>
+
             <Button
                 android:layout_below="@id/input_section"
                 android:layout_alignRight="@id/input_section"
-                android:id="@+id/nextBtn"
+                android:id="@+id/finishBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="43dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/edit_profile_btn"
                 android:fontFamily="@font/montserrat_semibold2"
                 android:padding="10dp"
-                android:text="Next"
+                android:text="Finish"
                 android:textSize="12sp"
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="77dp"
                 tools:layout_editor_absoluteY="237dp" />
+
         </RelativeLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

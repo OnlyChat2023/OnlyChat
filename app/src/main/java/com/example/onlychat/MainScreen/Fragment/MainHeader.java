@@ -45,12 +45,38 @@ public class MainHeader extends Fragment implements Main_FragmentCallBacks {
         icon = (ImageView) view_layout_header.findViewById(R.id.icon);
 //        txtSubTitle = (TextView) view_layout_header.findViewById(R.id.sub_title);
 
-        try { Bundle arguments = getArguments();
-            assert arguments != null;
-//            title_id.setText(arguments.getString("arg1", ""));
-            }
-        catch (Exception e) { Log.e("RED BUNDLE ERROR – ",  e.getMessage()); }
+//        try { Bundle arguments = getArguments();
+//            assert arguments != null;
+////            title_id.setText(arguments.getString("arg1", ""));
+//            }
+//        catch (Exception e) { Log.e("RED BUNDLE ERROR – ",  e.getMessage()); }
+        txtHeaderTitle.setText("DIRECT MESSAGE");
+        icon.setImageResource(R.drawable.comment_dots_regular);
 
         return view_layout_header;
+    }
+
+    @Override
+    public void onMsgFromMainToFragment(String strValue){
+        if (strValue == "CHAT"){
+            txtHeaderTitle.setText("DIRECT MESSAGE");
+            icon.setImageResource(R.drawable.comment_dots_regular);
+        }
+        else if (strValue == "BOTCHAT") {
+            txtHeaderTitle.setText("BOT CHAT");
+            icon.setImageResource(R.drawable.bots);
+        }
+        else if (strValue == "FRIEND") {
+            txtHeaderTitle.setText("FRIENDS");
+            icon.setImageResource(R.drawable.user_group_solid);
+        }
+        else if (strValue == "GLOBALCHAT") {
+            txtHeaderTitle.setText("GLOBAL CHAT");
+            icon.setImageResource(R.drawable.earth_americas_solid);
+        }
+        else if (strValue == "GROUPCHAT") {
+            txtHeaderTitle.setText("GROUP CHAT");
+            icon.setImageResource(R.drawable.users_line_solid);
+        }
     }
 }

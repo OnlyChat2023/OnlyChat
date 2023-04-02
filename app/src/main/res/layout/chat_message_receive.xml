@@ -1,32 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:id="@+id/chat_message_receive"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="@color/background_dark">
+    android:paddingVertical="8dp"
+    android:paddingRight="80dp"
+    android:layout_height="wrap_content">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_weight="0"
-        android:id="@+id/chat_message_avatar"
-        android:layout_marginRight="5dp"
-        android:background="@color/white"
-        app:shapeAppearanceOverlay="@style/circle"/>
-
-    <TextView
-        android:id="@+id/chat_message_receive_content"
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginRight="9dp"
+        />
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="A primary toolbar within the activity that may display the activity title, application-level navigation affordances, and other interactive items."
-        android:textColor="@color/white"
-        android:fontFamily="@font/montserratmedium"
-        android:textSize="13sp"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="5dp"
-        android:background="@drawable/message_receive_background"
-        android:maxWidth="220dp"/>
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/timeMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserratmedium"
+            android:paddingRight="15dp"
+            android:text="Sent at 12:57 04/03/2023"
+            android:layout_gravity="right"
+            android:layout_marginBottom="5dp"
+            android:textColor="#818181"
+            android:textSize="8sp" />
+
+        <TextView
+            android:id="@+id/chatContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/global_chat_round_left"
+            android:fontFamily="@font/montserratregular"
+            android:lineHeight="24dp"
+            android:text="What's the problem?"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            />
+    </LinearLayout>
 </LinearLayout>

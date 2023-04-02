@@ -1,24 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/chat_message_send"
     android:orientation="horizontal"
-    android:background="@color/background_dark"
-    android:gravity="right">
+    android:paddingVertical="8dp"
+    android:paddingLeft="80dp"
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/chat_message_send_content"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="A primary toolbar within the activity that may display the activity title, application-level navigation affordances, and other interactive items."
-        android:textColor="@color/white"
-        android:fontFamily="@font/montserratmedium"
-        android:textSize="13sp"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="5dp"
-        android:background="@drawable/message_send_background"
-        android:maxWidth="250dp" />
+        android:orientation="vertical"
+        android:layout_alignParentRight="true">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/timeMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserratmedium"
+            android:paddingLeft="15dp"
+            android:text="Sent at 12:57 04/03/2023"
+            android:layout_gravity="left"
+            android:layout_marginBottom="5dp"
+            android:textColor="#818181"
+            android:textSize="8sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@drawable/global_chat_round_right"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/messageSend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserratregular"
+                android:lineHeight="24dp"
+                android:textSize="15sp"
+                android:text=""
+                android:textColor="@color/white">
+            </TextView>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/chatImage"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

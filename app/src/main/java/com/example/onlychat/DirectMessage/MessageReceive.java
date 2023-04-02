@@ -15,13 +15,14 @@ import com.example.onlychat.R;
 import java.util.ArrayList;
 
 public class MessageReceive extends ArrayAdapter<String> {
-    Context context; Bitmap avatar; ArrayList<String> msgs; ArrayList<String> types;
-    public MessageReceive(Context context, Bitmap avatar, ArrayList<String> msgs, ArrayList<String> types) {
+    Context context; Bitmap avatar; ArrayList<String> msgs; ArrayList<String> types; ArrayList<String> times;
+    public MessageReceive(Context context, Bitmap avatar, ArrayList<String> msgs, ArrayList<String> types, ArrayList<String> times) {
         super(context, R.layout.main_chat_content_item, msgs);
         this.avatar = avatar;
         this.msgs = msgs;
         this.types = types;
         this.context = context;
+        this.times = times;
     }
 
     @Override
@@ -29,23 +30,30 @@ public class MessageReceive extends ArrayAdapter<String> {
         if (types.get(position) == "SEND") {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             View row = inflater.inflate(R.layout.chat_message_send, null);
-            TextView msg = (TextView) row.findViewById(R.id.chat_message_send_content);
+            TextView msg = (TextView) row.findViewById(R.id.messageSend);
+            TextView time = (TextView) row.findViewById(R.id.timeMessage);
             msg.setText(msgs.get(position));
+            time.setText(times.get(position));
+            time.setVisibility(View.GONE);
             return row;
         } else {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             View row = inflater.inflate(R.layout.chat_message_receive, null);
-            TextView msg = (TextView) row.findViewById(R.id.chat_message_receive_content);
-            ImageView avt = (ImageView) row.findViewById(R.id.chat_message_avatar);
+            TextView msg = (TextView) row.findViewById(R.id.chatContent);
+            ImageView avt = (ImageView) row.findViewById(R.id.avatar);
+            TextView time = (TextView) row.findViewById(R.id.timeMessage);
             avt.setImageBitmap(this.avatar);
             msg.setText(msgs.get(position));
+            time.setText(times.get(position));
+            time.setVisibility(View.GONE);
             return row;
         }
     }
 
-    public void AddMessage(String msg, String type){
+    public void AddMessage(String msg, String type, String time){
         msgs.add(msg);
         types.add(type);
+        times.add(time);
         this.notifyDataSetChanged();
     }
 }

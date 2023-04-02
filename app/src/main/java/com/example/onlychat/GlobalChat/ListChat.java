@@ -2,6 +2,7 @@ package com.example.onlychat.GlobalChat;
 
 import android.content.Context;
 import android.app.Activity;
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -85,32 +86,13 @@ public class ListChat extends AppCompatActivity {
         CustomChatItem customChatItem=new CustomChatItem(this,avatars,names,messages,times);
         listMessage.setAdapter(customChatItem);
 
+
         listMessage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-                // overlay
-                View overlayView = inflater.inflate(R.layout.global_chat_overlay, null);
-                int width = LinearLayout.LayoutParams.MATCH_PARENT;
-                int height = LinearLayout.LayoutParams.MATCH_PARENT;
-                final PopupWindow overlayWindow = new PopupWindow(overlayView,width,height,true);
-                overlayWindow.showAtLocation(view, Gravity.TOP, 0, 0);
 
-                // Popup
-                View popupView = inflater.inflate(R.layout.global_chat_popup_above, null);
-
-                boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT,600,focusable);
-                popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-                popupView.setTranslationY(600);
-                popupView.animate().translationY(0).setDuration(200);
-
-                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        overlayWindow.dismiss();
-                    }
-                });
+                MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
+                messageBottomDialogFragment.show(getSupportFragmentManager(), messageBottomDialogFragment.getTag());
 
                 return false;
             }

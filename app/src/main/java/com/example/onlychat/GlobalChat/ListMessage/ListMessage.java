@@ -2,12 +2,17 @@ package com.example.onlychat.GlobalChat.ListMessage;
 
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,11 +74,32 @@ public class ListMessage extends AppCompatActivity {
 
         listView=(ListView) findViewById(R.id.listMessages);
         CustomMessageItem customMessageItem = new CustomMessageItem(this,avatars,names,messages);
+
+
         listView.setAdapter(customMessageItem);
         listView.setSelection(0);
         listView.smoothScrollToPosition(0);
         listView.setDivider(null);
         listView.setDividerHeight(0);
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+
+                // Popup
+                View popupView = inflater.inflate(R.layout.global_chat_popup_above, null);
+
+                boolean focusable = true; // lets taps outside the popup also dismiss it
+                final PopupWindow popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT,600,focusable);
+                popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+                popupView.setTranslationY(600);
+                popupView.animate().translationY(0).setDuration(200);
+
+                return false;
+            }
+        });
+
 
         chatLayout = (RelativeLayout) findViewById(R.id.chatLayout);
         enclose = (ImageView) findViewById(R.id.encloseIcon);
