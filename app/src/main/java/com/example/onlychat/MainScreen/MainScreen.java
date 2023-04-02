@@ -28,5 +28,17 @@ public class MainScreen extends FragmentActivity implements Main_MainCallBacks{
          mainNavbar = MainNavbar.newInstance("navbar");
          ft.replace(R.id.main_navbar, mainNavbar);
          ft.commit();
+
+         ft = getSupportFragmentManager().beginTransaction();
+         mainNavbar = MainNavbar.newInstance("navbar");
+         ft.replace(R.id.main_navbar, mainNavbar);
+         ft.commit();
+    }
+
+    @Override
+    public void onMsgFromFragToMain (String sender, String strValue){
+        if (sender == "NAVBAR"){
+//            mainContent.onMsgFromMainToFragment(strValue);
+        }
     }
 }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.onlychat.DirectMessage.ChattingActivity;
@@ -18,6 +19,7 @@ public class OptionActivity extends AppCompatActivity {
     ImageView avatar;
     Button btn_back, btn_nickname, btn_profile, btn_notify;
     TextView txtName;
+    RelativeLayout nick_name, notify, profile, delete, block, report;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,13 @@ public class OptionActivity extends AppCompatActivity {
         btn_profile = (Button) findViewById(R.id.chat_option_btn_profile);
         btn_notify = (Button) findViewById(R.id.chat_option_btn_noify);
 
+        nick_name = (RelativeLayout) findViewById(R.id.change_nickname);
+        notify = (RelativeLayout) findViewById(R.id.on_off_notify);
+        profile = (RelativeLayout) findViewById(R.id.profile_page);
+        delete = (RelativeLayout) findViewById(R.id.delete_chat);
+        block = (RelativeLayout) findViewById(R.id.block);
+        report = (RelativeLayout) findViewById(R.id.report);
+
         Intent main_chat = getIntent();
         Bundle userInf = main_chat.getExtras();
         Bitmap bm_avatar = (Bitmap) main_chat.getParcelableExtra("Bitmap");
@@ -40,8 +49,9 @@ public class OptionActivity extends AppCompatActivity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OptionActivity.this, ChattingActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(OptionActivity.this, ChattingActivity.class);
+//                startActivity(intent);
+                finish();
             }
         });
     }

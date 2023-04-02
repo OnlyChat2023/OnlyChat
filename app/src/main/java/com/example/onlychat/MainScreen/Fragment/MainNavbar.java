@@ -16,7 +16,7 @@ import com.example.onlychat.MainScreen.Interface.Main_MainCallBacks;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.R;
 
-public class MainNavbar extends Fragment implements Main_FragmentCallBacks {
+public class MainNavbar extends Fragment {
     MainScreen main;
     Button btnChat, btnGroupChat, btnGlobalChat, btnBotChat, btnFriends;
 
@@ -46,11 +46,42 @@ public class MainNavbar extends Fragment implements Main_FragmentCallBacks {
         btnBotChat = (Button) view_layout_navbar.findViewById(R.id.btn_botchat);
         btnFriends = (Button) view_layout_navbar.findViewById(R.id.btn_friends);
 
-        try { Bundle arguments = getArguments();
-            assert arguments != null;
-//            title_id.setText(arguments.getString("arg1", ""));
-        }
-        catch (Exception e) { Log.e("RED BUNDLE ERROR – ",  e.getMessage()); }
+//        try { Bundle arguments = getArguments();
+//            assert arguments != null;
+////            title_id.setText(arguments.getString("arg1", ""));
+//        }
+//        catch (Exception e) { Log.e("RED BUNDLE ERROR – ",  e.getMessage()); }
+
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main.onMsgFromFragToMain("NAVBAR", "CHAT");
+            }
+        });
+        btnBotChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main.onMsgFromFragToMain("NAVBAR", "BOTCHAT");
+            }
+        });
+        btnFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main.onMsgFromFragToMain("NAVBAR", "FRIEND");
+            }
+        });
+        btnGlobalChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main.onMsgFromFragToMain("NAVBAR", "GLOBALCHAT");
+            }
+        });
+        btnGroupChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main.onMsgFromFragToMain("NAVBAR", "GROUPCHAT");
+            }
+        });
 
         return view_layout_navbar;
     }

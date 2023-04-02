@@ -32,9 +32,10 @@ public class MainContent extends Fragment {
     Context context = null;
     EditText searchbox;
     ListView listChat;
-    Spinner spinner;
+    ImageView profileImage;
+    CustomChatItem adapter;
+    String typeChat;
 
-    String[] more_content = {"Delete", "Block", "Profile"};
     String names[] = {
             "Anonymous","Anonymous Private","Anonymous Publish"
     };
@@ -78,6 +79,7 @@ public class MainContent extends Fragment {
         if (!(getActivity() instanceof Main_MainCallBacks)) {
             throw new IllegalStateException("Activity must implement MainCallbacks");
         }
+        typeChat = "CHAT";
         context = getActivity();
         main = (MainScreen) getActivity(); // use this reference to invoke main callbacks
     }
@@ -87,30 +89,36 @@ public class MainContent extends Fragment {
         RelativeLayout view_layout_content = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
 
         listChat = (ListView) view_layout_content.findViewById(R.id.listMessage);
+        searchbox = (EditText) view_layout_content.findViewById(R.id.main_content_searchbox);
+        profileImage = (ImageView)view_layout_content.findViewById(R.id.profileImage);
 
-        try { Bundle arguments = getArguments();
-            assert arguments != null;
-//            title_id.setText(arguments.getString("arg1", ""));
-        }
-        catch (Exception e) { Log.e("RED BUNDLE ERROR – ",  e.getMessage()); }
+        profileImage.setVisibility(View.INVISIBLE);
 
-        CustomChatItem adapter = new CustomChatItem(context,avatars,names,messages,times);
+//        try { Bundle arguments = getArguments();
+//            assert arguments != null;
+////            title_id.setText(arguments.getString("arg1", ""));
+//        }
+//        catch (Exception e) { Log.e("RED BUNDLE ERROR – ",  e.getMessage()); }
+
+        adapter = new CustomChatItem(context,avatars,names,messages,times);
         listChat.setAdapter(adapter);
 
         listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Intent intent = new Intent(context, ChattingActivity.class);
-                Bundle userInf = new Bundle();
-                TextView name = (TextView) v.findViewById(R.id.main_chat_item_name);
-                ImageView avatar = (ImageView) v.findViewById(R.id.main_chat_item_avatar);
+                if (typeChat == "CHAT") {
+                    Intent intent = new Intent(context, ChattingActivity.class);
+                    Bundle userInf = new Bundle();
+                    TextView name = (TextView) v.findViewById(R.id.messageName);
+                    ImageView avatar = (ImageView) v.findViewById(R.id.messageAvatar);
 
-                userInf.putString("name", name.getText().toString());
-                avatar.setDrawingCacheEnabled(true);
-                Bitmap b = avatar.getDrawingCache();
-                intent.putExtras(userInf);
-                intent.putExtra("Bitmap", b);
-                startActivity(intent);
+                    userInf.putString("name", name.getText().toString());
+                    avatar.setDrawingCacheEnabled(true);
+                    Bitmap b = avatar.getDrawingCache();
+                    intent.putExtras(userInf);
+                    intent.putExtra("Bitmap", b);
+                    startActivity(intent);
+                }
             }});
 
 //        spinner = (Spinner) listChat.findViewById(R.id.main_chat_item_more);
@@ -119,4 +127,40 @@ public class MainContent extends Fragment {
 
         return view_layout_content;
     }
+
+//    @Override
+//    public void onMsgFromMainToFragment(String strValue){
+//        if (typeChat != strValue) {
+//            if (strValue == "CHAT") {
+//                //Loading array and update listChat
+//                String namess[] = {
+//                        "Bill Gates", "Elon Mush", "Vladimir Putin"
+//                };
+//
+//                Integer avatarss[] = {
+//                        R.drawable.global_chat_message_avatar, R.drawable.global_chat_message_avatar, R.drawable.global_chat_message_avatar
+//                };
+//
+//                String messagess[] = {
+//                        "Sorry to bother you. I have a questi...",
+//                        "Sorry to bother you. I have a questi...",
+//                        "Sorry to bother you. I have a questi...",
+//                };
+//
+//                String timess[] = {"2:00 PM", "4:00 PM", "6:00 PM"};
+//                adapter.changeData(avatarss, namess, messagess, timess);
+//
+//                profileImage.setVisibility(View.INVISIBLE);
+//            } else if (strValue == "BOTCHAT") {
+//                profileImage.setVisibility(View.VISIBLE);
+//            } else if (strValue == "FRIEND") {
+//                profileImage.setVisibility(View.VISIBLE);
+//            } else if (strValue == "GLOBALCHAT") {
+//                profileImage.setVisibility(View.VISIBLE);
+//            } else if (strValue == "GROUPCHAT") {
+//                profileImage.setVisibility(View.VISIBLE);
+//            }
+//            typeChat = strValue;
+//        }
+//    }
 }

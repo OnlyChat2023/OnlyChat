@@ -48,4 +48,12 @@ public class CustomChatItem extends ArrayAdapter<String> {
 
         return row;
     }
+
+    public void changeData(Integer[] avatars, String[] names,String[] messages,String[] times){
+        this.avatars = avatars;
+        this.names = names;
+        this.messages = messages;
+        this.times = times;
+        this.notifyDataSetChanged();
+    }
 }
