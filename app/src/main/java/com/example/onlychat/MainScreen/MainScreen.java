@@ -1,19 +1,15 @@
 package com.example.onlychat.MainScreen;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import com.example.onlychat.MainScreen.Interface.Main_MainCallBacks;
 import com.example.onlychat.MainScreen.Fragment.MainContent;
-import com.example.onlychat.MainScreen.Fragment.MainHeader;
 import com.example.onlychat.MainScreen.Fragment.MainNavbar;
-import com.example.onlychat.MainScreen.Fragment.CustomizeChatItem;
 import com.example.onlychat.R;
 
 public class MainScreen extends FragmentActivity implements Main_MainCallBacks{
      FragmentTransaction ft;
-     MainHeader mainHeader;
      MainNavbar mainNavbar;
      MainContent mainContent;
 
@@ -24,13 +20,13 @@ public class MainScreen extends FragmentActivity implements Main_MainCallBacks{
          setContentView(R.layout.main_screen);
 
          ft = getSupportFragmentManager().beginTransaction();
-         mainHeader = MainHeader.newInstance("header");
-         ft.replace(R.id.main_header, mainHeader);
+         mainContent = MainContent.newInstance("content");
+         ft.replace(R.id.main_content, mainContent);
          ft.commit();
 
          ft = getSupportFragmentManager().beginTransaction();
-         mainContent = MainContent.newInstance("content");
-         ft.replace(R.id.main_content, mainContent);
+         mainNavbar = MainNavbar.newInstance("navbar");
+         ft.replace(R.id.main_navbar, mainNavbar);
          ft.commit();
 
          ft = getSupportFragmentManager().beginTransaction();
@@ -42,8 +38,7 @@ public class MainScreen extends FragmentActivity implements Main_MainCallBacks{
     @Override
     public void onMsgFromFragToMain (String sender, String strValue){
         if (sender == "NAVBAR"){
-            mainHeader.onMsgFromMainToFragment(strValue);
-            mainContent.onMsgFromMainToFragment(strValue);
+//            mainContent.onMsgFromMainToFragment(strValue);
         }
     }
 }

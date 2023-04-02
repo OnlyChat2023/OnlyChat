@@ -86,6 +86,12 @@ public class ListChat extends AppCompatActivity {
         CustomChatItem customChatItem=new CustomChatItem(this,avatars,names,messages,times);
         listMessage.setAdapter(customChatItem);
 
+        listMessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        });
 
         listMessage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
