@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.onlychat.ChatBot.MainScreen;
+import com.example.onlychat.GroupChat.GroupChatSetting;
 
 public class MainActivity extends AppCompatActivity {
     private final Boolean isLogin = false;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = new Intent(MainActivity.this, MainScreen.class);
+        Intent intent = new Intent(MainActivity.this, GroupChatSetting.class);
         startActivity(intent);
 
 //        if (isLogin == false) {

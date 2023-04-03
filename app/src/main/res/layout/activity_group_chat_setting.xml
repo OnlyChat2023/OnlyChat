@@ -1,183 +1,273 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GroupChat.GroupChatSetting">
-    <ScrollView
-        android:id="@+id/scrollView"
+    android:orientation="vertical"
+    android:background="#181828"
+    >
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="215dp"
+        android:paddingVertical="20dp"
+        android:paddingHorizontal="20dp"
+        >
+        <ImageView
+            android:id="@+id/imageView11"
+            android:layout_width="20dp"
+            android:layout_height="28dp"
+            app:srcCompat="@drawable/global_chat_back" />
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_marginTop="15dp"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@drawable/global_chat_avatar1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Anonymous"
+            android:textColor="#ffffff"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="28dp"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:paddingHorizontal="50dp">
+
+        <Button
+            android:id="@+id/chat_option_btn_profile"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_add_member"
+            android:stateListAnimator="@null"
+            android:gravity="center" />
+
+<!--        <Button-->
+<!--            android:id="@+id/chat_option_btn_noify"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:stateListAnimator="@null"-->
+<!--            android:background="@drawable/ic_turn_off_notification"-->
+<!--            android:gravity="center"/>-->
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:paddingHorizontal="24dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Setting"
+            android:textColor="#818181"
+            android:textSize="16dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserrat_semibold" />
 
         <RelativeLayout
-            android:id="@+id/relativeLayout"
+            android:id="@+id/share"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#181828"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            tools:ignore="MissingConstraints">
-
-            <ImageView
-                android:id="@+id/avatar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/avatar_img" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:paddingVertical="6dp"
+            >
 
             <TextView
-                android:id="@+id/groupname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/avatar"
-                android:layout_centerHorizontal="true"
-                android:fontFamily="@font/montserrat_bold"
-                android:text="Anonymous"
-                android:textColor="@color/white"
-                android:textSize="35sp" />
+                android:layout_alignParentStart="true"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="Share"
+                android:layout_centerVertical="true"
+                android:textColor="#ffffff"
+                android:textSize="18dp" />
 
             <ImageView
-                android:id="@+id/icon"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="10dp"
-                android:padding="10dp"
-                android:src="@drawable/ic_back_button"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="9dp" />
-
-            <LinearLayout
-                android:id="@+id/setting_section"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/groupname"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/settingL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:text="Setting"
-                    android:textColor="#818181"
-                    android:textSize="20sp" />
-
-                <ListView
-                    android:id="@android:id/list"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp" />
-            </LinearLayout>
-
-            <View
-                android:id="@+id/gap"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_below="@id/setting_section"
-                android:layout_weight="1" />
-
-            <LinearLayout
-                android:id="@+id/privacy_support_section"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/gap"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/privacyL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:text="Privacy and Support"
-                    android:textColor="#818181"
-                    android:textSize="20sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp"
-                    android:background="#181828"
-
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="2dp"
-                    tools:ignore="MissingConstraints,UseCompoundDrawables">
-
-                    <TextView
-                        android:id="@+id/blockL"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Block"
-                        android:layout_marginLeft="10dp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:layout_marginTop="10dp"
-                        android:textColor="#ffffff"
-                        android:textSize="20sp"
-                        tools:layout_editor_absoluteX="77dp"
-                        tools:layout_editor_absoluteY="16dp" />
-
-                    <View android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <ImageView
-                        android:id="@+id/ic_block"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:padding="10dp"
-                        tools:ignore="MissingConstraints"
-                        android:src="@drawable/ic_ban"
-                        tools:layout_editor_absoluteX="16dp"
-                        tools:layout_editor_absoluteY="9dp" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp"
-                    android:background="#181828"
-
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="2dp"
-                    tools:ignore="MissingConstraints,UseCompoundDrawables">
-
-                    <TextView
-                        android:id="@+id/reportL"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Report"
-                        android:layout_marginLeft="10dp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:layout_marginTop="10dp"
-                        android:textColor="#ffffff"
-                        android:textSize="20sp"
-                        tools:layout_editor_absoluteX="77dp"
-                        tools:layout_editor_absoluteY="16dp" />
-
-                    <View android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <ImageView
-                        android:id="@+id/ic_report"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_warning"
-                        tools:ignore="MissingConstraints"
-                        tools:layout_editor_absoluteX="16dp"
-                        tools:layout_editor_absoluteY="9dp" />
-                </LinearLayout>
-            </LinearLayout>
+                android:id="@+id/imageView13"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/global_chat_share" />
         </RelativeLayout>
-    </ScrollView>>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginBottom="18dp"
+            android:paddingVertical="6dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Turn off notification"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_alignParentStart="true"
+                android:textSize="18dp"
+                android:textColor="#ffffff"
+
+                />
+
+            <ImageView
+                android:id="@+id/imageView14"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/global_chat_notification" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/members"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:paddingVertical="6dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="Members (31257)"
+                android:textColor="#ffffff"
+                android:textSize="18dp"
+
+                />
+
+            <ImageView
+                android:id="@+id/imageView15"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/global_chat_mebers" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginBottom="18dp"
+            android:paddingVertical="6dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete chat"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_alignParentStart="true"
+                android:textSize="18dp"
+                android:textColor="#ffffff"
+                />
+
+            <ImageView
+                android:id="@+id/imageView16"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/global_chat_delete_2" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginBottom="25dp"
+            android:paddingVertical="6dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Leave"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_alignParentStart="true"
+                android:textSize="18dp"
+                android:textColor="#ffffff"
+
+                />
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="22dp"
+                android:layout_height="23dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/leave_icon" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Privacy and support"
+            android:textColor="#818181"
+            android:textSize="16dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserrat_semibold" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginBottom="18dp"
+            android:paddingVertical="6dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Block"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_alignParentStart="true"
+                android:textSize="18dp"
+                android:textColor="#ffffff"
+
+                />
+
+            <ImageView
+                android:id="@+id/imageView18"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/global_chat_blok" />
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginBottom="18dp"
+            android:paddingVertical="6dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Report"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_alignParentStart="true"
+                android:textSize="18dp"
+                android:textColor="#ffffff"
+
+                />
+
+            <ImageView
+                android:id="@+id/imageView19"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/global_chat_report" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>
