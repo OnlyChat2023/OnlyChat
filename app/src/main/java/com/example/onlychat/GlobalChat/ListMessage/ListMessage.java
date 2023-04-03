@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,7 +31,8 @@ public class ListMessage extends AppCompatActivity {
     ImageView icon;
     View gap;
     EditText chatText;
-    ImageView optionButton;
+    Button optionButton;
+    Button backButton;
 
     String names[] = {
             "Paimon","me","Xiao","Klee Bunbara","Paimon",
@@ -110,7 +112,16 @@ public class ListMessage extends AppCompatActivity {
         icon =(ImageView) findViewById(R.id.iconIcon);
         gap =(View) findViewById(R.id.gap);
         chatText = (EditText) findViewById(R.id.chatText);
-        optionButton = (ImageView) findViewById(R.id.optionButton);
+        optionButton = (Button) findViewById(R.id.optionButton);
+        backButton = (Button) findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.fixed,R.anim.left_to_right);
+            }
+        });
 
         optionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +137,7 @@ public class ListMessage extends AppCompatActivity {
 //                    intent.putExtras(userInf);
 //                    intent.putExtra("Bitmap", b);
                 startActivity(intent);
+                overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
 

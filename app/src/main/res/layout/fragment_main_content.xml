@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:fontFamily="@font/montserrat_bold2"
+            android:fontFamily="@font/montserrat_bold"
             android:text="chat title"
             android:textAllCaps="true"
             android:textColor="#D8D8D8"
@@ -93,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:fontFamily="@font/montserrat_semibold2"
+            android:fontFamily="@font/montserrat_semibold"
             android:text="MESSAGES"
             android:textColor="@color/white"
             android:textSize="14sp" />

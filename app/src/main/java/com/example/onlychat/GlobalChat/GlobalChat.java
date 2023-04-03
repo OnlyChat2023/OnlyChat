@@ -102,6 +102,17 @@ public class GlobalChat extends Fragment {
         CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), avatars,names,messages,times);
         listChat.setAdapter(customChatItem);
 
+        listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
+                messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
+
+                return true;
+            }
+        });
+
         listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -116,20 +127,9 @@ public class GlobalChat extends Fragment {
 //                    intent.putExtras(userInf);
 //                    intent.putExtra("Bitmap", b);
                     startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
-
-        listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
-                messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
-
-                return false;
-            }
-        });
-
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
