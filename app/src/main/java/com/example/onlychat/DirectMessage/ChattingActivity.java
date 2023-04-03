@@ -25,10 +25,12 @@ import com.example.onlychat.R;
 import java.util.ArrayList;
 
 public class ChattingActivity extends AppCompatActivity {
-    ImageView imgAvatar, btnBack, btnSetting, btnFile, btnImage, btnIcon, btnSend;
+    ImageView imgAvatar, btnFile, btnImage, btnIcon, btnSend;
+    Button btnBack, btnSetting;
     TextView txtName, txtOnline;
     EditText chatMessage;
     ListView chatContent;
+    public Boolean isMute;
 
     String[] messages = {
            "Sorry to bother you. I have a question for you",
@@ -67,8 +69,9 @@ public class ChattingActivity extends AppCompatActivity {
 //        actionBar.hide();
         setContentView(R.layout.global_chat_list_message);
 
-        btnBack = (ImageView) findViewById(R.id.backButton);
-        btnSetting = (ImageView) findViewById(R.id.optionButton);
+        isMute = false;
+        btnBack = (Button) findViewById(R.id.backButton);
+        btnSetting = (Button) findViewById(R.id.optionButton);
         imgAvatar = (ImageView) findViewById(R.id.imageView4);
         txtName = (TextView) findViewById(R.id.textName);
         txtOnline = (TextView) findViewById(R.id.textSubName);
@@ -86,6 +89,8 @@ public class ChattingActivity extends AppCompatActivity {
         Bitmap bm_avatar = (Bitmap) main_chat.getParcelableExtra("Bitmap");
         imgAvatar.setImageBitmap(bm_avatar);
         txtName.setText(userInf.getString("name"));
+        txtOnline.setText("Online");
+        txtOnline.setTextColor(getResources().getColor(R.color.online_green));
 
         MessageReceive adapter = new MessageReceive(this, bm_avatar, ArrayString2ArrayList(messages), ArrayString2ArrayList(types), ArrayString2ArrayList(times));
         chatContent.setAdapter(adapter);

@@ -12,13 +12,19 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".GroupChat.AddMember"
+            android:exported="false" />
+        <activity
             android:name=".ChatBot.MainScreen"
             android:exported="false" />
         <activity
-            android:name=".Authetication.ResetPassword"
+            android:name=".DirectMessage.Authetication.ResetPassword"
             android:exported="true" />
         <activity
-            android:name=".Authetication.OTP"
+            android:name=".DirectMessage.Authetication.OTP"
+            android:exported="true" />
+        <activity
+            android:name=".DirectMessage.ChattingActivity"
             android:exported="true" />
         <activity
             android:name=".DirectMessage.Option.OptionActivity"
@@ -39,10 +45,10 @@
             android:name=".Profile.Profile"
             android:exported="false" />
         <activity
-            android:name=".Authetication.ForgotActivity"
+            android:name=".DirectMessage.Authetication.ForgotActivity"
             android:exported="false" />
         <activity
-            android:name=".Authetication.RegisterActivity"
+            android:name=".DirectMessage.Authetication.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
