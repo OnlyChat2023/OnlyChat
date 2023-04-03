@@ -2,44 +2,45 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:paddingTop="20dp"
-    android:background="#181828"
-    >
+    android:orientation="vertical"
+    android:background="@color/background_dark">
 
     <RelativeLayout
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="18dp"
-        android:paddingEnd="33dp">
+        android:paddingVertical="20dp"
+        android:paddingHorizontal="20dp"
+        android:paddingEnd="36dp"
+        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_semibold"
-            android:text="GLOBAL CHAT CHANEL"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/montserrat_bold2"
+            android:text="chat title"
+            android:textAllCaps="true"
             android:textColor="#D8D8D8"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:id="@+id/chatIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            app:srcCompat="@drawable/global_chat_icon" />
+            android:src="@drawable/global_chat_icon" />
     </RelativeLayout>
-
     <RelativeLayout
         android:id="@+id/searchLayout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/titleLayout"
-        android:paddingHorizontal="18dp"
-        android:layout_marginTop="20dp">
+        android:paddingHorizontal="18dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,9 +55,10 @@
                 android:id="@+id/imageView3"
                 android:layout_width="24dp"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/global_chat_searchicon" />
+                android:src="@drawable/global_chat_searchicon" />
 
             <EditText
+                android:id="@+id/main_content_searchbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -70,45 +72,49 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/profileImage"
+            android:id="@+id/profile"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentEnd="true"
-            app:srcCompat="@drawable/global_chat_avatar" />
+            android:src="@drawable/global_chat_avatar" />
 
     </RelativeLayout>
-
     <RelativeLayout
         android:id="@+id/addLayout"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
+        android:paddingVertical="15dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/searchLayout"
-        android:paddingHorizontal="18dp"
+        android:paddingHorizontal="20dp"
         android:paddingEnd="36dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:fontFamily="@font/montserrat_medium"
+            android:fontFamily="@font/montserrat_semibold2"
             android:text="MESSAGES"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="14sp" />
 
         <ImageView
-            android:id="@+id/addIcon"
+            android:id="@+id/addChat"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            app:srcCompat="@drawable/global_chat_addicon" />
+            android:src="@drawable/global_chat_addicon" />
     </RelativeLayout>
+
     <ListView
-        android:id="@+id/listMessage"
-        android:layout_below="@+id/addLayout"
-        android:scrollbars="none"
+        android:id="@+id/listChat"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/addLayout"
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
-        android:layout_height="match_parent"/>
+        android:scrollbars="none" />
+
+
 </RelativeLayout>

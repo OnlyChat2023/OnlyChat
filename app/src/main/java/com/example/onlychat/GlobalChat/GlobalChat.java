@@ -1,7 +1,11 @@
 package com.example.onlychat.GlobalChat;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
 import android.content.Context;
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
@@ -19,15 +23,22 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
+import com.example.onlychat.DirectMessage.ChattingActivity;
+import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.R;
 
-public class ListChat extends AppCompatActivity {
-    ListView listMessage;
-    ImageView profileImage;
-    ImageView addIcon;
+public class GlobalChat extends Fragment {
+    TextView chatTitle;
+    ImageView chatIcon;
+    ImageView profile;
+    ImageView addChat;
+    ListView listChat;
+
     String names[] = {
             "Anonymous","Anonymous Private","Anonymous Publish",
             "Anonymous","Anonymous Private","Anonymous Publish",
@@ -72,38 +83,58 @@ public class ListChat extends AppCompatActivity {
     GridView androidGridView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.global_chat_list_chat);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        RelativeLayout globalChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
 
-        listMessage = (ListView) findViewById(R.id.listMessage);
+        // set value for widget
+        chatTitle=(TextView) globalChat.findViewById(R.id.header_title);
+        chatTitle.setText("global chat channel");
+        chatIcon = (ImageView) globalChat.findViewById(R.id.chatIcon);
+        profile=(ImageView) globalChat.findViewById(R.id.profile);
+        addChat = (ImageView) globalChat.findViewById(R.id.addChat);
+        listChat = (ListView) globalChat.findViewById(R.id.listChat);
 
-        listMessage.setSelection(0);
-        listMessage.smoothScrollToPosition(0);
-        listMessage.setDivider(null);
-        listMessage.setDividerHeight(0);
+        listChat.setSelection(0);
+        listChat.smoothScrollToPosition(0);
+        listChat.setDivider(null);
+        listChat.setDividerHeight(0);
 
-        CustomChatItem customChatItem=new CustomChatItem(this,avatars,names,messages,times);
-        listMessage.setAdapter(customChatItem);
+        CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), avatars,names,messages,times);
+        listChat.setAdapter(customChatItem);
 
+        listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(listChat.getContext(), ListMessage.class);
+//                    Bundle userInf = new Bundle();
+//                    TextView name = (TextView) v.findViewById(R.id.messageName);
+//                    ImageView avatar = (ImageView) v.findViewById(R.id.messageAvatar);
+//
+//                    userInf.putString("name", name.getText().toString());
+//                    avatar.setDrawingCacheEnabled(true);
+//                    Bitmap b = avatar.getDrawingCache();
+//                    intent.putExtras(userInf);
+//                    intent.putExtra("Bitmap", b);
+                    startActivity(intent);
+            }
+        });
 
-        listMessage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
-                messageBottomDialogFragment.show(getSupportFragmentManager(), messageBottomDialogFragment.getTag());
+                messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
 
                 return false;
             }
         });
 
 
-        profileImage = (ImageView) findViewById(R.id.profileImage);
-        profileImage.setOnClickListener(new View.OnClickListener() {
+        profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                LayoutInflater inflater = (LayoutInflater) globalChat.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
                 // overlay
                 View overlayView = inflater.inflate(R.layout.global_chat_overlay, null);
 //                boolean focusable = true; // lets taps outside the popup also dismiss it
@@ -137,11 +168,10 @@ public class ListChat extends AppCompatActivity {
             }
         });
 
-        addIcon = (ImageView) findViewById(R.id.addIcon);
-        addIcon.setOnClickListener(new View.OnClickListener() {
+        addChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                LayoutInflater inflater = (LayoutInflater) globalChat.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
                 // overlay
                 View overlayView = inflater.inflate(R.layout.global_chat_overlay, null);
 //                boolean focusable = true; // lets taps outside the popup also dismiss it
@@ -164,7 +194,7 @@ public class ListChat extends AppCompatActivity {
                 });
             }
         });
-
+        return globalChat;
     }
 
     public class ImageAdapterGridView extends BaseAdapter {

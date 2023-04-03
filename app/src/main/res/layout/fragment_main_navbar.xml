@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="5dp"
+    android:background="@color/background_navbar">
+
+    <Button
+        android:id="@+id/btn_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_weight="1"
+        android:background="@drawable/navbar_direct_chat" />
+
+    <Button
+        android:id="@+id/btn_groupchat"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_weight="1"
+        android:background="@drawable/navbar_group_chat" />
+
+    <Button
+        android:id="@+id/btn_globalchat"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_weight="1"
+        android:background="@drawable/navbar_global_chat"
+       />
+
+    <Button
+        android:id="@+id/btn_botchat"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_weight="1"
+        android:background="@drawable/navbar_bot_chat"
+        />
+
+    <Button
+        android:id="@+id/btn_friends"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_weight="1"
+        android:background="@drawable/navbar_friends"
+        />
+</LinearLayout>

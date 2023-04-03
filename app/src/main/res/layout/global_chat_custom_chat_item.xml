@@ -5,12 +5,13 @@
     android:gravity="center_vertical"
     android:background="@drawable/global_chat_chat_item_background"
     android:layout_height="wrap_content"
+    android:paddingVertical="8dp"
     >
 
     <ImageView
         android:id="@+id/messageAvatar"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         />
 
     <LinearLayout
@@ -26,7 +27,7 @@
             android:id="@+id/messageName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserratmedium"
+            android:fontFamily="@font/montserrat_semibold"
             android:text="Anonymous"
             android:maxLines="1"
             android:layout_marginBottom="5dp"
@@ -35,13 +36,13 @@
 
         <TextView
             android:id="@+id/messageContent"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:fontFamily="@font/montserratregular"
+            android:fontFamily="@font/montserrat_regular"
             android:text="Yes, I was working on it last night and..."
             android:textColor="#FFFFFF"
-            android:textSize="11sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
     <TextView
@@ -50,9 +51,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+<<<<<<< HEAD
+        android:fontFamily="@font/montserratregular"
+=======
         android:layout_alignBottom="@id/information"
         android:layout_alignTop="@id/information"
-        android:fontFamily="@font/montserratregular"
+        android:fontFamily="@font/montserrat_regular"
+>>>>>>> e2cc45e322a69eb154b042f11209b7ecb56a3382
         android:text="2:00 PM"
         android:textColor="#FFFFFF"
         android:textSize="11sp" />

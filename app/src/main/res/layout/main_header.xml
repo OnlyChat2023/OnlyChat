@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:fontFamily="@font/montserrat_bold2"
+        android:fontFamily="@font/montserrat_bold"
         android:text="GLOBAL CHAT CHANEL"
         android:textColor="#D8D8D8"
         android:textSize="16sp" />

@@ -25,18 +25,18 @@
         />
 
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            app:tabIndicatorColor="#7124CF"
-            android:layout_marginTop="30dp"
-            app:tabTextAppearance="@style/MineCustomTabText"
-            app:tabRippleColor="@null"
-            app:tabTextColor="#A9A9A9"
-            app:tabSelectedTextColor="@color/white"
-            android:layout_height="wrap_content">
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        app:tabIndicatorColor="#7124CF"
+        android:layout_marginTop="30dp"
+        app:tabTextAppearance="@style/MineCustomTabText"
+        app:tabRippleColor="@null"
+        app:tabTextColor="#A9A9A9"
+        app:tabSelectedTextColor="@color/white"
+        android:layout_height="wrap_content">
 
-        </com.google.android.material.tabs.TabLayout>
+    </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPaper"

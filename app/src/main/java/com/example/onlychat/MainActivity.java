@@ -17,11 +17,10 @@ import android.widget.TextView;
 
 import com.example.onlychat.Authetication.ForgotActivity;
 import com.example.onlychat.Authetication.RegisterActivity;
-import com.example.onlychat.GlobalChat.ListChat;
+import com.example.onlychat.ChatBot.MainScreen;
 import com.example.onlychat.EditProfile.EditProfile;
 import com.example.onlychat.GroupChat.GroupChatSetting;
 import com.example.onlychat.Profile.Profile;
-import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.DirectMessage.ChattingActivity;
 
 public class MainActivity extends AppCompatActivity {
