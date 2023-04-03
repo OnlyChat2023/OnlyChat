@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="14dp">
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="5dp"
+        />
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_toRightOf="@id/checkbox"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/name_phone_section"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:layout_toRightOf="@+id/avatar"
+        android:orientation="vertical"
+        android:paddingRight="80dp">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Adam M.Mathew"
+            android:textColor="@color/white"
+            android:layout_marginBottom="5dp"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/phoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_light"
+            android:text="0976382676"
+            android:textColor="#A9A9A9"
+            android:textSize="12sp" />
+    </LinearLayout>
+</RelativeLayout>
