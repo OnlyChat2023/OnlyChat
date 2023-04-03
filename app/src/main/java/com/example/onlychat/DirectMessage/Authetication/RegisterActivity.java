@@ -1,4 +1,4 @@
-package com.example.onlychat.Authetication;
+package com.example.onlychat.DirectMessage.Authetication;
 
 import androidx.appcompat.app.AppCompatActivity;
 

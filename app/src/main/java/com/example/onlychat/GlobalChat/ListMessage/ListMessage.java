@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,7 +31,7 @@ public class ListMessage extends AppCompatActivity {
     ImageView icon;
     View gap;
     EditText chatText;
-    ImageView optionButton;
+    Button optionButton;
 
     String names[] = {
             "Paimon","me","Xiao","Klee Bunbara","Paimon",
@@ -110,7 +111,7 @@ public class ListMessage extends AppCompatActivity {
         icon =(ImageView) findViewById(R.id.iconIcon);
         gap =(View) findViewById(R.id.gap);
         chatText = (EditText) findViewById(R.id.chatText);
-        optionButton = (ImageView) findViewById(R.id.optionButton);
+        optionButton = (Button) findViewById(R.id.optionButton);
 
         optionButton.setOnClickListener(new View.OnClickListener() {
             @Override

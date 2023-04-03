@@ -58,47 +58,29 @@
                 <Button
                     android:id="@+id/chat_option_btn_nickname"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableTop="@drawable/dm_option_icon_nickname"
-                    android:text="nickname"
-                    android:textAllCaps="false"
-                    android:textSize="10sp"
                     android:stateListAnimator="@null"
-                    android:textColor="#FAF4FF"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:backgroundTint="@color/background_dark"
-                    android:layout_gravity="center"/>
+                    android:background="@drawable/dm_option_nickname_nav"
+                    android:gravity="center"/>
 
                 <Button
                     android:id="@+id/chat_option_btn_profile"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:drawableTop="@drawable/dm_option_icon_profile"
-                    android:backgroundTint="@color/background_dark"
-                    android:text="personal page"
-                    android:textAllCaps="false"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/dm_option_profile_nav"
                     android:stateListAnimator="@null"
-                    android:textColor="#FAF4FF"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:textSize="10sp"
-                    android:layout_gravity="center" />
+                    android:gravity="center" />
 
                 <Button
                     android:id="@+id/chat_option_btn_noify"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textColor="#FAF4FF"
+                    android:layout_height="wrap_content"
                     android:stateListAnimator="@null"
-                    android:drawableTop="@drawable/dm_option_icon_on_notification"
-                    android:backgroundTint="@color/background_dark"
-                    android:text="off notification"
-                    android:textAllCaps="false"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:textSize="10sp"
-                    android:layout_gravity="center" />
+                    android:background="@drawable/dm_icon_on_notify_nav"
+                    android:gravity="center"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -170,7 +152,7 @@
                 android:layout_height="23dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                app:srcCompat="@drawable/dm_option_icon_on_notification" />
+                android:background="@drawable/dm_option_icon_on_notification" />
         </RelativeLayout>
 
         <RelativeLayout

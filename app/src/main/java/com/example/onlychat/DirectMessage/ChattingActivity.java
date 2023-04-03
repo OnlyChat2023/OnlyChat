@@ -25,7 +25,8 @@ import com.example.onlychat.R;
 import java.util.ArrayList;
 
 public class ChattingActivity extends AppCompatActivity {
-    ImageView imgAvatar, btnBack, btnSetting, btnFile, btnImage, btnIcon, btnSend;
+    ImageView imgAvatar, btnFile, btnImage, btnIcon, btnSend;
+    Button btnBack, btnSetting;
     TextView txtName, txtOnline;
     EditText chatMessage;
     ListView chatContent;
@@ -69,8 +70,8 @@ public class ChattingActivity extends AppCompatActivity {
         setContentView(R.layout.global_chat_list_message);
 
         isMute = false;
-        btnBack = (ImageView) findViewById(R.id.backButton);
-        btnSetting = (ImageView) findViewById(R.id.optionButton);
+        btnBack = (Button) findViewById(R.id.backButton);
+        btnSetting = (Button) findViewById(R.id.optionButton);
         imgAvatar = (ImageView) findViewById(R.id.imageView4);
         txtName = (TextView) findViewById(R.id.textName);
         txtOnline = (TextView) findViewById(R.id.textSubName);

@@ -1,27 +1,16 @@
 package com.example.onlychat;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.onlychat.Authetication.ForgotActivity;
-import com.example.onlychat.Authetication.RegisterActivity;
 import com.example.onlychat.ChatBot.MainScreen;
-import com.example.onlychat.EditProfile.EditProfile;
-import com.example.onlychat.GroupChat.GroupChatSetting;
-import com.example.onlychat.Profile.Profile;
-import com.example.onlychat.DirectMessage.ChattingActivity;
 
 public class MainActivity extends AppCompatActivity {
     private final Boolean isLogin = false;

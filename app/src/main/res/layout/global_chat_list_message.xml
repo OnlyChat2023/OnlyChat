@@ -50,15 +50,18 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_toRightOf="@+id/imageView4"
+                android:layout_toLeftOf="@+id/optionButton"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textName"
                     android:layout_width="wrap_content"
+                    android:maxWidth="500dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
+                    android:maxLines="1"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Anonymous"
+                    android:text="Anonymous Private"
                     android:textColor="#ffffff"
                     android:textSize="20sp" />
 
