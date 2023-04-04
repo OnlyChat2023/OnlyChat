@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.onlychat.R;
 
-public class CustomeFriendCheckBox extends ArrayAdapter<String> {
+public class CustomFriendCheckBox extends ArrayAdapter<String> {
     Context context;
     Integer[] avatars;
     String[] names;
@@ -21,7 +23,8 @@ public class CustomeFriendCheckBox extends ArrayAdapter<String> {
     ImageView avatar;
     TextView name;
     TextView phoneNumber;
-    public CustomeFriendCheckBox(Context context,Integer[] avatars, String[] names,String[] phoneNumbers){
+    CheckBox checkBox;
+    public CustomFriendCheckBox(Context context, Integer[] avatars, String[] names, String[] phoneNumbers){
         super(context, R.layout.checkbox_member,names);
         this.context = context;
         this.avatars = avatars;
@@ -37,10 +40,36 @@ public class CustomeFriendCheckBox extends ArrayAdapter<String> {
         avatar = (ImageView) row.findViewById(R.id.avatar);
         name = (TextView) row.findViewById(R.id.name);
         phoneNumber = (TextView) row.findViewById(R.id.phoneNumber);
+//        checkBox = (CheckBox) row.findViewById(R.id.checkbox);
+
+//        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                System.out.println("CHECKED");
+//                if (checkBox.isChecked()) {
+//                    checkBox.setChecked(false);
+//                }
+//                else {
+//                    checkBox.setChecked(true);
+//                }
+//            }
+//        });
 
         avatar.setImageResource(avatars[position]);
         name.setText(names[position]);
         phoneNumber.setText(phoneNumbers[position]);
+
+//        row.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (checkBox.isChecked()){
+//                    System.out.println("CHECKED");
+//                }
+//                else {
+//                    System.out.println("UNCHECKED");
+//                }
+//            }
+//        });
 
         return row;
     }

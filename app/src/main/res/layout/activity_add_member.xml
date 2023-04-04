@@ -92,8 +92,5 @@
         android:layout_width="405dp"
         android:layout_height="665dp"
         android:scrollbars="none"
-        tools:layout_editor_absoluteX="6dp"
-        tools:layout_editor_absoluteY="67dp"
-        android:choiceMode="multipleChoice"
         tools:ignore="MissingConstraints" />
 </LinearLayout>
