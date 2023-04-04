@@ -31,19 +31,19 @@
             android:exported="true" />
         <activity
             android:name=".MainScreen.MainScreen"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".EditProfileStep2"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".GroupChat.GroupChatSetting"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".EditProfile.EditProfile"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Profile.Profile"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DirectMessage.Authetication.ForgotActivity"
             android:exported="false" />
@@ -61,16 +61,16 @@
         </activity>
         <activity
             android:name=".GlobalChat.GlobalChat"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".GlobalChat.ListMessage.ListMessage"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".GlobalChat.ListMessage.Options.Options"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".Friends.Friends"
-            android:exported="true" />
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

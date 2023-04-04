@@ -102,9 +102,9 @@ public class MainScreen extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),0);
         adapter.addFragment(new DirectMessage(),"direct message");
         adapter.addFragment(new GlobalChat(), "");
+        adapter.addFragment(new GlobalChat(), "global chat");
         adapter.addFragment(new GlobalChat(), "");
-        adapter.addFragment(new GlobalChat(), "");
-        adapter.addFragment(new Friends(), "");
+        adapter.addFragment(new Friends(), "friends");
         viewPager.setAdapter(adapter);
     }
 
