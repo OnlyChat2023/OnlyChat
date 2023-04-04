@@ -52,7 +52,7 @@ public class ChangeNickNameDialog extends DialogFragment {
         Button refresh = (Button) layout.findViewById(R.id.refresh_btn);
         Button no = (Button) layout.findViewById(R.id.no_btn);
 
-        friendName.setText(fr_name);
+        friendName.setText("Editting " + fr_name + "'s nickname");
         friendNickname.setHint(fr_nickname);
         userNickname.setHint(user_nickname);
 

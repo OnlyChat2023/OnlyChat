@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="250dp"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingHorizontal="20dp"
     android:layout_gravity="center"
-    android:paddingTop="25dp"
-    android:paddingBottom="15dp"
+    android:paddingTop="35dp"
+    android:paddingBottom="20dp"
     android:background="@drawable/dialog_background">
 
     <TextView
@@ -16,9 +16,10 @@
         android:layout_height="wrap_content"
         android:text="Do you still want to delete this message?"
         android:fontFamily="@font/montserrat_regular"
-        android:textSize="13sp"
+        android:textSize="16sp"
+        android:gravity="center_horizontal"
         android:textColor="#E9E9E9"
-        android:paddingBottom="15dp"
+        android:paddingBottom="30dp"
         />
 
     <LinearLayout
@@ -35,7 +36,7 @@
             android:text="yes"
             android:fontFamily="@font/montserrat_bold"
             android:textSize="14dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/yes_button_background"
             />
         <Button
@@ -43,7 +44,7 @@
             android:layout_width="74dp"
             android:layout_height="26dp"
             android:text="no"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="15dp"
             android:fontFamily="@font/montserrat_bold"
             android:textSize="14dp"
             android:background="@drawable/no_button_background"
