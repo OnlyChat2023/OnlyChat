@@ -51,9 +51,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:fontFamily="@font/montserrat_regular"
         android:layout_alignBottom="@id/information"
         android:layout_alignTop="@id/information"
+        android:fontFamily="@font/montserrat_regular"
         android:text="2:00 PM"
         android:textColor="#FFFFFF"
         android:textSize="11sp" />
