@@ -35,7 +35,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+<<<<<<< HEAD
         Intent intent = new Intent(MainActivity.this, Profile.class);
+=======
+        Intent intent = new Intent(MainActivity.this, MainScreen.class);
+>>>>>>> fb725affc15280445fb5eee3202748046b5bca97
         startActivity(intent);
 
 //        if (isLogin == false) {
