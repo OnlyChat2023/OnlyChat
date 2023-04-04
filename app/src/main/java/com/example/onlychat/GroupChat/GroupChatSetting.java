@@ -2,66 +2,130 @@ package com.example.onlychat.GroupChat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 
-import com.example.onlychat.GroupChat.CustomComponents.CustomIconLabelAdapterGroupChatSetting;
+import com.example.onlychat.GlobalChat.ListMessage.Options.CustomMemberItem;
+import com.example.onlychat.MainActivity;
 import com.example.onlychat.R;
 
-public class GroupChatSetting extends ListActivity {
+public class GroupChatSetting extends AppCompatActivity {
 
-    private CustomIconLabelAdapterGroupChatSetting adapter;
-    String[] contents = {"Share", "Add people", "Turn off notification", "Members", "Delete chat", "Leave"};
-    Integer[] thumbnails = { R.drawable.ic_share,R.drawable.ic_add_friend,R.drawable.ic_notification,R.drawable.ic_member,R.drawable.ic_trash,R.drawable.ic_leave };
+    Button addBtn;
+    RelativeLayout share;
+    RelativeLayout members;
+    ListView listMembers;
+
+    Integer avatars[] = {
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,R.drawable.global_chat_avatar,
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,R.drawable.global_chat_avatar,
+            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,R.drawable.global_chat_avatar
+
+    };
+    String names[] = {
+            "Adam M.Mathew","Albert Willson","Andrew McLeod", "Brittany Smith",
+            "Adam M.Mathew","Albert Willson","Andrew McLeod", "Brittany Smith",
+            "Adam M.Mathew","Albert Willson","Andrew McLeod", "Brittany Smith"
+    };
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat_setting);
 
-        adapter = new CustomIconLabelAdapterGroupChatSetting(this, R.layout.setting_item, contents, thumbnails);
-        setListAdapter((ListAdapter) adapter);
-    }
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+        share = (RelativeLayout) findViewById(R.id.share);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                // overlay
+                View overlayView = inflater.inflate(R.layout.global_chat_overlay, null);
+//                boolean focusable = true; // lets taps outside the popup also dismiss it
+                int width = LinearLayout.LayoutParams.MATCH_PARENT;
+                int height = LinearLayout.LayoutParams.MATCH_PARENT;
+                final PopupWindow overlayWindow = new PopupWindow(overlayView,width,height,true);
+                overlayWindow.showAtLocation(view, Gravity.TOP, 0, 0);
 
-        if(position == 0){
-            openDialog(Gravity.CENTER, R.layout.layout_share_box);
-        }
-        if(position == 3){
-            openDialog(Gravity.CENTER, R.layout.fragment_members);
-        }
-    }
+                // Popup
+                View popupView = inflater.inflate(R.layout.layout_share_box, null);
+                boolean focusable = true; // lets taps outside the popup also dismiss it
+                final PopupWindow popupWindow = new PopupWindow(popupView,900,1070,focusable);
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
-    private void openDialog(int gravity, int layout) {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(layout);
+                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        overlayWindow.dismiss();
+                    }
+                });
+            }
+        });
 
-        Window window = dialog.getWindow();
-        if(window == null) {
-            return;
-        }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        members = (RelativeLayout) findViewById(R.id.members);
+        members.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                // overlay
+                View overlayView = inflater.inflate(R.layout.global_chat_overlay, null);
+//                boolean focusable = true; // lets taps outside the popup also dismiss it
+                int width = LinearLayout.LayoutParams.MATCH_PARENT;
+                int height = LinearLayout.LayoutParams.MATCH_PARENT;
+                final PopupWindow overlayWindow = new PopupWindow(overlayView,width,height,true);
+                overlayWindow.showAtLocation(view, Gravity.TOP, 0, 0);
 
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = gravity;
-        window.setAttributes(windowAttributes);
+                // Popup
+                View popupView = inflater.inflate(R.layout.global_chat_popup_members, null);
 
-        // Click ben ngoai tat dialog
-        dialog.setCancelable(true);
+                // set list members
+                listMembers = (ListView)  popupView.findViewById(R.id.listMembers);
+                CustomMemberItem customMemberItem=new CustomMemberItem(popupView.getContext(),avatars,names);
+                listMembers.setAdapter(customMemberItem);
+                listMembers.setSelection(0);
+                listMembers.smoothScrollToPosition(0);
+                listMembers.setDivider(null);
+                listMembers.setDividerHeight(0);
 
-        // show dialog
-        dialog.show();
+
+                boolean focusable = true; // lets taps outside the popup also dismiss it
+                final PopupWindow popupWindow = new PopupWindow(popupView,900,1250,focusable);
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        overlayWindow.dismiss();
+                    }
+                });
+            }
+        });
+
+        addBtn = (Button) findViewById(R.id.add_member_btn);
+
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent activity_add_member = new Intent(GroupChatSetting.this, AddMember.class);
+                startActivity(activity_add_member);
+            }
+        });
+
     }
 }

@@ -32,6 +32,7 @@ public class ListMessage extends AppCompatActivity {
     View gap;
     EditText chatText;
     Button optionButton;
+    Button backButton;
 
     String names[] = {
             "Paimon","me","Xiao","Klee Bunbara","Paimon",
@@ -112,6 +113,15 @@ public class ListMessage extends AppCompatActivity {
         gap =(View) findViewById(R.id.gap);
         chatText = (EditText) findViewById(R.id.chatText);
         optionButton = (Button) findViewById(R.id.optionButton);
+        backButton = (Button) findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.fixed,R.anim.left_to_right);
+            }
+        });
 
         optionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +137,7 @@ public class ListMessage extends AppCompatActivity {
 //                    intent.putExtras(userInf);
 //                    intent.putExtra("Bitmap", b);
                 startActivity(intent);
+                overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
 

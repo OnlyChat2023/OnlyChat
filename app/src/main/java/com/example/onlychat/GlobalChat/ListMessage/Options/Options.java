@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -19,6 +20,7 @@ public class Options extends AppCompatActivity {
     RelativeLayout share;
     RelativeLayout members;
     ListView listMembers;
+    ImageView backButton;
 
     Integer avatars[] = {
             R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,R.drawable.global_chat_avatar,
@@ -37,6 +39,15 @@ public class Options extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.global_chat_chat_options);
+
+        backButton = (ImageView) findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.fixed, R.anim.left_to_right);
+            }
+        });
 
         share = (RelativeLayout) findViewById(R.id.share);
         share.setOnClickListener(new View.OnClickListener() {

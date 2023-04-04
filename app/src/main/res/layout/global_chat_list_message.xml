@@ -115,6 +115,7 @@
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
             android:padding="11dp"
+            android:paddingVertical="9dp"
             android:paddingEnd="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -168,7 +169,7 @@
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/montserrat_regular"
                 android:hint="Type here..."
-                android:paddingVertical="7dp"
+                android:paddingVertical="12dp"
                 android:textColorHint="#A9A9A9"
                 android:maxLines="3"
                 android:textCursorDrawable="@null" />

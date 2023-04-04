@@ -12,6 +12,9 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".GroupChat.AddMember"
+            android:exported="false" />
+        <activity
             android:name=".ChatBot.MainScreen"
             android:exported="false" />
         <activity
