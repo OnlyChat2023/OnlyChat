@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.onlychat.DiaLog.BasicDialog;
+import com.example.onlychat.DiaLog.ChangeNickNameDialog;
 import com.example.onlychat.DirectMessage.ChattingActivity;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.R;
@@ -59,6 +60,22 @@ public class OptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        btn_nickname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChangeNickNameDialog dialog = new ChangeNickNameDialog().newInstance(txtName.getText().toString(), "God of Wars", "");
+                dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
+            }
+        });
+
+        nick_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChangeNickNameDialog dialog = new ChangeNickNameDialog().newInstance(txtName.getText().toString(), "God of Wars", "");
+                dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
             }
         });
 
