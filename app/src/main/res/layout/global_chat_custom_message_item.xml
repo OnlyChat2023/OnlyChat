@@ -36,10 +36,10 @@
             android:layout_height="wrap_content"
             android:background="@drawable/global_chat_round_left"
             android:fontFamily="@font/montserrat_regular"
-            android:lineHeight="24dp"
+            android:lineHeight="20dp"
             android:text="What's the problem?"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="14sp" />
         <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp"

@@ -94,8 +94,6 @@ public class DirectMessage extends Fragment {
 
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
-        listChat.setDivider(null);
-        listChat.setDividerHeight(0);
 
         CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), avatars,names,messages,times);
         listChat.setAdapter(customChatItem);

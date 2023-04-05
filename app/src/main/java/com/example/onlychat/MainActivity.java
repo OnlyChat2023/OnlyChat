@@ -1,7 +1,6 @@
 package com.example.onlychat;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.Group;
 
 
 import android.content.Intent;
@@ -11,15 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.onlychat.ChatBot.MainScreen;
-import com.example.onlychat.EditProfile.EditProfile;
-import com.example.onlychat.Friends.AllFriends.AllFriends;
-import com.example.onlychat.Friends.Friends;
-import com.example.onlychat.GlobalChat.GlobalChat;
-import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
-import com.example.onlychat.GroupChat.AddMember;
-import com.example.onlychat.GroupChat.GroupChatSetting;
-import com.example.onlychat.Profile.Profile;
+import com.example.onlychat.MainScreen.MainScreen;
 
 public class MainActivity extends AppCompatActivity {
     private final Boolean isLogin = false;
@@ -35,11 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-<<<<<<< HEAD
-        Intent intent = new Intent(MainActivity.this, Profile.class);
-=======
         Intent intent = new Intent(MainActivity.this, MainScreen.class);
->>>>>>> fb725affc15280445fb5eee3202748046b5bca97
         startActivity(intent);
 
 //        if (isLogin == false) {

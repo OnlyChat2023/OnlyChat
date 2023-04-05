@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.onlychat.ChatBot.ChatBot;
 import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.Friends.Friends;
 import com.example.onlychat.GlobalChat.GlobalChat;
@@ -103,7 +104,7 @@ public class MainScreen extends AppCompatActivity {
         adapter.addFragment(new DirectMessage(),"direct message");
         adapter.addFragment(new GlobalChat(), "");
         adapter.addFragment(new GlobalChat(), "");
-        adapter.addFragment(new GlobalChat(), "");
+        adapter.addFragment(new ChatBot(), "chat bot");
         adapter.addFragment(new Friends(), "");
         viewPager.setAdapter(adapter);
     }

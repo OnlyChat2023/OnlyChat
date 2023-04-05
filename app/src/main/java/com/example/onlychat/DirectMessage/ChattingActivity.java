@@ -121,7 +121,7 @@ public class ChattingActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(ChattingActivity.this, MainScreen.class);
+//                Intent intent = new Intent(ChattingActivity.this, ChatBot.class);
 //                startActivity(intent);
                 finish();
             }

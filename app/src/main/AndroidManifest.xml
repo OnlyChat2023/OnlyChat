@@ -15,7 +15,7 @@
             android:name=".GroupChat.AddMember"
             android:exported="false" />
         <activity
-            android:name=".ChatBot.MainScreen"
+            android:name=".ChatBot.ChatBot"
             android:exported="false" />
         <activity
             android:name=".DirectMessage.Authetication.ResetPassword"
