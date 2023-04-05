@@ -43,7 +43,7 @@
             android:exported="false" />
         <activity
             android:name=".Profile.Profile"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DirectMessage.Authetication.ForgotActivity"
             android:exported="false" />

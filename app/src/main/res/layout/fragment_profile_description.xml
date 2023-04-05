@@ -12,13 +12,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="I fell in love with her courage, her sincerity, and her flaming self respect. And it’s these things I’d believe in, even if the whole world indulged in wild suspicions that she wasn’t all she should be."
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:textColor="#ffffff"
-        android:fontFamily="@font/montserrat_medium"
-        android:background="#353546"
-        android:padding="15dp"
-        android:textSize="18sp"
-        tools:layout_editor_absoluteX="77dp"
-        tools:layout_editor_absoluteY="16dp" />
+        android:fontFamily="@font/montserrat_regular"
+        android:background="@drawable/profile_large_item"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="22dp"
+        android:textSize="16sp" />
 </LinearLayout>

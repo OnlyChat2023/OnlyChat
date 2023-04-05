@@ -4,93 +4,111 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#292943"
     tools:context=".Profile.Profile">
+
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fillViewport="true">
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            tools:ignore="MissingConstraints">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/avatar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/avatar_img"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginBottom="10dp"
-                />
+                android:src="@drawable/avatar_img" />
 
             <TextView
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/avatar"
+                android:layout_below="@id/avatar"
                 android:layout_centerHorizontal="true"
-                android:fontFamily="@font/montserrat_bold"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="28dp"
+                android:fontFamily="@font/montserrat_semibold"
                 android:text="Phong Tran"
                 android:textColor="@color/white"
-                android:textSize="35sp" />
+                android:textSize="28sp" />
 
             <LinearLayout
                 android:id="@+id/btn_section"
-                android:layout_below="@id/username"
-                android:layout_marginTop="15dp"
-                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/username"
+                android:layout_centerHorizontal="true">
 
                 <Button
                     android:id="@+id/button2"
                     android:layout_width="wrap_content"
-                    android:layout_height="43dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
                     android:background="@drawable/profile_btn_add"
                     android:drawableEnd="@drawable/ic_add_friend"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:padding="10dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:paddingHorizontal="13dp"
                     android:text="Add friend"
-                    android:textSize="12sp"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="77dp"
-                    tools:layout_editor_absoluteY="237dp" />
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/button3"
                     android:layout_width="wrap_content"
                     android:layout_height="43dp"
-                    android:drawableLeft="@drawable/ic_chat"
-                    android:text="Send chat"
-                    android:textColor="#44216F"
                     android:background="@drawable/profile_btn_send_chat"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:padding="12dp"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="226dp"
-                    tools:layout_editor_absoluteY="237dp" />
+                    android:drawableStart="@drawable/ic_chat"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:paddingHorizontal="16dp"
+                    android:text="Send chat"
+                    android:textAlignment="textEnd"
+                    android:textAllCaps="false"
+                    android:textColor="#44216F"
+                    android:textSize="13sp" />
             </LinearLayout>
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                android:fontFamily="@font/montserrat_medium"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_below="@id/btn_section"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabTextColor="#656565"
-                app:tabIndicatorColor="@color/white"
-                app:tabSelectedTextColor="@color/white"/>
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/view_pager"
-                android:layout_below="@id/tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="500dp" />
+                android:layout_marginTop="28dp"
+                android:background="#181828"
+                android:orientation="vertical">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tab_layout"
+                    style="@style/ProfileCustomTabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:background="#181828"
+                    android:fontFamily="@font/montserrat_regular"
+                    app:tabIndicatorColor="@color/white"
+                    app:tabSelectedTextColor="@color/white"
+                    app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+                    app:tabTextColor="#FFFFFF" />
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#181828"
+                    android:paddingVertical="12dp"
+                    android:paddingHorizontal="20dp" />
+            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
