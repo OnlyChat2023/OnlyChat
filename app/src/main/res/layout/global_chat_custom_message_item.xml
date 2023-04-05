@@ -1,48 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:paddingVertical="8dp"
-    android:paddingRight="80dp"
+    android:paddingHorizontal="12dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/avatar"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_marginTop="21dp"
-        android:layout_marginRight="9dp"
-         />
-    <LinearLayout
+        android:layout_marginEnd="6dp"
+        android:layout_alignTop="@id/chatLayout" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_toEndOf="@id/avatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:fontFamily="@font/montserrat_medium"
+        android:text="Klee Bunbara"
+        android:layout_marginBottom="5dp"
+        android:textColor="@color/white"
+        android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_medium"
-            android:text="Klee Bunbara"
-            android:layout_marginBottom="5dp"
-            android:textColor="@color/white"
-            android:textSize="13sp" />
+    <LinearLayout
+        android:id="@+id/chatLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/avatar"
+        android:layout_below="@id/name"
+        android:background="@drawable/global_chat_round_left"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/chatContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/global_chat_round_left"
             android:fontFamily="@font/montserrat_regular"
             android:lineHeight="20dp"
             android:text="What's the problem?"
             android:textColor="@color/white"
             android:textSize="14sp" />
+
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            />
+            android:id="@+id/chatImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

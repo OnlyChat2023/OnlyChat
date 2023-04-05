@@ -7,14 +7,17 @@ import androidx.appcompat.app.ActionBar;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ListView;
 
@@ -28,10 +31,15 @@ import java.util.ArrayList;
 
 public class ChattingActivity extends AppCompatActivity {
     ImageView imgAvatar, btnFile, btnImage, btnIcon, btnSend;
+    ImageView enclose;
+    ImageView image;
+    ImageView icon;
+    View gap;
     Button btnBack, btnSetting;
     TextView txtName, txtOnline;
     EditText chatMessage;
     ListView chatContent;
+    RelativeLayout chatLayout;
     public Boolean isMute;
 
     String[] messages = {
@@ -83,8 +91,10 @@ public class ChattingActivity extends AppCompatActivity {
         btnFile = (ImageView) findViewById(R.id.encloseIcon);
         btnImage = (ImageView) findViewById(R.id.imageIcon);
         btnIcon = (ImageView) findViewById(R.id.iconIcon);
+        gap = (View) findViewById(R.id.gap);
         btnSend = (ImageView) findViewById(R.id.sendIcon);
         chatMessage = (EditText) findViewById(R.id.chatText);
+        chatLayout = (RelativeLayout) findViewById(R.id.chatLayout);
 
         Intent main_chat = getIntent();
         Bundle userInf = main_chat.getExtras();
@@ -97,7 +107,7 @@ public class ChattingActivity extends AppCompatActivity {
         MessageReceive adapter = new MessageReceive(this, bm_avatar, ArrayString2ArrayList(messages), ArrayString2ArrayList(types), ArrayString2ArrayList(times));
         chatContent.setAdapter(adapter);
         chatContent.setSelection(adapter.getCount() - 1);
-//        chatContent.smoothScrollToPosition(0);
+        chatContent.smoothScrollToPosition(adapter.getCount() - 1);
         chatContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -114,7 +124,7 @@ public class ChattingActivity extends AppCompatActivity {
                 DMBottomDialog dialog = new DMBottomDialog().newInstance(i);
                 dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
 
-                return false;
+                return true;
             }
         });
 
@@ -150,6 +160,54 @@ public class ChattingActivity extends AppCompatActivity {
                 intent.putExtras(userInf);
                 intent.putExtra("Bitmap", b);
                 startActivity(intent);
+            }
+        });
+
+        final boolean[] state = {true};
+
+
+        chatLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                chatLayout.getWindowVisibleDisplayFrame(r);
+
+                int heightDiff = chatLayout.getRootView().getHeight() - r.height();
+                if (state[0] && heightDiff > 0.25*chatLayout.getRootView().getHeight()) {
+                    chatContent.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            chatContent.setSelection(adapter.getCount() - 1);
+                        }
+                    },150);
+
+                    chatContent.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            btnFile.animate().translationX(-220).setDuration(120);
+                            btnImage.animate().translationX(-220).setDuration(120);
+                            btnIcon.animate().translationX(-220).setDuration(120);
+                            gap.animate().translationX(-220).setDuration(120);
+                            chatMessage.animate().translationX(-220).setDuration(120);
+                            chatMessage.setPadding(0,0,0,0);
+                        }
+                    }, 160);
+                    state[0] = false;
+                }
+                else if (!state[0] && heightDiff <= 0.25*chatLayout.getRootView().getHeight()) {
+                    state[0] = true;
+                    chatContent.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            btnFile.animate().translationX(-0).setDuration(100);
+                            btnImage.animate().translationX(-0).setDuration(100);
+                            btnIcon.animate().translationX(-0).setDuration(100);
+                            gap.animate().translationX(-0).setDuration(100);
+                            chatMessage.animate().translationX(-0).setDuration(100);
+                            chatMessage.setPadding(0,0,230,0);
+                        }
+                    });
+                }
             }
         });
     }

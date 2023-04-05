@@ -88,22 +88,6 @@
 
         </RelativeLayout>
 
-        <ListView
-            android:id="@+id/listMessages"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/linearLayout"
-            android:windowSoftInputMode="adjustPan"
-            android:scrollbars="none"
-            android:isScrollContainer="true"
-            android:layout_marginBottom="80dp"
-            android:paddingHorizontal="16dp"
-            android:transcriptMode="alwaysScroll"
-            android:layout_alignParentBottom="true"
-            android:divider="@null"
-            >
-        </ListView>
-
         <RelativeLayout
             android:id="@+id/chatLayout"
             android:layout_width="match_parent"
@@ -111,6 +95,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="11dp"
+            android:layout_marginTop="11dp"
             android:background="@drawable/global_chat_background"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
@@ -182,6 +167,21 @@
                 app:srcCompat="@drawable/global_chat_send" />
 
         </RelativeLayout>
+
+        <ListView
+            android:id="@+id/listMessages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayout"
+            android:windowSoftInputMode="adjustPan"
+            android:scrollbars="none"
+            android:layout_above="@id/chatLayout"
+            android:isScrollContainer="true"
+            android:paddingHorizontal="12dp"
+            android:transcriptMode="alwaysScroll"
+            android:divider="@null"
+            >
+        </ListView>
     </RelativeLayout>
 </ScrollView>
 

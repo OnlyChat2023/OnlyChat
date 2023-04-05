@@ -121,7 +121,8 @@ public class DirectMessage extends Fragment {
 
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
-                return false;
+
+                return true;
             }
         });
 

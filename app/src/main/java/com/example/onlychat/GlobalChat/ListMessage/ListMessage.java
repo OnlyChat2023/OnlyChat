@@ -80,10 +80,9 @@ public class ListMessage extends AppCompatActivity {
         listView=(ListView) findViewById(R.id.listMessages);
         CustomMessageItem customMessageItem = new CustomMessageItem(this,avatars,names,messages);
 
-
         listView.setAdapter(customMessageItem);
-        listView.setSelection(0);
-        listView.smoothScrollToPosition(0);
+        listView.setSelection(customMessageItem.getCount() - 1);
+        listView.smoothScrollToPosition(customMessageItem.getCount() - 1);
         listView.setDivider(null);
         listView.setDividerHeight(0);
 
