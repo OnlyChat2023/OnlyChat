@@ -23,6 +23,7 @@ import com.example.onlychat.ChatBot.ChatBot;
 import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.Friends.Friends;
 import com.example.onlychat.GlobalChat.GlobalChat;
+import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.MainScreen.Interface.Main_MainCallBacks;
 import com.example.onlychat.MainScreen.Fragment.MainContent;
 import com.example.onlychat.MainScreen.Fragment.MainNavbar;
@@ -102,7 +103,7 @@ public class MainScreen extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),0);
         adapter.addFragment(new DirectMessage(),"direct message");
-        adapter.addFragment(new GlobalChat(), "");
+        adapter.addFragment(new GroupChat(), "");
         adapter.addFragment(new GlobalChat(), "");
         adapter.addFragment(new ChatBot(), "chat bot");
         adapter.addFragment(new Friends(), "");
