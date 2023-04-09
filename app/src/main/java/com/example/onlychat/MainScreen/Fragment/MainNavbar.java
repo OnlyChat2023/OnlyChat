@@ -17,7 +17,7 @@ import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.R;
 
 public class MainNavbar extends Fragment {
-//    MainScreen main;
+//    ChatBot main;
 //    Button btnChat, btnGroupChat, btnGlobalChat, btnBotChat, btnFriends;
 //
 //    public static MainNavbar newInstance(String strArg1) {
@@ -34,7 +34,7 @@ public class MainNavbar extends Fragment {
 //        if (!(getActivity() instanceof Main_MainCallBacks)) {
 //            throw new IllegalStateException("Activity must implement MainCallbacks");
 //        }
-//        main = (MainScreen) getActivity(); // use this reference to invoke main callbacks
+//        main = (ChatBot) getActivity(); // use this reference to invoke main callbacks
 //    }
 //
 //    @Override

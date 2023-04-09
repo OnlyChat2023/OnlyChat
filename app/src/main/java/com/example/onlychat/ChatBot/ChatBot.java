@@ -1,16 +1,11 @@
-package com.example.onlychat.GlobalChat;
+package com.example.onlychat.ChatBot;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import android.content.Context;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,14 +20,13 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.onlychat.DirectMessage.ChattingActivity;
-import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
+import com.example.onlychat.GlobalChat.CustomChatItem;
+import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.R;
 
-public class GlobalChat extends Fragment {
+public class ChatBot extends Fragment {
     TextView chatTitle;
     ImageView chatIcon;
     ImageView profile;
@@ -40,12 +34,12 @@ public class GlobalChat extends Fragment {
     ListView listChat;
 
     String names[] = {
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
+            "English Study Chat Bot","English Study Chat Bot","English Study Chat Bot",
+            "English Study Chat Bot","English Study Chat Bot","English Study Chat Bot",
+            "English Study Chat Bot","English Study Chat Bot","English Study Chat Bot",
+            "English Study Chat Bot","English Study Chat Bot","English Study Chat Bot",
+            "English Study Chat Bot","English Study Chat Bot","English Study Chat Bot",
+            "English Study Chat Bot","English Study Chat Bot","English Study Chat Bot",
     };
     Integer avatars[]={
             R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
@@ -84,21 +78,41 @@ public class GlobalChat extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RelativeLayout globalChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
+        RelativeLayout botChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
 
         // set value for widget
-        chatTitle=(TextView) globalChat.findViewById(R.id.header_title);
-        chatTitle.setText("global chat channel");
-        chatIcon = (ImageView) globalChat.findViewById(R.id.chatIcon);
-        profile=(ImageView) globalChat.findViewById(R.id.profile);
-        addChat = (ImageView) globalChat.findViewById(R.id.addChat);
-        listChat = (ListView) globalChat.findViewById(R.id.listChat);
+        chatTitle=(TextView) botChat.findViewById(R.id.header_title);
+        chatIcon = (ImageView) botChat.findViewById(R.id.chatIcon);
+        profile=(ImageView) botChat.findViewById(R.id.profile);
+        addChat = (ImageView) botChat.findViewById(R.id.addChat);
+        listChat = (ListView) botChat.findViewById(R.id.listChat);
+
+        chatTitle.setText("Bot Chat Channel");
+
+        chatIcon.setImageResource(R.drawable.botchat_icon);
 
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
 
-        CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), avatars,names,messages,times);
+        CustomChatItem customChatItem=new CustomChatItem(botChat.getContext(), avatars,names,messages,times);
         listChat.setAdapter(customChatItem);
+
+//        listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Intent intent = new Intent(listChat.getContext(), ChattingActivity.class);
+//                Bundle userInf = new Bundle();
+//                TextView name = (TextView) view.findViewById(R.id.messageName);
+//                ImageView avatar = (ImageView) view.findViewById(R.id.messageAvatar);
+//
+//                userInf.putString("name", name.getText().toString());
+//                avatar.setDrawingCacheEnabled(true);
+//                Bitmap b = avatar.getDrawingCache();
+//                intent.putExtras(userInf);
+//                intent.putExtra("Bitmap", b);
+//                startActivity(intent);
+//            }
+//        });
 
         listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -106,70 +120,22 @@ public class GlobalChat extends Fragment {
 
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
-
-                return true;
+                return false;
             }
         });
 
-        listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(listChat.getContext(), ListMessage.class);
-//                    Bundle userInf = new Bundle();
-//                    TextView name = (TextView) v.findViewById(R.id.messageName);
-//                    ImageView avatar = (ImageView) v.findViewById(R.id.messageAvatar);
-//
-//                    userInf.putString("name", name.getText().toString());
-//                    avatar.setDrawingCacheEnabled(true);
-//                    Bitmap b = avatar.getDrawingCache();
-//                    intent.putExtras(userInf);
-//                    intent.putExtra("Bitmap", b);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
-            }
-        });
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LayoutInflater inflater = (LayoutInflater) globalChat.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                // overlay
-                View overlayView = inflater.inflate(R.layout.global_chat_overlay, null);
-//                boolean focusable = true; // lets taps outside the popup also dismiss it
-                int width = LinearLayout.LayoutParams.MATCH_PARENT;
-                int height = LinearLayout.LayoutParams.MATCH_PARENT;
-                final PopupWindow overlayWindow = new PopupWindow(overlayView,width,height,true);
-                overlayWindow.showAtLocation(view, Gravity.TOP, 0, 0);
 
-                // Popup
-                View popupView = inflater.inflate(R.layout.global_chat_popup, null);
-                androidGridView = (GridView) popupView.findViewById(R.id.gridview_android_example);
-                androidGridView.setAdapter(new ImageAdapterGridView(popupView.getContext()));
-
-                androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-                    }
-                });
-
-                boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView,900,1360,focusable);
-
-                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        overlayWindow.dismiss();
-                    }
-                });
-
-                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
             }
         });
 
         addChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LayoutInflater inflater = (LayoutInflater) globalChat.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                LayoutInflater inflater = (LayoutInflater) botChat.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
                 // overlay
                 View overlayView = inflater.inflate(R.layout.global_chat_overlay, null);
 //                boolean focusable = true; // lets taps outside the popup also dismiss it
@@ -192,7 +158,7 @@ public class GlobalChat extends Fragment {
                 });
             }
         });
-        return globalChat;
+        return botChat;
     }
 
     public class ImageAdapterGridView extends BaseAdapter {
@@ -230,4 +196,3 @@ public class GlobalChat extends Fragment {
         }
     }
 }
-

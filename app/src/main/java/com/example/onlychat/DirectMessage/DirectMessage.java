@@ -94,8 +94,6 @@ public class DirectMessage extends Fragment {
 
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
-        listChat.setDivider(null);
-        listChat.setDividerHeight(0);
 
         CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), avatars,names,messages,times);
         listChat.setAdapter(customChatItem);
@@ -113,7 +111,9 @@ public class DirectMessage extends Fragment {
                 Bitmap b = avatar.getDrawingCache();
                 intent.putExtras(userInf);
                 intent.putExtra("Bitmap", b);
+
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
 
@@ -123,7 +123,8 @@ public class DirectMessage extends Fragment {
 
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
-                return false;
+
+                return true;
             }
         });
 

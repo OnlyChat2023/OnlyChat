@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import com.example.onlychat.R;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class CustomIconLabelAdapter extends ArrayAdapter<String> {
     Context context;
     Integer[] thumbnails;
@@ -30,9 +33,14 @@ public class CustomIconLabelAdapter extends ArrayAdapter<String> {
         @SuppressLint({"MissingInflatedId", "LocalSuppress"})
         TextView content = (TextView) row.findViewById(R.id.content);
         ImageView icon = (ImageView) row.findViewById(R.id.icon);
+        ImageView linkout = (ImageView) row.findViewById(R.id.linkOut);
 //        System.out.println(contents[position]);
         content.setText(contents[position]);
         icon.setImageResource(thumbnails[position]);
+
+        if (Arrays.asList(this.contents).contains("Facebook"))
+            linkout.setVisibility(View.VISIBLE);
+
         return (row);
     }
 }

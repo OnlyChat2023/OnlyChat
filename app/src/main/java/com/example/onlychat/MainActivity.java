@@ -1,7 +1,6 @@
 package com.example.onlychat;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.Group;
 
 
 import android.content.Intent;

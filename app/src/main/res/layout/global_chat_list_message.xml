@@ -17,9 +17,9 @@
         <RelativeLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="85dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="0dp"
+            android:paddingVertical="12dp"
             android:background="#28283A"
             android:gravity="center_vertical"
             android:paddingHorizontal="10dp"
@@ -49,21 +49,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_toRightOf="@+id/imageView4"
                 android:layout_toLeftOf="@+id/optionButton"
+                android:layout_toRightOf="@+id/imageView4"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textName"
                     android:layout_width="wrap_content"
-                    android:maxWidth="500dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
-                    android:maxLines="1"
                     android:fontFamily="@font/montserrat_bold"
+                    android:maxWidth="500dp"
+                    android:maxLines="1"
                     android:text="Anonymous Private"
                     android:textColor="#ffffff"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/textSubName"
@@ -82,26 +82,11 @@
                 android:layout_height="54dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
                 android:drawableStart="@drawable/global_chat_options"
                 android:padding="14dp" />
 
         </RelativeLayout>
-
-        <ListView
-            android:id="@+id/listMessages"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/linearLayout"
-            android:windowSoftInputMode="adjustPan"
-            android:scrollbars="none"
-            android:isScrollContainer="true"
-            android:layout_marginBottom="80dp"
-            android:paddingHorizontal="16dp"
-            android:transcriptMode="alwaysScroll"
-            android:layout_alignParentBottom="true"
-            android:divider="@null"
-            >
-        </ListView>
 
         <RelativeLayout
             android:id="@+id/chatLayout"
@@ -109,13 +94,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="11dp"
+            android:layout_marginTop="11dp"
             android:background="@drawable/global_chat_background"
-            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:padding="11dp"
-            android:paddingVertical="9dp"
+            android:paddingVertical="5dp"
+            android:paddingStart="9dp"
             android:paddingEnd="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -124,7 +109,7 @@
                 android:id="@+id/encloseIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
                 app:srcCompat="@drawable/global_chat_enclose" />
@@ -134,17 +119,17 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/encloseIcon"
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@id/encloseIcon"
                 app:srcCompat="@drawable/global_chat_chooseimage" />
 
             <ImageView
                 android:id="@+id/iconIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/imageIcon"
+                android:layout_toEndOf="@id/imageIcon"
                 app:srcCompat="@drawable/global_chat_icon_icon" />
 
             <View
@@ -154,15 +139,15 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/iconIcon"
+                android:layout_toEndOf="@id/iconIcon"
                 android:background="@android:color/white" />
             <EditText
                 android:id="@+id/chatText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="-75dp"
-                android:layout_toLeftOf="@id/sendIcon"
-                android:layout_toRightOf="@id/gap"
+                android:layout_marginEnd="-75dp"
+                android:layout_toStartOf="@id/sendIcon"
+                android:layout_toEndOf="@id/gap"
                 android:background="@null"
                 android:ems="10"
                 android:textSize="15sp"
@@ -182,6 +167,21 @@
                 app:srcCompat="@drawable/global_chat_send" />
 
         </RelativeLayout>
+
+        <ListView
+            android:id="@+id/listMessages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayout"
+            android:windowSoftInputMode="adjustPan"
+            android:scrollbars="none"
+            android:layout_above="@id/chatLayout"
+            android:isScrollContainer="true"
+            android:paddingHorizontal="12dp"
+            android:transcriptMode="alwaysScroll"
+            android:divider="@null"
+            >
+        </ListView>
     </RelativeLayout>
 </ScrollView>
 

@@ -87,7 +87,7 @@ public class MainContent extends Fragment {
         }
         typeChat = "CHAT";
         context = getActivity();
-//        main = (MainScreen) getActivity(); // use this reference to invoke main callbacks
+//        main = (ChatBot) getActivity(); // use this reference to invoke main callbacks
     }
 
     @Override
