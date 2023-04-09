@@ -83,7 +83,9 @@
                 android:layout_below="@id/btn_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabSelectedTextColor="@color/my_purple"/>
+                app:tabTextColor="#656565"
+                app:tabIndicatorColor="@color/white"
+                app:tabSelectedTextColor="@color/white"/>
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/view_pager"
                 android:layout_below="@id/tab_layout"

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.onlychat.EditProfile.EditProfile;
 import com.example.onlychat.Friends.AllFriends.AllFriends;
 import com.example.onlychat.Friends.Friends;
 import com.example.onlychat.GlobalChat.GlobalChat;
@@ -18,6 +19,7 @@ import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GroupChat.AddMember;
 import com.example.onlychat.GroupChat.GroupChatSetting;
 import com.example.onlychat.MainScreen.MainScreen;
+import com.example.onlychat.Profile.Profile;
 
 public class MainActivity extends AppCompatActivity {
     private final Boolean isLogin = false;

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="30dp"
+    android:paddingTop="45dp"
+    android:background="@drawable/global_chat_popup_above"
+    android:paddingHorizontal="50dp"
+    android:gravity="center_horizontal"
+    tools:context=".GlobalChat.MessageBottomDialogFragment">
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="62dp"
+        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/global_chat_delete" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/direct_message_pin" />
+</RelativeLayout>

@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ListView;
 
+import com.example.onlychat.DiaLog.ChangeNickNameDialog;
+import com.example.onlychat.DiaLog.DMBottomDialog;
 import com.example.onlychat.DirectMessage.Option.OptionActivity;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.R;
@@ -105,6 +107,16 @@ public class ChattingActivity extends AppCompatActivity {
                 else
                     timeMsg.setVisibility(View.GONE);
             }});
+
+        chatContent.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                DMBottomDialog dialog = new DMBottomDialog().newInstance(i);
+                dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
+
+                return false;
+            }
+        });
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override

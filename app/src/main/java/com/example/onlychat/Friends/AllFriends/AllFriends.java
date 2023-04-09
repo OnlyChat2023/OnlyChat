@@ -11,9 +11,10 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.onlychat.GroupChat.CustomFriendCheckbox.CustomFriendCheckBox;
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
-import com.example.onlychat.GroupChat.CustomFriendCheckbox.CustomeFriendCheckBox;
+
 import com.example.onlychat.R;
 
 public class AllFriends extends Fragment {
@@ -56,6 +57,7 @@ public class AllFriends extends Fragment {
         listFriends.smoothScrollToPosition(0);
         listFriends.setDivider(null);
         listFriends.setDividerHeight(0);
+
 
         CustomFriendItem customFriendItem=new CustomFriendItem(getActivity(),avatars,names,phoneNumbers);
         listFriends.setAdapter(customFriendItem);
