@@ -1,5 +1,6 @@
 package com.example.onlychat.GroupChat;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -9,12 +10,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -28,6 +32,9 @@ import com.example.onlychat.R;
 public class GroupChatSetting extends AppCompatActivity {
 
     Button addBtn;
+    ImageButton changeAvatarGroup;
+    ImageView avatar;
+    private final int GALLERY_REQ_CODE = 1000;
     RelativeLayout share;
     RelativeLayout members;
     ListView listMembers;
@@ -127,5 +134,27 @@ public class GroupChatSetting extends AppCompatActivity {
             }
         });
 
+        // Handling changing avatar of groupchat
+        avatar = (ImageView) findViewById(R.id.avatar);
+        changeAvatarGroup = (ImageButton) findViewById(R.id.up_image_btn);
+        changeAvatarGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent iGallery = new Intent(Intent.ACTION_PICK);
+                iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(iGallery, GALLERY_REQ_CODE);
+            }
+        });
+
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if(requestCode == GALLERY_REQ_CODE){
+                avatar.setImageURI(data.getData());
+            }
+        }
+    }
+
 }
