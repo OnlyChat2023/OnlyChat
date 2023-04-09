@@ -44,6 +44,7 @@
             android:layout_toRightOf="@+id/name" />
     </RelativeLayout>
     <Button
+        android:id="@+id/okBtn"
         android:layout_below="@+id/nameInput"
         android:layout_width="100dp"
         android:layout_centerHorizontal="true"
