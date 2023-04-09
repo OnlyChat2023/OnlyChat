@@ -110,6 +110,7 @@ const HcmDeparture = () => {
                                     departure_depot: 'BX Miền Tây',
                                     arrival_depot: `${station.name}`,
                                     bus_type: item.Kind,
+                                    booked_seats: [],
                                     reserved_seats: 0,
                                     total_seats: 34,
                                 }
@@ -232,6 +233,7 @@ const HcmArrival = () => {
                                     departure_depot: `BX ${$('.startPoint > .name').text().trim().replaceAll('BX ', '')}`,
                                     arrival_depot: 'BX Miền Tây',
                                     bus_type: item.Kind,
+                                    booked_seats: [],
                                     reserved_seats: 0,
                                     total_seats: 34,
                                 }
@@ -373,6 +375,31 @@ const BxMienTay = () => {
     })
     .catch((err) => console.log(err));
 }
+
+const users = [
+    {
+        fullname: 'Nguyễn Văn A',
+        username: 'admin',
+        password: 'admin',
+        role: 'ROLE_ADMIN',
+        phone: '0123456789',
+        email: '1234@example.com',
+        dob: '02-12-1998',
+        address: '1234 Đường 1, Phường 1, Quận 1, TP. Hồ Chí Minh',
+        gender: 'GENDER_MALE'
+    },
+    {
+        fullname: 'Nguyễn Văn B',
+        username: 'cuccutbietnoi',
+        password: 'cucumber',
+        role: 'ROLE_ADMIN',
+        phone: '0972771822',
+        email: '6872@example.com',
+        dob: '21-10-1993',
+        address: '134 Đường 4, Phường 1, Quận 1, TP. Hồ Chí Minh',
+        gender: 'GENDER_MALE'
+    }
+]
 
 // BxMienTay();
 

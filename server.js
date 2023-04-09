@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
-
+import socketIO from 'socket.io';
 import dotenv from 'dotenv';
+
 
 const port = process.env.PORT || 5000;
 
@@ -15,6 +16,205 @@ dotenv.config({ path: './config.env' });
 
 const server = app.listen(port, () => {
     console.log(`App is running on port ${port}...`);
+});
+
+const io = socketIO(server);
+
+io.of('/direct_message').on('connection', (socket) => {
+
+    socket.on('seen_message', (user) => {
+        socket.user = user;
+        socket.broadcast.to(user).emit('seen_message', socket.user);
+    });
+
+    socket.on('send_message', (message) => { 
+        // broadcast toàn bộ client trong room này
+        socket.broadcast.to(socket.user).emit('receive_message', {
+            message: message,
+            user: socket.user,
+            time: new Date().getTime()
+        });
+    });
+
+    socket.on('change_nickname', (user) => {
+        // cập nhật csdl
+        socket.broadcast.to(socket.user).emit('change_nickname', user);
+    });
+
+    socket.on('blocking', () => {   
+        // cập nhật csdl
+        socket.broadcast.to(socket.user).emit('blocking');
+    });
+
+    socket.on('unblocking', () => {   
+        // cập nhật csdl
+        socket.broadcast.to(socket.user).emit('unblocking');
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+
+});
+
+io.of('/group_message').on('connection', (socket) => { 
+
+    socket.on('create_room', (room) => {
+        socket.room = room;
+        socket.join(room);
+    });
+
+    socket.on('add_member', (member) => {
+        socket.broadcast.to(socket.room).emit('add_member', member);
+    });
+
+    socket.on('remove_member', (member) => {
+        socket.broadcast.to(socket.room).emit('remove_member', member);
+    });
+
+    socket.on('delete_chat', (room) => { 
+        // cập nhật csdl
+        socket.broadcast.to(room).emit('delete_chat');
+    });
+
+    socket.on('seen_message', (room) => {
+        socket.room = room;
+        socket.broadcast.to(room).emit('seen_message', socket.user);
+    });
+
+    socket.on('send_message', (message) => { 
+        // broadcast toàn bộ client trong room này
+        socket.broadcast.to(socket.room).emit('receive_message', {
+            message: message,
+            user: socket.user,
+            time: new Date().getTime()
+        });
+    });
+
+    socket.on('change_nickname', (user) => {
+        // cập nhật csdl
+        socket.broadcast.to(socket.room).emit('change_nickname', user);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+
+io.of('/group_message').on('connection', (socket) => { 
+
+    socket.on('create_room', (room) => {
+        socket.room = room;
+        socket.join(room);
+    });
+
+    socket.on('add_member', (member) => {
+        socket.broadcast.to(socket.room).emit('add_member', member);
+    });
+
+    socket.on('remove_member', (member) => {
+        socket.broadcast.to(socket.room).emit('remove_member', member);
+    });
+
+    socket.on('delete_chat', (room) => { 
+        // cập nhật csdl
+        socket.broadcast.to(room).emit('delete_chat');
+    });
+
+    socket.on('seen_message', (room) => {
+        socket.room = room;
+        socket.broadcast.to(room).emit('seen_message', socket.user);
+    });
+
+    socket.on('send_message', (message) => { 
+        // broadcast toàn bộ client trong room này
+        socket.broadcast.to(socket.room).emit('receive_message', {
+            message: message,
+            user: socket.user,
+            time: new Date().getTime()
+        });
+    });
+
+    socket.on('change_nickname', (user) => {
+        // cập nhật csdl
+        socket.broadcast.to(socket.room).emit('change_nickname', user);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+
+io.of('/global_message').on('connection', (socket) => { 
+
+    socket.on('create_room', (room) => {
+        socket.room = room;
+        socket.join(room);
+    });
+
+    socket.on('add_member', (member) => {
+        socket.broadcast.to(socket.room).emit('add_member', member);
+    });
+
+    socket.on('remove_member', (member) => {
+        socket.broadcast.to(socket.room).emit('remove_member', member);
+    });
+
+    socket.on('delete_chat', (room) => { 
+        // cập nhật csdl
+        socket.broadcast.to(room).emit('delete_chat');
+    });
+
+    socket.on('seen_message', (room) => {
+        socket.room = room;
+        socket.broadcast.to(room).emit('seen_message', socket.user);
+    });
+
+    socket.on('send_message', (message) => { 
+        // broadcast toàn bộ client trong room này
+        socket.broadcast.to(socket.room).emit('receive_message', {
+            message: message,
+            user: socket.user,
+            time: new Date().getTime()
+        });
+    });
+
+    socket.on('set_nickname', (user) => {
+        // cập nhật csdl
+        socket.emit('set_nickname', user);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+
+io.on('connection', (socket) => {
+    console.log('User connected');
+    
+    socket.on('add_friend', (friend) => {
+        
+    });
+
+    socket.on('remove_friend', (friend) => { 
+
+    });
+
+    socket.on('restriction_friend', (friend) => { 
+        
+    });
+
+    socket.on('block_friend', (friend) => { 
+        
+    });
+    
+    socket.on('disconnect', () => {
+
+    });
+
+    socket.on('send_add_friend_request', () => {
+
+    })
 });
 
 process.on('unhandledRejection', (err) => {

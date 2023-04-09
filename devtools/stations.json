@@ -9,7 +9,7 @@
             }
         ]
     },
-    { "location": "Bến Tre", "stations": [{ "name": "BX ", "address": "", "phone": "" }] },
+    { "location": "Bến Tre", "stations": [{ "name": "BX Bến xe", "address": "", "phone": "" }] },
     {
         "location": "Cà Mau",
         "stations": [
