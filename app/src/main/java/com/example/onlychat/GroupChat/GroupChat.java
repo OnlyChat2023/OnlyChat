@@ -86,7 +86,10 @@ public class GroupChat extends Fragment {
         // set value for widget
         chatTitle = (TextView) groupChat.findViewById(R.id.header_title);
         chatTitle.setText("group chat channel");
+
         chatIcon = (ImageView) groupChat.findViewById(R.id.chatIcon);
+        chatIcon.setImageResource(R.drawable.ic_groupchat);
+
         profile = (ImageView) groupChat.findViewById(R.id.profile);
         addChat = (ImageView) groupChat.findViewById(R.id.addChat);
         listChat = (ListView) groupChat.findViewById(R.id.listChat);

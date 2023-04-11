@@ -17,6 +17,8 @@ public class ForgotActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
+
         setContentView(R.layout.forgot_password_form);
 
         Intent loginIntent = new Intent(this, MainActivity.class);
@@ -30,5 +32,11 @@ public class ForgotActivity extends AppCompatActivity {
                 finishAffinity();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.fixed, R.anim.left_to_right);
     }
 }

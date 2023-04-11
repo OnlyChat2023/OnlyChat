@@ -28,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
+
         if (isLogin == false) {
             setContentView(R.layout.login_activity);
 
@@ -39,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     startActivity(registerIntent);
+                    overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
                 }
             });
 
@@ -69,5 +72,11 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.fixed, R.anim.left_to_right);
     }
 }
