@@ -13,14 +13,7 @@ import android.widget.TextView;
 import com.example.onlychat.MainScreen.MainScreen;
 
 public class MainActivity extends AppCompatActivity {
-    private final Boolean isLogin = false;
 
-    private ImageView showPasswordBtn;
-    private EditText passwordInput;
-    private TextView forgotPasswordBtn;
-
-    private boolean isHidePassword = true;
-    private Button RegisterBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

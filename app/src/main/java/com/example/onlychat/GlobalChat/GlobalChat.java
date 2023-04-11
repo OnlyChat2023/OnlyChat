@@ -97,7 +97,7 @@ public class GlobalChat extends Fragment {
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
 
-        CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), avatars,names,messages,times);
+        CustomChatItem customChatItem = new CustomChatItem(globalChat.getContext(), avatars,names,messages,times);
         listChat.setAdapter(customChatItem);
 
         listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

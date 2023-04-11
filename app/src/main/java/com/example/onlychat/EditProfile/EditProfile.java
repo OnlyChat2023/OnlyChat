@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.example.onlychat.EditProfileStep2;
-import com.example.onlychat.MainActivity;
 import com.example.onlychat.R;
 
 public class EditProfile extends AppCompatActivity {

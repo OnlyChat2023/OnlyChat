@@ -18,12 +18,6 @@
             android:name=".ChatBot.ChatBot"
             android:exported="false" />
         <activity
-            android:name=".DirectMessage.Authetication.ResetPassword"
-            android:exported="true" />
-        <activity
-            android:name=".DirectMessage.Authetication.OTP"
-            android:exported="true" />
-        <activity
             android:name=".DirectMessage.ChattingActivity"
             android:exported="true" />
         <activity
@@ -33,7 +27,7 @@
             android:name=".MainScreen.MainScreen"
             android:exported="true" />
         <activity
-            android:name=".EditProfileStep2"
+            android:name=".EditProfile.EditProfileStep2"
             android:exported="false" />
         <activity
             android:name=".GroupChat.GroupChatSetting"
@@ -45,11 +39,20 @@
             android:name=".Profile.Profile"
             android:exported="true" />
         <activity
-            android:name=".DirectMessage.Authetication.ForgotActivity"
-            android:exported="false" />
+            android:name=".Authetication.ResetPassword"
+            android:exported="true" />
         <activity
-            android:name=".DirectMessage.Authetication.RegisterActivity"
-            android:exported="false" />
+            android:name=".Authetication.OTP"
+            android:exported="true" />
+        <activity
+            android:name=".Authetication.ForgotActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Authetication.RegisterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Authetication.LoginActivity"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
