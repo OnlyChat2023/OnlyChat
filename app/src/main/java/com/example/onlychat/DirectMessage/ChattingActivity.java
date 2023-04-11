@@ -134,6 +134,7 @@ public class ChattingActivity extends AppCompatActivity {
 //                Intent intent = new Intent(ChattingActivity.this, ChatBot.class);
 //                startActivity(intent);
                 finish();
+                overridePendingTransition(R.anim.fixed,R.anim.left_to_right);
             }
         });
 
@@ -160,6 +161,7 @@ public class ChattingActivity extends AppCompatActivity {
                 intent.putExtras(userInf);
                 intent.putExtra("Bitmap", b);
                 startActivity(intent);
+                overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
 
