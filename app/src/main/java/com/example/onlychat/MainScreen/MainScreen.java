@@ -1,10 +1,15 @@
 package com.example.onlychat.MainScreen;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +24,9 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.onlychat.Authetication.ForgotActivity;
+import com.example.onlychat.Authetication.LoginActivity;
+import com.example.onlychat.Authetication.RegisterActivity;
 import com.example.onlychat.ChatBot.ChatBot;
 import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.Friends.Friends;
@@ -27,6 +35,7 @@ import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.MainScreen.Interface.Main_MainCallBacks;
 import com.example.onlychat.MainScreen.Fragment.MainContent;
 import com.example.onlychat.MainScreen.Fragment.MainNavbar;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.R;
 import com.google.android.material.tabs.TabLayout;
 
@@ -38,8 +47,6 @@ public class MainScreen extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
 
-
-
     private int[] tabIcons = {
             R.drawable.navbar_direct_chat,
             R.drawable.navbar_group_chat,
@@ -48,56 +55,74 @@ public class MainScreen extends AppCompatActivity {
             R.drawable.navbar_friends
     };
 
+    private ImageView showPasswordBtn;
+    private EditText passwordInput;
+    private TextView forgotPasswordBtn;
+
+    private boolean isHidePassword = true;
+    private Button RegisterBtn;
+
+    private Boolean isLogin = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         setContentView(R.layout.main_screen);
+        isLogin=true;
+        HttpManager httpManager = new HttpManager(this);
+        httpManager.getUserProfile();
+        if (isLogin) {
 
-        viewPager = (ViewPager) findViewById(R.id.viewPaper);
-        setupViewPager(viewPager);
+            setContentView(R.layout.main_screen);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(viewPager);
-//        setupTabIcons();
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.main_navbarrrrrrrrrrrrrrr, null);
+            viewPager = (ViewPager) findViewById(R.id.viewPaper);
+            setupViewPager(viewPager);
 
-            ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
-            if(i == 0) {
-                tab_icon.setImageResource(tabIcons[i]);
-                tab_icon.setBackgroundColor(Color.parseColor("#352159"));
-            } else {
-                tab_icon.setImageResource(tabIcons[i]);
-            }
-            tabLayout.getTabAt(i).setCustomView(tab);
-        }
+            tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+            tabLayout.setupWithViewPager(viewPager);
+            //        setupTabIcons();
+            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+                LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.main_navbarrrrrrrrrrrrrrr, null);
 
-        tabLayout.setOnTabSelectedListener(
-                new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        super.onTabSelected(tab);
-                        View tabView = tab.getCustomView();
-                        ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
-                        tab_icon.setBackgroundColor(Color.parseColor("#352159"));
-                    }
-
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-                        super.onTabUnselected(tab);
-                        View tabView = tab.getCustomView();
-                        ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
-                        tab_icon.setBackgroundColor(Color.TRANSPARENT);
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-                        super.onTabReselected(tab);
-                    }
+                ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+                if (i == 0) {
+                    tab_icon.setImageResource(tabIcons[i]);
+                    tab_icon.setBackgroundColor(Color.parseColor("#352159"));
+                } else {
+                    tab_icon.setImageResource(tabIcons[i]);
                 }
-        );
+                tabLayout.getTabAt(i).setCustomView(tab);
+            }
 
+            tabLayout.setOnTabSelectedListener(
+                    new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+                        @Override
+                        public void onTabSelected(TabLayout.Tab tab) {
+                            super.onTabSelected(tab);
+                            View tabView = tab.getCustomView();
+                            ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
+                            tab_icon.setBackgroundColor(Color.parseColor("#352159"));
+                        }
 
+                        @Override
+                        public void onTabUnselected(TabLayout.Tab tab) {
+                            super.onTabUnselected(tab);
+                            View tabView = tab.getCustomView();
+                            ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
+                            tab_icon.setBackgroundColor(Color.TRANSPARENT);
+                        }
+
+                        @Override
+                        public void onTabReselected(TabLayout.Tab tab) {
+                            super.onTabReselected(tab);
+                        }
+                    }
+            );
+        }
+        else {
+            Intent LoginActivity = new Intent(this, com.example.onlychat.Authetication.LoginActivity.class);
+            startActivity(LoginActivity);
+            finishAffinity();
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
