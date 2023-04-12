@@ -4,11 +4,9 @@ import AppError from "../utils/appError.js";
 
 
 const userProfile = catchAsync(async (req, res) => {
-  // let users
-  // const user = await User.findOne({ _id: res.locals.authUser._id })
   const user = await User.findOne({ _id: "642e2f430cc3fd9470f85b5b" })
+  // const user = await User.find()
 
-  // SEND RESPONSE
   res.status(200).json({
     status: 'success',
     data: {

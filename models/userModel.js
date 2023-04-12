@@ -1,7 +1,17 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  chatbot_channel: [],
+  _id: mongoose.Schema.ObjectId,
+  name: { type: String },
+  password: { type: String },
+  username: { type: String },
+  avatar: { type: String },
+  email: { type: String },
+  phone: { type: String },
+  facebook: { type: String },
+  instagram: { type: String },
+  university: { type: String },
+  chatbot_channel: [{ type: String }],
   directmessage_channel: [{
     type: String
   }],
@@ -11,17 +21,8 @@ const userSchema = new mongoose.Schema({
   groupchat_channel: [{
     type: String
   }],
-  name: { type: String },
-  password: { type: String },
-  username: { type: String },
-  email: { type: String },
-  phone: { type: String },
-  facebook: { type: String },
-  instagram: { type: String },
-  university: { type: String },
   friend: [{ type: String }],
-  friend_request: [{ type: String }],
-  avatar: { type: String }
+  friend_request: [{ type: String }]
 });
 
 const User = mongoose.model('users', userSchema);
