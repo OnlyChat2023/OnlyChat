@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.util.Log;
-=======
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
->>>>>>> 77baa234ba69ff9d8bcbc2393acc01116d68a83f
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -135,7 +132,6 @@ public class MainScreen extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),0);
-<<<<<<< HEAD
 
         // test data
         ArrayList<RoomModel> listRoom = new ArrayList<>();
@@ -164,13 +160,6 @@ public class MainScreen extends AppCompatActivity {
         adapter.addFragment(new ChatBot(), "bot chat");
         adapter.addFragment(new Friends(), "friends");
 
-=======
-        adapter.addFragment(new DirectMessage(),"direct chat");
-//        adapter.addFragment(new GroupChat(), "group chat");
-        adapter.addFragment(new GlobalChat(), "global chat");
-        adapter.addFragment(new ChatBot(), "bot chat");
-        adapter.addFragment(new Friends(), "friends");
->>>>>>> 77baa234ba69ff9d8bcbc2393acc01116d68a83f
         viewPager.setAdapter(adapter);
     }
 
