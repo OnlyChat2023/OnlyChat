@@ -2,7 +2,7 @@ import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
 import Validator from "../utils/Validator.js";
 import REGEX from '../constants/regex.js';
-import firebase from '../firebase/firebase.js';
+// import firebase from '../firebase/firebase.js';
 
 /*
     AUTH CONTROLLER
@@ -27,7 +27,7 @@ const register = catchAsync(async (req, res, next) => {
 
     // Validate request body
     if (!Validator.isValidRequestBody(req.body.user, ['phonenumber', 'password', 'passwordConfirm']))
-        return next(new AppError("Bad request", 400)); 
+        return next(new AppError("Bad request", 400));
 
 
     // Validate phonenumber, password and password confirm

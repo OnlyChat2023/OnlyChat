@@ -26,7 +26,7 @@ app.use(hpp());
 app.use(express.json({ limit: '10mb' }));
 
 app.use('/btb/api/v1/auth', authRouter);
-app.use('/bus/v1/user', userProfileRouter); // mounting new router on route (URL)
+app.use('/btb/api/v1/user', userProfileRouter); // mounting new router on route (URL)
 
 app.use(globalErrorhandler);
 
