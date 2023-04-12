@@ -27,7 +27,7 @@ io.of('/direct_message').on('connection', (socket) => {
         socket.broadcast.to(user).emit('seen_message', socket.user);
     });
 
-    socket.on('send_message', (message) => { 
+    socket.on('send_message', (message) => {
         // broadcast toàn bộ client trong room này
         socket.broadcast.to(socket.user).emit('receive_message', {
             message: message,
@@ -41,12 +41,12 @@ io.of('/direct_message').on('connection', (socket) => {
         socket.broadcast.to(socket.user).emit('change_nickname', user);
     });
 
-    socket.on('blocking', () => {   
+    socket.on('blocking', () => {
         // cập nhật csdl
         socket.broadcast.to(socket.user).emit('blocking');
     });
 
-    socket.on('unblocking', () => {   
+    socket.on('unblocking', () => {
         // cập nhật csdl
         socket.broadcast.to(socket.user).emit('unblocking');
     });
@@ -57,7 +57,7 @@ io.of('/direct_message').on('connection', (socket) => {
 
 });
 
-io.of('/group_message').on('connection', (socket) => { 
+io.of('/group_message').on('connection', (socket) => {
 
     socket.on('create_room', (room) => {
         socket.room = room;
@@ -72,7 +72,7 @@ io.of('/group_message').on('connection', (socket) => {
         socket.broadcast.to(socket.room).emit('remove_member', member);
     });
 
-    socket.on('delete_chat', (room) => { 
+    socket.on('delete_chat', (room) => {
         // cập nhật csdl
         socket.broadcast.to(room).emit('delete_chat');
     });
@@ -82,7 +82,7 @@ io.of('/group_message').on('connection', (socket) => {
         socket.broadcast.to(room).emit('seen_message', socket.user);
     });
 
-    socket.on('send_message', (message) => { 
+    socket.on('send_message', (message) => {
         // broadcast toàn bộ client trong room này
         socket.broadcast.to(socket.room).emit('receive_message', {
             message: message,
@@ -101,7 +101,7 @@ io.of('/group_message').on('connection', (socket) => {
     });
 });
 
-io.of('/group_message').on('connection', (socket) => { 
+io.of('/group_message').on('connection', (socket) => {
 
     socket.on('create_room', (room) => {
         socket.room = room;
@@ -116,7 +116,7 @@ io.of('/group_message').on('connection', (socket) => {
         socket.broadcast.to(socket.room).emit('remove_member', member);
     });
 
-    socket.on('delete_chat', (room) => { 
+    socket.on('delete_chat', (room) => {
         // cập nhật csdl
         socket.broadcast.to(room).emit('delete_chat');
     });
@@ -126,7 +126,7 @@ io.of('/group_message').on('connection', (socket) => {
         socket.broadcast.to(room).emit('seen_message', socket.user);
     });
 
-    socket.on('send_message', (message) => { 
+    socket.on('send_message', (message) => {
         // broadcast toàn bộ client trong room này
         socket.broadcast.to(socket.room).emit('receive_message', {
             message: message,
@@ -145,7 +145,7 @@ io.of('/group_message').on('connection', (socket) => {
     });
 });
 
-io.of('/global_message').on('connection', (socket) => { 
+io.of('/global_message').on('connection', (socket) => {
 
     socket.on('create_room', (room) => {
         socket.room = room;
@@ -160,7 +160,7 @@ io.of('/global_message').on('connection', (socket) => {
         socket.broadcast.to(socket.room).emit('remove_member', member);
     });
 
-    socket.on('delete_chat', (room) => { 
+    socket.on('delete_chat', (room) => {
         // cập nhật csdl
         socket.broadcast.to(room).emit('delete_chat');
     });
@@ -170,7 +170,7 @@ io.of('/global_message').on('connection', (socket) => {
         socket.broadcast.to(room).emit('seen_message', socket.user);
     });
 
-    socket.on('send_message', (message) => { 
+    socket.on('send_message', (message) => {
         // broadcast toàn bộ client trong room này
         socket.broadcast.to(socket.room).emit('receive_message', {
             message: message,
@@ -191,23 +191,23 @@ io.of('/global_message').on('connection', (socket) => {
 
 io.on('connection', (socket) => {
     console.log('User connected');
-    
+
     socket.on('add_friend', (friend) => {
-        
-    });
-
-    socket.on('remove_friend', (friend) => { 
 
     });
 
-    socket.on('restriction_friend', (friend) => { 
-        
+    socket.on('remove_friend', (friend) => {
+
     });
 
-    socket.on('block_friend', (friend) => { 
-        
+    socket.on('restriction_friend', (friend) => {
+
     });
-    
+
+    socket.on('block_friend', (friend) => {
+
+    });
+
     socket.on('disconnect', () => {
 
     });

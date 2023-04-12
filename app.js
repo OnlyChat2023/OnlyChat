@@ -7,6 +7,8 @@ import cors from 'cors';
 import userProfileRouter from "./routes/userProfileRoutes.js"
 import globalErrorhandler from "./controllers/ErrorController.js"
 
+import messageRoutes from "./routes/messageRoutes.js"
+
 import authRouter from './routes/authRoutes.js';
 
 const limiter = rateLimit({
@@ -26,7 +28,7 @@ app.use(hpp());
 app.use(express.json({ limit: '10mb' }));
 
 app.use('/btb/api/v1/auth', authRouter);
-app.use('/bus/v1/user', userProfileRouter); // mounting new router on route (URL)
+app.use('/btb/api/v1/', messageRoutes)
 
 app.use(globalErrorhandler);
 
