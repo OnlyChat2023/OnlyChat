@@ -27,8 +27,8 @@ app.use(hpp());
 
 app.use(express.json({ limit: '10mb' }));
 
-app.use('/btb/api/v1/auth', authRouter);
-app.use('/btb/api/v1/', messageRoutes)
+app.use('/api/onlychat/v1/auth', authRouter);
+app.use('/api/onlychat/v1/user', userProfileRouter); // mounting new router on route (URL)
 
 app.use(globalErrorhandler);
 
