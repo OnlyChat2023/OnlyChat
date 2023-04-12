@@ -15,20 +15,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.MainActivity;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.R;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException;
-import com.google.firebase.auth.FirebaseAuthSettings;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+
+import org.json.JSONObject;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,55 +38,6 @@ public class RegisterActivity extends AppCompatActivity {
     private Button LoginBtn, RegisterBtn;
     private Boolean validationOK = true;
 
-    FirebaseAuth auth;
-    private String mVerificationId, mResendToken;
-
-    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
-        @Override
-        public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
-            // This callback will be invoked in two situations:
-            // 1 - Instant verification. In some cases the phone number can be instantly
-            //     verified without needing to send or enter a verification code.
-            // 2 - Auto-retrieval. On some devices Google Play services can automatically
-            //     detect the incoming verification SMS and perform verification without
-            //     user action.
-            Log.d("PHONE", "onVerificationCompleted:" + credential);
-
-//            signInWithPhoneAuthCredential(credential);
-        }
-
-        @Override
-        public void onVerificationFailed(@NonNull FirebaseException e) {
-            // This callback is invoked in an invalid request for verification is made,
-            // for instance if the the phone number format is not valid.
-            Log.w("PHONE_ERR", "onVerificationFailed", e);
-
-            if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                // Invalid request
-            } else if (e instanceof FirebaseTooManyRequestsException) {
-                // The SMS quota for the project has been exceeded
-            } else if (e instanceof FirebaseAuthMissingActivityForRecaptchaException) {
-                // reCAPTCHA verification attempted with null Activity
-            }
-
-            // Show a message and update the UI
-        }
-        @Override
-        public void onCodeSent(@NonNull String verificationId,
-                               @NonNull PhoneAuthProvider.ForceResendingToken token) {
-            // The SMS verification code has been sent to the provided phone number, we
-            // now need to ask the user to enter the code and then construct a credential
-            // by combining the code with a verification ID.
-            Log.d("SEND CODE", "onCodeSent:" + verificationId);
-
-            // Save verification ID and resending token so we can use them later
-            mVerificationId = verificationId;
-            mResendToken = String.valueOf(token);
-        }
-    };
-
-    PhoneAuthOptions options;
 //
 //    public void onStart() {
 //        super.onStart();
@@ -131,8 +77,6 @@ public class RegisterActivity extends AppCompatActivity {
         LoginBtn                = (Button) findViewById(R.id.signInBtn);
         RegisterBtn             = (Button) findViewById(R.id.registerBtn);
 
-        auth = FirebaseAuth.getInstance();
-
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,6 +88,8 @@ public class RegisterActivity extends AppCompatActivity {
         RegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                validationOK = true;
 
                 String phone            = phoneNumberInput.getText().toString();
                 String name             = usernameInput.getText().toString();
@@ -180,20 +126,29 @@ public class RegisterActivity extends AppCompatActivity {
                     passwordConfirmInput.setError("Confirm password is not match");
                 }
 
-                FirebaseAuthSettings firebaseAuthSettings = auth.getFirebaseAuthSettings();
+                if (validationOK) {
+                    String phoneNumber = "+84" + phone.substring(1);
 
-// Configure faking the auto-retrieval with the whitelisted numbers.
-//                firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(phone.replace("0", "+84"), "123123");
+                    HttpManager httpRequest = new HttpManager(RegisterActivity.this);
+                    httpRequest.validateAccount(phoneNumber, new HttpResponse() {
+                        @Override
+                        public void onSuccess(JSONObject response) {
+                            Intent OTPIntent = new Intent(RegisterActivity.this, OTP.class);
 
-                options = PhoneAuthOptions.newBuilder(auth)
-                        .setPhoneNumber(phone.replace("0", "+84"))       // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                        .setActivity(RegisterActivity.this)                 // (optional) Activity for callback binding
-                        // If no activity is passed, reCAPTCHA verification can not be used.
-                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                        .build();
+                            Bundle args = new Bundle();
+                            args.putString("phone", phoneNumber);
+                            OTPIntent.putExtras(args);
 
-                PhoneAuthProvider.verifyPhoneNumber(options);
+                            startActivity(OTPIntent);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Log.e("VALIDATE", error);
+                            phoneNumberInput.setError("This phone has already been used");
+                        }
+                    });
+                }
             }
         });
 

@@ -25,7 +25,7 @@ public class HttpManager {
     private Context context;
     private GlobalPreferenceManager pref;
 
-    public  HttpManager(Context _context) {
+    public HttpManager(Context _context) {
         this.context = _context;
         this.pref = new GlobalPreferenceManager(_context);
     }
@@ -56,5 +56,11 @@ public class HttpManager {
 
         jsonObjReq.setTag(tag);
         queue.add(jsonObjReq);
+    }
+
+    public void validateAccount(String phoneNumber, HttpResponse responseReceiver) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("phonenumber", phoneNumber);
+        createRequest("http://localhost:5000/api/onlychat/v1/auth/register/validate", Request.Method.POST, "register-validate", params, responseReceiver);
     }
 }

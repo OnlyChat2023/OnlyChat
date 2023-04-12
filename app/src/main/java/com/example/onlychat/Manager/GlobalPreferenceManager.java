@@ -1,15 +1,16 @@
 package com.example.onlychat.Manager;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class GlobalPreferenceManager {
 
     private Context mContext;
-    private PreferenceManager pref;
+    private SharedPreferences pref;
 
     public GlobalPreferenceManager(Context context) {
         this.mContext = context;
-        pref = (PreferenceManager) PreferenceManager.getDefaultSharedPreferences(context);
+        pref = PreferenceManager.getDefaultSharedPreferences(context);
     }
 }
