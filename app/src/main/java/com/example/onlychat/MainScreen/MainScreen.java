@@ -72,7 +72,7 @@ public class MainScreen extends AppCompatActivity {
     private boolean isHidePassword = true;
     private Button RegisterBtn;
 
-    private Boolean isLogin = false;
+    private Boolean isLogin = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +166,7 @@ public class MainScreen extends AppCompatActivity {
 
 =======
         adapter.addFragment(new DirectMessage(),"direct chat");
-        adapter.addFragment(new GroupChat(), "group chat");
+//        adapter.addFragment(new GroupChat(), "group chat");
         adapter.addFragment(new GlobalChat(), "global chat");
         adapter.addFragment(new ChatBot(), "bot chat");
         adapter.addFragment(new Friends(), "friends");

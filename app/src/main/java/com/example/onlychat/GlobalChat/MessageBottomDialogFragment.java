@@ -1,5 +1,7 @@
 package com.example.onlychat.GlobalChat;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -8,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.example.onlychat.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -21,6 +25,9 @@ public class MessageBottomDialogFragment extends BottomSheetDialogFragment {
 
     private String mParam1;
     private String mParam2;
+    public ImageView delete;
+    public ImageView block;
+    public ImageView leave;
 
     public MessageBottomDialogFragment() {
         // Required empty public constructor
@@ -48,6 +55,11 @@ public class MessageBottomDialogFragment extends BottomSheetDialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return  inflater.inflate(R.layout.fragment_message_bottom_dialog, container, false);
+        RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.fragment_message_bottom_dialog, container, false);
+        leave = (ImageView) layout.findViewById(R.id.imageView5);
+        delete = (ImageView) layout.findViewById(R.id.imageView7);
+        block = (ImageView) layout.findViewById(R.id.imageView10);
+
+        return layout;
     }
 }
