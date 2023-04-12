@@ -29,10 +29,10 @@
 <!--            android:exported="false" />-->
         <activity
             android:name=".DirectMessage.ChattingActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".DirectMessage.Option.OptionActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".MainScreen.MainScreen"
             android:exported="false" />

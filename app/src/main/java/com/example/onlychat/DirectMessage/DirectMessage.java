@@ -28,6 +28,8 @@ import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.R;
 
+import java.util.ArrayList;
+
 public class DirectMessage extends Fragment {
     TextView chatTitle;
     ImageView chatIcon;
@@ -95,8 +97,8 @@ public class DirectMessage extends Fragment {
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
 
-        CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), avatars,names,messages,times);
-        listChat.setAdapter(customChatItem);
+//        CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), avatars,names,messages,times);
+//        listChat.setAdapter(customChatItem);
 
         listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -122,8 +124,23 @@ public class DirectMessage extends Fragment {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
+                messageBottomDialogFragment.leave.setVisibility(View.GONE);
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
+                messageBottomDialogFragment.delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
+//                        customChatItem.changeData();
+                        messageBottomDialogFragment.dismiss();
+                    }
+                });
+
+                messageBottomDialogFragment.block.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        messageBottomDialogFragment.dismiss();
+                    }
+                });
                 return true;
             }
         });
