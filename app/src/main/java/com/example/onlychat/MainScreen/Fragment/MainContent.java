@@ -104,8 +104,8 @@ public class MainContent extends Fragment {
 //        }
 //        catch (Exception e) { Log.e("RED BUNDLE ERROR – ",  e.getMessage()); }
 
-        adapter = new CustomChatItem(context,avatars,names,messages,times);
-        listChat.setAdapter(adapter);
+//        adapter = new CustomChatItem(context,avatars,names,messages,times);
+//        listChat.setAdapter(adapter);
 
 //        listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override

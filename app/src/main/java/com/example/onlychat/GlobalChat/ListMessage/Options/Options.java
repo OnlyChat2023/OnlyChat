@@ -2,6 +2,7 @@ package com.example.onlychat.GlobalChat.ListMessage.Options;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import com.example.onlychat.GlobalChat.CustomChatItem;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
 public class Options extends AppCompatActivity {
@@ -39,6 +41,9 @@ public class Options extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.global_chat_chat_options);
+
+        Intent intent = getIntent();
+        Options options = (Options) intent.getSerializableExtra("Data");
 
         backButton = (ImageView) findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {

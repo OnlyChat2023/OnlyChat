@@ -39,6 +39,8 @@ public class GroupChatSetting extends AppCompatActivity {
     RelativeLayout members;
     ListView listMembers;
 
+    ImageView backButton;
+
     Integer avatars[] = {
             R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,R.drawable.global_chat_avatar,
             R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,R.drawable.global_chat_avatar,
@@ -56,6 +58,16 @@ public class GroupChatSetting extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat_setting);
+
+        backButton = (ImageView) findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.fixed, R.anim.left_to_right);
+            }
+        });
+
 
         share = (RelativeLayout) findViewById(R.id.share);
         share.setOnClickListener(new View.OnClickListener() {

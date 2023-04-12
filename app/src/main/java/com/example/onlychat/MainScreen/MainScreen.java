@@ -4,8 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+<<<<<<< HEAD
+import android.util.Log;
+=======
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
+>>>>>>> 77baa234ba69ff9d8bcbc2393acc01116d68a83f
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -32,13 +36,20 @@ import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.Friends.Friends;
 import com.example.onlychat.GlobalChat.GlobalChat;
 import com.example.onlychat.GroupChat.GroupChat;
+import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.MainScreen.Interface.Main_MainCallBacks;
 import com.example.onlychat.MainScreen.Fragment.MainContent;
 import com.example.onlychat.MainScreen.Fragment.MainNavbar;
+import com.example.onlychat.Model.MessageModel;
+import com.example.onlychat.Model.RoomModel;
+import com.example.onlychat.Profile.ViewPagerAdapter;
 import com.example.onlychat.R;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class MainScreen extends AppCompatActivity {
@@ -61,7 +72,7 @@ public class MainScreen extends AppCompatActivity {
     private boolean isHidePassword = true;
     private Button RegisterBtn;
 
-    private Boolean isLogin = false;
+    private Boolean isLogin = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,11 +135,42 @@ public class MainScreen extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),0);
+<<<<<<< HEAD
+
+        // test data
+        ArrayList<RoomModel> listRoom = new ArrayList<>();
+
+        for(int i=0;i<10;i++){
+            ArrayList<MessageModel> listMessage = new ArrayList<>();
+            for(int j=0;j<10;j++){
+                ArrayList<String> seenUser= new ArrayList<>();
+                seenUser.add("1");
+                seenUser.add("2");
+                seenUser.add("3");
+                MessageModel messageModel = new MessageModel(Integer.toString(i),Integer.toString(i),R.drawable.global_chat_avatar,"test","test","Sorry to bother you. I have a question for you",new Date(),seenUser);
+                listMessage.add(messageModel);
+            }
+
+            ArrayList<Member> members = new ArrayList<>();
+            members.add(new Member("1","anonymous","anonymous",R.drawable.global_chat_avatar));
+            RoomOptions roomOptions= new RoomOptions(false,false,"cccc",R.drawable.global_chat_avatar,members);
+            listRoom.add(new RoomModel(Integer.toString(i),R.drawable.global_chat_avatar,"Anonymous",listMessage,roomOptions));
+        }
+        /////////////////////////////
+
         adapter.addFragment(new DirectMessage(),"direct chat");
         adapter.addFragment(new GroupChat(), "group chat");
+        adapter.addFragment(new GlobalChat(listRoom), "global chat");
+        adapter.addFragment(new ChatBot(), "bot chat");
+        adapter.addFragment(new Friends(), "friends");
+
+=======
+        adapter.addFragment(new DirectMessage(),"direct chat");
+//        adapter.addFragment(new GroupChat(), "group chat");
         adapter.addFragment(new GlobalChat(), "global chat");
         adapter.addFragment(new ChatBot(), "bot chat");
         adapter.addFragment(new Friends(), "friends");
+>>>>>>> 77baa234ba69ff9d8bcbc2393acc01116d68a83f
         viewPager.setAdapter(adapter);
     }
 
