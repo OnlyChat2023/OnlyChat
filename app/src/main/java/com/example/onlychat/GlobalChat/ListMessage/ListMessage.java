@@ -3,6 +3,7 @@ package com.example.onlychat.GlobalChat.ListMessage;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,13 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.onlychat.DirectMessage.Option.OptionActivity;
 import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
 public class ListMessage extends AppCompatActivity {
@@ -33,52 +36,56 @@ public class ListMessage extends AppCompatActivity {
     EditText chatText;
     Button optionButton;
     Button backButton;
+    ImageView chatImage;
+    TextView chatName;
 
-    String names[] = {
-            "Paimon","me","Xiao","Klee Bunbara","Paimon",
-            "me","Xiao","Klee Bunbara","me","Yae Miko",
-            "Paimon","me","Xiao","Klee Bunbara","Paimon",
-            "me","Xiao","Klee Bunbara","me","Yae Miko"
-    };
-    Integer avatars[]= {
-            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
-            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
-            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
-            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
-            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
-            R.drawable.global_chat_avatar1, R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
-            R.drawable.global_chat_avatar1, R.drawable.global_chat_avatar1
-    };
-    Object messages[] = {
-            "Sorry to bother you. I have a question for you",
-            "I’ve been having a problem with my computer. I know you’re an engineer so I thought you might be able to help me.",
-            "I see",
-            "What’s the problem?",
-            "I have a file that I can’t open for some reason.",
-            "I have reason.",
-            "Yes, I was working on it last night and everything was fine, but this morning.",
-            "Sorry to bother you. I have a question for you",
-            "I see",
-            "I have a file that I can’t open for some reason.",
-            "Sorry to bother you. I have a question for you",
-            "I’ve been having a problem with my computer. I know you’re an engineer so I thought you might be able to help me.",
-            "I see",
-            "What’s the problem?",
-            "I have a file that I can’t open for some reason.",
-            "I have reason.",
-            "Yes, I was working on it last night and everything was fine, but this morning.",
-            "Sorry to bother you. I have a question for you",
-            R.drawable.global_chat_avatar1,
-            "I have a file that I can’t open for some reason."
-    };
+//    String names[] = {
+//            "Paimon","me","Xiao","Klee Bunbara","Paimon",
+//            "me","Xiao","Klee Bunbara","me","Yae Miko",
+//            "Paimon","me","Xiao","Klee Bunbara","Paimon",
+//            "me","Xiao","Klee Bunbara","me","Yae Miko"
+//    };
+//    Integer avatars[]= {
+//            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
+//            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
+//            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
+//            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
+//            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
+//            R.drawable.global_chat_avatar1, R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
+//            R.drawable.global_chat_avatar1, R.drawable.global_chat_avatar1
+//    };
+//    Object messages[] = {
+//            "Sorry to bother you. I have a question for you",
+//            "I’ve been having a problem with my computer. I know you’re an engineer so I thought you might be able to help me.",
+//            "I see",
+//            "What’s the problem?",
+//            "I have a file that I can’t open for some reason.",
+//            "I have reason.",
+//            "Yes, I was working on it last night and everything was fine, but this morning.",
+//            "Sorry to bother you. I have a question for you",
+//            "I see",
+//            "I have a file that I can’t open for some reason.",
+//            "Sorry to bother you. I have a question for you",
+//            "I’ve been having a problem with my computer. I know you’re an engineer so I thought you might be able to help me.",
+//            "I see",
+//            "What’s the problem?",
+//            "I have a file that I can’t open for some reason.",
+//            "I have reason.",
+//            "Yes, I was working on it last night and everything was fine, but this morning.",
+//            "Sorry to bother you. I have a question for you",
+//            R.drawable.global_chat_avatar1,
+//            "I have a file that I can’t open for some reason."
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.global_chat_list_message);
 
+        Intent intent = getIntent();
+        RoomModel roomModel = (RoomModel) intent.getSerializableExtra("Data");
         listView=(ListView) findViewById(R.id.listMessages);
-        CustomMessageItem customMessageItem = new CustomMessageItem(this,avatars,names,messages);
+        CustomMessageItem customMessageItem = new CustomMessageItem(this,roomModel.getMessages());
 
         listView.setAdapter(customMessageItem);
         listView.setSelection(customMessageItem.getCount() - 1);
@@ -113,6 +120,11 @@ public class ListMessage extends AppCompatActivity {
         chatText = (EditText) findViewById(R.id.chatText);
         optionButton = (Button) findViewById(R.id.optionButton);
         backButton = (Button) findViewById(R.id.backButton);
+        chatImage = (ImageView) findViewById(R.id.avatar);
+        chatName = (TextView) findViewById(R.id.textName);
+
+        chatImage.setImageResource(roomModel.getAvatar());
+        chatName.setText(roomModel.getName());
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,6 +147,7 @@ public class ListMessage extends AppCompatActivity {
 //                    Bitmap b = avatar.getDrawingCache();
 //                    intent.putExtras(userInf);
 //                    intent.putExtra("Bitmap", b);
+                intent.putExtra("Data",roomModel.getOptions());
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }

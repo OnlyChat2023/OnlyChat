@@ -32,7 +32,6 @@ public class GroupChat extends Fragment {
     ImageView profile;
     ImageView addChat;
     ListView listChat;
-
     Button okBtn;
 
     String names[] = {
@@ -91,8 +90,8 @@ public class GroupChat extends Fragment {
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
 
-        CustomChatItem customChatItem = new CustomChatItem(groupChat.getContext(), avatars, names, messages, times);
-        listChat.setAdapter(customChatItem);
+//        CustomChatItem customChatItem = new CustomChatItem(groupChat.getContext(), avatars, names, messages, times);
+//        listChat.setAdapter(customChatItem);
 
         listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

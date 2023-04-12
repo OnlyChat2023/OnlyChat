@@ -82,7 +82,7 @@ public class ChattingActivity extends AppCompatActivity {
         isMute = false;
         btnBack = (Button) findViewById(R.id.backButton);
         btnSetting = (Button) findViewById(R.id.optionButton);
-        imgAvatar = (ImageView) findViewById(R.id.imageView4);
+//        imgAvatar = (ImageView) findViewById(R.id.imageView4);
         txtName = (TextView) findViewById(R.id.textName);
         txtOnline = (TextView) findViewById(R.id.textSubName);
 
