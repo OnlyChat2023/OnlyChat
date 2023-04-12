@@ -1,4 +1,5 @@
 import messageModel from "../models/globalChatModel.js"
+import catchAsync from "../utils/catchAsync.js"
 
 const getAll = catchAsync(async (req, res) => {
   const messages = await messageModel.find()
