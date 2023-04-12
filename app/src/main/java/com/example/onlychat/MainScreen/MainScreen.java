@@ -1,11 +1,19 @@
 package com.example.onlychat.MainScreen;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.util.Log;
+=======
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
+>>>>>>> 77baa234ba69ff9d8bcbc2393acc01116d68a83f
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +28,9 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.onlychat.Authetication.ForgotActivity;
+import com.example.onlychat.Authetication.LoginActivity;
+import com.example.onlychat.Authetication.RegisterActivity;
 import com.example.onlychat.ChatBot.ChatBot;
 import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.Friends.Friends;
@@ -54,60 +65,77 @@ public class MainScreen extends AppCompatActivity {
             R.drawable.navbar_friends
     };
 
+    private ImageView showPasswordBtn;
+    private EditText passwordInput;
+    private TextView forgotPasswordBtn;
+
+    private boolean isHidePassword = true;
+    private Button RegisterBtn;
+
+    private Boolean isLogin = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         setContentView(R.layout.main_screen);
 
-        viewPager = (ViewPager) findViewById(R.id.viewPaper);
-        setupViewPager(viewPager);
+        if (isLogin) {
 
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(viewPager);
-//        setupTabIcons();
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.main_navbarrrrrrrrrrrrrrr, null);
+            setContentView(R.layout.main_screen);
 
-            ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
-            if(i == 0) {
-                tab_icon.setImageResource(tabIcons[i]);
-                tab_icon.setBackgroundColor(Color.parseColor("#352159"));
-            } else {
-                tab_icon.setImageResource(tabIcons[i]);
-            }
-            tabLayout.getTabAt(i).setCustomView(tab);
-        }
+            viewPager = (ViewPager) findViewById(R.id.viewPaper);
+            setupViewPager(viewPager);
 
-        tabLayout.setOnTabSelectedListener(
-                new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        super.onTabSelected(tab);
-                        View tabView = tab.getCustomView();
-                        ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
-                        tab_icon.setBackgroundColor(Color.parseColor("#352159"));
-                    }
+            tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+            tabLayout.setupWithViewPager(viewPager);
+            //        setupTabIcons();
+            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+                LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.main_navbarrrrrrrrrrrrrrr, null);
 
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-                        super.onTabUnselected(tab);
-                        View tabView = tab.getCustomView();
-                        ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
-                        tab_icon.setBackgroundColor(Color.TRANSPARENT);
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-                        super.onTabReselected(tab);
-                    }
+                ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+                if (i == 0) {
+                    tab_icon.setImageResource(tabIcons[i]);
+                    tab_icon.setBackgroundColor(Color.parseColor("#352159"));
+                } else {
+                    tab_icon.setImageResource(tabIcons[i]);
                 }
-        );
+                tabLayout.getTabAt(i).setCustomView(tab);
+            }
 
+            tabLayout.setOnTabSelectedListener(
+                    new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+                        @Override
+                        public void onTabSelected(TabLayout.Tab tab) {
+                            super.onTabSelected(tab);
+                            View tabView = tab.getCustomView();
+                            ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
+                            tab_icon.setBackgroundColor(Color.parseColor("#352159"));
+                        }
 
+                        @Override
+                        public void onTabUnselected(TabLayout.Tab tab) {
+                            super.onTabUnselected(tab);
+                            View tabView = tab.getCustomView();
+                            ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
+                            tab_icon.setBackgroundColor(Color.TRANSPARENT);
+                        }
+
+                        @Override
+                        public void onTabReselected(TabLayout.Tab tab) {
+                            super.onTabReselected(tab);
+                        }
+                    }
+            );
+        }
+        else {
+            Intent LoginActivity = new Intent(this, com.example.onlychat.Authetication.LoginActivity.class);
+            startActivity(LoginActivity);
+            finishAffinity();
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),0);
+<<<<<<< HEAD
 
         // test data
         ArrayList<RoomModel> listRoom = new ArrayList<>();
@@ -136,6 +164,13 @@ public class MainScreen extends AppCompatActivity {
         adapter.addFragment(new ChatBot(), "bot chat");
         adapter.addFragment(new Friends(), "friends");
 
+=======
+        adapter.addFragment(new DirectMessage(),"direct chat");
+        adapter.addFragment(new GroupChat(), "group chat");
+        adapter.addFragment(new GlobalChat(), "global chat");
+        adapter.addFragment(new ChatBot(), "bot chat");
+        adapter.addFragment(new Friends(), "friends");
+>>>>>>> 77baa234ba69ff9d8bcbc2393acc01116d68a83f
         viewPager.setAdapter(adapter);
     }
 
