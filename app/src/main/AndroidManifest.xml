@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -20,15 +23,9 @@
         <activity
             android:name=".GroupChat.ListMessage.ListMessage"
             android:exported="true" />
-        <activity
-            android:name=".ChatBot.MainScreen"
-            android:exported="false" />
-        <activity
-            android:name=".DirectMessage.Authetication.ResetPassword"
-            android:exported="true" />
-        <activity
-            android:name=".DirectMessage.Authetication.OTP"
-            android:exported="true" />
+<!--        <activity-->
+<!--            android:name=".ChatBot.ChatBot"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".DirectMessage.ChattingActivity"
             android:exported="true" />
@@ -39,8 +36,8 @@
             android:name=".MainScreen.MainScreen"
             android:exported="false" />
         <activity
-            android:name=".EditProfileStep2"
-            android:exported="true" />
+            android:name=".EditProfile.EditProfileStep2"
+            android:exported="false" />
         <activity
             android:name=".GroupChat.GroupChatSetting"
             android:exported="true" />
@@ -51,11 +48,20 @@
             android:name=".Profile.Profile"
             android:exported="false" />
         <activity
-            android:name=".DirectMessage.Authetication.ForgotActivity"
-            android:exported="false" />
+            android:name=".Authetication.ResetPassword"
+            android:exported="true" />
         <activity
-            android:name=".DirectMessage.Authetication.RegisterActivity"
-            android:exported="false" />
+            android:name=".Authetication.OTP"
+            android:exported="true" />
+        <activity
+            android:name=".Authetication.ForgotActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Authetication.RegisterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Authetication.LoginActivity"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

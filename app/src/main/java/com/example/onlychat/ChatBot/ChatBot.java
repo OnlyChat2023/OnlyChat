@@ -124,7 +124,6 @@ public class ChatBot extends Fragment {
             }
         });
 
-
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

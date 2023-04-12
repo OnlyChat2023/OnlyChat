@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditProfileStep2">
+    tools:context=".EditProfile.EditProfileStep2">
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -14,10 +14,9 @@
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:fontFamily="@font/montserrat_medium"
-            android:layout_height="match_parent"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            tools:ignore="MissingConstraints">
+            android:layout_height="wrap_content"
+            android:paddingVertical="20dp"
+            android:paddingHorizontal="25dp">
 
             <LinearLayout
                 android:id="@+id/input_section"
@@ -30,7 +29,7 @@
                 <TextView
                     android:id="@+id/fbL"
                     android:fontFamily="@font/montserrat_medium"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Facebook Link"
                     android:textColor="#ffffff"
@@ -43,12 +42,12 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edit_input"
                     android:paddingHorizontal="15dp"
-                    android:paddingVertical="10dp"
+                    android:paddingVertical="8dp"
                     android:layout_marginBottom="30dp"/>
                 <TextView
                     android:id="@+id/insL"
                     android:fontFamily="@font/montserrat_medium"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Instagram Link"
                     android:textColor="#ffffff"
@@ -61,12 +60,12 @@
                     android:fontFamily="@font/montserrat_medium"
                     android:background="@drawable/edit_input"
                     android:paddingHorizontal="15dp"
-                    android:paddingVertical="10dp"
+                    android:paddingVertical="8dp"
                     android:layout_marginBottom="30dp"/>
                 <TextView
                     android:id="@+id/twitterL"
                     android:fontFamily="@font/montserrat_medium"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Twitter Link"
                     android:textColor="#ffffff"
@@ -79,12 +78,12 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edit_input"
                     android:paddingHorizontal="15dp"
-                    android:paddingVertical="10dp"
+                    android:paddingVertical="8dp"
                     android:layout_marginBottom="30dp"/>
                 <TextView
                     android:id="@+id/desL"
                     android:fontFamily="@font/montserrat_medium"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Description"
                     android:textColor="#ffffff"
@@ -98,20 +97,22 @@
                     android:paddingHorizontal="15dp"
                     android:paddingVertical="8dp"
                     android:background="@drawable/edit_input"
-                    android:layout_marginBottom="30dp"/>
+                    android:layout_marginBottom="30dp" />
 
             </LinearLayout>
 
             <Button
                 android:layout_below="@id/input_section"
-                android:layout_alignRight="@id/input_section"
+                android:layout_alignEnd="@id/input_section"
                 android:id="@+id/finishBtn"
+                android:textAllCaps="false"
                 android:layout_width="wrap_content"
-                android:layout_height="43dp"
+                android:layout_height="45dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/edit_profile_btn"
                 android:fontFamily="@font/montserrat_semibold"
-                android:padding="10dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="8dp"
                 android:text="Finish"
                 android:textSize="12sp"
                 tools:ignore="MissingConstraints"
