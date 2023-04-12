@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import socketIO from 'socket.io';
+import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 
 
@@ -18,7 +18,7 @@ const server = app.listen(port, () => {
     console.log(`App is running on port ${port}...`);
 });
 
-const io = socketIO(server);
+const io = new Server(server);
 
 io.of('/direct_message').on('connection', (socket) => {
 

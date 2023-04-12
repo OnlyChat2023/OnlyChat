@@ -2,7 +2,6 @@ import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
 import Validator from "../utils/Validator.js";
 import REGEX from '../constants/regex.js';
-import firebase from '../firebase/firebase.js';
 
 /*
     AUTH CONTROLLER
@@ -29,7 +28,6 @@ const register = catchAsync(async (req, res, next) => {
     if (!Validator.isValidRequestBody(req.body.user, ['phonenumber', 'password', 'passwordConfirm']))
         return next(new AppError("Bad request", 400)); 
 
-
     // Validate phonenumber, password and password confirm
     const { phonenumber, password, passwordConfirm } = req.body.user;
 
@@ -41,7 +39,6 @@ const register = catchAsync(async (req, res, next) => {
 
     else if (password !== passwordConfirm)
         return next(new AppError("Password and password confirm do not match", 400));
-
 
     const founded_user = await User.findOne({ phone: phonenumber });
 
