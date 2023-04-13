@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordInput, phoneInput;
     private CheckBox rememberMe;
     private TextView forgotPasswordBtn;
+    private ProgressBar loadingBar;
     private boolean isHidePassword = true;
     private Button RegisterBtn, LoginBtn;
     private Boolean validationOK = true;
@@ -60,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         phoneInput = (EditText) findViewById(R.id.phoneNumberInput);
         forgotPasswordBtn = (TextView) findViewById(R.id.forgotPasswordBtn);
         showPasswordBtn = (ImageView) findViewById(R.id.showPassword);
+        loadingBar = (ProgressBar) findViewById(R.id.loadingBar);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -124,12 +126,16 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if (validationOK) {
+                    enableLogin(false);
+
                     HttpManager httpRequest = new HttpManager(LoginActivity.this);
 
                     httpRequest.Login(phone, password, new HttpResponse() {
 
                         @Override
                         public void onSuccess(JSONObject response) throws JSONException {
+                            enableLogin(true);
+
                             JSONObject userInfo = response.getJSONObject("user").getJSONObject("info");
 
                             UserModel userInformation = new Gson().fromJson(String.valueOf(userInfo), UserModel.class);
@@ -161,11 +167,20 @@ public class LoginActivity extends AppCompatActivity {
                         public void onError(String error) {
                             phoneInput.setError("Invalid phone number or password. Please try again.");
                             phoneInput.requestFocus();
+                            enableLogin(true);
                         }
                     });
                 }
             }
         });
+    }
+
+    private void enableLogin(boolean enable) {
+        if (enable)
+            loadingBar.setVisibility(View.GONE);
+        else
+            loadingBar.setVisibility(View.VISIBLE);
+        LoginBtn.setEnabled(enable);
     }
 
     @Override
