@@ -1,13 +1,13 @@
 package com.example.onlychat.MainScreen;
 
+<<<<<<< HEAD
 import android.annotation.SuppressLint;
 import android.app.Activity;
+=======
+>>>>>>> 778e4f8f37a8b9a027c87f5d16d8b3cef63dd586
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -20,15 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.onlychat.Authetication.ForgotActivity;
-import com.example.onlychat.Authetication.LoginActivity;
-import com.example.onlychat.Authetication.RegisterActivity;
 import com.example.onlychat.ChatBot.ChatBot;
 import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.Friends.Friends;
@@ -53,6 +48,10 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+<<<<<<< HEAD
+=======
+import java.util.Date;
+>>>>>>> 778e4f8f37a8b9a027c87f5d16d8b3cef63dd586
 import java.util.List;
 
 public class MainScreen extends AppCompatActivity {
@@ -75,6 +74,7 @@ public class MainScreen extends AppCompatActivity {
     private boolean isHidePassword = true;
     private Button RegisterBtn;
 
+<<<<<<< HEAD
     private Boolean isLogin = false;
     private UserModel user;
     private ArrayList<RoomModel> global_list;
@@ -87,6 +87,9 @@ public class MainScreen extends AppCompatActivity {
     GroupChat groupChatFragment = new GroupChat();
     ChatBot botChatFragment = new ChatBot();
 
+=======
+    private Boolean isLogin = true;
+>>>>>>> 778e4f8f37a8b9a027c87f5d16d8b3cef63dd586
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

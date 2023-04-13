@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:paddingVertical="9dp"
-    android:paddingHorizontal="12dp"
     android:layout_height="wrap_content">
 
     <TextView

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.onlychat.Model.MessageModel;
+import com.example.onlychat.Manager.Model.MessageModel;
 import com.example.onlychat.R;
 
 import java.util.ArrayList;

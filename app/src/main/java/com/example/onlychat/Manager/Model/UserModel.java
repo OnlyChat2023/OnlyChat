@@ -1,4 +1,4 @@
-package com.example.onlychat.Model;
+package com.example.onlychat.Manager.Model;
 
 import org.json.JSONArray;
 

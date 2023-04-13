@@ -4,7 +4,6 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,13 +23,19 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.onlychat.GlobalChat.CustomChatItem;
-import com.example.onlychat.GlobalChat.GlobalChat;
-import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
+<<<<<<< HEAD
 import com.example.onlychat.Model.RoomModel;
+=======
+import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.Interfaces.RoomOptions;
+import com.example.onlychat.Manager.Model.MessageModel;
+import com.example.onlychat.Manager.Model.RoomModel;
+>>>>>>> 778e4f8f37a8b9a027c87f5d16d8b3cef63dd586
 import com.example.onlychat.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DirectMessage extends Fragment {
     TextView chatTitle;
@@ -39,6 +44,7 @@ public class DirectMessage extends Fragment {
     ImageView addChat;
     ListView listChat;
 
+<<<<<<< HEAD
     ArrayList<RoomModel> roomModels = new ArrayList<>();
     public ArrayList<RoomModel> getRoomModels() {
         return roomModels;
@@ -56,6 +62,9 @@ public class DirectMessage extends Fragment {
             R.raw.a_16,R.raw.a_17, R.raw.a_18, R.raw.a_19, R.raw.a_20,
             R.raw.a_21, R.raw.a_22, R.raw.a_23, R.raw.a_24, R.raw.a_25,
     };
+=======
+    ArrayList<RoomModel> roomChat = new ArrayList<RoomModel>();
+>>>>>>> 778e4f8f37a8b9a027c87f5d16d8b3cef63dd586
 
     GridView androidGridView;
 
@@ -78,22 +87,26 @@ public class DirectMessage extends Fragment {
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
 
+<<<<<<< HEAD
         CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), roomModels);
+=======
+        ArrayList<MessageModel> msg = new ArrayList<MessageModel>();
+        msg.add(new MessageModel("6430c86d1b48c829004aa123", "6430c86d1b48c829004aa89b", R.raw.a_1, "Riden Shogun", "Risho", "Hello World", Calendar.getInstance().getTime(), null));
+        msg.add(new MessageModel("6430c86d1b48c829004aa124", "642e2f430cc3fd9470f85b5b", R.raw.a_2, "Yae Miko", "Yami", "Hello new Word", Calendar.getInstance().getTime(), null));
+        ArrayList<Member> members = new ArrayList<Member>();
+        members.add(new Member("6430c86d1b48c829004aa89b", "Raiden Shogun", "Risho", R.raw.a_1));
+        members.add(new Member("642e2f430cc3fd9470f85b5b", "Yae Miko", "Yami", R.raw.a_2));
+        roomChat.add(new RoomModel("6430c86d1b48c829004aa123", R.raw.a_2, "Yami", msg, new RoomOptions(false, false, "Yami", null, members)));
+
+        CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), roomChat);
+>>>>>>> 778e4f8f37a8b9a027c87f5d16d8b3cef63dd586
         listChat.setAdapter(customChatItem);
 
         listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ChattingActivity.class);
-                Bundle userInf = new Bundle();
-                TextView name = (TextView) view.findViewById(R.id.messageName);
-                ImageView avatar = (ImageView) view.findViewById(R.id.messageAvatar);
-
-                userInf.putString("name", name.getText().toString());
-                avatar.setDrawingCacheEnabled(true);
-                Bitmap b = avatar.getDrawingCache();
-                intent.putExtras(userInf);
-                intent.putExtra("Bitmap", b);
+                intent.putExtra("roomChat", roomChat.get(i));
 
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
@@ -201,7 +214,7 @@ public class DirectMessage extends Fragment {
         }
 
         public int getCount() {
-            return avatarsImage.length;
+            return roomChat.size();
         }
 
         public Object getItem(int position) {
@@ -223,7 +236,7 @@ public class DirectMessage extends Fragment {
             } else {
                 mImageView = (ImageView) convertView;
             }
-            mImageView.setImageResource(avatarsImage[position]);
+            mImageView.setImageResource(roomChat.get(position).getAvatar());
             return mImageView;
         }
     }

@@ -3,7 +3,6 @@ package com.example.onlychat.GlobalChat.ListMessage;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -21,9 +18,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.onlychat.DirectMessage.Option.OptionActivity;
 import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
-import com.example.onlychat.Model.RoomModel;
+import com.example.onlychat.Manager.Model.RoomModel;
 import com.example.onlychat.R;
 
 public class ListMessage extends AppCompatActivity {

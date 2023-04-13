@@ -13,8 +13,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
-import com.example.onlychat.GlobalChat.CustomChatItem;
-import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
 public class Options extends AppCompatActivity {

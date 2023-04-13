@@ -1,13 +1,11 @@
 package com.example.onlychat.Manager;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,7 +13,6 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.onlychat.Interfaces.HttpResponse;
@@ -25,11 +22,9 @@ import com.example.onlychat.Model.UserModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -161,6 +156,10 @@ public class HttpManager {
         createRequest("http://" + ip + ":5000/api/onlychat/v1/auth/register", Request.Method.POST, "register", params, responseReceiver);
     }
 
+//    public ArrayList<RoomModel> getDirectMessageRoom() {
+//
+//        return
+//    }
     public void Login(String phoneNumber, String password, HttpResponse responseReceiver) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("phonenumber", phoneNumber);

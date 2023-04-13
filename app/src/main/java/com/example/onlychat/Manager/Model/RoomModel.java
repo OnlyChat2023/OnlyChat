@@ -1,4 +1,4 @@
-package com.example.onlychat.Model;
+package com.example.onlychat.Manager.Model;
 
 import com.example.onlychat.Interfaces.RoomOptions;
 
