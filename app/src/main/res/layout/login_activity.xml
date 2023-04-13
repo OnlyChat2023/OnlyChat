@@ -114,6 +114,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <CheckBox
+                    android:id="@+id/rememberMe"
                     android:buttonTint="#A479FF"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -140,25 +141,43 @@
                 android:textColor="#A479FF"
                 android:text="Forgot password ?" />
 
-            <Button
-                android:id="@+id/LoginBtn"
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:id="@+id/btnGroup"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rememberCheck"
-                android:layout_marginTop="35dp"
-                android:background="@drawable/auth_button"
-                android:fontFamily="@font/montserrat_semibold"
-                android:paddingTop="12dp"
-                android:paddingBottom="13dp"
-                android:text="Sign in"
-                android:textAllCaps="false"
-                android:textSize="18sp" />
+                android:layout_marginTop="35dp">
+
+                <ProgressBar
+                    android:id="@+id/loadingBar"
+                    android:indeterminate="true"
+                    android:indeterminateDrawable="@drawable/progress_bar"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:elevation="5dp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/LoginBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/auth_button"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="13dp"
+                    android:text="Login"
+                    android:textAllCaps="false"
+                    android:textSize="18sp" />
+            </RelativeLayout>
 
             <View
                 android:id="@+id/line_spec"
                 android:layout_width="wrap_content"
                 android:layout_height="22dp"
-                android:layout_below="@id/LoginBtn"
+                android:layout_below="@id/btnGroup"
                 android:layout_marginTop="35dp"
                 android:layout_marginBottom="25dp"
                 android:background="@drawable/bottom_spec" />

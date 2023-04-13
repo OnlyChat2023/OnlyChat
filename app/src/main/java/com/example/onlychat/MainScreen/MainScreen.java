@@ -26,10 +26,14 @@ import com.example.onlychat.GlobalChat.GlobalChat;
 import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
-import com.example.onlychat.Manager.Model.MessageModel;
-import com.example.onlychat.Manager.Model.RoomModel;
+import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
+import com.example.onlychat.Model.MessageModel;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 import com.google.android.material.tabs.TabLayout;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,6 +64,18 @@ public class MainScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isLogin=true;
+        HttpManager httpManager = new HttpManager(this);
+        httpManager.getUser();
+//        httpManager.getUserById("6430c86d1b48c829004aa89b");
+//        try {
+//            httpManager.getDirectChat();
+//        } catch (JSONException e) {
+//            throw new RuntimeException(e);
+//        }
+
+        Bundle bundle = getIntent().getExtras();
+        isLogin = bundle.getBoolean("isLogin", false);
 
         if (isLogin) {
 
