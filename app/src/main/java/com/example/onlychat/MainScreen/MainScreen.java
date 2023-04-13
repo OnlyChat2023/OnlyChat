@@ -38,6 +38,7 @@ import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.MainScreen.Interface.Main_MainCallBacks;
 import com.example.onlychat.MainScreen.Fragment.MainContent;
 import com.example.onlychat.MainScreen.Fragment.MainNavbar;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Profile.ViewPagerAdapter;
@@ -74,6 +75,9 @@ public class MainScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle bundle = getIntent().getExtras();
+        isLogin = bundle.getBoolean("isLogin", false);
 
         if (isLogin) {
 

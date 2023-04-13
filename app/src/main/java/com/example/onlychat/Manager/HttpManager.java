@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -47,7 +48,11 @@ public class HttpManager {
             new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    httpResponse.onSuccess(response);
+                    try {
+                        httpResponse.onSuccess(response);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             },
             new Response.ErrorListener() {
@@ -70,7 +75,7 @@ public class HttpManager {
                             String responseBody = new String(error.networkResponse.data, "utf-8");
                             JSONObject data = new JSONObject(responseBody);
                             String message = data.getString("message");
-                            Log.d("TEST", message);
+                            Log.e("HTTP ERROR", message);
                         } catch (UnsupportedEncodingException | JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -83,11 +88,16 @@ public class HttpManager {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
+                if (pref.getIsLoggedIn())
+                    headers.put("Authorization", "Bearer " + pref.getUserToken());
                 return headers;
             }
         };
 
+        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(50000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        jsonObjReq.setShouldCache(false);
         jsonObjReq.setTag(tag);
+
         queue.add(jsonObjReq);
     }
 
@@ -107,5 +117,13 @@ public class HttpManager {
         params.put("firebaseToken", firebaseToken);
 
         createRequest("http://" + ip + ":5000/api/onlychat/v1/auth/register", Request.Method.POST, "register", params, responseReceiver);
+    }
+
+    public void Login(String phoneNumber, String password, HttpResponse responseReceiver) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("phonenumber", phoneNumber);
+        params.put("password", password);
+
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/auth/login", Request.Method.POST, "login", params, responseReceiver);
     }
 }
