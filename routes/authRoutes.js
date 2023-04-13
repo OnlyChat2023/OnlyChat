@@ -15,6 +15,7 @@ const router = express.Router();
 router.post('/login', authController.login);
 
 //// > REGISTER
+router.post('/register/validate', authController.validateRegister);
 router.post('/register', authController.register);
 
 //// > FORGOT PASSWORD
