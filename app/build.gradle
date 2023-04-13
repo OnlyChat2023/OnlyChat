@@ -39,5 +39,26 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+<<<<<<< HEAD
+
+    // Check permission
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
+
+    // Import libs
+//    implementation 'gun0912.ted:tedbottompicker:2.0.1'
+//    implementation 'io.github.ParkSangGwon:tedimagepicker:1.4.2'
+//    implementation "androidx.recyclerview:recyclerview:1.2.1"
+//    implementation "androidx.cardview:cardview:1.0.0"
+
+
+    implementation('pub.devrel:easypermissions:3.0.0')
+    implementation('com.droidninja:filepicker:2.2.5')
+    implementation('com.github.bumptech.glide:glide:4.13.0')
+    implementation('org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.3')
+
+    // Emoji
+    implementation 'com.vanniktech:emoji-google:0.7.0'
+=======
     implementation 'com.android.volley:volley:1.2.1'
+>>>>>>> 4affaf07d92ae47f6399a0ed28758ff94867377e
 }
