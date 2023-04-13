@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,8 @@ import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 import com.google.android.material.tabs.TabLayout;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -70,7 +73,13 @@ public class MainScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         isLogin=true;
         HttpManager httpManager = new HttpManager(this);
-        httpManager.getUserProfile();
+        httpManager.getUser();
+//        httpManager.getUserById("6430c86d1b48c829004aa89b");
+//        try {
+//            httpManager.getDirectChat();
+//        } catch (JSONException e) {
+//            throw new RuntimeException(e);
+//        }
         if (isLogin) {
 
             setContentView(R.layout.main_screen);
