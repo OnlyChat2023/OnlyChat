@@ -129,7 +129,11 @@ const register = catchAsync(async (req, res, next) => {
         return next(new Error('Phone number is invalid with the phone varification', 401));
     }
 
-    const user = await User.create({ username, phone: phonenumber, password });
+    const min = 1, max = 25;
+
+    const numberAvt = Math.floor(Math.random() * (max - min + 1) + min);
+
+    const user = await User.create({ username, phone: phonenumber, password, avatar: `avatar/${numberAvt}.png` });
 
     return res.status(200).json({
         status: 'success',
