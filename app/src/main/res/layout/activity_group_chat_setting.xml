@@ -13,7 +13,7 @@
         android:paddingHorizontal="20dp"
         >
         <ImageView
-            android:id="@+id/imageView11"
+            android:id="@+id/backButton"
             android:layout_width="20dp"
             android:layout_height="28dp"
             app:srcCompat="@drawable/global_chat_back" />

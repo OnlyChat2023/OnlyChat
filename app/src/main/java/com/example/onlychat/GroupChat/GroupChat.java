@@ -42,6 +42,7 @@ public class GroupChat extends Fragment {
             "Anonymous","Anonymous Private","Anonymous Publish",
             "Anonymous","Anonymous Private","Anonymous Publish",
     };
+
     Integer avatars[]={
             R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
             R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
@@ -50,6 +51,7 @@ public class GroupChat extends Fragment {
             R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
             R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
     };
+
     String messages[] = {
             "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
             "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
@@ -58,6 +60,7 @@ public class GroupChat extends Fragment {
             "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
             "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
     };
+
     String times[]={
             "2:00 PM","4:00 PM","6:00 PM",
             "2:00 PM","4:00 PM","6:00 PM",
@@ -68,11 +71,11 @@ public class GroupChat extends Fragment {
     };
 
     Integer avatarsImage[] = {
-            R.raw.a_1, R.raw.a_2, R.raw.a_3, R.raw.a_4, R.raw.a_5,
-            R.raw.a_6, R.raw.a_7, R.raw.a_8, R.raw.a_9, R.raw.a_10,
-            R.raw.a_11, R.raw.a_12, R.raw.a_13, R.raw.a_14, R.raw.a_15,
-            R.raw.a_16,R.raw.a_17, R.raw.a_18, R.raw.a_19, R.raw.a_20,
-            R.raw.a_21, R.raw.a_22, R.raw.a_23, R.raw.a_24, R.raw.a_25,
+        R.raw.a_1, R.raw.a_2, R.raw.a_3, R.raw.a_4, R.raw.a_5,
+        R.raw.a_6, R.raw.a_7, R.raw.a_8, R.raw.a_9, R.raw.a_10,
+        R.raw.a_11, R.raw.a_12, R.raw.a_13, R.raw.a_14, R.raw.a_15,
+        R.raw.a_16,R.raw.a_17, R.raw.a_18, R.raw.a_19, R.raw.a_20,
+        R.raw.a_21, R.raw.a_22, R.raw.a_23, R.raw.a_24, R.raw.a_25,
     };
 
     @Override
@@ -82,7 +85,10 @@ public class GroupChat extends Fragment {
         // set value for widget
         chatTitle = (TextView) groupChat.findViewById(R.id.header_title);
         chatTitle.setText("group chat channel");
+
         chatIcon = (ImageView) groupChat.findViewById(R.id.chatIcon);
+//        chatIcon.setImageResource(R.drawable.ic_groupchat);
+
         profile = (ImageView) groupChat.findViewById(R.id.profile);
         addChat = (ImageView) groupChat.findViewById(R.id.addChat);
         listChat = (ListView) groupChat.findViewById(R.id.listChat);
@@ -90,8 +96,8 @@ public class GroupChat extends Fragment {
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
 
-        CustomChatItem customChatItem = new CustomChatItem(groupChat.getContext(), avatars, names, messages, times);
-        listChat.setAdapter(customChatItem);
+//        CustomChatItem customChatItem = new CustomChatItem(groupChat.getContext(), avatars, names, messages, times);
+//        listChat.setAdapter(customChatItem);
 
         listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

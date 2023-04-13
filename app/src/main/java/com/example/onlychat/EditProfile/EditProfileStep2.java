@@ -1,8 +1,10 @@
-package com.example.onlychat;
+package com.example.onlychat.EditProfile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.onlychat.R;
 
 public class EditProfileStep2 extends AppCompatActivity {
 

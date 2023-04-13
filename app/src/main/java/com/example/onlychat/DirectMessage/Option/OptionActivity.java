@@ -60,6 +60,7 @@ public class OptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                overridePendingTransition(R.anim.fixed, R.anim.left_to_right);
             }
         });
 

@@ -30,7 +30,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.onlychat.DirectMessage.ChattingActivity;
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
+
+import java.util.ArrayList;
 
 public class GlobalChat extends Fragment {
     TextView chatTitle;
@@ -38,40 +41,42 @@ public class GlobalChat extends Fragment {
     ImageView profile;
     ImageView addChat;
     ListView listChat;
+    ArrayList<RoomModel> roomModels = new ArrayList<>();
 
-    String names[] = {
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-    };
-    Integer avatars[]={
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-    };
-    String messages[] = {
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-    };
-    String times[]={
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-    };
 
+//    String names[] = {
+//            "Anonymous","Anonymous Private","Anonymous Publish",
+//            "Anonymous","Anonymous Private","Anonymous Publish",
+//            "Anonymous","Anonymous Private","Anonymous Publish",
+//            "Anonymous","Anonymous Private","Anonymous Publish",
+//            "Anonymous","Anonymous Private","Anonymous Publish",
+//            "Anonymous","Anonymous Private","Anonymous Publish",
+//    };
+//    Integer avatars[]={
+//            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+//            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+//            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+//            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+//            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+//            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
+//    };
+//    String messages[] = {
+//            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+//            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+//            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+//            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+//            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+//            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
+//    };
+//    String times[]={
+//            "2:00 PM","4:00 PM","6:00 PM",
+//            "2:00 PM","4:00 PM","6:00 PM",
+//            "2:00 PM","4:00 PM","6:00 PM",
+//            "2:00 PM","4:00 PM","6:00 PM",
+//            "2:00 PM","4:00 PM","6:00 PM",
+//            "2:00 PM","4:00 PM","6:00 PM",
+//    };
+//
     Integer avatarsImage[] = {
             R.raw.a_1, R.raw.a_2, R.raw.a_3, R.raw.a_4, R.raw.a_5,
             R.raw.a_6, R.raw.a_7, R.raw.a_8, R.raw.a_9, R.raw.a_10,
@@ -81,6 +86,10 @@ public class GlobalChat extends Fragment {
     };
 
     GridView androidGridView;
+
+    public GlobalChat(ArrayList<RoomModel> roomModels){
+        this.roomModels = roomModels;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,7 +106,7 @@ public class GlobalChat extends Fragment {
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
 
-        CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), avatars,names,messages,times);
+        CustomChatItem customChatItem = new CustomChatItem(globalChat.getContext(),roomModels );
         listChat.setAdapter(customChatItem);
 
         listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -115,15 +124,7 @@ public class GlobalChat extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ListMessage.class);
-//                    Bundle userInf = new Bundle();
-//                    TextView name = (TextView) v.findViewById(R.id.messageName);
-//                    ImageView avatar = (ImageView) v.findViewById(R.id.messageAvatar);
-//
-//                    userInf.putString("name", name.getText().toString());
-//                    avatar.setDrawingCacheEnabled(true);
-//                    Bitmap b = avatar.getDrawingCache();
-//                    intent.putExtras(userInf);
-//                    intent.putExtra("Bitmap", b);
+                intent.putExtra("Data",roomModels.get(i));
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }

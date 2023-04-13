@@ -47,37 +47,39 @@
                 android:textColor="@color/white"
                 android:text="Bill Gates"
                 android:gravity="center"
-                android:layout_marginVertical="5dp"/>
+                android:layout_marginVertical="15dp"/>
             <LinearLayout
+                android:layout_marginVertical="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:paddingHorizontal="50dp">
+                android:gravity="center"
+                >
 
                 <Button
                     android:id="@+id/chat_option_btn_nickname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="0"
                     android:stateListAnimator="@null"
                     android:background="@drawable/dm_option_nickname_nav"
                     android:gravity="center"/>
 
                 <Button
                     android:id="@+id/chat_option_btn_profile"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:background="@drawable/dm_option_profile_nav"
                     android:stateListAnimator="@null"
+                    android:layout_marginHorizontal="50dp"
                     android:gravity="center" />
 
                 <Button
                     android:id="@+id/chat_option_btn_noify"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:stateListAnimator="@null"
                     android:background="@drawable/dm_icon_on_notify_nav"
                     android:gravity="center"/>
@@ -122,8 +124,8 @@
 
             <ImageView
                 android:id="@+id/imageView13"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 app:srcCompat="@drawable/dm_option_icon_nickname" />
@@ -134,7 +136,8 @@
             android:layout_width="match_parent"
             android:layout_marginBottom="18dp"
             android:paddingVertical="6dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -148,8 +151,8 @@
 
             <ImageView
                 android:id="@+id/imageView14"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/dm_option_icon_on_notification" />
@@ -176,8 +179,8 @@
 
             <ImageView
                 android:id="@+id/imageView15"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 app:srcCompat="@drawable/dm_option_icon_profile" />
@@ -201,8 +204,8 @@
 
             <ImageView
                 android:id="@+id/imageView16"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 app:srcCompat="@drawable/dm_option_icon_delete" />
@@ -235,8 +238,8 @@
 
             <ImageView
                 android:id="@+id/imageView18"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 app:srcCompat="@drawable/dm_option_icon_block" />
@@ -262,8 +265,8 @@
 
             <ImageView
                 android:id="@+id/imageView19"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 app:srcCompat="@drawable/dm_option_icon_report" />

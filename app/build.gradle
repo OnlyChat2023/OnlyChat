@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -33,9 +34,12 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation platform('com.google.firebase:firebase-bom:31.4.0')
+    implementation 'com.google.firebase:firebase-auth'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+<<<<<<< HEAD
 
     // Check permission
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
@@ -54,4 +58,7 @@ dependencies {
 
     // Emoji
     implementation 'com.vanniktech:emoji-google:0.7.0'
+=======
+    implementation 'com.android.volley:volley:1.2.1'
+>>>>>>> 4affaf07d92ae47f6399a0ed28758ff94867377e
 }

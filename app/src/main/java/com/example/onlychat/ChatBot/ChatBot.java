@@ -94,8 +94,8 @@ public class ChatBot extends Fragment {
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
 
-        CustomChatItem customChatItem=new CustomChatItem(botChat.getContext(), avatars,names,messages,times);
-        listChat.setAdapter(customChatItem);
+//        CustomChatItem customChatItem=new CustomChatItem(botChat.getContext(), avatars,names,messages,times);
+//        listChat.setAdapter(customChatItem);
 
 //        listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -123,7 +123,6 @@ public class ChatBot extends Fragment {
                 return false;
             }
         });
-
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override

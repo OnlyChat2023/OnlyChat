@@ -11,7 +11,8 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.example.onlychat.GroupChat.CustomFriendCheckbox.CustomFriendCheckBox;
+import com.example.onlychat.GlobalChat.CustomChatItem;
+import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 
 import com.example.onlychat.R;
 

@@ -2,12 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
 
 
+=======
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+>>>>>>> 4affaf07d92ae47f6399a0ed28758ff94867377e
 
     <application
         android:name=".GroupChat.ListMessage.EmojiApplication"
@@ -19,7 +24,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:usesCleartextTraffic="true">
+
         <activity
             android:name=".GroupChat.GroupChat"
             android:exported="false" />
@@ -30,42 +37,45 @@
             android:name=".GroupChat.ListMessage.ListMessage"
             android:windowSoftInputMode="adjustResize"
             android:exported="true" />
-        <activity
-            android:name=".ChatBot.MainScreen"
-            android:exported="false" />
-        <activity
-            android:name=".DirectMessage.Authetication.ResetPassword"
-            android:exported="true" />
-        <activity
-            android:name=".DirectMessage.Authetication.OTP"
-            android:exported="true" />
+<!--        <activity-->
+<!--            android:name=".ChatBot.ChatBot"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".DirectMessage.ChattingActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".DirectMessage.Option.OptionActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".MainScreen.MainScreen"
-            android:exported="true" />
+            android:exported="false" />
         <activity
-            android:name=".EditProfileStep2"
+            android:name=".EditProfile.EditProfileStep2"
             android:exported="false" />
         <activity
             android:name=".GroupChat.GroupChatSetting"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".EditProfile.EditProfile"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Profile.Profile"
             android:exported="false" />
         <activity
-            android:name=".DirectMessage.Authetication.ForgotActivity"
-            android:exported="false" />
+            android:name=".Authetication.ResetPassword"
+            android:exported="true" />
         <activity
-            android:name=".DirectMessage.Authetication.RegisterActivity"
-            android:exported="false" />
+            android:name=".Authetication.OTP"
+            android:exported="true" />
+        <activity
+            android:name=".Authetication.ForgotActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Authetication.RegisterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Authetication.LoginActivity"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -77,16 +87,16 @@
         </activity>
         <activity
             android:name=".GlobalChat.GlobalChat"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".GlobalChat.ListMessage.ListMessage"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".GlobalChat.ListMessage.Options.Options"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".Friends.Friends"
-            android:exported="true" />
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"
