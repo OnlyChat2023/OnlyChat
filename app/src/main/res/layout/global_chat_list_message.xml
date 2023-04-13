@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:background="#181828"
     android:fillViewport="true"
+    android:id="@+id/root_view"
     tools:context=".MainActivity">
 
     <RelativeLayout
@@ -88,6 +89,14 @@
 
         </RelativeLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recycler_view"
+            android:layout_marginTop="16dp"
+            tools:listitem="@layout/item_main"/>
+
         <RelativeLayout
             android:id="@+id/chatLayout"
             android:layout_width="match_parent"
@@ -167,8 +176,8 @@
                 app:srcCompat="@drawable/global_chat_send" />
 
         </RelativeLayout>
-
-        <ListView
+        
+       <ListView
             android:id="@+id/listMessages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

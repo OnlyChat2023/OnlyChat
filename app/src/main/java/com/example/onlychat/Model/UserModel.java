@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class UserModel implements Serializable {
+<<<<<<< HEAD
      String id,name,email,phone,facebook,instagram,university,description;
      Integer avatar;
      ArrayList<RoomModel> directChat = new ArrayList<RoomModel>();
@@ -56,6 +57,29 @@ public class UserModel implements Serializable {
     public UserModel(){}
 
     public  String getId() {
+=======
+    String id;
+    String name, username, email, phone, facebook, instagram, description;
+    String avatar;
+    String token;
+
+    public UserModel(){}
+
+    public UserModel(String id, String name, String username, String email, String phone, String facebook, String instagram, String description, String avatar, String token) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+        this.facebook = facebook;
+        this.instagram = instagram;
+        this.description = description;
+        this.avatar = avatar;
+        this.token = token;
+    }
+
+    public String getId() {
+>>>>>>> 49053b79cc700a3df2738c0f4f819a40ccdad1df
         return id;
     }
 
@@ -65,6 +89,14 @@ public class UserModel implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void setName(String name) {
@@ -111,11 +143,11 @@ public class UserModel implements Serializable {
         this.description = description;
     }
 
-    public Integer getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Integer avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 
