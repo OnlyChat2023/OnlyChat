@@ -32,7 +32,6 @@ public class GroupChat extends Fragment {
     ImageView profile;
     ImageView addChat;
     ListView listChat;
-
     Button okBtn;
 
     String names[] = {

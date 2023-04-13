@@ -86,7 +86,7 @@ public class ChattingActivity extends AppCompatActivity {
         txtName = (TextView) findViewById(R.id.textName);
         txtOnline = (TextView) findViewById(R.id.textSubName);
 
-        chatContent = (ListView) findViewById(R.id.listMessages);
+//        chatContent = (ListView) findViewById(R.id.listMessages);
 
         btnFile = (ImageView) findViewById(R.id.encloseIcon);
         btnImage = (ImageView) findViewById(R.id.imageIcon);
