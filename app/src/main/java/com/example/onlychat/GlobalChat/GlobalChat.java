@@ -3,14 +3,8 @@ package com.example.onlychat.GlobalChat;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import android.content.Context;
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,12 +19,10 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.onlychat.DirectMessage.ChattingActivity;
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
-import com.example.onlychat.Model.RoomModel;
+import com.example.onlychat.Manager.Model.RoomModel;
 import com.example.onlychat.R;
 
 import java.util.ArrayList;

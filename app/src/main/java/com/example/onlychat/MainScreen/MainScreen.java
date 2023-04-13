@@ -1,12 +1,8 @@
 package com.example.onlychat.MainScreen;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -19,15 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.onlychat.Authetication.ForgotActivity;
-import com.example.onlychat.Authetication.LoginActivity;
-import com.example.onlychat.Authetication.RegisterActivity;
 import com.example.onlychat.ChatBot.ChatBot;
 import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.Friends.Friends;
@@ -35,17 +26,12 @@ import com.example.onlychat.GlobalChat.GlobalChat;
 import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
-import com.example.onlychat.MainScreen.Interface.Main_MainCallBacks;
-import com.example.onlychat.MainScreen.Fragment.MainContent;
-import com.example.onlychat.MainScreen.Fragment.MainNavbar;
-import com.example.onlychat.Model.MessageModel;
-import com.example.onlychat.Model.RoomModel;
-import com.example.onlychat.Profile.ViewPagerAdapter;
+import com.example.onlychat.Manager.Model.MessageModel;
+import com.example.onlychat.Manager.Model.RoomModel;
 import com.example.onlychat.R;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -69,7 +55,7 @@ public class MainScreen extends AppCompatActivity {
     private boolean isHidePassword = true;
     private Button RegisterBtn;
 
-    private Boolean isLogin = false;
+    private Boolean isLogin = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

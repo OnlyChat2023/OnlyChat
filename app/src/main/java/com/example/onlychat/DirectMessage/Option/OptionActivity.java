@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,16 +20,20 @@ import android.widget.TextView;
 import com.example.onlychat.DiaLog.BasicDialog;
 import com.example.onlychat.DiaLog.ChangeNickNameDialog;
 import com.example.onlychat.DirectMessage.ChattingActivity;
+import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.R;
 
 public class OptionActivity extends AppCompatActivity {
-    Activity preChat;
+    ChattingActivity preChat;
     ImageView avatar, notify_icon;
     Button btn_back, btn_nickname, btn_profile, btn_notify;
     TextView txtName;
     RelativeLayout nick_name, notify, profile, delete, block, report;
-    public ChattingActivity chatActivity;
+    RoomOptions options;
+    Member meInf;
+    Member friendInf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +56,19 @@ public class OptionActivity extends AppCompatActivity {
         report = (RelativeLayout) findViewById(R.id.report);
 
         Intent main_chat = getIntent();
-        Bundle userInf = main_chat.getExtras();
-        Bitmap bm_avatar = (Bitmap) main_chat.getParcelableExtra("Bitmap");
-        avatar.setImageBitmap(bm_avatar);
-        txtName.setText(userInf.getString("name"));
+        preChat = (ChattingActivity) getParent();
+        options = (RoomOptions) main_chat.getSerializableExtra("option");
+        friendInf = (Member) main_chat.getSerializableExtra("friend");
+        meInf = (Member) main_chat.getSerializableExtra("me");
+        avatar.setImageResource(friendInf.getAvatar());
+        txtName.setText(friendInf.getName());
+        if (options.getNotifications()){
+            btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
+            notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
+        } else{
+            btn_notify.setBackgroundResource(R.drawable.dm_icon_off_notify);
+            notify_icon.setBackgroundResource(R.drawable.dm_option_icon_off_notifycation);
+        }
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +81,7 @@ public class OptionActivity extends AppCompatActivity {
         btn_nickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChangeNickNameDialog dialog = new ChangeNickNameDialog().newInstance(txtName.getText().toString(), "God of Wars", "");
+                ChangeNickNameDialog dialog = new ChangeNickNameDialog().newInstance(OptionActivity.this, friendInf.getName(), friendInf.getNickname(), meInf.getNickname());
                 dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
             }
         });
@@ -75,24 +89,47 @@ public class OptionActivity extends AppCompatActivity {
         nick_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChangeNickNameDialog dialog = new ChangeNickNameDialog().newInstance(txtName.getText().toString(), "God of Wars", "");
+                ChangeNickNameDialog dialog = new ChangeNickNameDialog().newInstance(OptionActivity.this, friendInf.getName(), friendInf.getNickname(), meInf.getNickname());
                 dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
+
+                if (!dialog.getFr_nickname().equals(friendInf.getNickname())) {
+                    friendInf.setNickname(dialog.getFr_nickname());
+                    txtName.setText(friendInf.getNickname());
+                }
+                if (!dialog.getUser_nickname().equals(meInf.getNickname())) {
+                    meInf.setNickname(dialog.getUser_nickname());
+                }
+
             }
         });
 
         btn_notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btn_notify.setBackgroundResource(R.drawable.dm_icon_off_notify);
-                notify_icon.setBackgroundResource(R.drawable.dm_option_icon_off_notifycation);
+                if (options.getNotifications()){
+                    options.setNotifications(false);
+                    btn_notify.setBackgroundResource(R.drawable.dm_icon_off_notify);
+                    notify_icon.setBackgroundResource(R.drawable.dm_option_icon_off_notifycation);
+                } else{
+                    options.setNotifications(true);
+                    btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
+                    notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
+                }
             }
         });
 
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
-                notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
+                if (options.getNotifications()){
+                    options.setNotifications(false);
+                    btn_notify.setBackgroundResource(R.drawable.dm_icon_off_notify);
+                    notify_icon.setBackgroundResource(R.drawable.dm_option_icon_off_notifycation);
+                } else{
+                    options.setNotifications(true);
+                    btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
+                    notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
+                }
             }
         });
 
@@ -111,5 +148,14 @@ public class OptionActivity extends AppCompatActivity {
                 dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
             }
         });
+    }
+
+    public void setNickname(String frNN, String meNN){
+        friendInf.setNickname(frNN);
+        meInf.setNickname(meNN);
+//        if (preChat != null)
+//            preChat.setNickname(frNN, meNN);
+//        else
+//            Log.e("<<previous chat", "NULLLLLLLL");
     }
 }

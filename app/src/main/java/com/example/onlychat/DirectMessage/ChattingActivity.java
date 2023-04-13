@@ -1,16 +1,14 @@
 package com.example.onlychat.DirectMessage;
 
-import static java.lang.System.err;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.ActionBar;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
@@ -21,72 +19,48 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ListView;
 
-import com.example.onlychat.DiaLog.ChangeNickNameDialog;
 import com.example.onlychat.DiaLog.DMBottomDialog;
 import com.example.onlychat.DirectMessage.Option.OptionActivity;
-import com.example.onlychat.MainScreen.MainScreen;
+import com.example.onlychat.GroupChat.ListMessage.ListMessage;
+import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.Interfaces.RoomOptions;
+import com.example.onlychat.Manager.Model.MessageModel;
+import com.example.onlychat.Manager.Model.RoomModel;
 import com.example.onlychat.R;
+import com.vanniktech.emoji.EmojiPopup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+
+import droidninja.filepicker.FilePickerBuilder;
+import droidninja.filepicker.FilePickerConst;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class ChattingActivity extends AppCompatActivity {
     ImageView imgAvatar, btnFile, btnImage, btnIcon, btnSend;
-    ImageView enclose;
-    ImageView image;
-    ImageView icon;
+    String me_id = "6430c86d1b48c829004aa89b";
     View gap;
     Button btnBack, btnSetting;
     TextView txtName, txtOnline;
     EditText chatMessage;
     ListView chatContent;
     RelativeLayout chatLayout;
-    public Boolean isMute;
+    RoomModel userInf;
+    ArrayList<Uri> arrayList = new ArrayList<>();
 
-    String[] messages = {
-           "Sorry to bother you. I have a question for you",
-            "I've been having a problem with my computer. I know you're an engineer so I thought you might be able to help me.",
-            "I see",
-            "What problem?",
-            "I have a file that I can't open for some reason.",
-            "I have a file that I can't open for some reason.",
-            "Yes, I was working on it last night and everything was fine, but this morning."
-    };
-
-    String[] types = {
-            "RECEIVE",
-            "SEND",
-            "RECEIVE",
-            "RECEIVE",
-            "RECEIVE",
-            "SEND",
-            "RECEIVE"
-    };
-
-    String[] times = {
-            "Sent at 12:57 04/03/2023",
-            "Sent at 12:57 04/03/2023",
-            "Sent at 12:57 04/03/2023",
-            "Sent at 12:57 04/03/2023",
-            "Sent at 12:57 04/03/2023",
-            "Sent at 12:57 04/03/2023",
-            "Sent at 12:57 04/03/2023",
-            "Sent at 12:57 04/03/2023"
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        ActionBar actionBar = getSupportActionBar();
 //        actionBar.hide();
         setContentView(R.layout.global_chat_list_message);
-
-        isMute = false;
         btnBack = (Button) findViewById(R.id.backButton);
         btnSetting = (Button) findViewById(R.id.optionButton);
-//        imgAvatar = (ImageView) findViewById(R.id.imageView4);
+        imgAvatar = (ImageView) findViewById(R.id.avatar);
         txtName = (TextView) findViewById(R.id.textName);
         txtOnline = (TextView) findViewById(R.id.textSubName);
 
-//        chatContent = (ListView) findViewById(R.id.listMessages);
+        chatContent = (ListView) findViewById(R.id.listMessages);
 
         btnFile = (ImageView) findViewById(R.id.encloseIcon);
         btnImage = (ImageView) findViewById(R.id.imageIcon);
@@ -97,14 +71,13 @@ public class ChattingActivity extends AppCompatActivity {
         chatLayout = (RelativeLayout) findViewById(R.id.chatLayout);
 
         Intent main_chat = getIntent();
-        Bundle userInf = main_chat.getExtras();
-        Bitmap bm_avatar = (Bitmap) main_chat.getParcelableExtra("Bitmap");
-        imgAvatar.setImageBitmap(bm_avatar);
-        txtName.setText(userInf.getString("name"));
+        userInf = (RoomModel) main_chat.getSerializableExtra("roomChat");
+        imgAvatar.setImageResource(userInf.getAvatar());
+        txtName.setText(userInf.getName());
         txtOnline.setText("Online");
         txtOnline.setTextColor(getResources().getColor(R.color.online_green));
 
-        MessageReceive adapter = new MessageReceive(this, bm_avatar, ArrayString2ArrayList(messages), ArrayString2ArrayList(types), ArrayString2ArrayList(times));
+        MessageReceive adapter = new MessageReceive(this, userInf.getAvatar(), me_id, userInf.getMessages());
         chatContent.setAdapter(adapter);
         chatContent.setSelection(adapter.getCount() - 1);
         chatContent.smoothScrollToPosition(adapter.getCount() - 1);
@@ -123,7 +96,6 @@ public class ChattingActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DMBottomDialog dialog = new DMBottomDialog().newInstance(i);
                 dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
-
                 return true;
             }
         });
@@ -131,10 +103,45 @@ public class ChattingActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(ChattingActivity.this, ChatBot.class);
-//                startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.fixed,R.anim.left_to_right);
+            }
+        });
+
+        btnFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        btnImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //                requestPermission();
+                String[] strings = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
+                if(EasyPermissions.hasPermissions(ChattingActivity.this, strings)) {
+                    imagePicker();
+                }
+                else {
+                    EasyPermissions.requestPermissions(
+                            ChattingActivity.this,
+                            "App needs to access your camera & storage",
+                            100,
+                            strings);
+                }
+            }
+        });
+
+        // EMOJI
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) EmojiPopup emojiPopup = EmojiPopup.Builder.fromRootView(
+                findViewById(R.id.root_view)
+        ).build(chatMessage);
+
+        btnIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    emojiPopup.toggle();
             }
         });
 
@@ -143,8 +150,9 @@ public class ChattingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String msg = chatMessage.getText().toString();
                 if (msg.length() != 0) {
-                    adapter.AddMessage(msg, "SEND", "Sent at 12:57 04/03/2023");
+                    adapter.AddMessage(new MessageModel("1234567890", me_id, null, "", "", msg, Calendar.getInstance().getTime(), null));
                     chatMessage.setText("");
+
                 }
             }
         });
@@ -153,13 +161,15 @@ public class ChattingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ChattingActivity.this, OptionActivity.class);
-                Bundle userInf = new Bundle();
-
-                userInf.putString("name", txtName.getText().toString());
-                imgAvatar.setDrawingCacheEnabled(true);
-                Bitmap b = imgAvatar.getDrawingCache();
-                intent.putExtras(userInf);
-                intent.putExtra("Bitmap", b);
+                for (Member mem : userInf.getOptions().getMembers()){
+                    if (!mem.getId().equals(me_id)){
+                        intent.putExtra("friend", mem);
+                    }
+                    else{
+                        intent.putExtra("me", mem);
+                    }
+                }
+                intent.putExtra("option", userInf.getOptions());
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
@@ -214,11 +224,38 @@ public class ChattingActivity extends AppCompatActivity {
         });
     }
 
-    ArrayList<String> ArrayString2ArrayList(String[] str){
-        ArrayList<String> res = new ArrayList<String>();
-        for (String val : str){
-            res.add(val);
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        for (Member mem : this.userInf.getOptions().getMembers()) {
+            if (!mem.getId().equals(me_id)) {
+                txtName.setText(mem.getNickname());
+                break;
+            }
         }
-        return res;
+    }
+
+    public void setNickname(String frNN, String meNN) {
+        for(Member mem : this.userInf.getOptions().getMembers()){
+            if (mem.getId().equals(me_id)){
+                mem.setNickname(meNN);
+            } else{
+                mem.setNickname(frNN);
+            }
+        }
+    }
+
+    private void imagePicker(){
+        System.out.println("RUN HERE");
+        FilePickerBuilder.getInstance()
+                .setActivityTitle("Select Images")
+                .setSpan(FilePickerConst.SPAN_TYPE.FOLDER_SPAN, 3)
+                .setSpan(FilePickerConst.SPAN_TYPE.DETAIL_SPAN, 4)
+                .setMaxCount(4)
+                .setSelectedFiles(arrayList)
+                .pickPhoto(ChattingActivity.this);
+        System.out.println();
+//        .setActivityTheme(Integer.parseInt("FFFFFF"))
     }
 }
