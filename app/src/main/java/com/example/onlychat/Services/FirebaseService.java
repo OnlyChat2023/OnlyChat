@@ -45,7 +45,7 @@ public class FirebaseService {
     }
 
     public void signInWithPhoneAuthCredential(String code) {
-        if (this.credential == null)
+        if (!TextUtils.isEmpty(this.mVerificationId))
             this.credential = PhoneAuthProvider.getCredential(this.mVerificationId, code);
 
         this.auth.signInWithCredential(this.credential)
@@ -81,6 +81,7 @@ public class FirebaseService {
                     Log.w("Error verificate code", "signInWithCredential:failure", task.getException());
                     if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                         // The verification code entered was invalid
+                        FirebaseService.this.OTPValidator.onValidateError();
                     }
                 }
             }

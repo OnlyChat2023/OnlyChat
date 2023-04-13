@@ -18,11 +18,11 @@ public class LoginActivity extends AppCompatActivity {
     private final Boolean isLogin = false;
 
     private ImageView showPasswordBtn;
-    private EditText passwordInput;
+    private EditText passwordInput, phoneInput;
     private TextView forgotPasswordBtn;
 
     private boolean isHidePassword = true;
-    private Button RegisterBtn;
+    private Button LoginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +30,14 @@ public class LoginActivity extends AppCompatActivity {
 
         overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
 
-        if (isLogin == false) {
+        if (!isLogin) {
             setContentView(R.layout.login_activity);
 
             Intent registerIntent = new Intent(this, RegisterActivity.class);
             Intent forgotIntent = new Intent(this, ForgotActivity.class);
 
-            RegisterBtn = (Button) findViewById(R.id.registerBtn);
-            RegisterBtn.setOnClickListener(new View.OnClickListener() {
+            LoginBtn = (Button) findViewById(R.id.registerBtn);
+            LoginBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startActivity(registerIntent);
@@ -46,6 +46,13 @@ public class LoginActivity extends AppCompatActivity {
             });
 
             passwordInput = (EditText) findViewById(R.id.passwordInput);
+            phoneInput = (EditText) findViewById(R.id.phoneNumberInput);
+
+            Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                String phoneNumber = bundle.getString("phonenumber");
+                phoneInput.setText(phoneNumber);
+            }
 
             forgotPasswordBtn = (TextView) findViewById(R.id.forgotPasswordBtn);
 
@@ -62,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    if (isHidePassword == true)
+                    if (isHidePassword)
                         passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                     else
                         passwordInput.setTransformationMethod(PasswordTransformationMethod.getInstance());

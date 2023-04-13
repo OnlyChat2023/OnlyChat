@@ -3,6 +3,7 @@ package com.example.onlychat.Authetication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,19 +15,29 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.onlychat.Interfaces.AuthOTP;
+import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.R;
 import com.example.onlychat.Services.FirebaseService;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthSettings;
+
+import org.json.JSONObject;
 
 public class OTP extends AppCompatActivity {
 
     private EditText inputOTP1, inputOTP2, inputOTP3, inputOTP4, inputOTP5, inputOTP6;
-    private TextView resendBtn;
+    private TextView resendBtn, errorMessage;
     private Button continueBtn;
     private FirebaseService OTPService;
+    private String username, phoneNumber, password, confirmPassword;
+    private ProgressBar loadingBar;
+    private HttpManager httpRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +45,10 @@ public class OTP extends AppCompatActivity {
         overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
 
         Bundle bundle = getIntent().getExtras();
-        String phoneNumber = bundle.getString("phone");
+        phoneNumber = bundle.getString("phone");
+        username = bundle.getString("username");
+        password = bundle.getString("password");
+        confirmPassword = bundle.getString("confirmPassword");
 
         setContentView(R.layout.otp_form);
 
@@ -46,6 +60,11 @@ public class OTP extends AppCompatActivity {
         inputOTP6 = (EditText) findViewById(R.id.inputOTP6);
         continueBtn = (Button) findViewById(R.id.ContinueBtn);
         resendBtn = (TextView) findViewById(R.id.resendBtn);
+        loadingBar = (ProgressBar) findViewById(R.id.loadingBar);
+
+        errorMessage = (TextView) findViewById(R.id.errorMessage);
+
+        httpRequest = new HttpManager(OTP.this);
 
         EditText[] otpEt = new EditText[] {
             inputOTP1, inputOTP2, inputOTP3, inputOTP4, inputOTP5, inputOTP6
@@ -64,6 +83,33 @@ public class OTP extends AppCompatActivity {
             @Override
             public void onSuccess(String token) {
                 Log.d("FragmentCreate","Token found from thread1 after expiry " + token);
+                httpRequest.Register(username, phoneNumber, password, confirmPassword, token, new HttpResponse() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+                        enableRegister(true);
+                        Toast.makeText(OTP.this, "Congratulations! Your account has been successfully created.", Toast.LENGTH_SHORT).show();
+
+                        Intent LoginActivityIntent = new Intent(OTP.this, LoginActivity.class);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("phonenumber", "0" + phoneNumber.substring(3));
+                        LoginActivityIntent.putExtras(bundle);
+
+                        startActivity(LoginActivityIntent);
+
+                        finishAffinity();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        enableRegister(true);
+                    }
+                });
+            }
+
+            @Override
+            public void onValidateError() {
+                errorMessage.setText("Invalid OTP entered. Please try again.");
             }
         });
 
@@ -72,6 +118,8 @@ public class OTP extends AppCompatActivity {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                enableRegister(false);
+
                 String code = inputOTP1.getText().toString() + inputOTP2.getText().toString() + inputOTP3.getText().toString();
                 code = code + inputOTP4.getText().toString() + inputOTP5.getText().toString() + inputOTP6.getText().toString();
 
@@ -143,9 +191,24 @@ public class OTP extends AppCompatActivity {
         }
     }
 
+    private void enableRegister(boolean enable) {
+        if (enable)
+            loadingBar.setVisibility(View.GONE);
+        else
+            loadingBar.setVisibility(View.VISIBLE);
+        continueBtn.setEnabled(enable);
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.fixed, R.anim.left_to_right);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        FirebaseAuth.getInstance().signOut();
     }
 }

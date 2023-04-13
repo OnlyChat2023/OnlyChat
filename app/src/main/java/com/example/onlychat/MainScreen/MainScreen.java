@@ -69,7 +69,7 @@ public class MainScreen extends AppCompatActivity {
     private boolean isHidePassword = true;
     private Button RegisterBtn;
 
-    private Boolean isLogin = true;
+    private Boolean isLogin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
