@@ -8,27 +8,38 @@ import BotChat from "../models/botChatModel.js"
 
 
 const getUserInformation = catchAsync(async (req, res) => {
-  const user = await User.findOne({ _id: "642e2f430cc3fd9470f85b5b" })
+  // const user = await User.findOne({ _id: req })
 
   const directChat = []
   for (let i of user.directmessage_channel) {
-    directChat.push(await DirectChat.findOne({ _id: i }))
+    const dmList = await DirectChat.findOne({ _id: i });
+    dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+    directChat.push(dmList);
   }
 
   const groupChat = []
   for (let i of user.groupchat_channel) {
-    groupChat.push(await GroupChat.findOne({ _id: i }))
+    const dmList = await GlobalChat.findOne({ _id: i });
+
+    dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+    groupChat.push(dmList);
   }
 
   const globalChat = []
   for (let i of user.globalchat_channel) {
-    globalChat.push(await GlobalChat.findOne({ _id: i }))
+    const dmList = await GlobalChat.findOne({ _id: i });
+    dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+    globalChat.push(dmList);
   }
 
   const botChat = []
   for (let i of user.chatbot_channel) {
-    botChat.push(await BotChat.findOne({ _id: i }))
+    const dmList = await BotChat.findOne({ _id: i });
+    dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+    botChat.push(dmList);
   }
+
+  console.log(globalChat)
 
   res.status(200).json({
     status: 'success',
@@ -37,7 +48,8 @@ const getUserInformation = catchAsync(async (req, res) => {
       directChat: directChat,
       groupChat: groupChat,
       globalChat: globalChat,
-      botChat: botChat
+      botChat: botChat,
+
     },
   })
 })
