@@ -5,11 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-<<<<<<< HEAD
-=======
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
->>>>>>> 49053b79cc700a3df2738c0f4f819a40ccdad1df
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -38,14 +35,8 @@ import com.example.onlychat.GlobalChat.GlobalChat;
 import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
-<<<<<<< HEAD
 import com.example.onlychat.Manager.HttpManager;
-=======
-import com.example.onlychat.MainScreen.Interface.Main_MainCallBacks;
-import com.example.onlychat.MainScreen.Fragment.MainContent;
-import com.example.onlychat.MainScreen.Fragment.MainNavbar;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
->>>>>>> 49053b79cc700a3df2738c0f4f819a40ccdad1df
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
@@ -83,7 +74,6 @@ public class MainScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
         isLogin=true;
         HttpManager httpManager = new HttpManager(this);
         httpManager.getUser();
@@ -93,12 +83,10 @@ public class MainScreen extends AppCompatActivity {
 //        } catch (JSONException e) {
 //            throw new RuntimeException(e);
 //        }
-=======
 
         Bundle bundle = getIntent().getExtras();
         isLogin = bundle.getBoolean("isLogin", false);
 
->>>>>>> 49053b79cc700a3df2738c0f4f819a40ccdad1df
         if (isLogin) {
 
             setContentView(R.layout.main_screen);

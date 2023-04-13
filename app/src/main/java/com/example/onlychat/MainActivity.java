@@ -6,21 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-<<<<<<< HEAD
-=======
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
->>>>>>> 49053b79cc700a3df2738c0f4f819a40ccdad1df
 
 import com.example.onlychat.MainScreen.MainScreen;
-<<<<<<< HEAD
 import com.example.onlychat.Manager.HttpManager;
-=======
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Profile.Profile;
->>>>>>> 49053b79cc700a3df2738c0f4f819a40ccdad1df
 
 public class MainActivity extends AppCompatActivity {
 

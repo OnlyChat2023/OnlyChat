@@ -11,12 +11,7 @@ public class GlobalPreferenceManager {
 
     private Context mContext;
     private SharedPreferences pref;
-<<<<<<< HEAD
 
-    public GlobalPreferenceManager(Context context) {
-        this.mContext = context;
-        pref = (SharedPreferences) PreferenceManager.getDefaultSharedPreferences(context);
-=======
 
     private static final String IS_LOGIN = "IS_LOGIN";
     private static final String LOGIN_USERNAME = "LOGIN_USERNAME";
@@ -65,6 +60,5 @@ public class GlobalPreferenceManager {
     public void ValidateRemember() {
         if (!pref.getBoolean(LOGIN_REMEMBER, false))
             SignOut();
->>>>>>> 49053b79cc700a3df2738c0f4f819a40ccdad1df
     }
 }

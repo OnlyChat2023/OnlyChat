@@ -19,8 +19,10 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,11 +39,8 @@ import java.util.Map;
 public class HttpManager {
     private Context context;
     private GlobalPreferenceManager pref;
-<<<<<<< HEAD
     static private UserModel user = new UserModel();
-=======
-    private final String ip = "192.168.1.125";
->>>>>>> 49053b79cc700a3df2738c0f4f819a40ccdad1df
+    private final String ip = "192.168.1.45";
 
     public HttpManager(Context _context) {
         this.context = _context;
@@ -70,9 +69,6 @@ public class HttpManager {
             new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-<<<<<<< HEAD
-                    httpResponse.onError(error.getMessage()==null?error.toString():error.getMessage());
-=======
                     if (error instanceof NetworkError) {
                         //handle your network error here.
                     } else if(error instanceof ServerError) {
@@ -95,9 +91,7 @@ public class HttpManager {
                             throw new RuntimeException(e);
                         }
                     }
-
-                    httpResponse.onError(String.valueOf(error));
->>>>>>> 49053b79cc700a3df2738c0f4f819a40ccdad1df
+                    httpResponse.onError(error.getMessage()==null?error.toString():error.getMessage());
                 }
             }) {
             @Override
@@ -117,7 +111,6 @@ public class HttpManager {
         queue.add(jsonObjReq);
     }
 
-<<<<<<< HEAD
     public UserModel getUser(){
         createRequest("http://192.168.1.45:5000/api/onlychat/v1/user/userInformation",Request.Method.GET,"userprofile", null,
         new HttpResponse(){
@@ -129,22 +122,19 @@ public class HttpManager {
                     JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
                     JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
                     JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
+
+                    user = new Gson().fromJson(String.valueOf(information), UserModel.class);
 //                    Log.i("friend",information.getJSONArray("friend").toString());
 //                    Log.i("friend_request",information.getJSONArray("friend_request").toString());
-                    user.setName(information.getString("name"));
-//                    user.setAvatar(information.getString("avatar"));
-                    user.setEmail(information.getString("email"));
-                    user.setPhone(information.getString("phone"));
-                    user.setFacebook(information.getString("facebook"));
-                    user.setInstagram(information.getString("instagram"));
-                    user.setUniversity(information.getString("university"));
+
                     ArrayList<RoomModel> global = new ArrayList<>();
                     for(int i=0;i<globalChat.length();i++){
 //                        String id = globalChat.getString(i);
+                          MessageModel messages = new MessageModel();
+//                          messages = new Gson().fromJson(String.valueOf())
                           Log.i("Item",globalChat.getJSONObject(i).getString("_id"));
 //                        RoomModel roomModel = new RoomModel();
                     }
-
                 }
                 catch (Exception e){
                     Log.i("HTTP Success Error",e.toString());
@@ -160,15 +150,17 @@ public class HttpManager {
     }
 
 
-    public UserModel getUserById(String _id){
+    public UserModel getUserById(String _id) {
         UserModel userModel = new UserModel();
-        createRequest("http://192.168.2.16:5000/api/onlychat/v1/user/userProfile", Request.Method.PATCH, "userprofile",new HashMap<String,String>(){{put("_id",_id);}} ,
+        createRequest("http://192.168.2.16:5000/api/onlychat/v1/user/userProfile", Request.Method.PATCH, "userprofile", new HashMap<String, String>() {{
+                    put("_id", _id);
+                }},
                 new HttpResponse() {
                     @Override
                     public void onSuccess(JSONObject Response) {
                         try {
                             Log.i("HTTP Success", "success");
-                            Log.i("User Profile",Response.getJSONObject("data").toString());
+                            Log.i("User Profile", Response.getJSONObject("data").toString());
                         } catch (Exception e) {
                             Log.i("HTTP Success Error", e.toString());
                         }
@@ -182,7 +174,7 @@ public class HttpManager {
 
 
         return userModel;
-=======
+    }
     public void validateAccount(String phoneNumber, HttpResponse responseReceiver) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("phonenumber", phoneNumber);
@@ -207,6 +199,5 @@ public class HttpManager {
         params.put("password", password);
 
         createRequest("http://" + ip + ":5000/api/onlychat/v1/auth/login", Request.Method.POST, "login", params, responseReceiver);
->>>>>>> 49053b79cc700a3df2738c0f4f819a40ccdad1df
     }
 }
