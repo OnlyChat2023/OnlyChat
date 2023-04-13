@@ -1,15 +1,17 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
-  name: { type: String },
+  name: { type: String, default: '' },
   password: { type: String },
   username: { type: String },
-  avatar: { type: String },
-  email: { type: String },
+  avatar: { type: String, default: '' },
+  description: { type: String, default: '' },
+  email: { type: String, default: '' },
   phone: { type: String },
-  facebook: { type: String },
-  instagram: { type: String },
-  university: { type: String },
+  facebook: { type: String, default: '' },
+  instagram: { type: String, default: '' },
+  university: { type: String, default: '' },
   chatbot_channel: [{ type: String }],
   directmessage_channel: [{
     type: String
@@ -23,6 +25,20 @@ const userSchema = new mongoose.Schema({
   friend: [{ type: String }],
   friend_request: [{ type: String }]
 });
+
+userSchema.pre('save', async function(next) {
+  // Only run this function if password was actually modified
+  if (!this.isModified('password')) return next();
+
+  // Hash the password with cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
+
+  next();
+});  
+
+userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
+  return await bcrypt.compare(candidatePassword, userPassword)
+}
 
 const User = mongoose.model('users', userSchema);
 

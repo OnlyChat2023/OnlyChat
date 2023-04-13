@@ -75,6 +75,7 @@ const sendError = (err, req, res, next) => {
         message: err.message,
       });
     }
+    console.log(error);
     sendErrorProd(error, res);
   }
 };
