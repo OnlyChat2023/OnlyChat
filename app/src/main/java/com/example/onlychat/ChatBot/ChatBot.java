@@ -24,7 +24,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
+
+import java.util.ArrayList;
 
 public class ChatBot extends Fragment {
     TextView chatTitle;
@@ -33,38 +36,17 @@ public class ChatBot extends Fragment {
     ImageView addChat;
     ListView listChat;
 
-    String names[] = {
-            "English Study Chat Bot","English Study Chat Bot","English Study Chat Bot",
-            "English Study Chat Bot","English Study Chat Bot","English Study Chat Bot",
-            "English Study Chat Bot","English Study Chat Bot","English Study Chat Bot",
-            "English Study Chat Bot","English Study Chat Bot","English Study Chat Bot",
-            "English Study Chat Bot","English Study Chat Bot","English Study Chat Bot",
-            "English Study Chat Bot","English Study Chat Bot","English Study Chat Bot",
-    };
-    Integer avatars[]={
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-    };
-    String messages[] = {
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-    };
-    String times[]={
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-    };
+    ArrayList<RoomModel> roomModels = new ArrayList<>();
+
+    public ArrayList<RoomModel> getRoomModels() {
+        return roomModels;
+    }
+
+    public void setRoomModels(ArrayList<RoomModel> roomModels) {
+        this.roomModels = roomModels;
+    }
+
+    public ChatBot(){}
 
     Integer avatarsImage[] = {
             R.raw.a_1, R.raw.a_2, R.raw.a_3, R.raw.a_4, R.raw.a_5,

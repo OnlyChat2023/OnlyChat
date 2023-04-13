@@ -43,40 +43,14 @@ public class GlobalChat extends Fragment {
     ListView listChat;
     ArrayList<RoomModel> roomModels = new ArrayList<>();
 
+    public ArrayList<RoomModel> getRoomModels() {
+        return roomModels;
+    }
 
-//    String names[] = {
-//            "Anonymous","Anonymous Private","Anonymous Publish",
-//            "Anonymous","Anonymous Private","Anonymous Publish",
-//            "Anonymous","Anonymous Private","Anonymous Publish",
-//            "Anonymous","Anonymous Private","Anonymous Publish",
-//            "Anonymous","Anonymous Private","Anonymous Publish",
-//            "Anonymous","Anonymous Private","Anonymous Publish",
-//    };
-//    Integer avatars[]={
-//            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-//            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-//            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-//            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-//            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-//            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-//    };
-//    String messages[] = {
-//            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-//            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-//            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-//            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-//            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-//            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-//    };
-//    String times[]={
-//            "2:00 PM","4:00 PM","6:00 PM",
-//            "2:00 PM","4:00 PM","6:00 PM",
-//            "2:00 PM","4:00 PM","6:00 PM",
-//            "2:00 PM","4:00 PM","6:00 PM",
-//            "2:00 PM","4:00 PM","6:00 PM",
-//            "2:00 PM","4:00 PM","6:00 PM",
-//    };
-//
+    public void setRoomModels(ArrayList<RoomModel> roomModels) {
+        this.roomModels = roomModels;
+    }
+
     Integer avatarsImage[] = {
             R.raw.a_1, R.raw.a_2, R.raw.a_3, R.raw.a_4, R.raw.a_5,
             R.raw.a_6, R.raw.a_7, R.raw.a_8, R.raw.a_9, R.raw.a_10,
@@ -87,9 +61,7 @@ public class GlobalChat extends Fragment {
 
     GridView androidGridView;
 
-    public GlobalChat(ArrayList<RoomModel> roomModels){
-        this.roomModels = roomModels;
-    }
+    public GlobalChat(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,7 +77,7 @@ public class GlobalChat extends Fragment {
 
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
-
+        Log.i("global chat", roomModels.toString());
         CustomChatItem customChatItem = new CustomChatItem(globalChat.getContext(),roomModels );
         listChat.setAdapter(customChatItem);
 

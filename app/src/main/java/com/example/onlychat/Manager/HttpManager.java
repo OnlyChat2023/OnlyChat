@@ -23,6 +23,7 @@ import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +33,9 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -111,44 +115,9 @@ public class HttpManager {
         queue.add(jsonObjReq);
     }
 
-    public UserModel getUser(){
-        createRequest("http://192.168.1.45:5000/api/onlychat/v1/user/userInformation",Request.Method.GET,"userprofile", null,
-        new HttpResponse(){
-            @Override
-            public void onSuccess(JSONObject Response) {
-                try{
-                    JSONObject information = Response.getJSONObject("data").getJSONObject("user");
-                    JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
-                    JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
-                    JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
-                    JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
-
-                    user = new Gson().fromJson(String.valueOf(information), UserModel.class);
-//                    Log.i("friend",information.getJSONArray("friend").toString());
-//                    Log.i("friend_request",information.getJSONArray("friend_request").toString());
-
-                    ArrayList<RoomModel> global = new ArrayList<>();
-                    for(int i=0;i<globalChat.length();i++){
-//                        String id = globalChat.getString(i);
-                          MessageModel messages = new MessageModel();
-//                          messages = new Gson().fromJson(String.valueOf())
-                          Log.i("Item",globalChat.getJSONObject(i).getString("_id"));
-//                        RoomModel roomModel = new RoomModel();
-                    }
-                }
-                catch (Exception e){
-                    Log.i("HTTP Success Error",e.toString());
-                }
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.i("HTTP Error",error);
-            }
-        });
-        return user;
+    public void getListChat(HttpResponse responseReceiver){
+        createRequest("http://192.168.1.45:5000/api/onlychat/v1/user/userInformation",Request.Method.GET,"userprofile", null, responseReceiver);
     }
-
 
     public UserModel getUserById(String _id) {
         UserModel userModel = new UserModel();
@@ -160,7 +129,6 @@ public class HttpManager {
                     public void onSuccess(JSONObject Response) {
                         try {
                             Log.i("HTTP Success", "success");
-                            Log.i("User Profile", Response.getJSONObject("data").toString());
                         } catch (Exception e) {
                             Log.i("HTTP Success Error", e.toString());
                         }
