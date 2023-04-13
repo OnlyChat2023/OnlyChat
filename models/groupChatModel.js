@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
-import DateTime from 'node-datetime/src/datetime';
 
 const messageSchema = new mongoose.Schema({
-  _id: String,
+  _id: mongoose.Schema.ObjectId,
   avatar: String,
   name: String,
   chats: [

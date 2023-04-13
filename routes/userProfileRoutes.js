@@ -1,5 +1,5 @@
 import express from 'express'
-import { updateProfile, userProfile } from '../controllers/userProfileController.js'
+import { updateProfile, getUserInformation, getUserProfile, getDirectChat } from '../controllers/userProfileController.js'
 
 const router = express.Router()
 
@@ -9,6 +9,11 @@ const router = express.Router()
 router.patch('/updateProfile', updateProfile);
 
 // Get user information
-router.get('/userProfile', userProfile);
+router.get('/userInformation', getUserInformation);
+
+// get user profile
+router.patch('/userProfile', getUserProfile);
+
+router.patch('/directChat', getDirectChat)
 
 export default router;

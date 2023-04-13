@@ -9,10 +9,10 @@ import app from "./app.js";
 dotenv.config({ path: './config.env' });
 
 mongoose
-.connect(process.env.DATABASE)
-.then(() => {
-    console.log('Connected to DB successfully');
-});
+    .connect(process.env.DATABASE)
+    .then(() => {
+        console.log('Connected to DB successfully');
+    });
 
 const server = app.listen(port, () => {
     console.log(`App is running on port ${port}...`);
