@@ -7,6 +7,8 @@ import cors from 'cors';
 import userProfileRouter from "./routes/userProfileRoutes.js"
 import globalErrorhandler from "./controllers/ErrorController.js"
 
+import messageRoutes from "./routes/messageRoutes.js"
+
 import authRouter from './routes/authRoutes.js';
 
 const limiter = rateLimit({

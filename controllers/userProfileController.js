@@ -1,11 +1,61 @@
 import User from "../models/userModel.js";
 import catchAsync from "../utils/catchAsync.js"
 import AppError from "../utils/appError.js";
+import GlobalChat from "../models/globalChatModel.js"
+import DirectChat from "../models/directChatModel.js"
+import GroupChat from "../models/groupChatModel.js"
+import BotChat from "../models/botChatModel.js"
 
 
-const userProfile = catchAsync(async (req, res) => {
+const getUserInformation = catchAsync(async (req, res) => {
   const user = await User.findOne({ _id: "642e2f430cc3fd9470f85b5b" })
-  // const user = await User.find()
+
+  const directChat = []
+  for (let i of user.directmessage_channel) {
+    directChat.push(await DirectChat.findOne({ _id: i }))
+  }
+
+  const groupChat = []
+  for (let i of user.groupchat_channel) {
+    groupChat.push(await GroupChat.findOne({ _id: i }))
+  }
+
+  const globalChat = []
+  for (let i of user.globalchat_channel) {
+    globalChat.push(await GlobalChat.findOne({ _id: i }))
+  }
+
+  const botChat = []
+  for (let i of user.chatbot_channel) {
+    botChat.push(await BotChat.findOne({ _id: i }))
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: user,
+      directChat: directChat,
+      groupChat: groupChat,
+      globalChat: globalChat,
+      botChat: botChat
+    },
+  })
+})
+
+
+const getDirectChat = catchAsync(async (req, res) => {
+  // console.log("coccccc")
+  // console.log(req.body);
+  // // res.status(200).json({
+  // //   status: 'success',
+  // //   data: {
+
+  // //   },
+  // // })
+})
+
+const getUserProfile = catchAsync(async (req, res) => {
+  const user = await User.findOne({ _id: req.body._id })
 
   res.status(200).json({
     status: 'success',
@@ -14,6 +64,9 @@ const userProfile = catchAsync(async (req, res) => {
     },
   })
 })
+
+
+
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -62,4 +115,4 @@ const updateProfile = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: { user: updatedUser } });
 })
 
-export { userProfile, updateProfile }
+export { getUserInformation, updateProfile, getUserProfile, getDirectChat }
