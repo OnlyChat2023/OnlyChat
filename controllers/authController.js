@@ -5,6 +5,7 @@ import REGEX from '../constants/regex.js';
 import User from '../models/userModel.js';
 import firebase from '../firebase/firebase.js';
 import jwt from 'jsonwebtoken';
+import { promisify } from 'util';
 
 const signToken = function (id) {
     return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -129,7 +130,11 @@ const register = catchAsync(async (req, res, next) => {
         return next(new Error('Phone number is invalid with the phone varification', 401));
     }
 
-    const user = await User.create({ username, phone: phonenumber, password });
+    const min = 1, max = 25;
+
+    const numberAvt = Math.floor(Math.random() * (max - min + 1) + min);
+
+    const user = await User.create({ username, phone: phonenumber, password, avatar: `avatar/${numberAvt}.png` });
 
     return res.status(200).json({
         status: 'success',
@@ -162,20 +167,20 @@ const protect = catchAsync(async (req, res, next) => {
 
     if (!token)
         return next(new AppError('You are not logged in! Please log in to get access'), 401);
-    
+
     // 2) Verfication token
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    
+
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);
-    
+
     if (!currentUser)
         return next(new AppError('The user belonging to this token does no longer exist.', 401));
-    
+
     // 4) Check if user changed password after the token was issued
-    if (currentUser.changedPasswordAfter(decoded.iat)) 
-        return next(new AppError('User recently changed password! Please log in again.'), 401);
-    
+    // if (currentUser.changedPasswordAfter(decoded.iat))
+    //     return next(new AppError('User recently changed password! Please log in again.'), 401);
+
     // GRANT ACCESS TO PROTECT ROUTE
     req.user = currentUser;
     next();

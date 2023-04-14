@@ -20,43 +20,6 @@ const server = app.listen(port, () => {
 
 const io = new Server(server);
 
-io.of('/direct_message').on('connection', (socket) => {
-
-    socket.on('seen_message', (user) => {
-        socket.user = user;
-        socket.broadcast.to(user).emit('seen_message', socket.user);
-    });
-
-    socket.on('send_message', (message) => {
-        // broadcast toàn bộ client trong room này
-        socket.broadcast.to(socket.user).emit('receive_message', {
-            message: message,
-            user: socket.user,
-            time: new Date().getTime()
-        });
-    });
-
-    socket.on('change_nickname', (user) => {
-        // cập nhật csdl
-        socket.broadcast.to(socket.user).emit('change_nickname', user);
-    });
-
-    socket.on('blocking', () => {
-        // cập nhật csdl
-        socket.broadcast.to(socket.user).emit('blocking');
-    });
-
-    socket.on('unblocking', () => {
-        // cập nhật csdl
-        socket.broadcast.to(socket.user).emit('unblocking');
-    });
-
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
-    });
-
-});
-
 io.of('/group_message').on('connection', (socket) => {
 
     socket.on('create_room', (room) => {
@@ -190,7 +153,13 @@ io.of('/global_message').on('connection', (socket) => {
 });
 
 io.on('connection', (socket) => {
-    console.log('User connected');
+
+    socket.on('joinRoom', (roomName, user) => {
+        socket.room = roomName;
+        socket.user = JSON.parse(user);
+        console.log(socket.user);
+        socket.join(roomName);
+    });
 
     socket.on('add_friend', (friend) => {
 
@@ -214,7 +183,7 @@ io.on('connection', (socket) => {
 
     socket.on('send_add_friend_request', () => {
 
-    })
+    });
 });
 
 process.on('unhandledRejection', (err) => {

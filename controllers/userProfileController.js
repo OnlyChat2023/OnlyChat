@@ -8,19 +8,21 @@ import BotChat from "../models/botChatModel.js"
 
 
 const getUserInformation = catchAsync(async (req, res) => {
-  // const user = await User.findOne({ _id: req })
+  const user = await User.findOne({ _id: req.user.id })
+  // console.log(req.user.id)
 
   const directChat = []
   for (let i of user.directmessage_channel) {
     const dmList = await DirectChat.findOne({ _id: i });
+    const usrr = dmList.members.find((prep) => prep != user._id.toString())
+    dmList.name = usrr.nick_name
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
     directChat.push(dmList);
   }
 
   const groupChat = []
   for (let i of user.groupchat_channel) {
-    const dmList = await GlobalChat.findOne({ _id: i });
-
+    const dmList = await GroupChat.findOne({ _id: i });
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
     groupChat.push(dmList);
   }
@@ -38,8 +40,6 @@ const getUserInformation = catchAsync(async (req, res) => {
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
     botChat.push(dmList);
   }
-
-  console.log(globalChat)
 
   res.status(200).json({
     status: 'success',
