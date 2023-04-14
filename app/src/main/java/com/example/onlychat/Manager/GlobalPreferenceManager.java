@@ -32,6 +32,13 @@ public class GlobalPreferenceManager {
         pref.edit().putString(LOGIN_USERMODEL, jsonObject).apply();
     }
 
+    public UserModel getUserModel() {
+        String json = pref.getString(LOGIN_USERMODEL, "");
+        UserModel user = new Gson().fromJson(json, UserModel.class);
+
+        return user;
+    }
+
     public void Login(UserModel user, Boolean remember) {
         saveUser(user);
         pref.edit().putString(LOGIN_TOKEN, user.getToken()).apply();

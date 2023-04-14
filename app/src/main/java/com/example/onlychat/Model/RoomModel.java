@@ -6,13 +6,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class RoomModel implements Serializable {
-    String id;
-    Integer avatar;
+    String id,avatar;
     String name;
     ArrayList<MessageModel> messages;
     RoomOptions options;
 
-    public RoomModel(String id, Integer avatar, String name, ArrayList<MessageModel> messages, RoomOptions options) {
+    public RoomModel(String id, String avatar, String name, ArrayList<MessageModel> messages, RoomOptions options) {
         this.id = id;
         this.avatar = avatar;
         this.name = name;
@@ -28,11 +27,11 @@ public class RoomModel implements Serializable {
         this.id = id;
     }
 
-    public Integer getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Integer avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

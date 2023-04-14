@@ -123,7 +123,7 @@ public class ListMessage extends AppCompatActivity {
         chatImage = (ImageView) findViewById(R.id.avatar);
         chatName = (TextView) findViewById(R.id.textName);
 
-        chatImage.setImageResource(roomModel.getAvatar());
+//        chatImage.setImageResource(roomModel.getAvatar());
         chatName.setText(roomModel.getName());
 
         backButton.setOnClickListener(new View.OnClickListener() {

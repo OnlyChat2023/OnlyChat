@@ -43,7 +43,6 @@ public class GlobalChat extends Fragment {
     ListView listChat;
     ArrayList<RoomModel> roomModels = new ArrayList<>();
 
-
 //    String names[] = {
 //            "Anonymous","Anonymous Private","Anonymous Publish",
 //            "Anonymous","Anonymous Private","Anonymous Publish",
@@ -87,9 +86,9 @@ public class GlobalChat extends Fragment {
 
     GridView androidGridView;
 
-    public GlobalChat(ArrayList<RoomModel> roomModels){
-        this.roomModels = roomModels;
-    }
+//    public GlobalChat(ArrayList<RoomModel> roomModels){
+//        this.roomModels = roomModels;
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

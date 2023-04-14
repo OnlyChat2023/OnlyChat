@@ -6,13 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class UserModel implements Serializable {
-     String id,name,username,email,phone,facebook,instagram,university,description,avatar;
-     String token;
-
-    ArrayList<RoomModel> directChat = new ArrayList<RoomModel>();
-     ArrayList<RoomModel> groupChat = new ArrayList<RoomModel>();
-     ArrayList<RoomModel> globalChat = new ArrayList<RoomModel>();
-     ArrayList<RoomModel> botChat = new ArrayList<RoomModel>();
+    String id,name,username,email,phone,facebook,instagram,university,description,avatar;
+    String token;
 
     public String getUniversity() {
         return university;
@@ -20,38 +15,6 @@ public class UserModel implements Serializable {
 
     public void setUniversity(String university) {
         this.university = university;
-    }
-
-    public ArrayList<RoomModel> getDirectChat() {
-        return directChat;
-    }
-
-    public void setDirectChat(ArrayList<RoomModel> directChat) {
-        this.directChat = directChat;
-    }
-
-    public ArrayList<RoomModel> getGroupChat() {
-        return groupChat;
-    }
-
-    public void setGroupChat(ArrayList<RoomModel> groupChat) {
-        this.groupChat = groupChat;
-    }
-
-    public ArrayList<RoomModel> getGlobalChat() {
-        return globalChat;
-    }
-
-    public void setGlobalChat(ArrayList<RoomModel> globalChat) {
-        this.globalChat = globalChat;
-    }
-
-    public ArrayList<RoomModel> getBotChat() {
-        return botChat;
-    }
-
-    public void setBotChat(ArrayList<RoomModel> botChat) {
-        this.botChat = botChat;
     }
 
     public UserModel(){}

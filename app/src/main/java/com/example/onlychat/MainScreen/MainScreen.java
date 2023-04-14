@@ -32,11 +32,14 @@ import com.example.onlychat.GlobalChat.GlobalChat;
 import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 
@@ -70,6 +73,7 @@ public class MainScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         isLogin=true;
         HttpManager httpManager = new HttpManager(this);
         httpManager.getUser();
@@ -84,6 +88,11 @@ public class MainScreen extends AppCompatActivity {
         isLogin = bundle.getBoolean("isLogin", false);
 
         if (isLogin) {
+
+            GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
+
+            SocketManager.getInstance();
+            SocketManager.joinRoom("chicken", pref.getUserModel());
 
             setContentView(R.layout.main_screen);
 
@@ -142,29 +151,29 @@ public class MainScreen extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),0);
 
         // test data
-        ArrayList<RoomModel> listRoom = new ArrayList<>();
-
-        for(int i=0;i<10;i++){
-            ArrayList<MessageModel> listMessage = new ArrayList<>();
-            for(int j=0;j<10;j++){
-                ArrayList<String> seenUser= new ArrayList<>();
-                seenUser.add("1");
-                seenUser.add("2");
-                seenUser.add("3");
-                MessageModel messageModel = new MessageModel(Integer.toString(i),Integer.toString(i),R.drawable.global_chat_avatar,"test","test","Sorry to bother you. I have a question for you",new Date(),seenUser);
-                listMessage.add(messageModel);
-            }
-
-            ArrayList<Member> members = new ArrayList<>();
-            members.add(new Member("1","anonymous","anonymous",R.drawable.global_chat_avatar));
-            RoomOptions roomOptions= new RoomOptions(false,false,"cccc",R.drawable.global_chat_avatar,members);
-            listRoom.add(new RoomModel(Integer.toString(i),R.drawable.global_chat_avatar,"Anonymous",listMessage,roomOptions));
-        }
+//        ArrayList<RoomModel> listRoom = new ArrayList<>();
+//
+//        for(int i=0;i<10;i++){
+//            ArrayList<MessageModel> listMessage = new ArrayList<>();
+//            for(int j=0;j<10;j++){
+//                ArrayList<String> seenUser= new ArrayList<>();
+//                seenUser.add("1");
+//                seenUser.add("2");
+//                seenUser.add("3");
+//                MessageModel messageModel = new MessageModel(Integer.toString(i),Integer.toString(i), "","test","test","Sorry to bother you. I have a question for you",new Date(),seenUser);
+//                listMessage.add(messageModel);
+//            }
+//
+//            ArrayList<Member> members = new ArrayList<>();
+//            members.add(new Member("1","anonymous","anonymous",R.drawable.global_chat_avatar));
+//            RoomOptions roomOptions= new RoomOptions(false,false,"cccc",R.drawable.global_chat_avatar,members);
+//            listRoom.add(new RoomModel(Integer.toString(i),"","Anonymous",listMessage,roomOptions));
+//        }
         /////////////////////////////
 
         adapter.addFragment(new DirectMessage(),"direct chat");
         adapter.addFragment(new GroupChat(), "group chat");
-        adapter.addFragment(new GlobalChat(listRoom), "global chat");
+        adapter.addFragment(new GlobalChat(), "global chat");
         adapter.addFragment(new ChatBot(), "bot chat");
         adapter.addFragment(new Friends(), "friends");
 

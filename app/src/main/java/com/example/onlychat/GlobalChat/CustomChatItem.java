@@ -46,7 +46,7 @@ public class CustomChatItem extends ArrayAdapter<String> {
         messageContent = (TextView) row.findViewById(R.id.messageContent);
         messageTime = (TextView) row.findViewById(R.id.messageTime);
 
-        messageAvatar.setImageResource(listRooms.get(position).getAvatar());
+//        messageAvatar.setImageResource(listRooms.get(position).getAvatar());
         messageName.setText(listRooms.get(position).getName());
         MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size()-1);
         messageContent.setText(lastMessage.getMessage());
