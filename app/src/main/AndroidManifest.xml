@@ -2,31 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-<<<<<<< HEAD
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
-
-
-=======
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_SMS" />
->>>>>>> 4affaf07d92ae47f6399a0ed28758ff94867377e
 
     <application
         android:name=".GroupChat.ListMessage.EmojiApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:requestLegacyExternalStorage="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
-        tools:targetApi="31"
-        android:usesCleartextTraffic="true">
-
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".MessageBottomDialogFragmentChatting"
+            android:exported="false" />
         <activity
             android:name=".GroupChat.GroupChat"
             android:exported="false" />
@@ -35,11 +32,10 @@
             android:exported="false" />
         <activity
             android:name=".GroupChat.ListMessage.ListMessage"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="true" />
-<!--        <activity-->
-<!--            android:name=".ChatBot.ChatBot"-->
-<!--            android:exported="false" />-->
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" /> <!-- <activity -->
+        <!-- android:name=".ChatBot.ChatBot" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".DirectMessage.ChattingActivity"
             android:exported="false" />

@@ -3,11 +3,8 @@ package com.example.onlychat.GroupChat.ListMessage;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,28 +13,27 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.onlychat.GroupChat.GroupChatSetting;
-import com.example.onlychat.GroupChat.ListMessage.Options.Options;
-
 import android.Manifest;
+
+import com.example.onlychat.DiaLog.DMBottomDialog;
+import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
+import com.example.onlychat.GroupChat.GroupChatSetting;
+import com.example.onlychat.GroupChat.MessageBottomDialogFragmentChatting;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.normal.TedPermission;
 import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.EmojiTextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,12 +55,13 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     EditText chatText;
     Button optionButton;
     Button backButton;
-
     ImageView sendIcon;
     ImageView imageIcon;
     ImageView iconIcon;
     ArrayList<Uri> arrayList = new ArrayList<>();
     RecyclerView recyclerView;
+    ImageView chatImage;
+    TextView chatName;
     ArrayList<String> names = new ArrayList<String>(Arrays.asList(
             "Paimon","me","Xiao","Klee Bunbara","Paimon",
             "me","Xiao","Klee Bunbara","me","Yae Miko",
@@ -107,30 +104,36 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.global_chat_list_message);
 
+        Intent intent = getIntent();
+        RoomModel roomModel = (RoomModel) intent.getSerializableExtra("Data");
         listView=(ListView) findViewById(R.id.listMessages);
-        CustomMessageItem customMessageItem = new CustomMessageItem(this,avatars,names,messages);
+        CustomMessageItem customMessageItem = new CustomMessageItem(this,roomModel.getMessages());
 
-//        listView.setAdapter(customMessageItem);
-//        listView.setSelection(customMessageItem.getCount() - 1);
-//        listView.smoothScrollToPosition(customMessageItem.getCount() - 1);
-//        listView.setDivider(null);
-//        listView.setDividerHeight(0);
+        listView.setAdapter(customMessageItem);
+        listView.setSelection(customMessageItem.getCount() - 1);
+        listView.smoothScrollToPosition(customMessageItem.getCount() - 1);
+        listView.setDivider(null);
+        listView.setDividerHeight(0);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                // LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
                 // Popup
-                View popupView = inflater.inflate(R.layout.global_chat_popup_above, null);
+//                View popupView = inflater.inflate(R.layout.global_chat_popup_above, null);
+//
+//                boolean focusable = true; // lets taps outside the popup also dismiss it
+//                final PopupWindow popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT,600,focusable);
+//                popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+//                popupView.setTranslationY(900);
+//                popupView.animate().translationY(0).setDuration(200);
+//
+//                return false;
+                MessageBottomDialogFragmentChatting messageBottomDialogFragmentChatting = new MessageBottomDialogFragmentChatting();
+                messageBottomDialogFragmentChatting.show(getSupportFragmentManager(), messageBottomDialogFragmentChatting.getTag());
 
-                boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT,600,focusable);
-                popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-                popupView.setTranslationY(600);
-                popupView.animate().translationY(0).setDuration(200);
-
-                return false;
+                return true;
             }
         });
 
@@ -148,7 +151,13 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         iconIcon = (ImageView) findViewById(R.id.iconIcon);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
+        chatImage = (ImageView) findViewById(R.id.avatar);
+        chatName = (TextView) findViewById(R.id.textName);
+
+        chatImage.setImageResource(roomModel.getAvatar());
+        chatName.setText(roomModel.getName());
+
+        backButton .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -169,6 +178,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 //                    Bitmap b = avatar.getDrawingCache();
 //                    intent.putExtras(userInf);
 //                    intent.putExtra("Bitmap", b);
+                intent.putExtra("Data",roomModel.getOptions());
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
@@ -230,7 +240,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                 names.add("me");
                 messages.add(chatText.getText().toString());
 
-                CustomMessageItem customMessageItem = new CustomMessageItem(ListMessage.this,avatars,names,messages);
+                CustomMessageItem customMessageItem = new CustomMessageItem(ListMessage.this,roomModel.getMessages());
 
                 listView.setAdapter(customMessageItem);
                 listView.setSelection(customMessageItem.getCount() - 1);

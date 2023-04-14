@@ -155,7 +155,7 @@ public class MainScreen extends AppCompatActivity {
         /////////////////////////////
 
         adapter.addFragment(new DirectMessage(),"direct chat");
-        adapter.addFragment(new GroupChat(), "group chat");
+        adapter.addFragment(new GroupChat(listRoom), "group chat");
         adapter.addFragment(new GlobalChat(listRoom), "global chat");
         adapter.addFragment(new ChatBot(), "bot chat");
         adapter.addFragment(new Friends(), "friends");
