@@ -1,34 +1,42 @@
 package com.example.onlychat.Model;
 
+import org.json.JSONArray;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class UserModel implements Serializable {
-    String id;
-    String name,email,phone,facebook,instagram,description;
-    Integer avatar;
+    String id,name,username,email,phone,facebook,instagram,university,description,avatar;
+    String token;
+
+    public String getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(String university) {
+        this.university = university;
+    }
 
     public UserModel(){}
-
-    public UserModel(String name, String email, String phone, String facebook, String instagram, String description, Integer avatar) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.facebook = facebook;
-        this.instagram = instagram;
-        this.description = description;
-        this.avatar = avatar;
-    }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public  void setId(String id) {
         this.id = id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void setName(String name) {
@@ -75,22 +83,12 @@ public class UserModel implements Serializable {
         this.description = description;
     }
 
-    public Integer getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Integer avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-
-//    public UserModel getUserFromDB(String id){
-////        UserModel user = new UserModel();
-////        return
-//    }
-
-    public void setUserToDB(){
-
-    }
-
 
 }

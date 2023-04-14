@@ -3,10 +3,9 @@ package com.example.onlychat.Interfaces;
 import java.io.Serializable;
 
 public class Member implements Serializable {
-    String id, name, nickname;
-    Integer avatar;
+    String id, name, nickname,avatar;
 
-    public Member(String id, String name, String nickname, Integer avatar) {
+    public Member(String id, String name, String nickname, String avatar) {
         this.id = id;
         this.name = name;
         this.nickname = nickname;
@@ -37,11 +36,11 @@ public class Member implements Serializable {
         this.nickname = nickname;
     }
 
-    public Integer getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Integer avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 }

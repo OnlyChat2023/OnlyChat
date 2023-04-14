@@ -4,21 +4,31 @@ import com.example.onlychat.Interfaces.RoomOptions;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class RoomModel implements Serializable {
-    String id;
-    Integer avatar;
-    String name;
+    String id,avatar,name;
     ArrayList<MessageModel> messages;
     RoomOptions options;
 
-    public RoomModel(String id, Integer avatar, String name, ArrayList<MessageModel> messages, RoomOptions options) {
-        this.id = id;
-        this.avatar = avatar;
-        this.name = name;
-        this.messages = messages;
-        this.options = options;
+    Date update_time;
+
+    public RoomModel() {}
+
+    public Date getUpdate_time() {
+        return update_time;
     }
+
+    public void setUpdate_time(Date update_time) {
+        this.update_time = update_time;
+    }
+//    public RoomModel(String id, Integer avatar, String name, ArrayList<MessageModel> messages, RoomOptions options) {
+//        this.id = id;
+//        this.avatar = avatar;
+//        this.name = name;
+//        this.messages = messages;
+//        this.options = options;
+//    }
 
     public String getId() {
         return id;
@@ -28,11 +38,11 @@ public class RoomModel implements Serializable {
         this.id = id;
     }
 
-    public Integer getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Integer avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

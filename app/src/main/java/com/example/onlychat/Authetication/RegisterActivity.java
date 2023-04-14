@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.onlychat.Interfaces.HttpResponse;
@@ -33,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private ImageView showPasswordBtn;
     private EditText passwordInput, passwordConfirmInput, phoneNumberInput, usernameInput;
+    private ProgressBar loadingBar;
 
     private boolean isHidePassword = true;
     private Button LoginBtn, RegisterBtn;
@@ -53,19 +55,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         setContentView(R.layout.register_form);
 
-
-//        FileInputStream serviceAccount = null;
-//        try {
-//            serviceAccount = new FileInputStream("serviceAccountKey.json");
-//            FirebaseOptions options = new FirebaseOptions.Builder()
-//                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-//                    .build();
-//
-//            FirebaseApp.initializeApp(options);
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-
         Intent loginIntent = new Intent(this, MainActivity.class);
 
         phoneNumberInput        = (EditText) findViewById(R.id.phoneInput);
@@ -76,6 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
         showPasswordBtn         = (ImageView) findViewById(R.id.showPassword);
         LoginBtn                = (Button) findViewById(R.id.signInBtn);
         RegisterBtn             = (Button) findViewById(R.id.registerBtn);
+
+        loadingBar              = (ProgressBar) findViewById(R.id.loadingBar);
 
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,28 +88,33 @@ public class RegisterActivity extends AppCompatActivity {
                 String passwordConfirm  = passwordConfirmInput.getText().toString();
 
                 if (TextUtils.isEmpty(phone)) {
-                    phoneNumberInput.setError("Phone number is required");
                     validationOK = false;
+                    phoneNumberInput.setError("Phone number is required");
+                    phoneNumberInput.requestFocus();
                 }
 
                 if (TextUtils.isEmpty(name)) {
                     validationOK = false;
                     usernameInput.setError("User name is required");
+                    usernameInput.requestFocus();
                 }
 
                 if (TextUtils.isEmpty(password)) {
                     validationOK = false;
                     passwordInput.setError("Password is required");
+                    passwordInput.requestFocus();
                 }
 
                 if (TextUtils.isEmpty(passwordConfirm)) {
                     validationOK = false;
                     passwordConfirmInput.setError("Password confirm is required");
+                    passwordConfirmInput.requestFocus();
                 }
 
                 if (!phone.matches("^(03|05|07|08|09)\\d{8}$")) {
                     validationOK = false;
                     phoneNumberInput.setError("Phone number is not a valid number");
+                    phoneNumberInput.requestFocus();
                 }
 
                 if (!password.equals(passwordConfirm)) {
@@ -127,25 +123,36 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 if (validationOK) {
-                    String phoneNumber = "+84" + phone.substring(1);
+                    enableRegister(false);
 
                     HttpManager httpRequest = new HttpManager(RegisterActivity.this);
-                    httpRequest.validateAccount(phoneNumber, new HttpResponse() {
+                    httpRequest.validateAccount(phone, new HttpResponse() {
                         @Override
                         public void onSuccess(JSONObject response) {
+
+                            String phoneNumber = "+84" + phone.substring(1);
+
                             Intent OTPIntent = new Intent(RegisterActivity.this, OTP.class);
 
                             Bundle args = new Bundle();
                             args.putString("phone", phoneNumber);
+                            args.putString("username", name);
+                            args.putString("password", password);
+                            args.putString("confirmPassword", passwordConfirm);
                             OTPIntent.putExtras(args);
 
                             startActivity(OTPIntent);
+
+                            enableRegister(true);
                         }
 
                         @Override
                         public void onError(String error) {
+                            enableRegister(true);
+
                             Log.e("VALIDATE", error);
                             phoneNumberInput.setError("This phone has already been used");
+                            phoneNumberInput.requestFocus();
                         }
                     });
                 }
@@ -171,6 +178,14 @@ public class RegisterActivity extends AppCompatActivity {
                 isHidePassword = !isHidePassword;
             }
         });
+    }
+
+    private void enableRegister(boolean enable) {
+        if (enable)
+            loadingBar.setVisibility(View.GONE);
+        else
+            loadingBar.setVisibility(View.VISIBLE);
+        RegisterBtn.setEnabled(enable);
     }
 
     @Override

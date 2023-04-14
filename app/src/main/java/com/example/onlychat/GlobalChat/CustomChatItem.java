@@ -2,6 +2,7 @@ package com.example.onlychat.GlobalChat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,6 @@ import java.util.ArrayList;
 
 public class CustomChatItem extends ArrayAdapter<String> {
     Context context;
-    Integer[] avatars;
-    String[] names;
-    String[] messages;
-    String[] times;
-
     ImageView messageAvatar;
     TextView messageName;
     TextView messageContent;
@@ -46,20 +42,21 @@ public class CustomChatItem extends ArrayAdapter<String> {
         messageContent = (TextView) row.findViewById(R.id.messageContent);
         messageTime = (TextView) row.findViewById(R.id.messageTime);
 
-        messageAvatar.setImageResource(listRooms.get(position).getAvatar());
+//        messageAvatar.setImageResource(listRooms.get(position).getAvatar());
         messageName.setText(listRooms.get(position).getName());
         MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size()-1);
+        Log.i("TAG", lastMessage.getName());
         messageContent.setText(lastMessage.getMessage());
         messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
 
         return row;
     }
 
-    public void changeData(Integer[] avatars, String[] names,String[] messages,String[] times){
-        this.avatars = avatars;
-        this.names = names;
-        this.messages = messages;
-        this.times = times;
-        this.notifyDataSetChanged();
-    }
+//    public void changeData(Integer[] avatars, String[] names,String[] messages,String[] times){
+//        this.avatars = avatars;
+//        this.names = names;
+//        this.messages = messages;
+//        this.times = times;
+//        this.notifyDataSetChanged();
+//    }
 }

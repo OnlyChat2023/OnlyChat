@@ -80,6 +80,18 @@ public class GroupChat extends Fragment {
         R.raw.a_21, R.raw.a_22, R.raw.a_23, R.raw.a_24, R.raw.a_25,
     };
 
+    ArrayList<RoomModel> roomModels = new ArrayList<>();
+
+    public ArrayList<RoomModel> getRoomModels() {
+        return roomModels;
+    }
+
+    public void setRoomModels(ArrayList<RoomModel> roomModels) {
+        this.roomModels = roomModels;
+    }
+
+    public GroupChat(){}
+
     public GroupChat(ArrayList<RoomModel> roomModels){
         this.roomModels = roomModels;
     }
