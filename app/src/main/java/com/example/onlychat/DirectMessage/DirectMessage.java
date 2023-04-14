@@ -4,8 +4,8 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +23,15 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.onlychat.GlobalChat.CustomChatItem;
-import com.example.onlychat.GlobalChat.GlobalChat;
-import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
+import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.Interfaces.RoomOptions;
+import com.example.onlychat.Model.MessageModel;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DirectMessage extends Fragment {
     TextView chatTitle;
@@ -37,53 +40,16 @@ public class DirectMessage extends Fragment {
     ImageView addChat;
     ListView listChat;
 
-    String names[] = {
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-    };
-    Integer avatars[]={
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-    };
-    String messages[] = {
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-    };
-    String times[]={
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-    };
-
-    Integer avatarsImage[] = {
-            R.raw.a_1, R.raw.a_2, R.raw.a_3, R.raw.a_4, R.raw.a_5,
-            R.raw.a_6, R.raw.a_7, R.raw.a_8, R.raw.a_9, R.raw.a_10,
-            R.raw.a_11, R.raw.a_12, R.raw.a_13, R.raw.a_14, R.raw.a_15,
-            R.raw.a_16,R.raw.a_17, R.raw.a_18, R.raw.a_19, R.raw.a_20,
-            R.raw.a_21, R.raw.a_22, R.raw.a_23, R.raw.a_24, R.raw.a_25,
-    };
+    ArrayList<RoomModel> roomChat = new ArrayList<RoomModel>();
 
     GridView androidGridView;
+
+    public DirectMessage(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RelativeLayout globalChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
-
+        Log.i("Direct", "onCreateView: ");
         // set value for widget
         chatTitle=(TextView) globalChat.findViewById(R.id.header_title);
         chatIcon = (ImageView) globalChat.findViewById(R.id.chatIcon);
@@ -97,22 +63,22 @@ public class DirectMessage extends Fragment {
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
 
-//        CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), avatars,names,messages,times);
-//        listChat.setAdapter(customChatItem);
+//        ArrayList<MessageModel> msg = new ArrayList<MessageModel>();
+//        msg.add(new MessageModel("6430c86d1b48c829004aa123", "6430c86d1b48c829004aa89b", R.raw.a_1, "Riden Shogun", "Risho", "Hello World", Calendar.getInstance().getTime(), null));
+//        msg.add(new MessageModel("6430c86d1b48c829004aa124", "642e2f430cc3fd9470f85b5b", R.raw.a_2, "Yae Miko", "Yami", "Hello new Word", Calendar.getInstance().getTime(), null));
+//        ArrayList<Member> members = new ArrayList<Member>();
+//        members.add(new Member("6430c86d1b48c829004aa89b", "Raiden Shogun", "Risho", R.raw.a_1));
+//        members.add(new Member("642e2f430cc3fd9470f85b5b", "Yae Miko", "Yami", R.raw.a_2));
+//        roomChat.add(new RoomModel("6430c86d1b48c829004aa123", R.raw.a_2, "Yami", msg, new RoomOptions(false, false, "Yami", null, members)));
+
+        CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), roomChat);
+        listChat.setAdapter(customChatItem);
 
         listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ChattingActivity.class);
-                Bundle userInf = new Bundle();
-                TextView name = (TextView) view.findViewById(R.id.messageName);
-                ImageView avatar = (ImageView) view.findViewById(R.id.messageAvatar);
-
-                userInf.putString("name", name.getText().toString());
-                avatar.setDrawingCacheEnabled(true);
-                Bitmap b = avatar.getDrawingCache();
-                intent.putExtras(userInf);
-                intent.putExtra("Bitmap", b);
+                intent.putExtra("roomChat", roomChat.get(i));
 
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
@@ -220,7 +186,7 @@ public class DirectMessage extends Fragment {
         }
 
         public int getCount() {
-            return avatarsImage.length;
+            return roomChat.size();
         }
 
         public Object getItem(int position) {
@@ -242,7 +208,7 @@ public class DirectMessage extends Fragment {
             } else {
                 mImageView = (ImageView) convertView;
             }
-            mImageView.setImageResource(avatarsImage[position]);
+//            mImageView.setImageResource(roomChat.get(position).getAvatar());
             return mImageView;
         }
     }

@@ -8,7 +8,7 @@ public class MessageModel implements Serializable {
     String id,userId,avatar;
     String name,nickName ,message;
     Date time;
-    ArrayList<String> seenUser;
+    ArrayList<String> seenUser=new ArrayList<>();
     public MessageModel(){}
     public MessageModel(String id, String userId, String avatar, String name, String nickName, String message, Date time, ArrayList<String> seenUser) {
         this.id = id;

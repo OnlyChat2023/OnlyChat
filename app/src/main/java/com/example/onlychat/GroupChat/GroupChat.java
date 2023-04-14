@@ -24,7 +24,10 @@ import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
 import com.example.onlychat.GroupChat.ListMessage.ListMessage;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
+
+import java.util.ArrayList;
 
 public class GroupChat extends Fragment {
     TextView chatTitle;
@@ -34,49 +37,17 @@ public class GroupChat extends Fragment {
     ListView listChat;
     Button okBtn;
 
-    String names[] = {
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-    };
+    ArrayList<RoomModel> roomModels = new ArrayList<>();
 
-    Integer avatars[]={
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,
-    };
+    public ArrayList<RoomModel> getRoomModels() {
+        return roomModels;
+    }
 
-    String messages[] = {
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-            "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...", "Sorry to bother you. I have a questi...",
-    };
+    public void setRoomModels(ArrayList<RoomModel> roomModels) {
+        this.roomModels = roomModels;
+    }
 
-    String times[]={
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-            "2:00 PM","4:00 PM","6:00 PM",
-    };
-
-    Integer avatarsImage[] = {
-        R.raw.a_1, R.raw.a_2, R.raw.a_3, R.raw.a_4, R.raw.a_5,
-        R.raw.a_6, R.raw.a_7, R.raw.a_8, R.raw.a_9, R.raw.a_10,
-        R.raw.a_11, R.raw.a_12, R.raw.a_13, R.raw.a_14, R.raw.a_15,
-        R.raw.a_16,R.raw.a_17, R.raw.a_18, R.raw.a_19, R.raw.a_20,
-        R.raw.a_21, R.raw.a_22, R.raw.a_23, R.raw.a_24, R.raw.a_25,
-    };
+    public GroupChat(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,8 +67,8 @@ public class GroupChat extends Fragment {
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
 
-//        CustomChatItem customChatItem = new CustomChatItem(groupChat.getContext(), avatars, names, messages, times);
-//        listChat.setAdapter(customChatItem);
+        CustomChatItem customChatItem = new CustomChatItem(groupChat.getContext(),roomModels );
+        listChat.setAdapter(customChatItem);
 
         listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
