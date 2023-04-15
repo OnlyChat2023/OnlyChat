@@ -6,6 +6,7 @@ import hpp from 'hpp';
 import cors from 'cors';
 import userProfileRouter from "./routes/userProfileRoutes.js"
 import globalErrorhandler from "./controllers/ErrorController.js"
+import groupChatRouter from './routes/groupChatRoutes.js';
 
 import messageRoutes from "./routes/messageRoutes.js"
 
@@ -29,6 +30,8 @@ app.use(express.json({ limit: '10mb' }));
 
 app.use('/api/onlychat/v1/auth', authRouter);
 app.use('/api/onlychat/v1/user', userProfileRouter); // mounting new router on route (URL)
+app.use('/api/onlychat/v1/groupChat', groupChatRouter);
+
 
 app.use(globalErrorhandler);
 
