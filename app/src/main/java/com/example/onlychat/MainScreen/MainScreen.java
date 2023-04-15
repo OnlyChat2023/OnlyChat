@@ -281,7 +281,7 @@ public class MainScreen extends AppCompatActivity {
                 Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
                 members.add(member);
             }
-            roomOptions.setMembers(members);
+            if (roomOptions != null) roomOptions.setMembers(members);
             roomModel.setOptions(roomOptions);
             roomModel.setMessages(listMessage);
             listRoom.add(roomModel);

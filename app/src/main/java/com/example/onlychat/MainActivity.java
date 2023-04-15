@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         UserModel user = pref.getUserModel();
 
-        Log.e("NUGGG", user.getToken());
+//        Log.e("NUGGG", user.getToken());
 
         Intent intent = new Intent(MainActivity.this, MainScreen.class);
         intent.putExtras(bundle);
