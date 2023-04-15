@@ -12,6 +12,8 @@ const messageSchema = new mongoose.Schema({
       time: Date,
     }
   ],
+  members: [{}],
+  options: [{}],
   update_time: Date
 });
 

@@ -14,11 +14,12 @@ const getUserInformation = catchAsync(async (req, res) => {
   const directChat = []
   for (let i of user.directmessage_channel) {
     const dmList = await DirectChat.findOne({ _id: i });
-    const usrr = dmList.members.find((prep) => prep != user._id.toString())
-    dmList.name = usrr.nick_name
+    dmList.avatar = dmList.members.filter(el => el.user_id != user._id.toString())[0].avatar
+    dmList.name = dmList.members.filter(el => el.user_id != user._id.toString())[0].nick_name
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
     directChat.push(dmList);
   }
+  // console.log("Direct", directChat)
 
   const groupChat = []
   for (let i of user.groupchat_channel) {
@@ -26,6 +27,7 @@ const getUserInformation = catchAsync(async (req, res) => {
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
     groupChat.push(dmList);
   }
+  // console.log("Group", groupChat)
 
   const globalChat = []
   for (let i of user.globalchat_channel) {
@@ -33,13 +35,17 @@ const getUserInformation = catchAsync(async (req, res) => {
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
     globalChat.push(dmList);
   }
+  // console.log("Global", globalChat)
 
   const botChat = []
   for (let i of user.chatbot_channel) {
+    // console.log(i)
     const dmList = await BotChat.findOne({ _id: i });
-    dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+    // console.log(dmList)
     botChat.push(dmList);
   }
+  // console.log("Bot", botChat)
+
 
   res.status(200).json({
     status: 'success',
@@ -54,17 +60,6 @@ const getUserInformation = catchAsync(async (req, res) => {
   })
 })
 
-
-const getDirectChat = catchAsync(async (req, res) => {
-  // console.log("coccccc")
-  // console.log(req.body);
-  // // res.status(200).json({
-  // //   status: 'success',
-  // //   data: {
-
-  // //   },
-  // // })
-})
 
 const getUserProfile = catchAsync(async (req, res) => {
   const user = await User.findOne({ _id: req.body._id })
@@ -127,4 +122,4 @@ const updateProfile = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: { user: updatedUser } });
 })
 
-export { getUserInformation, updateProfile, getUserProfile, getDirectChat }
+export { getUserInformation, updateProfile, getUserProfile }
