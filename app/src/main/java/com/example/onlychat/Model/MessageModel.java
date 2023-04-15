@@ -10,8 +10,6 @@ public class MessageModel implements Serializable {
     Date time;
     ArrayList<String> seenUser=new ArrayList<>();
     public MessageModel(){}
-<<<<<<< HEAD
-=======
     public MessageModel(String id, String userId, String avatar, String name, String nickName, String message, Date time, ArrayList<String> seenUser) {
         this.id = id;
         this.user_id = userId;
@@ -22,7 +20,6 @@ public class MessageModel implements Serializable {
         this.time = time;
         this.seenUser = seenUser;
     }
->>>>>>> d7b83eb9bd5dc7e10d896aa80cd61f02b79707c9
 
     public String getId() {
         return id;

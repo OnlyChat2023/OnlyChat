@@ -7,14 +7,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class RoomModel implements Serializable {
-<<<<<<< HEAD
-    String id;
+    String _id;
     String avatar;
     String name;
     String qr_code;
-=======
-    String _id,avatar,name;
->>>>>>> d7b83eb9bd5dc7e10d896aa80cd61f02b79707c9
     ArrayList<MessageModel> messages;
     RoomOptions options;
     Date update_time;

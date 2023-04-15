@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.Model.UserModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,14 +34,8 @@ import java.util.Map;
 public class HttpManager {
     private Context context;
     private GlobalPreferenceManager pref;
-<<<<<<< HEAD
-    static private com.example.onlychat.Model.UserModel user = new com.example.onlychat.Model.UserModel();
-    private final String ip = "192.168.2.16";
-
-=======
     static private UserModel user = new UserModel();
     private final String ip = "192.168.1.111";
->>>>>>> d7b83eb9bd5dc7e10d896aa80cd61f02b79707c9
 
     public HttpManager(Context _context) {
         this.context = _context;
@@ -112,21 +107,12 @@ public class HttpManager {
     }
 
     public void getListChat(HttpResponse responseReceiver){
-<<<<<<< HEAD
-        createRequest("http://"+ip+":5000/api/onlychat/v1/user/userInformation",Request.Method.GET,"userprofile", null, responseReceiver);
-    }
-
-    public com.example.onlychat.Model.UserModel getUserById(String _id) {
-        com.example.onlychat.Model.UserModel userModel = new com.example.onlychat.Model.UserModel();
-        createRequest("http://"+ip+":5000/api/onlychat/v1/user/userProfile", Request.Method.PATCH, "userprofile", new HashMap<String, String>() {{
-=======
         createRequest("http://" + ip + ":5000/api/onlychat/v1/user/userInformation",Request.Method.GET,"userprofile", null, responseReceiver);
     }
 
     public UserModel getUserById(String _id) {
         UserModel userModel = new UserModel();
         createRequest("http://" + ip + ":5000/api/onlychat/v1/user/userProfile", Request.Method.PATCH, "userprofile", new HashMap<String, String>() {{
->>>>>>> d7b83eb9bd5dc7e10d896aa80cd61f02b79707c9
                     put("_id", _id);
                 }},
                 new HttpResponse() {
