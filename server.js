@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import { v4 as uuid } from 'uuid';
 
 
 const port = process.env.PORT || 5000;
@@ -17,6 +19,21 @@ mongoose
 const server = app.listen(port, () => {
     console.log(`App is running on port ${port}...`);
 });
+
+const saveBase64Image = async (dataString, filename) => {
+  const matches = dataString.match(/^data:image\/([A-Za-z-+\/]+);base64,(.+)/), response = {};
+
+  if (matches.length !== 3) {
+    return new Error('Invalid input string');
+  }
+
+  response.type = matches[1];
+  response.data = matches[2];
+
+  fs.writeFile(`${filename}.${response.type}`, response.data, { encoding: 'base64' }, (err) => {
+
+  });
+}
 
 const io = new Server(server);
 
@@ -154,11 +171,62 @@ io.of('/global_message').on('connection', (socket) => {
 
 io.on('connection', (socket) => {
 
-    socket.on('joinRoom', (roomName, user) => {
-        socket.room = roomName;
+    socket.on('joinRoom', (roomInfo, user) => {
+        const [roomId, channel] = roomInfo.split('::');
+        socket.room = roomId;
+        socket.channel = channel;
+
         socket.user = JSON.parse(user);
-        console.log(socket.user);
-        socket.join(roomName);
+        socket.join(roomId);
+    });
+
+    socket.on('sendStringMessage', (message, user) => {
+        const send_user = JSON.parse(user);
+
+        console.log(message);
+
+        let messageModal = {};
+
+        if (socket.channel === 'global_chat') {
+            messageModal = {
+                message: message,
+                user_id: send_user.id,
+                // anonymous_avatar: user.anonymous_avatar,
+                anonymous_avatar: '',
+                nickname: send_user.name,
+                time: new Date()
+            }
+        }
+
+        io.sockets.in(socket.room).emit('messageListener', messageModal, { ...send_user, token: '' });
+    });
+
+    socket.on('sendImageMessage', (images, user) => {
+        const send_user = JSON.parse(user);
+
+        const image_list = JSON.parse(images);
+
+        for (let i = 0; i < image_list.length; i++) {
+            const image = image_list[i];
+            const filename = `assets/chats/${socket.channel}/${uuid()}`;
+
+            saveBase64Image(image, filename);
+        }
+
+        let messageModal = {};
+
+        // if (socket.channel === 'global_chat') {
+        //     messageModal = {
+        //         message: message,
+        //         user_id: send_user.id,
+        //         // anonymous_avatar: user.anonymous_avatar,
+        //         anonymous_avatar: '',
+        //         nickname: send_user.name,
+        //         time: new Date()
+        //     }
+        // }
+
+        // io.sockets.in(socket.room).emit('messageListener', messageModal, { ...send_user, token: '' });
     });
 
     socket.on('add_friend', (friend) => {

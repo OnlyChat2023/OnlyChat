@@ -34,12 +34,12 @@ const getUserInformation = catchAsync(async (req, res) => {
     globalChat.push(dmList);
   }
 
-  const botChat = []
-  for (let i of user.chatbot_channel) {
-    const dmList = await BotChat.findOne({ _id: i });
-    dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
-    botChat.push(dmList);
-  }
+  // const botChat = []
+  // for (let i of user.chatbot_channel) {
+  //   const dmList = await BotChat.findOne({ _id: i });
+  //   dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+  //   botChat.push(dmList);
+  // }
 
   res.status(200).json({
     status: 'success',
@@ -48,7 +48,7 @@ const getUserInformation = catchAsync(async (req, res) => {
       directChat: directChat,
       groupChat: groupChat,
       globalChat: globalChat,
-      botChat: botChat,
+      botChat: [],
 
     },
   })

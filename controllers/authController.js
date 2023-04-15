@@ -171,6 +171,9 @@ const protect = catchAsync(async (req, res, next) => {
     // 2) Verfication token
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
+
+    console.log(decoded.id);
+
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);
 
