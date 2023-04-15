@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 const port = process.env.PORT || 5000;
 
 import app from "./app.js";
+import globalChat from './models/globalChatModel.js';
 dotenv.config({ path: './config.env' });
 
 mongoose
@@ -55,7 +56,7 @@ io.of('/group_message').on('connection', (socket) => {
     socket.on('delete_chat', (room) => {
         // cập nhật csdl
         socket.broadcast.to(room).emit('delete_chat');
-    });
+    }); 
 
     socket.on('seen_message', (room) => {
         socket.room = room;
@@ -180,7 +181,7 @@ io.on('connection', (socket) => {
         socket.join(roomId);
     });
 
-    socket.on('sendStringMessage', (message, user) => {
+    socket.on('sendStringMessage', async (message, user) => {
         const send_user = JSON.parse(user);
 
         console.log(message);
@@ -196,6 +197,10 @@ io.on('connection', (socket) => {
                 nickname: send_user.name,
                 time: new Date()
             }
+
+            const GlobalChannel = await globalChat.findOne({_id: socket.room });
+            GlobalChannel.chats.push(messageModal);
+            await GlobalChannel.save();
         }
 
         io.sockets.in(socket.room).emit('messageListener', messageModal, { ...send_user, token: '' });

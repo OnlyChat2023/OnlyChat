@@ -12,6 +12,14 @@ const messageSchema = new mongoose.Schema({
       time: Date,
     }
   ],
+  options: {
+    type: [],
+    default: ''
+  },
+  members: {
+    type: [],
+    default: ''
+  },
   update_time: Date
 });
 
