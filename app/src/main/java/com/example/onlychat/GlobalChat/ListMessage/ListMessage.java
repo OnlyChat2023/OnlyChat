@@ -91,7 +91,6 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
         recyclerView.setAdapter(mainAdapter);
 
-
         listView=(ListView) findViewById(R.id.listMessages);
 
         customMessageItem = new CustomMessageItem(this, roomModel.getMessages());
