@@ -91,15 +91,6 @@ public class OptionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 ChangeNickNameDialog dialog = new ChangeNickNameDialog().newInstance(OptionActivity.this, friendInf.getName(), friendInf.getNickname(), meInf.getNickname());
                 dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
-
-                if (!dialog.getFr_nickname().equals(friendInf.getNickname())) {
-                    friendInf.setNickname(dialog.getFr_nickname());
-                    txtName.setText(friendInf.getNickname());
-                }
-                if (!dialog.getUser_nickname().equals(meInf.getNickname())) {
-                    meInf.setNickname(dialog.getUser_nickname());
-                }
-
             }
         });
 
@@ -153,6 +144,8 @@ public class OptionActivity extends AppCompatActivity {
     public void setNickname(String frNN, String meNN){
         friendInf.setNickname(frNN);
         meInf.setNickname(meNN);
+        Log.i("CHANGENN", friendInf.getNickname());
+        Log.i("CHANGENN", meInf.getNickname());
 //        if (preChat != null)
 //            preChat.setNickname(frNN, meNN);
 //        else

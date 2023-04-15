@@ -28,6 +28,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class HttpManager {
     private Context context;
     private GlobalPreferenceManager pref;
     static private UserModel user = new UserModel();
-    private final String ip = "192.168.1.111";
+    private final String ip = "192.168.1.43";
 
     public HttpManager(Context _context) {
         this.context = _context;
@@ -158,5 +159,14 @@ public class HttpManager {
         params.put("password", password);
 
         createRequest("http://" + ip + ":5000/api/onlychat/v1/auth/login", Request.Method.POST, "login", params, responseReceiver);
+    }
+
+    public void AddGroupChat(String newName, String userID, HttpResponse responseReceiver){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("_id", userID);
+        params.put("name", newName);
+        params.put("update_time", Calendar.getInstance().getTime().toString());
+
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/addGroup", Request.Method.POST, "addGroup", params, responseReceiver);
     }
 }
