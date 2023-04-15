@@ -6,7 +6,7 @@ const messageSchema = new mongoose.Schema({
   name: String,
   chats: [
     {
-      id_: String,
+      _id: mongoose.Schema.ObjectId,
       message: String,
       time: Date,
       user_id: String,
@@ -20,7 +20,7 @@ const messageSchema = new mongoose.Schema({
       user_id: String,
       avatar: String,
       name: String,
-      nick_name: String,
+      nickname: String,
     }
   ],
   options: [

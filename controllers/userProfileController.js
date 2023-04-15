@@ -15,7 +15,7 @@ const getUserInformation = catchAsync(async (req, res) => {
   for (let i of user.directmessage_channel) {
     const dmList = await DirectChat.findOne({ _id: i });
     dmList.avatar = dmList.members.filter(el => el.user_id != user._id.toString())[0].avatar
-    dmList.name = dmList.members.filter(el => el.user_id != user._id.toString())[0].nick_name
+    dmList.name = dmList.members.filter(el => el.user_id != user._id.toString())[0].nickname
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
     directChat.push(dmList);
   }
