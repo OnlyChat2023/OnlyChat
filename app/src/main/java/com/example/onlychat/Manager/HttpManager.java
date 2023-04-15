@@ -93,8 +93,8 @@ public class HttpManager {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
-//                if (pref.getIsLoggedIn())
-//                    headers.put("Authorization", "Bearer " + pref.getUserToken());
+                if (pref.getIsLoggedIn())
+                    headers.put("Authorization", "Bearer " + pref.getUserToken());
                 return headers;
             }
         };

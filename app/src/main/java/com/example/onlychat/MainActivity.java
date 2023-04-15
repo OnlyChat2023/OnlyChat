@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.Profile;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putBoolean("isLogin", pref.getIsLoggedIn());
+
+        UserModel user = pref.getUserModel();
+
+        Log.e("NUGGG", user.getToken());
 
         Intent intent = new Intent(MainActivity.this, MainScreen.class);
         intent.putExtras(bundle);
