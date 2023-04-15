@@ -21,7 +21,6 @@ import com.example.onlychat.MainActivity;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
-import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 import com.google.gson.Gson;
 
@@ -138,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             JSONObject userInfo = response.getJSONObject("user").getJSONObject("info");
 
-                            UserModel userInformation = new Gson().fromJson(String.valueOf(userInfo), UserModel.class);
+                            com.example.onlychat.Model.UserModel userInformation = new Gson().fromJson(String.valueOf(userInfo), com.example.onlychat.Model.UserModel.class);
                             pref.Login(userInformation, rememberMe.isChecked());
 
                             Bundle bundle = new Bundle();

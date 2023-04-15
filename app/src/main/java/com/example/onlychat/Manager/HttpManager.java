@@ -16,11 +16,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.onlychat.Interfaces.HttpResponse;
-import com.example.onlychat.Model.MessageModel;
-import com.example.onlychat.Model.RoomModel;
-import com.example.onlychat.Model.UserModel;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,8 +33,8 @@ import java.util.Map;
 public class HttpManager {
     private Context context;
     private GlobalPreferenceManager pref;
-    static private UserModel user = new UserModel();
-    private final String ip = "192.168.1.45";
+    static private com.example.onlychat.Model.UserModel user = new com.example.onlychat.Model.UserModel();
+    private final String ip = "192.168.2.16";
 
     public HttpManager(Context _context) {
         this.context = _context;
@@ -111,12 +106,12 @@ public class HttpManager {
     }
 
     public void getListChat(HttpResponse responseReceiver){
-        createRequest("http://192.168.1.45:5000/api/onlychat/v1/user/userInformation",Request.Method.GET,"userprofile", null, responseReceiver);
+        createRequest("http://"+ip+":5000/api/onlychat/v1/user/userInformation",Request.Method.GET,"userprofile", null, responseReceiver);
     }
 
-    public UserModel getUserById(String _id) {
-        UserModel userModel = new UserModel();
-        createRequest("http://192.168.2.16:5000/api/onlychat/v1/user/userProfile", Request.Method.PATCH, "userprofile", new HashMap<String, String>() {{
+    public com.example.onlychat.Model.UserModel getUserById(String _id) {
+        com.example.onlychat.Model.UserModel userModel = new com.example.onlychat.Model.UserModel();
+        createRequest("http://"+ip+":5000/api/onlychat/v1/user/userProfile", Request.Method.PATCH, "userprofile", new HashMap<String, String>() {{
                     put("_id", _id);
                 }},
                 new HttpResponse() {
@@ -156,10 +151,6 @@ public class HttpManager {
         createRequest("http://" + ip + ":5000/api/onlychat/v1/auth/register", Request.Method.POST, "register", params, responseReceiver);
     }
 
-//    public ArrayList<RoomModel> getDirectMessageRoom() {
-//
-//        return
-//    }
     public void Login(String phoneNumber, String password, HttpResponse responseReceiver) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("phonenumber", phoneNumber);

@@ -10,13 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.onlychat.Manager.Model.MessageModel;
-import com.example.onlychat.Manager.Model.RoomModel;
+import com.example.onlychat.Model.MessageModel;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
 import java.util.ArrayList;
 
-public class CustomChatItem extends ArrayAdapter<String> {
+public class CustomChatItem extends ArrayAdapter<RoomModel> {
     Context context;
     ImageView messageAvatar;
     TextView messageName;
@@ -24,13 +24,11 @@ public class CustomChatItem extends ArrayAdapter<String> {
     TextView messageTime;
     ArrayList<RoomModel> listRooms;
 
-
-
     public CustomChatItem(Context context, ArrayList<RoomModel> listRooms){
-
-        super(context,R.layout.global_chat_custom_chat_item,new String[listRooms.size()]);
+        super(context,R.layout.global_chat_custom_chat_item,listRooms);
         this.context = context;
         this.listRooms = listRooms;
+
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
@@ -42,10 +40,9 @@ public class CustomChatItem extends ArrayAdapter<String> {
         messageContent = (TextView) row.findViewById(R.id.messageContent);
         messageTime = (TextView) row.findViewById(R.id.messageTime);
 
-//        messageAvatar.setImageResource(listRooms.get(position).getAvatar());
         messageName.setText(listRooms.get(position).getName());
         MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size()-1);
-        Log.i("TAG", lastMessage.getName());
+//        Log.i("TAG", lastMessage.getName());
         messageContent.setText(lastMessage.getMessage());
         messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
 

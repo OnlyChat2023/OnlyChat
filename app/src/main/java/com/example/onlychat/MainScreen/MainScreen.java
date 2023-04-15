@@ -1,13 +1,9 @@
 package com.example.onlychat.MainScreen;
 
-<<<<<<< HEAD
-import android.annotation.SuppressLint;
-import android.app.Activity;
-=======
->>>>>>> 778e4f8f37a8b9a027c87f5d16d8b3cef63dd586
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -22,8 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.onlychat.Authetication.LoginActivity;
 import com.example.onlychat.ChatBot.ChatBot;
 import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.Friends.Friends;
@@ -33,10 +31,8 @@ import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.Manager.HttpManager;
-import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
-import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
@@ -48,10 +44,6 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-<<<<<<< HEAD
-=======
-import java.util.Date;
->>>>>>> 778e4f8f37a8b9a027c87f5d16d8b3cef63dd586
 import java.util.List;
 
 public class MainScreen extends AppCompatActivity {
@@ -66,17 +58,7 @@ public class MainScreen extends AppCompatActivity {
             R.drawable.navbar_bot_chat,
             R.drawable.navbar_friends
     };
-
-    private ImageView showPasswordBtn;
-    private EditText passwordInput;
-    private TextView forgotPasswordBtn;
-
-    private boolean isHidePassword = true;
-    private Button RegisterBtn;
-
-<<<<<<< HEAD
     private Boolean isLogin = false;
-    private UserModel user;
     private ArrayList<RoomModel> global_list;
     private ArrayList<RoomModel> group_list;
     private ArrayList<RoomModel> direct_list;
@@ -87,13 +69,11 @@ public class MainScreen extends AppCompatActivity {
     GroupChat groupChatFragment = new GroupChat();
     ChatBot botChatFragment = new ChatBot();
 
-=======
-    private Boolean isLogin = true;
->>>>>>> 778e4f8f37a8b9a027c87f5d16d8b3cef63dd586
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         isLogin=true;
         HttpManager httpManager = new HttpManager(this);
         httpManager.getListChat(
@@ -101,26 +81,32 @@ public class MainScreen extends AppCompatActivity {
                 @Override
                 public void onSuccess(JSONObject Response) {
                     try{
-//                        JSONObject information = Response.getJSONObject("data").getJSONObject("user");
                         JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
                         JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
                         JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
                         JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
-//                        user = new Gson().fromJson(String.valueOf(information), UserModel.class);
-//                    Log.i("friend",information.getJSONArray("friend").toString());
-//                    Log.i("friend_request",information.getJSONArray("friend_request").toString());
+
                         direct_list = getListRoom(directChat);
                         group_list = getListRoom(groupChat);
                         global_list = getListRoom(globalChat);
                         chatbot_list = getListRoom(botChat);
-
-                        Log.i("TAG", global_list.get(0).getName());
 
                         directChatFragment.setRoomModels(direct_list);
                         globalChatFragment.setRoomModels(global_list);
                         groupChatFragment.setRoomModels(group_list);
                         botChatFragment.setRoomModels(chatbot_list);
 
+
+                        Log.i("Main - Direct", Integer.toString(direct_list.size()));
+                        Log.i("Main - Group", Integer.toString(group_list.size()));
+                        Log.i("Main - Global", Integer.toString(global_list.size()));
+                        Log.i("Main - Bot", Integer.toString(chatbot_list.size()));
+//                        Log.i("Custom chat", direct_list.get(0).getName());
+//                        Log.i("Custom chat", direct_list.get(0).getAvatar());
+//                        Log.i("Custom chat", direct_list.get(0).getId());
+//                        Log.i("Custom chat", direct_list.get(0).getMessages().get(0).getMessage());
+//                        Log.i("Custom chat", direct_list.get(0).getOptions().getNotify().toString());
+//                        Log.i("Custom chat",direct_list.get(0).getUpdate_time().toString() );
 
 
                     }
@@ -135,13 +121,6 @@ public class MainScreen extends AppCompatActivity {
                 }
             });
 
-//        httpManager.getUserById("6430c86d1b48c829004aa89b");
-//        try {
-//            httpManager.getDirectChat();
-//        } catch (JSONException e) {
-//            throw new RuntimeException(e);
-//        }
-
         Bundle bundle = getIntent().getExtras();
         isLogin = bundle.getBoolean("isLogin", false);
 
@@ -151,12 +130,12 @@ public class MainScreen extends AppCompatActivity {
 
             viewPager = (ViewPager) findViewById(R.id.viewPaper);
             setupViewPager(viewPager);
-
+            viewPager.setOffscreenPageLimit(3);
             tabLayout = (TabLayout) findViewById(R.id.tabLayout);
             tabLayout.setupWithViewPager(viewPager);
             //        setupTabIcons();
             for (int i = 0; i < tabLayout.getTabCount(); i++) {
-                LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.main_navbarrrrrrrrrrrrrrr, null);
+                LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.main_navbar, null);
 
                 ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
                 if (i == 0) {
@@ -167,6 +146,7 @@ public class MainScreen extends AppCompatActivity {
                 }
                 tabLayout.getTabAt(i).setCustomView(tab);
             }
+
 
             tabLayout.setOnTabSelectedListener(
                     new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
@@ -203,17 +183,17 @@ public class MainScreen extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),0);
 
-        adapter.addFragment(new DirectMessage(),"direct chat");
-        adapter.addFragment(new GroupChat(), "group chat");
+        adapter.addFragment(directChatFragment,"direct chat");
+        adapter.addFragment(groupChatFragment, "group chat");
         adapter.addFragment(globalChatFragment, "global chat");
-        adapter.addFragment(new ChatBot(), "bot chat");
+        adapter.addFragment(botChatFragment, "bot chat");
         adapter.addFragment(new Friends(), "friends");
+
 
         viewPager.setAdapter(adapter);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
-
         List<Fragment> fragments = new ArrayList<>();
         List<String> fragmentTitle = new ArrayList<>();
 
@@ -242,11 +222,13 @@ public class MainScreen extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return fragmentTitle.get(position);
         }
+
+
     }
 
     public ArrayList<RoomModel> getListRoom(JSONArray channel) throws JSONException, ParseException {
         ArrayList<RoomModel> listRoom = new ArrayList<>();
-        Log.i("Chat",Integer.toString(channel.length()));
+//        Log.i("Chat",Integer.toString(channel.length()));
 
         for(int i=0;i<channel.length();i++){
             RoomModel roomModel = new RoomModel();
@@ -255,9 +237,8 @@ public class MainScreen extends AppCompatActivity {
             roomModel.setName(channel.getJSONObject(i).getString("name"));
             ArrayList<MessageModel> listMessage = new ArrayList<>();
             for(int j=0;j<channel.getJSONObject(i).getJSONArray("chats").length();j++){
-                MessageModel messageModel = new MessageModel();
                 JSONObject messageJson = (JSONObject) channel.getJSONObject(i).getJSONArray("chats").get(j);
-                messageModel = new Gson().fromJson(String.valueOf(messageJson),MessageModel.class);
+                MessageModel messageModel = new Gson().fromJson(String.valueOf(messageJson), MessageModel.class);
                 String dtStart = messageJson.getString("time");
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                 try {
@@ -268,18 +249,20 @@ public class MainScreen extends AppCompatActivity {
                 }
                 listMessage.add(messageModel);
             }
-            RoomOptions roomOptions = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("options").get(0)),RoomOptions.class);
+            RoomOptions roomOptions = null;
+            if(channel.getJSONObject(i).getJSONArray("options").length()>0){
+                roomOptions = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("options").get(0)),RoomOptions.class);
+                ArrayList<Member> members = new ArrayList<>();
+                for(int l=0;l<channel.getJSONObject(i).getJSONArray("members").length();l++){
+                    Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
+                    members.add(member);
+                }
+                roomOptions.setMembers(members);
+            }
             String abc = channel.getJSONObject(i).getString("update_time");
             java.util.Date date1=  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(abc);
             roomModel.setUpdate_time(date1);
 
-
-            ArrayList<Member> members = new ArrayList<>();
-            for(int l=0;l<channel.getJSONObject(i).getJSONArray("members").length();l++){
-                    Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
-                    members.add(member);
-            }
-            roomOptions.setMembers(members);
             roomModel.setOptions(roomOptions);
             roomModel.setMessages(listMessage);
             listRoom.add(roomModel);

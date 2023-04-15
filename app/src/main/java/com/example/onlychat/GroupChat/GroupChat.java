@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
 import com.example.onlychat.GroupChat.ListMessage.ListMessage;
@@ -36,6 +38,9 @@ public class GroupChat extends Fragment {
     ImageView addChat;
     ListView listChat;
     Button okBtn;
+    CustomChatItem customChatItem;
+
+    RelativeLayout groupChat;
 
     ArrayList<RoomModel> roomModels = new ArrayList<>();
 
@@ -44,15 +49,24 @@ public class GroupChat extends Fragment {
     }
 
     public void setRoomModels(ArrayList<RoomModel> roomModels) {
-        this.roomModels = roomModels;
+//        this.roomModels = roomModels;
+        for(RoomModel i:roomModels){
+            this.roomModels.add(i);
+        }
+//        if(customChatItem == null){
+//            customChatItem = new CustomChatItem(groupChat.getContext(),roomModels );
+//            listChat.setAdapter(customChatItem);
+//        }
+        customChatItem.notifyDataSetChanged();
+
+        Log.i("SET - Group", roomModels.get(0).getName());
     }
 
     public GroupChat(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RelativeLayout groupChat = (RelativeLayout) inflater.inflate(R.layout.activity_group_chat, null);
-
+        groupChat = (RelativeLayout) inflater.inflate(R.layout.activity_group_chat, null);
         // set value for widget
         chatTitle = (TextView) groupChat.findViewById(R.id.header_title);
         chatTitle.setText("group chat channel");
@@ -66,8 +80,8 @@ public class GroupChat extends Fragment {
 
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
-
-        CustomChatItem customChatItem = new CustomChatItem(groupChat.getContext(),roomModels );
+        Log.i("Group chat", Integer.toString(roomModels.size()));
+        customChatItem = new CustomChatItem(groupChat.getContext(),roomModels );
         listChat.setAdapter(customChatItem);
 
         listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

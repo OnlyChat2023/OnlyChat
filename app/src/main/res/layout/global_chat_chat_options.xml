@@ -27,6 +27,7 @@
             app:srcCompat="@drawable/global_chat_avatar1" />
 
         <TextView
+            android:id="@+id/group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Anonymous"

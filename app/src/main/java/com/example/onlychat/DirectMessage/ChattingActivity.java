@@ -24,8 +24,7 @@ import com.example.onlychat.DirectMessage.Option.OptionActivity;
 import com.example.onlychat.GroupChat.ListMessage.ListMessage;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
-import com.example.onlychat.Manager.Model.MessageModel;
-import com.example.onlychat.Manager.Model.RoomModel;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 import com.vanniktech.emoji.EmojiPopup;
 
@@ -72,15 +71,15 @@ public class ChattingActivity extends AppCompatActivity {
 
         Intent main_chat = getIntent();
         userInf = (RoomModel) main_chat.getSerializableExtra("roomChat");
-        imgAvatar.setImageResource(userInf.getAvatar());
+//        imgAvatar.setImageResource(userInf.getAvatar());
         txtName.setText(userInf.getName());
         txtOnline.setText("Online");
         txtOnline.setTextColor(getResources().getColor(R.color.online_green));
 
-        MessageReceive adapter = new MessageReceive(this, userInf.getAvatar(), me_id, userInf.getMessages());
-        chatContent.setAdapter(adapter);
-        chatContent.setSelection(adapter.getCount() - 1);
-        chatContent.smoothScrollToPosition(adapter.getCount() - 1);
+//        MessageReceive adapter = new MessageReceive(this, userInf.getAvatar(), me_id, userInf.getMessages());
+//        chatContent.setAdapter(adapter);
+//        chatContent.setSelection(adapter.getCount() - 1);
+//        chatContent.smoothScrollToPosition(adapter.getCount() - 1);
         chatContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -150,7 +149,7 @@ public class ChattingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String msg = chatMessage.getText().toString();
                 if (msg.length() != 0) {
-                    adapter.AddMessage(new MessageModel("1234567890", me_id, null, "", "", msg, Calendar.getInstance().getTime(), null));
+//                    adapter.AddMessage(new com.example.onlychat.Manager.Model.MessageModel("1234567890", me_id, null, "", "", msg, Calendar.getInstance().getTime(), null));
                     chatMessage.setText("");
 
                 }
@@ -189,7 +188,7 @@ public class ChattingActivity extends AppCompatActivity {
                     chatContent.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            chatContent.setSelection(adapter.getCount() - 1);
+//                            chatContent.setSelection(adapter.getCount() - 1);
                         }
                     },150);
 
@@ -228,12 +227,12 @@ public class ChattingActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        for (Member mem : this.userInf.getOptions().getMembers()) {
-            if (!mem.getId().equals(me_id)) {
-                txtName.setText(mem.getNickname());
-                break;
-            }
-        }
+//        for (Member mem : this.userInf.getOptions().getMembers()) {
+//            if (!mem.getId().equals(me_id)) {
+//                txtName.setText(mem.getNickname());
+//                break;
+//            }
+//        }
     }
 
     public void setNickname(String frNN, String meNN) {

@@ -5,6 +5,7 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
-import com.example.onlychat.Manager.Model.RoomModel;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
 import java.util.ArrayList;
@@ -35,12 +36,19 @@ public class GlobalChat extends Fragment {
     ListView listChat;
     ArrayList<RoomModel> roomModels = new ArrayList<>();
 
+    CustomChatItem customChatItem;
+
     public ArrayList<RoomModel> getRoomModels() {
         return roomModels;
     }
 
     public void setRoomModels(ArrayList<RoomModel> roomModels) {
-        this.roomModels = roomModels;
+//        this.roomModels = roomModels;
+        for(RoomModel i:roomModels){
+            this.roomModels.add(i);
+        }
+        customChatItem.notifyDataSetChanged();
+        Log.i("SET - Global", roomModels.get(0).getName());
     }
 
     Integer avatarsImage[] = {
@@ -69,8 +77,8 @@ public class GlobalChat extends Fragment {
 
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
-        Log.i("global chat", roomModels.toString());
-        CustomChatItem customChatItem = new CustomChatItem(globalChat.getContext(),roomModels );
+        Log.i("Global chat", Integer.toString(roomModels.size()));
+        customChatItem = new CustomChatItem(globalChat.getContext(),roomModels );
         listChat.setAdapter(customChatItem);
 
         listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

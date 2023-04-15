@@ -108,7 +108,7 @@
             android:background="@drawable/global_chat_background"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:paddingVertical="5dp"
+            android:paddingVertical="12dp"
             android:paddingStart="9dp"
             android:paddingEnd="14dp"
             app:layout_constraintBottom_toBottomOf="parent"

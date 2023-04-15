@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.example.onlychat.Model.UserModel;
 import com.google.gson.Gson;
 
 public class GlobalPreferenceManager {
@@ -28,12 +27,12 @@ public class GlobalPreferenceManager {
         pref = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public void saveUser(UserModel user) {
+    public void saveUser(com.example.onlychat.Model.UserModel user) {
         String jsonObject = new Gson().toJson(user);
         pref.edit().putString(LOGIN_USERMODEL, jsonObject).apply();
     }
 
-    public void Login(UserModel user, Boolean remember) {
+    public void Login(com.example.onlychat.Model.UserModel user, Boolean remember) {
         saveUser(user);
         pref.edit().putString(LOGIN_TOKEN, user.getToken()).apply();
         pref.edit().putBoolean(LOGIN_REMEMBER, remember).apply();

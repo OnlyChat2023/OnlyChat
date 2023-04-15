@@ -1,4 +1,6 @@
-package com.example.onlychat.Manager.Model;
+package com.example.onlychat.Model;
+
+import com.example.onlychat.Model.RoomModel;
 
 import org.json.JSONArray;
 

@@ -60,9 +60,9 @@ public class OptionActivity extends AppCompatActivity {
         options = (RoomOptions) main_chat.getSerializableExtra("option");
         friendInf = (Member) main_chat.getSerializableExtra("friend");
         meInf = (Member) main_chat.getSerializableExtra("me");
-        avatar.setImageResource(friendInf.getAvatar());
+//        avatar.setImageResource(friendInf.getAvatar());
         txtName.setText(friendInf.getName());
-        if (options.getNotifications()){
+        if (options.getNotify()){
             btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
             notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
         } else{
@@ -106,12 +106,12 @@ public class OptionActivity extends AppCompatActivity {
         btn_notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (options.getNotifications()){
-                    options.setNotifications(false);
+                if (options.getNotify()){
+                    options.setNotify(false);
                     btn_notify.setBackgroundResource(R.drawable.dm_icon_off_notify);
                     notify_icon.setBackgroundResource(R.drawable.dm_option_icon_off_notifycation);
                 } else{
-                    options.setNotifications(true);
+                    options.setNotify(true);
                     btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
                     notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
                 }
@@ -121,12 +121,12 @@ public class OptionActivity extends AppCompatActivity {
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (options.getNotifications()){
-                    options.setNotifications(false);
+                if (options.getNotify()){
+                    options.setNotify(false);
                     btn_notify.setBackgroundResource(R.drawable.dm_icon_off_notify);
                     notify_icon.setBackgroundResource(R.drawable.dm_option_icon_off_notifycation);
                 } else{
-                    options.setNotifications(true);
+                    options.setNotify(true);
                     btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
                     notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
                 }

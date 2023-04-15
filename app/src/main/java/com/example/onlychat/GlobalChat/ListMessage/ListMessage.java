@@ -19,7 +19,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
-import com.example.onlychat.Manager.Model.RoomModel;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
 public class ListMessage extends AppCompatActivity {
@@ -34,44 +34,6 @@ public class ListMessage extends AppCompatActivity {
     Button backButton;
     ImageView chatImage;
     TextView chatName;
-
-//    String names[] = {
-//            "Paimon","me","Xiao","Klee Bunbara","Paimon",
-//            "me","Xiao","Klee Bunbara","me","Yae Miko",
-//            "Paimon","me","Xiao","Klee Bunbara","Paimon",
-//            "me","Xiao","Klee Bunbara","me","Yae Miko"
-//    };
-//    Integer avatars[]= {
-//            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
-//            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
-//            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
-//            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
-//            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
-//            R.drawable.global_chat_avatar1, R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar1,
-//            R.drawable.global_chat_avatar1, R.drawable.global_chat_avatar1
-//    };
-//    Object messages[] = {
-//            "Sorry to bother you. I have a question for you",
-//            "I’ve been having a problem with my computer. I know you’re an engineer so I thought you might be able to help me.",
-//            "I see",
-//            "What’s the problem?",
-//            "I have a file that I can’t open for some reason.",
-//            "I have reason.",
-//            "Yes, I was working on it last night and everything was fine, but this morning.",
-//            "Sorry to bother you. I have a question for you",
-//            "I see",
-//            "I have a file that I can’t open for some reason.",
-//            "Sorry to bother you. I have a question for you",
-//            "I’ve been having a problem with my computer. I know you’re an engineer so I thought you might be able to help me.",
-//            "I see",
-//            "What’s the problem?",
-//            "I have a file that I can’t open for some reason.",
-//            "I have reason.",
-//            "Yes, I was working on it last night and everything was fine, but this morning.",
-//            "Sorry to bother you. I have a question for you",
-//            R.drawable.global_chat_avatar1,
-//            "I have a file that I can’t open for some reason."
-//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,15 +96,8 @@ public class ListMessage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(optionButton.getContext(), Options.class);
-//                    Bundle userInf = new Bundle();
-//                    TextView name = (TextView) v.findViewById(R.id.messageName);
-//                    ImageView avatar = (ImageView) v.findViewById(R.id.messageAvatar);
-//
-//                    userInf.putString("name", name.getText().toString());
-//                    avatar.setDrawingCacheEnabled(true);
-//                    Bitmap b = avatar.getDrawingCache();
-//                    intent.putExtras(userInf);
-//                    intent.putExtra("Bitmap", b);
+                intent.putExtra("Name",roomModel.getName());
+                intent.putExtra("Avatar",roomModel.getAvatar());
                 intent.putExtra("Data",roomModel.getOptions());
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_to_left, R.anim.fixed);

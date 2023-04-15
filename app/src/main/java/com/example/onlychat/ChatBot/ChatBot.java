@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.onlychat.GlobalChat.CustomChatItem;
+import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
@@ -35,6 +37,7 @@ public class ChatBot extends Fragment {
     ImageView profile;
     ImageView addChat;
     ListView listChat;
+    CustomChatItem customChatItem;
 
     ArrayList<RoomModel> roomModels = new ArrayList<>();
 
@@ -43,7 +46,12 @@ public class ChatBot extends Fragment {
     }
 
     public void setRoomModels(ArrayList<RoomModel> roomModels) {
-        this.roomModels = roomModels;
+//        this.roomModels = roomModels;
+        for(RoomModel i:roomModels){
+            this.roomModels.add(i);
+        }
+        customChatItem.notifyDataSetChanged();
+        Log.i("SET - Bot", roomModels.get(0).getName());
     }
 
     public ChatBot(){}
@@ -69,6 +77,9 @@ public class ChatBot extends Fragment {
         addChat = (ImageView) botChat.findViewById(R.id.addChat);
         listChat = (ListView) botChat.findViewById(R.id.listChat);
 
+        Log.i("Bot chat", Integer.toString(roomModels.size()));
+
+
         chatTitle.setText("Bot Chat Channel");
 
         chatIcon.setImageResource(R.drawable.botchat_icon);
@@ -76,25 +87,25 @@ public class ChatBot extends Fragment {
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
 
-//        CustomChatItem customChatItem=new CustomChatItem(botChat.getContext(), avatars,names,messages,times);
-//        listChat.setAdapter(customChatItem);
+        customChatItem=new CustomChatItem(botChat.getContext(),roomModels);
+        listChat.setAdapter(customChatItem);
 
-//        listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent intent = new Intent(listChat.getContext(), ChattingActivity.class);
-//                Bundle userInf = new Bundle();
-//                TextView name = (TextView) view.findViewById(R.id.messageName);
-//                ImageView avatar = (ImageView) view.findViewById(R.id.messageAvatar);
-//
-//                userInf.putString("name", name.getText().toString());
-//                avatar.setDrawingCacheEnabled(true);
-//                Bitmap b = avatar.getDrawingCache();
-//                intent.putExtras(userInf);
-//                intent.putExtra("Bitmap", b);
-//                startActivity(intent);
-//            }
-//        });
+        listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(listChat.getContext(), ListMessage.class);
+                Bundle userInf = new Bundle();
+                TextView name = (TextView) view.findViewById(R.id.messageName);
+                ImageView avatar = (ImageView) view.findViewById(R.id.messageAvatar);
+
+                userInf.putString("name", name.getText().toString());
+                avatar.setDrawingCacheEnabled(true);
+                Bitmap b = avatar.getDrawingCache();
+                intent.putExtras(userInf);
+                intent.putExtra("Bitmap", b);
+                startActivity(intent);
+            }
+        });
 
         listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

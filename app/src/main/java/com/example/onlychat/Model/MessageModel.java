@@ -1,4 +1,4 @@
-package com.example.onlychat.Manager.Model;
+package com.example.onlychat.Model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,16 +10,6 @@ public class MessageModel implements Serializable {
     Date time;
     ArrayList<String> seenUser=new ArrayList<>();
     public MessageModel(){}
-//    public MessageModel(String id, String userId, Integer avatar, String name, String nickName, String message, Date time, ArrayList<String> seenUser) {
-//        this.id = id;
-//        this.userId = userId;
-//        this.avatar = avatar;
-//        this.name = name;
-//        this.nickName = nickName;
-//        this.message = message;
-//        this.time = time;
-//        this.seenUser = seenUser;
-//    }
 
     public String getId() {
         return id;

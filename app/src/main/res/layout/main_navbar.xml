@@ -1,78 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent">-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_tab"
+    android:layout_width="match_parent"
+    android:layout_height="10dp"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:background="@color/background_navbar">
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/nav_icon"
+        />
 
-        <Button
-            android:id="@+id/btn_chat"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/navbar_direct_chat"
-            android:textSize="10sp"
-            android:stateListAnimator="@null"
-            android:textColor="#FAF4FF"
-            android:fontFamily="@font/montserrat_regular"
-            android:backgroundTint="@color/background_navbar"
-            android:layout_gravity="center"/>
-
-        <Button
-            android:id="@+id/btn_groupchat"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:drawableTop="@drawable/navbar_group_chat"
-            android:backgroundTint="@color/background_navbar"
-            android:stateListAnimator="@null"
-            android:textColor="#FAF4FF"
-            android:fontFamily="@font/montserrat_regular"
-            android:textSize="10sp"
-            android:layout_gravity="center" />
-
-        <Button
-            android:id="@+id/btn_globalchat"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textColor="#FAF4FF"
-            android:stateListAnimator="@null"
-            android:drawableTop="@drawable/navbar_global_chat"
-            android:backgroundTint="@color/background_navbar"
-            android:fontFamily="@font/montserrat_regular"
-            android:textSize="10sp"
-            android:layout_gravity="center" />
-
-        <Button
-            android:id="@+id/btn_botchat"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:drawableTop="@drawable/navbar_bot_chat"
-            android:textColor="#FAF4FF"
-            android:stateListAnimator="@null"
-            android:backgroundTint="@color/background_navbar"
-            android:fontFamily="@font/montserrat_regular"
-            android:textSize="10sp"
-            android:layout_gravity="center" />
-
-        <Button
-            android:id="@+id/btn_friends"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textColor="#FAF4FF"
-            android:stateListAnimator="@null"
-            android:drawableTop="@drawable/navbar_friends"
-            android:backgroundTint="@color/background_navbar"
-            android:fontFamily="@font/montserrat_regular"
-            android:textSize="10sp"
-            android:layout_gravity="center" />
-    </LinearLayout>
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+</LinearLayout>

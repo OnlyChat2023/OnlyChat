@@ -12,7 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.example.onlychat.Interfaces.RoomOptions;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
 public class Options extends AppCompatActivity {
@@ -21,6 +24,9 @@ public class Options extends AppCompatActivity {
     RelativeLayout members;
     ListView listMembers;
     ImageView backButton;
+
+    TextView name;
+    ImageView avatar;
 
     Integer avatars[] = {
             R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,R.drawable.global_chat_avatar,
@@ -41,7 +47,16 @@ public class Options extends AppCompatActivity {
         setContentView(R.layout.global_chat_chat_options);
 
         Intent intent = getIntent();
-        Options options = (Options) intent.getSerializableExtra("Data");
+        RoomOptions options = (RoomOptions) intent.getSerializableExtra("Data");
+        String names = (String) intent.getSerializableExtra("Name");
+        String avatars = (String) intent.getSerializableExtra("Avatar");
+
+        name = (TextView) findViewById(R.id.group_name);
+        avatar = (ImageView) findViewById(R.id.avatar);
+
+        name.setText(names);
+//        avatar.setImageResource(Integer.parseInt(avatars));
+
 
         backButton = (ImageView) findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -98,12 +113,12 @@ public class Options extends AppCompatActivity {
 
                 // set list members
                 listMembers = (ListView)  popupView.findViewById(R.id.listMembers);
-                CustomMemberItem customMemberItem=new CustomMemberItem(popupView.getContext(),avatars,names);
-                listMembers.setAdapter(customMemberItem);
-                listMembers.setSelection(0);
-                listMembers.smoothScrollToPosition(0);
-                listMembers.setDivider(null);
-                listMembers.setDividerHeight(0);
+//                CustomMemberItem customMemberItem=new CustomMemberItem(popupView.getContext(),avatars,names);
+//                listMembers.setAdapter(customMemberItem);
+//                listMembers.setSelection(0);
+//                listMembers.smoothScrollToPosition(0);
+//                listMembers.setDivider(null);
+//                listMembers.setDividerHeight(0);
 
 
                 boolean focusable = true; // lets taps outside the popup also dismiss it

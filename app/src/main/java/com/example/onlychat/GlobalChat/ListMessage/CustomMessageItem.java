@@ -12,12 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.onlychat.Manager.Model.MessageModel;
+import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.R;
 
 import java.util.ArrayList;
 
-public class CustomMessageItem extends ArrayAdapter<String> {
+public class CustomMessageItem extends ArrayAdapter<MessageModel> {
     Context context;Integer[] avatars;String names[];Object messages[];
 
     TextView name;
@@ -26,7 +26,7 @@ public class CustomMessageItem extends ArrayAdapter<String> {
     ImageView chatImage;
     ArrayList<MessageModel> messageModels;
     public CustomMessageItem(Context context, ArrayList<MessageModel> messageModels){
-        super(context,R.layout.global_chat_custom_chat_item,new String[messageModels.size()]);
+        super(context,R.layout.global_chat_custom_chat_item,messageModels);
         this.context= context;
         this.messageModels = messageModels;
     }

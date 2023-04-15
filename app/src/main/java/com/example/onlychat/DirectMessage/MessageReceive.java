@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.onlychat.Manager.Model.MessageModel;
+import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.R;
 
 import java.util.ArrayList;

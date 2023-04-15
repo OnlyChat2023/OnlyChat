@@ -21,17 +21,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
-<<<<<<< HEAD
 import com.example.onlychat.Model.RoomModel;
-=======
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
-import com.example.onlychat.Manager.Model.MessageModel;
-import com.example.onlychat.Manager.Model.RoomModel;
->>>>>>> 778e4f8f37a8b9a027c87f5d16d8b3cef63dd586
 import com.example.onlychat.R;
 
 import java.util.ArrayList;
@@ -44,27 +40,21 @@ public class DirectMessage extends Fragment {
     ImageView addChat;
     ListView listChat;
 
-<<<<<<< HEAD
+    CustomChatItem customChatItem;
+
     ArrayList<RoomModel> roomModels = new ArrayList<>();
     public ArrayList<RoomModel> getRoomModels() {
         return roomModels;
     }
 
     public void setRoomModels(ArrayList<RoomModel> roomModels) {
-        this.roomModels = roomModels;
-        Log.i("Group", roomModels.get(0).getName());
+//        this.roomModels = roomModels;
+        for(RoomModel i:roomModels){
+            this.roomModels.add(i);
+        }
+        customChatItem.notifyDataSetChanged();
+        Log.i("SET - Direct", roomModels.get(0).getName());
     }
-
-    Integer avatarsImage[] = {
-            R.raw.a_1, R.raw.a_2, R.raw.a_3, R.raw.a_4, R.raw.a_5,
-            R.raw.a_6, R.raw.a_7, R.raw.a_8, R.raw.a_9, R.raw.a_10,
-            R.raw.a_11, R.raw.a_12, R.raw.a_13, R.raw.a_14, R.raw.a_15,
-            R.raw.a_16,R.raw.a_17, R.raw.a_18, R.raw.a_19, R.raw.a_20,
-            R.raw.a_21, R.raw.a_22, R.raw.a_23, R.raw.a_24, R.raw.a_25,
-    };
-=======
-    ArrayList<RoomModel> roomChat = new ArrayList<RoomModel>();
->>>>>>> 778e4f8f37a8b9a027c87f5d16d8b3cef63dd586
 
     GridView androidGridView;
 
@@ -73,7 +63,6 @@ public class DirectMessage extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RelativeLayout globalChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
-        Log.i("Direct", "onCreateView: ");
         // set value for widget
         chatTitle=(TextView) globalChat.findViewById(R.id.header_title);
         chatIcon = (ImageView) globalChat.findViewById(R.id.chatIcon);
@@ -81,32 +70,22 @@ public class DirectMessage extends Fragment {
         addChat = (ImageView) globalChat.findViewById(R.id.addChat);
         listChat = (ListView) globalChat.findViewById(R.id.listChat);
 
+        Log.i("Direct chat", Integer.toString(roomModels.size()));
+
         chatTitle.setText("direct message channel");
         chatIcon.setImageResource(R.drawable.direct_message_icon);
 
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
 
-<<<<<<< HEAD
-        CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), roomModels);
-=======
-        ArrayList<MessageModel> msg = new ArrayList<MessageModel>();
-        msg.add(new MessageModel("6430c86d1b48c829004aa123", "6430c86d1b48c829004aa89b", R.raw.a_1, "Riden Shogun", "Risho", "Hello World", Calendar.getInstance().getTime(), null));
-        msg.add(new MessageModel("6430c86d1b48c829004aa124", "642e2f430cc3fd9470f85b5b", R.raw.a_2, "Yae Miko", "Yami", "Hello new Word", Calendar.getInstance().getTime(), null));
-        ArrayList<Member> members = new ArrayList<Member>();
-        members.add(new Member("6430c86d1b48c829004aa89b", "Raiden Shogun", "Risho", R.raw.a_1));
-        members.add(new Member("642e2f430cc3fd9470f85b5b", "Yae Miko", "Yami", R.raw.a_2));
-        roomChat.add(new RoomModel("6430c86d1b48c829004aa123", R.raw.a_2, "Yami", msg, new RoomOptions(false, false, "Yami", null, members)));
-
-        CustomChatItem customChatItem=new CustomChatItem(globalChat.getContext(), roomChat);
->>>>>>> 778e4f8f37a8b9a027c87f5d16d8b3cef63dd586
+        customChatItem=new CustomChatItem(globalChat.getContext(), roomModels);
         listChat.setAdapter(customChatItem);
 
         listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ChattingActivity.class);
-                intent.putExtra("roomChat", roomChat.get(i));
+                intent.putExtra("roomChat", roomModels.get(i));
 
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
@@ -118,7 +97,7 @@ public class DirectMessage extends Fragment {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
-                messageBottomDialogFragment.leave.setVisibility(View.GONE);
+//                messageBottomDialogFragment.leave.setVisibility(View.GONE);
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
                 messageBottomDialogFragment.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -214,7 +193,7 @@ public class DirectMessage extends Fragment {
         }
 
         public int getCount() {
-            return roomChat.size();
+            return roomModels.size();
         }
 
         public Object getItem(int position) {
@@ -236,7 +215,7 @@ public class DirectMessage extends Fragment {
             } else {
                 mImageView = (ImageView) convertView;
             }
-            mImageView.setImageResource(roomChat.get(position).getAvatar());
+//            mImageView.setImageResource(roomChat.get(position).getAvatar());
             return mImageView;
         }
     }
