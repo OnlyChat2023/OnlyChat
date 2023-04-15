@@ -2,7 +2,6 @@ package com.example.onlychat.GroupChat;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
@@ -23,7 +22,6 @@ import android.widget.TextView;
 
 import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.GlobalChat.CustomChatItem;
-import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
 import com.example.onlychat.GroupChat.ListMessage.ListMessage;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.Model.RoomModel;
@@ -41,7 +39,6 @@ public class GroupChat extends Fragment {
     CustomChatItem customChatItem;
 
     RelativeLayout groupChat;
-
     ArrayList<RoomModel> roomModels = new ArrayList<>();
 
     public ArrayList<RoomModel> getRoomModels() {
@@ -49,14 +46,10 @@ public class GroupChat extends Fragment {
     }
 
     public void setRoomModels(ArrayList<RoomModel> roomModels) {
-//        this.roomModels = roomModels;
         for(RoomModel i:roomModels){
             this.roomModels.add(i);
         }
-//        if(customChatItem == null){
-//            customChatItem = new CustomChatItem(groupChat.getContext(),roomModels );
-//            listChat.setAdapter(customChatItem);
-//        }
+
         customChatItem.notifyDataSetChanged();
 
         Log.i("SET - Group", roomModels.get(0).getName());
@@ -64,19 +57,22 @@ public class GroupChat extends Fragment {
 
     public GroupChat(){}
 
+    public GroupChat(ArrayList<RoomModel> roomModels){
+        this.roomModels = roomModels;
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         groupChat = (RelativeLayout) inflater.inflate(R.layout.activity_group_chat, null);
         // set value for widget
         chatTitle = (TextView) groupChat.findViewById(R.id.header_title);
         chatTitle.setText("group chat channel");
-
         chatIcon = (ImageView) groupChat.findViewById(R.id.chatIcon);
-//        chatIcon.setImageResource(R.drawable.ic_groupchat);
-
-        profile = (ImageView) groupChat.findViewById(R.id.profile);
+        profile=(ImageView) groupChat.findViewById(R.id.profile);
         addChat = (ImageView) groupChat.findViewById(R.id.addChat);
         listChat = (ListView) groupChat.findViewById(R.id.listChat);
+
 
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
@@ -99,6 +95,7 @@ public class GroupChat extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ListMessage.class);
+                intent.putExtra("Data",roomModels.get(i));
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }

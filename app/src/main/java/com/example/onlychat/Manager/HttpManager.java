@@ -36,6 +36,7 @@ public class HttpManager {
     static private com.example.onlychat.Model.UserModel user = new com.example.onlychat.Model.UserModel();
     private final String ip = "192.168.2.16";
 
+
     public HttpManager(Context _context) {
         this.context = _context;
         this.pref = new GlobalPreferenceManager(_context);
@@ -92,8 +93,8 @@ public class HttpManager {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
-                if (pref.getIsLoggedIn())
-                    headers.put("Authorization", "Bearer " + pref.getUserToken());
+//                if (pref.getIsLoggedIn())
+//                    headers.put("Authorization", "Bearer " + pref.getUserToken());
                 return headers;
             }
         };

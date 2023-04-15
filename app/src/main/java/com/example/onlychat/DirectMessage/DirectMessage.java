@@ -26,8 +26,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.Model.RoomModel;
-import com.example.onlychat.Interfaces.Member;
-import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.R;
 
 import java.util.ArrayList;
@@ -55,7 +53,6 @@ public class DirectMessage extends Fragment {
         customChatItem.notifyDataSetChanged();
         Log.i("SET - Direct", roomModels.get(0).getName());
     }
-
     GridView androidGridView;
 
     public DirectMessage(){}

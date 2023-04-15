@@ -62,12 +62,9 @@ public class CustomFriendCheckBox extends ArrayAdapter<String> {
 //        row.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                if (checkBox.isChecked()){
-//                    System.out.println("CHECKED");
-//                }
-//                else {
-//                    System.out.println("UNCHECKED");
-//                }
+//                System.out.println("CLICKED");
+//                name.setText("???");
+////                checkBox.setChecked(!checkBox.isChecked());
 //            }
 //        });
 

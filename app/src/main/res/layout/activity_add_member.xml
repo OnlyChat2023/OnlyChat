@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#181828"
     tools:context=".GroupChat.AddMember">
 
     <LinearLayout
@@ -15,8 +16,8 @@
         android:layout_height="wrap_content" >
 
         <ImageView
+            android:id="@+id/backButton"
             android:paddingTop="7dp"
-            android:id="@+id/imageView11"
             android:layout_width="20dp"
             android:layout_height="28dp"
             android:layout_marginEnd="20dp"

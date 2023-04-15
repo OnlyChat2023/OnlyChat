@@ -15,6 +15,8 @@ public class RoomModel implements Serializable {
     RoomOptions options;
     Date update_time;
 
+    public RoomModel() {}
+
     public Date getUpdate_time() {
         return update_time;
     }

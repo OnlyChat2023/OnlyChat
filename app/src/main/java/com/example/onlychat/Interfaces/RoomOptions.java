@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class RoomOptions implements Serializable{
     String _id,user_id;
     Boolean notify, block;
-    ArrayList<com.example.onlychat.Interfaces.Member> members;
+    ArrayList<Member> members;
     public RoomOptions(){}
 
     public String get_id() {
@@ -41,8 +41,6 @@ public class RoomOptions implements Serializable{
         this.block = block;
     }
 
-
-
     public ArrayList<Member> getMembers() {
         return members;
     }
@@ -50,5 +48,6 @@ public class RoomOptions implements Serializable{
     public void setMembers(ArrayList<Member> members) {
         this.members = members;
     }
+
 
 }

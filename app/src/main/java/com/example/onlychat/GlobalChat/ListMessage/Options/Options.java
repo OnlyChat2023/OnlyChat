@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.onlychat.Interfaces.RoomOptions;
-import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
 public class Options extends AppCompatActivity {

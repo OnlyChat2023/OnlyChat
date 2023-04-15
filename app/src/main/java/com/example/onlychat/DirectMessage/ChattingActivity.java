@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,9 +20,7 @@ import android.widget.ListView;
 
 import com.example.onlychat.DiaLog.DMBottomDialog;
 import com.example.onlychat.DirectMessage.Option.OptionActivity;
-import com.example.onlychat.GroupChat.ListMessage.ListMessage;
 import com.example.onlychat.Interfaces.Member;
-import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 import com.vanniktech.emoji.EmojiPopup;
@@ -150,6 +147,7 @@ public class ChattingActivity extends AppCompatActivity {
                 String msg = chatMessage.getText().toString();
                 if (msg.length() != 0) {
 //                    adapter.AddMessage(new com.example.onlychat.Manager.Model.MessageModel("1234567890", me_id, null, "", "", msg, Calendar.getInstance().getTime(), null));
+//                    adapter.AddMessage(new MessageModel("1234567890", me_id, null, "", "", msg, Calendar.getInstance().getTime(), null));
                     chatMessage.setText("");
 
                 }

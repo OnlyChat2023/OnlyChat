@@ -30,7 +30,10 @@ import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
+
+import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
@@ -58,6 +61,7 @@ public class MainScreen extends AppCompatActivity {
             R.drawable.navbar_bot_chat,
             R.drawable.navbar_friends
     };
+
     private Boolean isLogin = false;
     private ArrayList<RoomModel> global_list;
     private ArrayList<RoomModel> group_list;
@@ -92,6 +96,8 @@ public class MainScreen extends AppCompatActivity {
                         chatbot_list = getListRoom(botChat);
 
                         directChatFragment.setRoomModels(direct_list);
+//                        Log.i("TAG", global_list.get(0).getName());
+
                         globalChatFragment.setRoomModels(global_list);
                         groupChatFragment.setRoomModels(group_list);
                         botChatFragment.setRoomModels(chatbot_list);
@@ -125,6 +131,11 @@ public class MainScreen extends AppCompatActivity {
         isLogin = bundle.getBoolean("isLogin", false);
 
         if (isLogin) {
+
+            GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
+
+            SocketManager.getInstance();
+//            SocketManager.joinRoom("chicken", pref.getUserModel());
 
             setContentView(R.layout.main_screen);
 
