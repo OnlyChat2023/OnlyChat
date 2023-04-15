@@ -7,19 +7,17 @@ const messageSchema = new mongoose.Schema({
   avatar: { type: String, default: '' },
   chats: [
     {
+      _id: mongoose.Schema.ObjectId,
       message: String,
-      isMe: Boolean,
       time: Date,
+      user_id: String,
+      seen_user: [
+        String,
+      ]
     }
   ],
-  options: {
-    type: [],
-    default: ''
-  },
-  members: {
-    type: [],
-    default: ''
-  },
+  members: [{}],
+  options: [{}],
   update_time: Date
 });
 
