@@ -81,6 +81,7 @@ public class MainScreen extends AppCompatActivity {
         isLogin=true;
         HttpManager httpManager = new HttpManager(this);
         httpManager.getListChat(
+<<<<<<< HEAD
             new HttpResponse(){
                 @Override
                 public void onSuccess(JSONObject Response) {
@@ -101,6 +102,31 @@ public class MainScreen extends AppCompatActivity {
                         globalChatFragment.setRoomModels(global_list);
                         groupChatFragment.setRoomModels(group_list);
                         botChatFragment.setRoomModels(chatbot_list);
+=======
+                new HttpResponse(){
+                    @Override
+                    public void onSuccess(JSONObject Response) {
+                        try{
+//                        JSONObject information = Response.getJSONObject("data").getJSONObject("user");
+                            JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
+                            JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
+                            JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
+                            JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
+//                        user = new Gson().fromJson(String.valueOf(information), UserModel.class);
+//                    Log.i("friend",information.getJSONArray("friend").toString());
+//                    Log.i("friend_request",information.getJSONArray("friend_request").toString());
+                            direct_list = getListRoom(directChat);
+                            group_list = getListRoom(groupChat);
+                            global_list = getListRoom(globalChat);
+                            chatbot_list = getListRoom(botChat);
+
+                            Log.i("TAG", global_list.get(0).getName());
+
+//                        directChatFragment.setRoomModels(direct_list);
+                            globalChatFragment.setRoomModels(global_list);
+                            groupChatFragment.setRoomModels(group_list);
+                            botChatFragment.setRoomModels(chatbot_list);
+>>>>>>> d7b83eb9bd5dc7e10d896aa80cd61f02b79707c9
 
 
                         Log.i("Main - Direct", Integer.toString(direct_list.size()));
@@ -115,28 +141,31 @@ public class MainScreen extends AppCompatActivity {
 //                        Log.i("Custom chat",direct_list.get(0).getUpdate_time().toString() );
 
 
+                        }
+                        catch (Exception e){
+                            Log.i("HTTP Success Error",e.toString());
+                        }
                     }
-                    catch (Exception e){
-                        Log.i("HTTP Success Error",e.toString());
-                    }
-                }
 
-                @Override
-                public void onError(String error) {
-                    Log.i("HTTP Error",error);
-                }
-            });
+                    @Override
+                    public void onError(String error) {
+                        Log.i("HTTP Error",error);
+                    }
+                });
 
         Bundle bundle = getIntent().getExtras();
         isLogin = bundle.getBoolean("isLogin", false);
 
         if (isLogin) {
 
+<<<<<<< HEAD
             GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
 
             SocketManager.getInstance();
 //            SocketManager.joinRoom("chicken", pref.getUserModel());
 
+=======
+>>>>>>> d7b83eb9bd5dc7e10d896aa80cd61f02b79707c9
             setContentView(R.layout.main_screen);
 
             viewPager = (ViewPager) findViewById(R.id.viewPaper);
@@ -194,10 +223,17 @@ public class MainScreen extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),0);
 
+<<<<<<< HEAD
         adapter.addFragment(directChatFragment,"direct chat");
         adapter.addFragment(groupChatFragment, "group chat");
         adapter.addFragment(globalChatFragment, "global chat");
         adapter.addFragment(botChatFragment, "bot chat");
+=======
+        adapter.addFragment(new DirectMessage(),"direct chat");
+        adapter.addFragment(new GroupChat(), "group chat");
+        adapter.addFragment(globalChatFragment, "global chat");
+        adapter.addFragment(new ChatBot(), "bot chat");
+>>>>>>> d7b83eb9bd5dc7e10d896aa80cd61f02b79707c9
         adapter.addFragment(new Friends(), "friends");
 
 
@@ -246,6 +282,9 @@ public class MainScreen extends AppCompatActivity {
             roomModel.setId(channel.getJSONObject(i).getString("_id"));
             roomModel.setAvatar(channel.getJSONObject(i).getString("avatar"));
             roomModel.setName(channel.getJSONObject(i).getString("name"));
+
+            Log.e("ROOM", roomModel.getName());
+
             ArrayList<MessageModel> listMessage = new ArrayList<>();
             for(int j=0;j<channel.getJSONObject(i).getJSONArray("chats").length();j++){
                 JSONObject messageJson = (JSONObject) channel.getJSONObject(i).getJSONArray("chats").get(j);
@@ -274,6 +313,16 @@ public class MainScreen extends AppCompatActivity {
             java.util.Date date1=  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(abc);
             roomModel.setUpdate_time(date1);
 
+<<<<<<< HEAD
+=======
+
+            ArrayList<Member> members = new ArrayList<>();
+            for(int l=0;l<channel.getJSONObject(i).getJSONArray("members").length();l++){
+                Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
+                members.add(member);
+            }
+            roomOptions.setMembers(members);
+>>>>>>> d7b83eb9bd5dc7e10d896aa80cd61f02b79707c9
             roomModel.setOptions(roomOptions);
             roomModel.setMessages(listMessage);
             listRoom.add(roomModel);

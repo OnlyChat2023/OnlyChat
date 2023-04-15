@@ -154,7 +154,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         chatImage = (ImageView) findViewById(R.id.avatar);
         chatName = (TextView) findViewById(R.id.textName);
 
-        chatImage.setImageResource(roomModel.getAvatar());
+//        chatImage.setImageResource(roomModel.getAvatar());
         chatName.setText(roomModel.getName());
 
         backButton .setOnClickListener(new View.OnClickListener() {

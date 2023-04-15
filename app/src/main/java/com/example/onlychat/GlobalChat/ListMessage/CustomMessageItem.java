@@ -13,12 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.onlychat.Model.MessageModel;
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 
 import java.util.ArrayList;
 
 public class CustomMessageItem extends ArrayAdapter<MessageModel> {
-    Context context;Integer[] avatars;String names[];Object messages[];
 
     TextView name;
     TextView message;
@@ -27,35 +27,44 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
     ArrayList<MessageModel> messageModels;
     public CustomMessageItem(Context context, ArrayList<MessageModel> messageModels){
         super(context,R.layout.global_chat_custom_chat_item,messageModels);
-        this.context= context;
-        this.messageModels = messageModels;
-    }
+//        this.context= context;
 
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View row ;
-        LayoutInflater inflater=((Activity) context).getLayoutInflater();
-//        if(names[position].equals("me")){
+//    GlobalPreferenceManager pref;
+    UserModel myInfo;
+
+//    public CustomMessageItem(Context context, ArrayList<MessageModel> messageModels) {
+////        super(context, R.layout.global_chat_custom_chat_item, messageModels);
+////        this.context = context;
+////        this.messageModels = messageModels;
+////
+////        pref = new GlobalPreferenceManager(context);
+////        myInfo = pref.getUserModel();
+//    }
+//
+//    @Override
+//    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+//        View row;
+//        LayoutInflater inflater=((Activity) context).getLayoutInflater();
+//
+//        if (messageModels.get(position).getUserId().equals(myInfo.getId())) {
 //            row = inflater.inflate(R.layout.global_chat_custom_message_item_me,null);
 //            message = (TextView)row.findViewById(R.id.message);
 //            chatImage = (ImageView) row.findViewById(R.id.chatImage);
-//            if(messages[position].getClass().getName().equals("java.lang.String")){
-//                message.setText(messages[position].toString());
-//            }
-//            else{
-//                chatImage.setImageResource(Integer.parseInt(messages[position].toString()));
-//            }
-//        }else{
-            row = inflater.inflate(R.layout.global_chat_custom_message_item,null);
-            message = (TextView) row.findViewById(R.id.chatContent);
-            name = (TextView) row.findViewById(R.id.name);
-            imageView = (ImageView) row.findViewById(R.id.avatar);
-
-            message.setText(messageModels.get(position).getMessage());
-            name.setText(messageModels.get(position).getNickName());
-//            imageView.setImageResource(messageModels.get(position).getAvatar());
+//
+//            message.setText(messageModels.get(position).getMessage());
 //        }
-//        if(position== names.length-1) row.setPadding(0,0,0,120);
-        return row;
-    }
+//        else {
+//            row = inflater.inflate(R.layout.global_chat_custom_message_item,null);
+//            message = (TextView) row.findViewById(R.id.chatContent);
+//            name = (TextView) row.findViewById(R.id.name);
+//            imageView = (ImageView) row.findViewById(R.id.avatar);
+//
+//            message.setText(messageModels.get(position).getMessage());
+//            name.setText(messageModels.get(position).getNickName());
+////            imageView.setImageResource(messageModels.get(position).getAvatar());
+//        }
+////        if(position== names.length-1) row.setPadding(0,0,0,120);
+//        return row;
+//    }
+}
 }

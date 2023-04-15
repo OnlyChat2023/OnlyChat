@@ -42,7 +42,7 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
 
         messageName.setText(listRooms.get(position).getName());
         MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size()-1);
-//        Log.i("TAG", lastMessage.getName());
+
         messageContent.setText(lastMessage.getMessage());
         messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
 

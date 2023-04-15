@@ -62,7 +62,7 @@ public class CustomMessageItem extends ArrayAdapter<String> {
 
         message.setText(messageModels.get(position).getMessage());
         name.setText(messageModels.get(position).getNickName());
-        imageView.setImageResource(messageModels.get(position).getAvatar());
+//        imageView.setImageResource(messageModels.get(position).getAvatar());
 
 //        if(position== names.length-1) row.setPadding(0,0,0,120);
         return row;

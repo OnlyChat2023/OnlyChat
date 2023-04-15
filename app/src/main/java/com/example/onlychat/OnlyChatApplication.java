@@ -1,11 +1,11 @@
-package com.example.onlychat.GroupChat.ListMessage;
+package com.example.onlychat;
 
 import android.app.Application;
 
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.google.GoogleEmojiProvider;
 
-public class EmojiApplication extends Application {
+public class OnlyChatApplication extends Application {
     @Override
     public void onCreate(){
         super.onCreate();

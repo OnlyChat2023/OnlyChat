@@ -16,7 +16,6 @@ import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Profile.Profile;
 
 public class MainActivity extends AppCompatActivity {
-
     GlobalPreferenceManager pref;
 
     @Override
@@ -25,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
         pref = new GlobalPreferenceManager(this);
         pref.ValidateRemember();
+
+//        pref.SignOut();
 
         Bundle bundle = new Bundle();
         bundle.putBoolean("isLogin", pref.getIsLoggedIn());
