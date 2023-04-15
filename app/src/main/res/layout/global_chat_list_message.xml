@@ -90,12 +90,11 @@
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_below="@id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            tools:listitem="@layout/item_main"/>
+            android:layout_above="@id/chatLayout" />
 
         <RelativeLayout
             android:id="@+id/chatLayout"
@@ -184,7 +183,7 @@
             android:layout_below="@id/linearLayout"
             android:windowSoftInputMode="adjustPan"
             android:scrollbars="none"
-            android:layout_above="@id/chatLayout"
+            android:layout_above="@id/recycler_view"
             android:isScrollContainer="true"
             android:paddingHorizontal="12dp"
             android:transcriptMode="alwaysScroll"

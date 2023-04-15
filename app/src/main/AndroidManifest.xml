@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
-        android:name=".GroupChat.ListMessage.EmojiApplication"
+        android:name="OnlyChatApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:requestLegacyExternalStorage="true"
@@ -76,7 +76,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

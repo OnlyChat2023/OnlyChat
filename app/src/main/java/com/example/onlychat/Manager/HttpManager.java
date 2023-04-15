@@ -39,7 +39,7 @@ public class HttpManager {
     private Context context;
     private GlobalPreferenceManager pref;
     static private UserModel user = new UserModel();
-    private final String ip = "192.168.1.125";
+    private final String ip = "192.168.1.111";
 
     public HttpManager(Context _context) {
         this.context = _context;
@@ -111,12 +111,12 @@ public class HttpManager {
     }
 
     public void getListChat(HttpResponse responseReceiver){
-        createRequest("http://192.168.1.45:5000/api/onlychat/v1/user/userInformation",Request.Method.GET,"userprofile", null, responseReceiver);
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/userInformation",Request.Method.GET,"userprofile", null, responseReceiver);
     }
 
     public UserModel getUserById(String _id) {
         UserModel userModel = new UserModel();
-        createRequest("http://192.168.2.16:5000/api/onlychat/v1/user/userProfile", Request.Method.PATCH, "userprofile", new HashMap<String, String>() {{
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/userProfile", Request.Method.PATCH, "userprofile", new HashMap<String, String>() {{
                     put("_id", _id);
                 }},
                 new HttpResponse() {

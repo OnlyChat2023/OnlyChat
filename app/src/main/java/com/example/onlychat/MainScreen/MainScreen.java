@@ -138,11 +138,6 @@ public class MainScreen extends AppCompatActivity {
 
         if (isLogin) {
 
-            GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
-
-            SocketManager.getInstance();
-            SocketManager.joinRoom("chicken", pref.getUserModel());
-
             setContentView(R.layout.main_screen);
 
             viewPager = (ViewPager) findViewById(R.id.viewPaper);
@@ -249,6 +244,9 @@ public class MainScreen extends AppCompatActivity {
             roomModel.setId(channel.getJSONObject(i).getString("_id"));
             roomModel.setAvatar(channel.getJSONObject(i).getString("avatar"));
             roomModel.setName(channel.getJSONObject(i).getString("name"));
+
+            Log.e("ROOM", roomModel.getName());
+
             ArrayList<MessageModel> listMessage = new ArrayList<>();
             for(int j=0;j<channel.getJSONObject(i).getJSONArray("chats").length();j++){
                 MessageModel messageModel = new MessageModel();

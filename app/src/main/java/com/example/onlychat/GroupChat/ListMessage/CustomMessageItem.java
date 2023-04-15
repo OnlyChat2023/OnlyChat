@@ -37,7 +37,7 @@ public class CustomMessageItem extends ArrayAdapter<String> {
         LayoutInflater inflater=((Activity) context).getLayoutInflater();
         if(names.get(position).equals("me")){
             row = inflater.inflate(R.layout.global_chat_custom_message_item_me,null);
-            message = (TextView)row.findViewById(R.id.message);
+            message = (TextView)row.findViewById(R.id.chatContent);
             chatImage = (ImageView) row.findViewById(R.id.chatImage);
             if(messages.get(position).getClass().getName().equals("java.lang.String")){
                 message.setText(messages.get(position).toString());

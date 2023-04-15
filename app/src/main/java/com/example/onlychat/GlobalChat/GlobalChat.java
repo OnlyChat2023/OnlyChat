@@ -89,7 +89,7 @@ public class GlobalChat extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ListMessage.class);
-                intent.putExtra("Data",roomModels.get(i));
+                intent.putExtra("Data", roomModels.get(i));
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }

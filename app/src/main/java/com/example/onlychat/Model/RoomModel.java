@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class RoomModel implements Serializable {
-    String id,avatar,name;
+    String _id,avatar,name;
     ArrayList<MessageModel> messages;
     RoomOptions options;
 
@@ -31,11 +31,11 @@ public class RoomModel implements Serializable {
 //    }
 
     public String getId() {
-        return id;
+        return _id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this._id = id;
     }
 
     public String getAvatar() {
@@ -60,6 +60,9 @@ public class RoomModel implements Serializable {
 
     public void setMessages(ArrayList<MessageModel> messages) {
         this.messages = messages;
+    }
+    public void pushMessage(MessageModel message) {
+        this.messages.add(message);
     }
 
     public RoomOptions getOptions() {

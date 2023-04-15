@@ -5,17 +5,17 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MessageModel implements Serializable {
-    String id,userId,avatar;
-    String name,nickName ,message;
+    String id,user_id,avatar;
+    String name,nickname ,message;
     Date time;
     ArrayList<String> seenUser=new ArrayList<>();
     public MessageModel(){}
     public MessageModel(String id, String userId, String avatar, String name, String nickName, String message, Date time, ArrayList<String> seenUser) {
         this.id = id;
-        this.userId = userId;
+        this.user_id = userId;
         this.avatar = avatar;
         this.name = name;
-        this.nickName = nickName;
+        this.nickname = nickName;
         this.message = message;
         this.time = time;
         this.seenUser = seenUser;
@@ -30,11 +30,11 @@ public class MessageModel implements Serializable {
     }
 
     public String getUserId() {
-        return userId;
+        return user_id;
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.user_id = userId;
     }
 
     public String getAvatar() {
@@ -54,11 +54,11 @@ public class MessageModel implements Serializable {
     }
 
     public String getNickName() {
-        return nickName;
+        return nickname;
     }
 
     public void setNickName(String nickName) {
-        this.nickName = nickName;
+        this.nickname = nickName;
     }
 
     public String getMessage() {
