@@ -13,6 +13,11 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
+
+import com.example.onlychat.GlobalChat.CustomChatItem;
+import com.example.onlychat.Interfaces.RoomOptions;
+import com.example.onlychat.Model.RoomModel;
+
 import com.example.onlychat.R;
 
 public class Options extends AppCompatActivity {
@@ -41,7 +46,7 @@ public class Options extends AppCompatActivity {
         setContentView(R.layout.global_chat_chat_options);
 
         Intent intent = getIntent();
-        Options options = (Options) intent.getSerializableExtra("Data");
+        RoomOptions options = (RoomOptions) intent.getSerializableExtra("Data");
 
         backButton = (ImageView) findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {

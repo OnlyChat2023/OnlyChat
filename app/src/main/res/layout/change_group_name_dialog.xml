@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="380dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="40dp"
+    android:paddingTop="40dp"
+    android:paddingHorizontal="15dp"
+    android:layout_gravity="center"
+    android:background="@drawable/dialog_background">
+
+    <TextView
+        android:layout_marginLeft="0dp"
+        android:id="@+id/user_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#e9e9e9"
+        android:text="New group name"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textSize="16dp"
+        android:layout_marginBottom="4dp"
+        />
+
+    <EditText
+        android:id="@+id/et_group_name"
+        android:layout_width="320dp"
+        android:layout_height="35dp"
+        android:textSize="14dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/black"
+        android:hint="New group name"
+        android:fontFamily="@font/montserrat_regular"
+        android:paddingLeft="10dp"
+        android:background="@drawable/nickname_form_background"
+        android:textColorHint="#818181"/>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="74dp"
+            android:layout_height="26dp"
+            android:text="save"
+            android:fontFamily="@font/montserrat_bold"
+            android:textSize="14dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/yes_button_background"
+            />
+
+<!--        <Button-->
+<!--            android:id="@+id/refresh_btn"-->
+<!--            android:layout_width="80dp"-->
+<!--            android:layout_height="26dp"-->
+<!--            android:text="refresh"-->
+<!--            android:fontFamily="@font/montserrat_bold"-->
+<!--            android:textSize="14dp"-->
+<!--            android:layout_marginHorizontal="5dp"-->
+<!--            android:background="@drawable/yes_button_background"-->
+<!--            />-->
+
+        <Button
+            android:id="@+id/cancelBtn"
+            android:layout_width="73dp"
+            android:layout_height="26dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/no_button_background"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="cancel"
+            android:textSize="14dp" />
+    </LinearLayout>
+</LinearLayout>

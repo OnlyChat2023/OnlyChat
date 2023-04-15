@@ -88,43 +88,43 @@ public class MainScreen extends AppCompatActivity {
         isLogin=true;
         HttpManager httpManager = new HttpManager(this);
         httpManager.getListChat(
-            new HttpResponse(){
-                @Override
-                public void onSuccess(JSONObject Response) {
-                    try{
+                new HttpResponse(){
+                    @Override
+                    public void onSuccess(JSONObject Response) {
+                        try{
 //                        JSONObject information = Response.getJSONObject("data").getJSONObject("user");
-                        JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
-                        JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
-                        JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
-                        JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
+                            JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
+                            JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
+                            JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
+                            JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
 //                        user = new Gson().fromJson(String.valueOf(information), UserModel.class);
 //                    Log.i("friend",information.getJSONArray("friend").toString());
 //                    Log.i("friend_request",information.getJSONArray("friend_request").toString());
-                        direct_list = getListRoom(directChat);
-                        group_list = getListRoom(groupChat);
-                        global_list = getListRoom(globalChat);
-                        chatbot_list = getListRoom(botChat);
+                            direct_list = getListRoom(directChat);
+                            group_list = getListRoom(groupChat);
+                            global_list = getListRoom(globalChat);
+                            chatbot_list = getListRoom(botChat);
 
-                        Log.i("TAG", global_list.get(0).getName());
+                            Log.i("TAG", global_list.get(0).getName());
 
 //                        directChatFragment.setRoomModels(direct_list);
-                        globalChatFragment.setRoomModels(global_list);
-                        groupChatFragment.setRoomModels(group_list);
-                        botChatFragment.setRoomModels(chatbot_list);
+                            globalChatFragment.setRoomModels(global_list);
+                            groupChatFragment.setRoomModels(group_list);
+                            botChatFragment.setRoomModels(chatbot_list);
 
 
 
+                        }
+                        catch (Exception e){
+                            Log.i("HTTP Success Error",e.toString());
+                        }
                     }
-                    catch (Exception e){
-                        Log.i("HTTP Success Error",e.toString());
-                    }
-                }
 
-                @Override
-                public void onError(String error) {
-                    Log.i("HTTP Error",error);
-                }
-            });
+                    @Override
+                    public void onError(String error) {
+                        Log.i("HTTP Error",error);
+                    }
+                });
 
 //        httpManager.getUserById("6430c86d1b48c829004aa89b");
 //        try {
@@ -270,8 +270,8 @@ public class MainScreen extends AppCompatActivity {
 
             ArrayList<Member> members = new ArrayList<>();
             for(int l=0;l<channel.getJSONObject(i).getJSONArray("members").length();l++){
-                    Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
-                    members.add(member);
+                Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
+                members.add(member);
             }
             roomOptions.setMembers(members);
             roomModel.setOptions(roomOptions);

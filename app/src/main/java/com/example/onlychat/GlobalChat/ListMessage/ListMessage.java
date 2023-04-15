@@ -38,6 +38,7 @@ import com.example.onlychat.Interfaces.MessageListener;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.MessageModel;
+import com.example.onlychat.GroupChat.MessageBottomDialogFragmentChatting;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
@@ -104,18 +105,22 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//
+//                // Popup
+//                View popupView = inflater.inflate(R.layout.global_chat_popup_above, null);
+//
+//                boolean focusable = true; // lets taps outside the popup also dismiss it
+//                final PopupWindow popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT,600,focusable);
+//                popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+//                popupView.setTranslationY(600);
+//                popupView.animate().translationY(0).setDuration(200);
+//
+//                return false;
+                MessageBottomDialogFragmentChatting messageBottomDialogFragmentChatting = new MessageBottomDialogFragmentChatting();
+                messageBottomDialogFragmentChatting.show(getSupportFragmentManager(), messageBottomDialogFragmentChatting.getTag());
 
-                // Popup
-                View popupView = inflater.inflate(R.layout.global_chat_popup_above, null);
-
-                boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT,600,focusable);
-                popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-                popupView.setTranslationY(600);
-                popupView.animate().translationY(0).setDuration(200);
-
-                return false;
+                return true;
             }
         });
 
