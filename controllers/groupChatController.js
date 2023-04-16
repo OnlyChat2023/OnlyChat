@@ -22,7 +22,7 @@ const addGroup = catchAsync(async (req, res, next) =>{
         avatar: userInf.avatar
       }],
       name: req.body.name,
-      avatar: null,
+      avatar: "",
       options:[{
         user_id: userInf._id,
         notify: false,
