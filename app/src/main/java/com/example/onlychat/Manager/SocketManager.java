@@ -62,18 +62,8 @@ public class SocketManager {
         }
     }
 
-    public static void sendImageMessage(Context ctx, ArrayList<Uri> arrayList, UserModel user) {
-        AsyncTask<String, Void, ArrayList<String>> image_convert = new ConvertImage(ctx, arrayList, new ConvertListener() {
-            @Override
-            public void onSuccess(ArrayList<String> result) {
-                ArrayList<String> imageStr = new ArrayList<String>();
-                for (int i = 0; i < result.size(); i++) {
-                    imageStr.add("data:image/png;base64," + result.get(i));
-                }
-
-                socket.emit("sendImageMessage", new Gson().toJson(imageStr), new Gson().toJson(user));
-            }
-        }).execute();
+    public static void sendImageMessage(Context ctx, ArrayList<String> arrayList, int position, UserModel user) {
+        socket.emit("sendImageMessage", new Gson().toJson(arrayList), position, new Gson().toJson(user));
     }
 
     public static void acceptRequestListener(){
