@@ -25,6 +25,8 @@ app.use(mongoSanitize());
 app.use(xss());
 app.use(hpp());
 
+app.use("/assets", express.static("assets"));
+
 app.use(express.json({ limit: '10mb' }));
 
 app.use('/api/onlychat/v1/auth', authRouter);

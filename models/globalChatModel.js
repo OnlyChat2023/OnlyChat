@@ -10,16 +10,17 @@ const messageSchema = new mongoose.Schema({
       message: String,
       time: Date,
       user_id: String,
-      anonymous_avatar: String,
-      nick_name: String,
+      avatar: String,
+      nickname: String,
     }
   ],
   qr_code: String,
   members: [
     {
       user_id: String,
-      avatar: String,
-      nickname: String,
+      avatar: { type: String, default: '' },
+      name: { type: String, default: '' },
+      nickname: { type: String, default: '' },
     }
   ],
   options: [
