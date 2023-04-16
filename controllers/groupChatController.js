@@ -14,7 +14,7 @@ const addGroup = catchAsync(async (req, res, next) =>{
     const userInf = await User.findOne({_id: req.body._id});
     const filterBody = {
       // _id: null, 
-      chats: null, 
+      chats: [], 
       members: [{
         user_id: userInf._id,
         name: userInf.name,
@@ -31,11 +31,25 @@ const addGroup = catchAsync(async (req, res, next) =>{
       update_time: req.body.update_time
     };
 
-    const addGroupChat = await groupChat.insertMany(filterBody, {ordered: true, rawResult: true}, function(err, res){
-      userInf.groupchat_channel.push(String(res.insertedIds[0]));
-      userInf.save();
+    const addGroupChat = await groupChat.insertMany(filterBody, {ordered: true, rawResult: true}, async function(err, result){
+      userInf.groupchat_channel.push(String(result.insertedIds[0]));
+      await userInf.save();
+
+      res.status(200).json({ status: 'success', data: {} });
     });
-    res.status(200).json({ status: 'success', data: {} });
 });
 
-export {addGroup}
+const getListGroupChat = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({_id : req.body._id});
+
+  const GroupChat = []
+  for (let i of user.groupchat_channel) {
+    const dmList = await groupChat.findOne({ _id: i });
+    dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+    GroupChat.push(dmList);
+  }
+  
+  res.status(200).json({ status: 'success', data: GroupChat });
+});
+
+export {addGroup, getListGroupChat}
