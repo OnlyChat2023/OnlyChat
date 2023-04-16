@@ -1,7 +1,11 @@
 package com.example.onlychat.Manager;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -21,6 +25,7 @@ import com.example.onlychat.Model.UserModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -35,7 +40,8 @@ public class HttpManager {
     private Context context;
     private GlobalPreferenceManager pref;
     static private UserModel user = new UserModel();
-    private final String ip = "192.168.1.111";
+    private static final String ip = "192.168.1.109";
+//    private static final String ip = "192.168.2.16";
 
     public HttpManager(Context _context) {
         this.context = _context;
@@ -110,30 +116,17 @@ public class HttpManager {
         createRequest("http://" + ip + ":5000/api/onlychat/v1/user/userInformation",Request.Method.GET,"userprofile", null, responseReceiver);
     }
 
-    public UserModel getUserById(String _id) {
-        UserModel userModel = new UserModel();
-        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/userProfile", Request.Method.PATCH, "userprofile", new HashMap<String, String>() {{
-                    put("_id", _id);
-                }},
-                new HttpResponse() {
-                    @Override
-                    public void onSuccess(JSONObject Response) {
-                        try {
-                            Log.i("HTTP Success", "success");
-                        } catch (Exception e) {
-                            Log.i("HTTP Success Error", e.toString());
-                        }
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        Log.i("HTTP Error", error);
-                    }
-                });
-
-
-        return userModel;
+    public void getListFriends(HttpResponse responseReceiver){
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/friends",Request.Method.GET,"friends", null, responseReceiver);
     }
+
+    public void getUserById(String _id,HttpResponse response) {
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/getUserById", Request.Method.PATCH, "userprofile",
+                new HashMap<String, String>() {{put("_id", _id);}},response);
+    }
+
+
+
     public void validateAccount(String phoneNumber, HttpResponse responseReceiver) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("phonenumber", phoneNumber);
@@ -158,5 +151,31 @@ public class HttpManager {
         params.put("password", password);
 
         createRequest("http://" + ip + ":5000/api/onlychat/v1/auth/login", Request.Method.POST, "login", params, responseReceiver);
+    }
+
+    public static class GetImageFromServer extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public GetImageFromServer(ImageView avatar) {
+            this.bmImage = avatar;
+        }
+
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL("http://"+ip+":5000/assets/"+urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 }

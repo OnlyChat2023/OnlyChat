@@ -21,6 +21,7 @@ import android.widget.ListView;
 import com.example.onlychat.DiaLog.DMBottomDialog;
 import com.example.onlychat.DirectMessage.Option.OptionActivity;
 import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 import com.vanniktech.emoji.EmojiPopup;
@@ -69,14 +70,16 @@ public class ChattingActivity extends AppCompatActivity {
         Intent main_chat = getIntent();
         userInf = (RoomModel) main_chat.getSerializableExtra("roomChat");
 //        imgAvatar.setImageResource(userInf.getAvatar());
+        new HttpManager.GetImageFromServer(imgAvatar).execute(userInf.getAvatar());
+
         txtName.setText(userInf.getName());
         txtOnline.setText("Online");
         txtOnline.setTextColor(getResources().getColor(R.color.online_green));
 
-//        MessageReceive adapter = new MessageReceive(this, userInf.getAvatar(), me_id, userInf.getMessages());
-//        chatContent.setAdapter(adapter);
-//        chatContent.setSelection(adapter.getCount() - 1);
-//        chatContent.smoothScrollToPosition(adapter.getCount() - 1);
+        MessageReceive adapter = new MessageReceive(this, userInf.getAvatar(), me_id, userInf.getMessages());
+        chatContent.setAdapter(adapter);
+        chatContent.setSelection(adapter.getCount() - 1);
+        chatContent.smoothScrollToPosition(adapter.getCount() - 1);
         chatContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {

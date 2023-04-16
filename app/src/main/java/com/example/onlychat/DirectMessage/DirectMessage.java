@@ -25,6 +25,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
@@ -51,7 +53,7 @@ public class DirectMessage extends Fragment {
             this.roomModels.add(i);
         }
         customChatItem.notifyDataSetChanged();
-        Log.i("SET - Direct", roomModels.get(0).getName());
+//        Log.i("SET - Direct", roomModels.get(0).getName());
     }
     GridView androidGridView;
 
@@ -66,6 +68,9 @@ public class DirectMessage extends Fragment {
         profile=(ImageView) globalChat.findViewById(R.id.profile);
         addChat = (ImageView) globalChat.findViewById(R.id.addChat);
         listChat = (ListView) globalChat.findViewById(R.id.listChat);
+
+        new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAvatar());
+
 
         Log.i("Direct chat", Integer.toString(roomModels.size()));
 

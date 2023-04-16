@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.onlychat.Interfaces.RoomOptions;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.R;
 
 public class Options extends AppCompatActivity {
@@ -26,18 +27,6 @@ public class Options extends AppCompatActivity {
 
     TextView name;
     ImageView avatar;
-
-    Integer avatars[] = {
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,R.drawable.global_chat_avatar,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,R.drawable.global_chat_avatar,
-            R.drawable.global_chat_avatar,R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar2,R.drawable.global_chat_avatar
-
-    };
-    String names[] = {
-            "Adam M.Mathew","Albert Willson","Andrew McLeod", "Brittany Smith",
-            "Adam M.Mathew","Albert Willson","Andrew McLeod", "Brittany Smith",
-            "Adam M.Mathew","Albert Willson","Andrew McLeod", "Brittany Smith"
-    };
 
 
     @Override
@@ -54,7 +43,7 @@ public class Options extends AppCompatActivity {
         avatar = (ImageView) findViewById(R.id.avatar);
 
         name.setText(names);
-//        avatar.setImageResource(Integer.parseInt(avatars));
+        new HttpManager.GetImageFromServer(avatar).execute(avatars);
 
 
         backButton = (ImageView) findViewById(R.id.backButton);

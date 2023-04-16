@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,37 +15,29 @@ import android.widget.ListView;
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 
+import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class AllFriends extends Fragment {
     ListView listFriends;
+    CustomFriendItem customFriendItem;
+    ArrayList<UserModel> friend_list = new ArrayList<>();
 
-    String names[] = {
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-            "Anonymous","Anonymous Private","Anonymous Publish",
-    };
-    Integer avatars[]={
-            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar,R.drawable.global_chat_avatar2,
-            R.drawable.global_chat_avatar1,R.drawable.global_chat_avatar,R.drawable.global_chat_avatar2
-    };
-    String phoneNumbers[] = {
-            "0973667324",
-            "0937687267",
-            "0776272828",
-            "0973667324",
-            "0937687267",
-            "0776272828",
-            "0973667324",
-            "0937687267",
-            "0776272828",
-            "0973667324",
-            "0937687267",
-            "0776272828",
-    };
+    public void setFriend_list(ArrayList<UserModel> friend_list){
+        for(UserModel i:friend_list){
+            this.friend_list.add(i);
+        }
+        customFriendItem.notifyDataSetChanged();
+//        Log.i("All friends", Integer.toString(friend_list.size()));
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,8 +50,29 @@ public class AllFriends extends Fragment {
         listFriends.setDivider(null);
         listFriends.setDividerHeight(0);
 
-        CustomFriendItem customFriendItem = new CustomFriendItem(getActivity(),avatars,names,phoneNumbers);
+        HttpManager httpManager = new HttpManager(getContext());
+
+        customFriendItem = new CustomFriendItem(getActivity(),friend_list);
         listFriends.setAdapter(customFriendItem);
+
+        listFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                httpManager.getUserById(friend_list.get(i).get_id(), new HttpResponse() {
+                    @Override
+                    public void onSuccess(JSONObject response) throws JSONException {
+                        JSONObject profile = response.getJSONObject("data");
+                        Log.i("all friends click item", profile.toString());
+
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+            }
+        });
 
         listFriends.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

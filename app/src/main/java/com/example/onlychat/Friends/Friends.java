@@ -16,12 +16,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.onlychat.Friends.AllFriends.AllFriends;
 import com.example.onlychat.Friends.Invite.Invite;
+import com.example.onlychat.Model.RoomModel;
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 import com.google.android.material.tabs.TabLayout;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,18 +36,27 @@ public class Friends extends Fragment {
     TabLayout tabLayout;
     ViewPager viewPager;
 
-    AllFriends allFriends;
-    Invite invite;
+    TextView quatity;
+
+    AllFriends allFriends = new AllFriends();
+    Invite invite = new Invite();
+
+    public Friends(){}
+    public void setFriend(ArrayList<UserModel> friend_list,ArrayList<UserModel> invite_list){
+        allFriends.setFriend_list(friend_list);
+        invite.setInvite_list(invite_list);
+        quatity.setText(friend_list.size()+" available");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout friends = (LinearLayout) inflater.inflate(R.layout.friends, null);
 
+
         tabLayout=friends.findViewById(R.id.tabLayout);
         viewPager=friends.findViewById(R.id.viewPaper);
 
-        allFriends = new AllFriends();
-        invite = new Invite();
+        quatity = (TextView) friends.findViewById(R.id.quantity);
 
         tabLayout.setupWithViewPager(viewPager);
 

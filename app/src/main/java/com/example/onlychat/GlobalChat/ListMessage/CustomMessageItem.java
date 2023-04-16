@@ -3,6 +3,7 @@ package com.example.onlychat.GlobalChat.ListMessage;
 import android.app.Activity;
 import android.content.Context;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.onlychat.Manager.GlobalPreferenceManager;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
@@ -45,7 +47,7 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
         View row;
         LayoutInflater inflater=((Activity) context).getLayoutInflater();
 
-        if (messageModels.get(position).getUserId().equals(myInfo.getId())) {
+        if (messageModels.get(position).getUserId().equals(myInfo.get_id())) {
             row = inflater.inflate(R.layout.global_chat_custom_message_item_me,null);
             message = (TextView)row.findViewById(R.id.message);
             chatImage = (ImageView) row.findViewById(R.id.chatImage);
@@ -60,7 +62,11 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
 
             message.setText(messageModels.get(position).getMessage());
             name.setText(messageModels.get(position).getNickName());
+            // set image
+            Log.i("Custom message user", messageModels.get(position).getAvatar());
+            new HttpManager.GetImageFromServer(imageView).execute(messageModels.get(position).getAvatar());
 //            imageView.setImageResource(messageModels.get(position).getAvatar());
+
         }
 //        if(position== names.length-1) row.setPadding(0,0,0,120);
         return row;
