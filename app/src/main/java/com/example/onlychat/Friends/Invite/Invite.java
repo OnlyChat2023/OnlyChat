@@ -80,4 +80,6 @@ public class Invite extends Fragment {
         invite_list.remove(i);
         listInvites.setAdapter(customInviteItem);
     }
+
+
 }

@@ -57,30 +57,35 @@ public class HttpManager {
             jsonRequest = new JSONObject(postParam);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(method, url, jsonRequest,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            httpResponse.onSuccess(response);
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        httpResponse.onSuccess(response);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (error instanceof NetworkError) {
-                            //handle your network error here.
-                        } else if (error instanceof ServerError) {
-                            //handle if server error occurs with 5** status code
-                        } else if (error instanceof AuthFailureError) {
-                            //handle if authFailure occurs.This is generally because of invalid credentials
-                        } else if (error instanceof ParseError) {
-                            //handle if the volley is unable to parse the response data.
-                        } else if (error instanceof TimeoutError) {
-                            //handle if socket time out is occurred.
-                        }
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error instanceof NetworkError) {
+                        //handle your network error here.
+                    } else if(error instanceof ServerError) {
+                        //handle if server error occurs with 5** status code
+                    } else if(error instanceof AuthFailureError) {
+                        //handle if authFailure occurs.This is generally because of invalid credentials
+                    } else if(error instanceof ParseError) {
+                        //handle if the volley is unable to parse the response data.
+                    } else if(error instanceof TimeoutError) {
+                        //handle if socket time out is occurred.
+                    }
+
+
+
 
                         if (error.networkResponse != null && error.networkResponse.data != null) {
                             try {
