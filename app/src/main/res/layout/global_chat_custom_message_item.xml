@@ -26,7 +26,7 @@
         android:textColor="@color/white"
         android:textSize="13sp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/chatLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,5 +49,11 @@
             android:id="@+id/chatImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imagesLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </androidx.recyclerview.widget.RecyclerView>
+    </RelativeLayout>
 </RelativeLayout>

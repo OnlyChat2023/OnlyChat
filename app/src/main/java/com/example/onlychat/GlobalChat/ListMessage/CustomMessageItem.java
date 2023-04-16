@@ -122,13 +122,61 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
             name = (TextView) row.findViewById(R.id.name);
             imageView = (ImageView) row.findViewById(R.id.avatar);
 
-            message.setText(messageModels.get(position).getMessage());
-            name.setText(messageModels.get(position).getNickName());
             // set image
 //            Log.i("Custom message user", messageModels.get(position).getAvatar());
             new HttpManager.GetImageFromServer(imageView).execute(messageModels.get(position).getAvatar());
 //            imageView.setImageResource(messageModels.get(position).getAvatar());
 
+            if (messageItem.hasImages()) {
+                imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);
+                imageLayout.setItemAnimator(null);
+
+                int numcol = 1;
+                if (messageItem.getImages().size() > 1)
+                    numcol = 2;
+
+                imageLayout.setLayoutManager(new GridLayoutManager(context, numcol) {
+                    @Override
+                    public boolean canScrollVertically() {
+                        return false;
+                    }
+                });
+//                new LoadImage(imageLayout).execute(messageItem.getTempImages());
+                ImageChat myImageChat = new ImageChat(messageItem.getImages());
+                imageLayout.setAdapter(myImageChat);
+            }
+            else if (messageItem.hasImagesStr()) {
+                imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);
+                imageLayout.setItemAnimator(null);
+
+                int numcol = 1;
+                if (messageItem.getImagesStr().size() > 1)
+                    numcol = 2;
+
+                imageLayout.setLayoutManager(new GridLayoutManager(context, numcol) {
+                    @Override
+                    public boolean canScrollVertically() {
+                        return false;
+                    }
+                });
+//                new LoadImage(imageLayout).execute(messageItem.getTempImages());
+
+                new DownloadImage(messageItem.getImagesStr(), new ConvertListener(){
+                    @Override
+                    public void onSuccess(ImageModel result) {
+
+                    }
+
+                    @Override
+                    public void onDownloadSuccess(ArrayList<Bitmap> res) {
+                        ImageChat myImageChat = new ImageChat(res);
+                        messageItem.setImages(res);
+                        imageLayout.setAdapter(myImageChat);
+                    }
+                }).execute();
+            }
+            message.setText(messageModels.get(position).getMessage());
+            name.setText(messageModels.get(position).getNickName());
         }
 //        if(position== names.length-1) row.setPadding(0,0,0,120);
         return row;

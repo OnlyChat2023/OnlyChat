@@ -356,7 +356,6 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                             roomModel.getMessages().get(position).setTime(message.getTime());
                         } else {
                             roomModel.pushMessage(message);
-//                            Log.e("run: ", message.getImagesStr().get(0));
                             customMessageItem.notifyDataSetChanged();
                         }
                         update = true;
