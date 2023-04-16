@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
@@ -28,7 +29,6 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
         super(context,R.layout.global_chat_custom_chat_item,listRooms);
         this.context = context;
         this.listRooms = listRooms;
-
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
@@ -41,19 +41,27 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
         messageTime = (TextView) row.findViewById(R.id.messageTime);
 
         messageName.setText(listRooms.get(position).getName());
-        MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size()-1);
+        if (listRooms.get(position).getMessages().size() != 0) {
+            MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size() - 1);
+            messageContent.setText(lastMessage.getMessage());
 
-        messageContent.setText(lastMessage.getMessage());
-        messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
-
+            if(lastMessage.getTime().getMinutes()<10){
+                messageTime.setText(lastMessage.getTime().getHours()+":0"+lastMessage.getTime().getMinutes());
+            }
+            else{
+                messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
+            }
+        }
+        else{
+            messageContent.setText("");
+ 
+            if(listRooms.get(position).getUpdate_time().getMinutes()<10){
+                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":0"+(listRooms.get(position).getUpdate_time().getMinutes())));
+            }
+            else{
+                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":"+(listRooms.get(position).getUpdate_time().getMinutes())));
+            }
+        }
         return row;
     }
-
-//    public void changeData(Integer[] avatars, String[] names,String[] messages,String[] times){
-//        this.avatars = avatars;
-//        this.names = names;
-//        this.messages = messages;
-//        this.times = times;
-//        this.notifyDataSetChanged();
-//    }
 }

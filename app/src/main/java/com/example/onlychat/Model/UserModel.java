@@ -6,41 +6,44 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class UserModel implements Serializable {
-    String id,name,nickname,username,email,phone,facebook,instagram,university,description,avatar;
+    String _id,name,nickname,anonymous_avatar,username,email,phone,facebook,instagram,university,description,avatar;
     String token;
-
-    public String getUniversity() {
-        return university;
-    }
-
-    public void setUniversity(String university) {
-        this.university = university;
-    }
 
     public UserModel(){}
 
+    public String get_id() {
+        return _id;
+    }
     public String getId() {
-        return id;
+        return _id;
     }
 
-    public  void setId(String id) {
-        this.id = id;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getToken() {
-        return token;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAnonymous_avatar() {
+        return anonymous_avatar;
+    }
+
+    public void setAnonymous_avatar(String anonymous_avatar) {
+        this.anonymous_avatar = anonymous_avatar;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -75,6 +78,14 @@ public class UserModel implements Serializable {
         this.instagram = instagram;
     }
 
+    public String getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(String university) {
+        this.university = university;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -99,4 +110,11 @@ public class UserModel implements Serializable {
         this.nickname = nickname;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

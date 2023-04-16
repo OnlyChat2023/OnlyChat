@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.example.onlychat.Friends.AllFriends.CustomFriendItem;
 import com.example.onlychat.GroupChat.CustomFriendCheckbox.CustomFriendCheckBox;
-import com.example.onlychat.GroupChat.ListMessage.ListMessage;
 import com.example.onlychat.R;
 
 public class AddMember extends AppCompatActivity {

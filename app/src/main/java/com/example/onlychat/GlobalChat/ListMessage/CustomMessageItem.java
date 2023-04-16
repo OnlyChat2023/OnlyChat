@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.example.onlychat.Async.DownloadImage;
 import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Model.ImageModel;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
@@ -49,16 +51,6 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
 
         pref = new GlobalPreferenceManager(context);
         myInfo = pref.getUserModel();
-    }
-
-    @Override
-    public int getCount() {
-        return messageModels.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return messageModels.get(position).getViewType(myInfo);
     }
 
     @Override
@@ -132,27 +124,31 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
 
             message.setText(messageModels.get(position).getMessage());
             name.setText(messageModels.get(position).getNickName());
+            // set image
+            Log.i("Custom message user", messageModels.get(position).getAvatar());
+            new HttpManager.GetImageFromServer(imageView).execute(messageModels.get(position).getAvatar());
 //            imageView.setImageResource(messageModels.get(position).getAvatar());
+
         }
 //        if(position== names.length-1) row.setPadding(0,0,0,120);
         return row;
     }
 
-    private class ViewHolder {
-        public RecyclerView imageLayout;
-        public TextView name;
-        public TextView message;
+//     private class ViewHolder {
+//         public RecyclerView imageLayout;
+//         public TextView name;
+//         public TextView message;
 
-        public ViewHolder(View convertView, boolean isMe) {
-            if (isMe) {
-                message = convertView.findViewById(R.id.message);
-                imageLayout = convertView.findViewById(R.id.imagesLayout);
-                imageLayout.setLayoutManager(new GridLayoutManager(context, 2));
-            } else {
-                message = convertView.findViewById(R.id.chatContent);
-                name = convertView.findViewById(R.id.name);
-//                imageLayout = convertView.findViewById(R.id.imagesLayout);
-            }
-        }
-    }
+//         public ViewHolder(View convertView, boolean isMe) {
+//             if (isMe) {
+//                 message = convertView.findViewById(R.id.message);
+//                 imageLayout = convertView.findViewById(R.id.imagesLayout);
+//                 imageLayout.setLayoutManager(new GridLayoutManager(context, 2));
+//             } else {
+//                 message = convertView.findViewById(R.id.chatContent);
+//                 name = convertView.findViewById(R.id.name);
+// //                imageLayout = convertView.findViewById(R.id.imagesLayout);
+//             }
+//         }
+//     }
 }

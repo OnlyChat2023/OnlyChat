@@ -2,6 +2,7 @@ package com.example.onlychat.Friends.AllFriends;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,24 +10,23 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 
-public class CustomFriendItem extends ArrayAdapter<String> {
-    Context context;
-    Integer[] avatars;
-    String[] names;
-    String[] phoneNumbers;
+import java.util.ArrayList;
 
+public class CustomFriendItem extends ArrayAdapter<UserModel> {
+    Context context;
     ImageView avatar;
     TextView name;
     TextView phoneNumber;
+    ArrayList<UserModel> listFriend;
 
-    public CustomFriendItem(Context context,Integer[] avatars, String[] names,String[] phoneNumbers){
-        super(context, R.layout.friends_friend_item,names);
+    public CustomFriendItem(Context context, ArrayList<UserModel> list_friend){
+        super(context, R.layout.friends_friend_item,list_friend);
         this.context = context;
-        this.avatars = avatars;
-        this.names = names;
-        this.phoneNumbers = phoneNumbers;
+        listFriend = list_friend;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
@@ -37,9 +37,10 @@ public class CustomFriendItem extends ArrayAdapter<String> {
         name = (TextView) row.findViewById(R.id.name);
         phoneNumber = (TextView) row.findViewById(R.id.phoneNumber);
 
-        avatar.setImageResource(avatars[position]);
-        name.setText(names[position]);
-        phoneNumber.setText(phoneNumbers[position]);
+        new HttpManager.GetImageFromServer(avatar).execute(listFriend.get(position).getAvatar());
+//        Log.i("custom friend item", listFriend.get(position).getName());
+        name.setText(listFriend.get(position).getName());
+        phoneNumber.setText(listFriend.get(position).getPhone());
 
         return row;
     }

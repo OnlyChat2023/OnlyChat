@@ -40,6 +40,7 @@ import com.example.onlychat.GroupChat.ListMessage.MainAdp;
 import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.MessageListener;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.ImageModel;
 import com.example.onlychat.Model.MessageModel;
@@ -104,7 +105,6 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         recyclerView.setAdapter(mainAdapter);
 
         listView=(ListView) findViewById(R.id.listMessages);
-
         customMessageItem = new CustomMessageItem(this, roomModel.getMessages());
         listView.setScrollingCacheEnabled(false);
         listView.setAdapter(customMessageItem);
@@ -116,18 +116,6 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-//
-//                // Popup
-//                View popupView = inflater.inflate(R.layout.global_chat_popup_above, null);
-//
-//                boolean focusable = true; // lets taps outside the popup also dismiss it
-//                final PopupWindow popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT,600,focusable);
-//                popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-//                popupView.setTranslationY(600);
-//                popupView.animate().translationY(0).setDuration(200);
-//
-//                return false;
                 MessageBottomDialogFragmentChatting messageBottomDialogFragmentChatting = new MessageBottomDialogFragmentChatting();
                 messageBottomDialogFragmentChatting.show(getSupportFragmentManager(), messageBottomDialogFragmentChatting.getTag());
 
@@ -146,7 +134,9 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         backButton = (Button) findViewById(R.id.backButton);
         chatImage = (ImageView) findViewById(R.id.avatar);
         chatName = (TextView) findViewById(R.id.textName);
-//        chatImage.setImageResource(roomModel.getAvatar());
+        // set image
+        new HttpManager.GetImageFromServer(chatImage).execute(roomModel.getAvatar());
+
         chatName.setText(roomModel.getName());
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -190,11 +180,11 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                     listView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            enclose.animate().translationX(-220).setDuration(120);
-                            image.animate().translationX(-220).setDuration(120);
-                            icon.animate().translationX(-220).setDuration(120);
-                            gap.animate().translationX(-220).setDuration(120);
-                            chatText.animate().translationX(-220).setDuration(120);
+                            enclose.animate().translationX(-200).setDuration(120);
+                            image.animate().translationX(-200).setDuration(120);
+                            icon.animate().translationX(-200).setDuration(120);
+                            gap.animate().translationX(-200).setDuration(120);
+                            chatText.animate().translationX(-200).setDuration(120);
                             chatText.setPadding(0,0,0,0);
                         }
                     }, 160);

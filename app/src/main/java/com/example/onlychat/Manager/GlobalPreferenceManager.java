@@ -3,6 +3,7 @@ package com.example.onlychat.Manager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.example.onlychat.Model.UserModel;
 import com.google.gson.Gson;
@@ -35,7 +36,6 @@ public class GlobalPreferenceManager {
     public UserModel getUserModel() {
         String json = pref.getString(LOGIN_USERMODEL, "");
         UserModel user = new Gson().fromJson(json, UserModel.class);
-
         return user;
     }
 
