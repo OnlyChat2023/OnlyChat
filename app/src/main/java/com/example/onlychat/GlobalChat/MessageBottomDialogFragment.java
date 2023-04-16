@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -25,6 +27,9 @@ public class MessageBottomDialogFragment extends BottomSheetDialogFragment {
 
     private String mParam1;
     private String mParam2;
+    private int postion;
+    private GroupChat activity;
+
     public ImageView delete;
     public ImageView block;
     public ImageView leave;
@@ -60,6 +65,21 @@ public class MessageBottomDialogFragment extends BottomSheetDialogFragment {
         delete = (ImageView) layout.findViewById(R.id.imageView7);
         block = (ImageView) layout.findViewById(R.id.imageView10);
 
+
+        leave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.LeaveGroup(MessageBottomDialogFragment.this, postion);
+            }
+        });
         return layout;
+    }
+
+    public void setPostion(int postion) {
+        this.postion = postion;
+    }
+
+    public void setActivity(GroupChat activity) {
+        this.activity = activity;
     }
 }

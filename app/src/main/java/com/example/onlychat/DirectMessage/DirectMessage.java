@@ -100,7 +100,7 @@ public class DirectMessage extends Fragment {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
-//                messageBottomDialogFragment.leave.setVisibility(View.GONE);
+                messageBottomDialogFragment.leave.setVisibility(View.GONE);
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
 
                 return true;

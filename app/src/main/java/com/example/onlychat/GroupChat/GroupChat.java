@@ -4,6 +4,7 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,15 +27,19 @@ import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 
 public class GroupChat extends Fragment {
     TextView chatTitle;
@@ -55,6 +60,13 @@ public class GroupChat extends Fragment {
     }
 
     public void setRoomModels(ArrayList<RoomModel> roomModels) {
+        roomModels.sort(new Comparator<RoomModel>() {
+            @Override
+            public int compare(RoomModel roomModel, RoomModel t1) {
+                return roomModel.getUpdate_time().compareTo(t1.getUpdate_time());
+            }
+        }.reversed());
+
         for(RoomModel i:roomModels){
             this.roomModels.add(i);
         }
@@ -92,6 +104,8 @@ public class GroupChat extends Fragment {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
+                messageBottomDialogFragment.setActivity(GroupChat.this);
+                messageBottomDialogFragment.setPostion(i);
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
 
                 return true;
@@ -137,18 +151,23 @@ public class GroupChat extends Fragment {
                         String newName = newGroupName.getText().toString();
                         if (!newName.equals("")){
                             HttpManager httpManager = new HttpManager(getContext());
-//                            httpManager.AddGroupChat(newName, pref.getUserModel().getId(), new HttpResponse() {
-//                                @Override
-//                                public void onSuccess(JSONObject response) throws JSONException {
-//                                    overlayWindow.dismiss();
-//                                    popupWindow.dismiss();
-//                                }
-//
-//                                @Override
-//                                public void onError(String error) {
-//
-//                                }
-//                            });
+                            httpManager.AddGroupChat(newName, pref.getUserModel().get_id(), new HttpResponse() {
+                                @Override
+                                public void onSuccess(JSONObject response) throws JSONException {
+                                    Reload();
+                                    overlayWindow.dismiss();
+                                    popupWindow.dismiss();
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    Log.i("HTTP Error",error);
+                                }
+                            });
+                        }
+                        else {
+                            overlayWindow.dismiss();
+                            popupWindow.dismiss();
                         }
 //                        Intent addMember = new Intent(popupView.getContext(), AddMember.class);
 //                        startActivity(addMember);
@@ -164,5 +183,47 @@ public class GroupChat extends Fragment {
             }
         });
         return groupChat;
+    }
+
+
+    public void Reload() {
+
+        HttpManager httpManager = new HttpManager(getContext());
+        httpManager.GetListGroupChat(pref.getUserModel().get_id(), new HttpResponse() {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException {
+                try{
+                    JSONArray groupChat = response.getJSONArray("data");
+                    ArrayList<RoomModel> rooms = ((MainScreen) getActivity()).getListRoom(groupChat);
+                    roomModels.clear();
+                    setRoomModels(rooms);
+                }
+                catch (Exception e){
+                    Log.i("HTTP Group Chat Success Error",e.toString());
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.i("HTTP Error",error);
+            }
+        });
+    }
+
+    public void LeaveGroup(MessageBottomDialogFragment current, int i){
+        HttpManager httpManager = new HttpManager(getContext());
+        httpManager.LeaveGroupChat(pref.getUserModel().get_id(), roomModels.get(i).getId(), new HttpResponse() {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException {
+                Reload();
+                current.dismiss();
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.i("HTTP Leave Group Chat Error",error);
+                current.dismiss();
+            }
+        });
     }
 }

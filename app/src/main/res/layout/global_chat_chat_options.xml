@@ -76,8 +76,8 @@
 
             <ImageView
                 android:id="@+id/imageView13"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 app:srcCompat="@drawable/global_chat_share" />
@@ -92,6 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Turn off notification"
+                android:layout_centerVertical="true"
                 android:fontFamily="@font/montserrat_medium"
                 android:layout_alignParentStart="true"
                 android:textSize="18dp"
@@ -101,11 +102,11 @@
 
             <ImageView
                 android:id="@+id/imageView14"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                app:srcCompat="@drawable/global_chat_notification" />
+                app:srcCompat="@drawable/dm_option_icon_on_notification" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -120,6 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
                 android:fontFamily="@font/montserrat_medium"
                 android:text="Members (31257)"
                 android:textColor="#ffffff"
@@ -129,11 +131,11 @@
 
             <ImageView
                 android:id="@+id/imageView15"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                app:srcCompat="@drawable/global_chat_mebers" />
+                app:srcCompat="@drawable/dm_option_icon_profile" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -144,6 +146,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Delete chat"
+                android:layout_centerVertical="true"
                 android:fontFamily="@font/montserrat_medium"
                 android:layout_alignParentStart="true"
                 android:textSize="18dp"
@@ -152,11 +155,11 @@
 
             <ImageView
                 android:id="@+id/imageView16"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                app:srcCompat="@drawable/global_chat_delete_2" />
+                app:srcCompat="@drawable/dm_option_icon_delete" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -167,6 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Leave"
+                android:layout_centerVertical="true"
                 android:fontFamily="@font/montserrat_medium"
                 android:layout_alignParentStart="true"
                 android:textSize="18dp"
@@ -176,8 +180,8 @@
 
             <ImageView
                 android:id="@+id/imageView9"
-                android:layout_width="22dp"
-                android:layout_height="23dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 app:srcCompat="@drawable/leave_icon" />
@@ -201,6 +205,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Block"
+                android:layout_centerVertical="true"
                 android:fontFamily="@font/montserrat_medium"
                 android:layout_alignParentStart="true"
                 android:textSize="18dp"
@@ -210,11 +215,11 @@
 
             <ImageView
                 android:id="@+id/imageView18"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                app:srcCompat="@drawable/global_chat_blok" />
+                app:srcCompat="@drawable/dm_option_icon_block" />
 
 
         </RelativeLayout>
@@ -227,6 +232,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Report"
+                android:layout_centerVertical="true"
                 android:fontFamily="@font/montserrat_medium"
                 android:layout_alignParentStart="true"
                 android:textSize="18dp"
@@ -236,11 +242,11 @@
 
             <ImageView
                 android:id="@+id/imageView19"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                app:srcCompat="@drawable/global_chat_report" />
+                app:srcCompat="@drawable/dm_option_icon_report" />
 
         </RelativeLayout>
 

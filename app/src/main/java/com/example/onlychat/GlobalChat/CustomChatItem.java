@@ -41,19 +41,27 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
         messageTime = (TextView) row.findViewById(R.id.messageTime);
 
         messageName.setText(listRooms.get(position).getName());
+        if (listRooms.get(position).getMessages().size() != 0) {
+            MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size() - 1);
+            messageContent.setText(lastMessage.getMessage());
 
-        MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size()-1);
-        messageContent.setText(lastMessage.getMessage());
-        new HttpManager.GetImageFromServer(messageAvatar).execute(listRooms.get(position).getAvatar());
-
-        if(lastMessage.getTime().getMinutes()<10){
-            messageTime.setText(lastMessage.getTime().getHours()+":0"+lastMessage.getTime().getMinutes());
+            if(lastMessage.getTime().getMinutes()<10){
+                messageTime.setText(lastMessage.getTime().getHours()+":0"+lastMessage.getTime().getMinutes());
+            }
+            else{
+                messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
+            }
         }
         else{
-            messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
+            messageContent.setText("");
+ 
+            if(listRooms.get(position).getUpdate_time().getMinutes()<10){
+                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":0"+(listRooms.get(position).getUpdate_time().getMinutes())));
+            }
+            else{
+                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":"+(listRooms.get(position).getUpdate_time().getMinutes())));
+            }
         }
-
         return row;
     }
-
 }

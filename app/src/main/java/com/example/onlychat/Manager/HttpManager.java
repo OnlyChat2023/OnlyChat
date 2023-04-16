@@ -40,7 +40,8 @@ import java.util.Map;
 public class HttpManager {
     private Context context;
     private static GlobalPreferenceManager pref;
-    private static final String ip = "192.168.1.109";
+    private static final String ip = "192.168.1.177";
+    static private UserModel user = new UserModel();
 //    private static final String ip = "192.168.2.16";
 
     public HttpManager(Context _context) {
@@ -84,19 +85,22 @@ public class HttpManager {
                         //handle if socket time out is occurred.
                     }
 
-                    if (error.networkResponse != null && error.networkResponse.data != null) {
-                        try {
-                            String responseBody = new String(error.networkResponse.data, "utf-8");
-                            JSONObject data = new JSONObject(responseBody);
-                            String message = data.getString("message");
-                            Log.e("HTTP ERROR", message);
-                        } catch (UnsupportedEncodingException | JSONException e) {
-                            throw new RuntimeException(e);
+
+
+
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            try {
+                                String responseBody = new String(error.networkResponse.data, "utf-8");
+                                JSONObject data = new JSONObject(responseBody);
+                                String message = data.getString("message");
+                                Log.e("HTTP ERROR", message);
+                            } catch (UnsupportedEncodingException | JSONException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
+                        httpResponse.onError(error.getMessage() == null ? error.toString() : error.getMessage());
                     }
-                    httpResponse.onError(error.getMessage()==null?error.toString():error.getMessage());
-                }
-            }) {
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -114,19 +118,20 @@ public class HttpManager {
         queue.add(jsonObjReq);
     }
 
-    public void getListChat(HttpResponse responseReceiver){
-        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/userInformation",Request.Method.GET,"userprofile", null, responseReceiver);
+    public void getListChat(HttpResponse responseReceiver) {
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/userInformation", Request.Method.GET, "userprofile", null, responseReceiver);
     }
 
-    public void getListFriends(HttpResponse responseReceiver){
-        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/friends",Request.Method.GET,"friends", null, responseReceiver);
+    public void getListFriends(HttpResponse responseReceiver) {
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/friends", Request.Method.GET, "friends", null, responseReceiver);
     }
 
-    public void getUserById(String _id,HttpResponse response) {
+    public void getUserById(String _id, HttpResponse response) {
         createRequest("http://" + ip + ":5000/api/onlychat/v1/user/getUserById", Request.Method.PATCH, "userprofile",
-                new HashMap<String, String>() {{put("_id", _id);}},response);
+                new HashMap<String, String>() {{
+                    put("_id", _id);
+                }}, response);
     }
-
 
 
     public void validateAccount(String phoneNumber, HttpResponse responseReceiver) {
@@ -167,7 +172,7 @@ public class HttpManager {
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;
             try {
-                InputStream in = new java.net.URL("http://"+ip+":5000/assets/"+urldisplay).openStream();
+                InputStream in = new java.net.URL("http://" + ip + ":5000/assets/" + urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
@@ -179,13 +184,29 @@ public class HttpManager {
         protected void onPostExecute(Bitmap result) {
             bmImage.setImageBitmap(result);
         }
-    public void AddGroupChat(String newName, String userID, HttpResponse responseReceiver){
+    }
+
+    public void AddGroupChat(String newName, String userID, HttpResponse responseReceiver) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("_id", userID);
         params.put("name", newName);
         params.put("update_time", Calendar.getInstance().getTime().toString());
 
-//        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/addGroup", Request.Method.POST, "addGroup", params, responseReceiver);
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/addGroup", Request.Method.POST, "addGroup", params, responseReceiver);
     }
-}
+
+    public void GetListGroupChat(String userID, HttpResponse responseReceiver) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("_id", userID);
+
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/getListGroupChat", Request.Method.POST, "getListGroupChat", params, responseReceiver);
+    }
+
+    public void LeaveGroupChat(String userID, String GroupChatID, HttpResponse responseReceiver){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("_id", userID);
+        params.put("grc_id", GroupChatID);
+
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/leaveGroupChat", Request.Method.POST, "leaveGroupChat", params, responseReceiver);
+    }
 }
