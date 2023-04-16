@@ -190,7 +190,7 @@ io.on('connection', (socket) => {
         if (socket.channel === 'global_chat') {
             messageModal = {
                 message: Buffer.from(message, 'utf-8').toString(),
-                user_id: send_user.id,
+                user_id: send_user._id,
                 imges: [],
                 // anonymous_avatar: user.anonymous_avatar,
                 anonymous_avatar: '',
@@ -225,7 +225,7 @@ io.on('connection', (socket) => {
         if (socket.channel === 'global_chat') {
             messageModal = {
                 message: '',
-                user_id: send_user.id,
+                user_id: send_user._id,
                 images: imagePath,
                 // anonymous_avatar: user.anonymous_avatar,
                 anonymous_avatar: '',
