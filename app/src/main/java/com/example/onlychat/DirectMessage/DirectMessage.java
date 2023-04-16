@@ -88,6 +88,7 @@ public class DirectMessage extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ChattingActivity.class);
                 intent.putExtra("roomChat", roomModels.get(i));
+                Log.i("DIRECTMESSAGE", roomModels.get(i).getOptions().getMembers().get(0).getNickname());
 
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
@@ -101,21 +102,7 @@ public class DirectMessage extends Fragment {
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
 //                messageBottomDialogFragment.leave.setVisibility(View.GONE);
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
-                messageBottomDialogFragment.delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
 
-//                        customChatItem.changeData();
-                        messageBottomDialogFragment.dismiss();
-                    }
-                });
-
-                messageBottomDialogFragment.block.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        messageBottomDialogFragment.dismiss();
-                    }
-                });
                 return true;
             }
         });

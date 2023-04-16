@@ -17,6 +17,7 @@ public class Member implements Serializable {
     }
 
     public void setId(String id) {
+
         this.user_id = id;
     }
 

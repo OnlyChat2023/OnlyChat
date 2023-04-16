@@ -46,6 +46,7 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
             TextView time = (TextView) row.findViewById(R.id.timeMessage);
             // set image
             new HttpManager.GetImageFromServer(avt).execute(this.avatar);
+
             msg.setText(this.message.get(position).getMessage());
             Date timeMsg = this.message.get(position).getTime();
             time.setText("Sent at " + timeMsg.getHours() + ":" + timeMsg.getMinutes() + " " + timeMsg.getDate());

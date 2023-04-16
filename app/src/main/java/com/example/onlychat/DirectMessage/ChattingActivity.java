@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
@@ -22,6 +23,7 @@ import com.example.onlychat.DiaLog.DMBottomDialog;
 import com.example.onlychat.DirectMessage.Option.OptionActivity;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 import com.vanniktech.emoji.EmojiPopup;
@@ -35,7 +37,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class ChattingActivity extends AppCompatActivity {
     ImageView imgAvatar, btnFile, btnImage, btnIcon, btnSend;
-    String me_id = "6430c86d1b48c829004aa89b";
+    String me_id;
     View gap;
     Button btnBack, btnSetting;
     TextView txtName, txtOnline;
@@ -69,9 +71,10 @@ public class ChattingActivity extends AppCompatActivity {
 
         Intent main_chat = getIntent();
         userInf = (RoomModel) main_chat.getSerializableExtra("roomChat");
+//        Log.i("CHATTING", userInf.getOptions().getMembers().get(0).getName());
 //        imgAvatar.setImageResource(userInf.getAvatar());
         new HttpManager.GetImageFromServer(imgAvatar).execute(userInf.getAvatar());
-
+        me_id = userInf.getOptions().getUser_id();
         txtName.setText(userInf.getName());
         txtOnline.setText("Online");
         txtOnline.setTextColor(getResources().getColor(R.color.online_green));
@@ -79,6 +82,8 @@ public class ChattingActivity extends AppCompatActivity {
         MessageReceive adapter = new MessageReceive(this, userInf.getAvatar(), me_id, userInf.getMessages());
         chatContent.setAdapter(adapter);
         chatContent.setSelection(adapter.getCount() - 1);
+
+        chatContent.setMotionEventSplittingEnabled(true);
         chatContent.smoothScrollToPosition(adapter.getCount() - 1);
         chatContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -149,8 +154,7 @@ public class ChattingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String msg = chatMessage.getText().toString();
                 if (msg.length() != 0) {
-//                    adapter.AddMessage(new com.example.onlychat.Manager.Model.MessageModel("1234567890", me_id, null, "", "", msg, Calendar.getInstance().getTime(), null));
-//                    adapter.AddMessage(new MessageModel("1234567890", me_id, null, "", "", msg, Calendar.getInstance().getTime(), null));
+                    adapter.AddMessage(new MessageModel("1234567890", me_id, null, "", "", msg, Calendar.getInstance().getTime(), null));
                     chatMessage.setText("");
 
                 }
@@ -161,7 +165,9 @@ public class ChattingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ChattingActivity.this, OptionActivity.class);
+                Log.i("<Option>", userInf.getOptions().getNotify().toString());
                 for (Member mem : userInf.getOptions().getMembers()){
+
                     if (!mem.getId().equals(me_id)){
                         intent.putExtra("friend", mem);
                     }
