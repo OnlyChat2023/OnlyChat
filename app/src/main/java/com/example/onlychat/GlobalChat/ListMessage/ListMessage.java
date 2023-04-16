@@ -94,7 +94,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 
         Intent intent = getIntent();
         roomModel = (RoomModel) intent.getSerializableExtra("Data");
-        position = (int) intent.getSerializableExtra("Position");
+//        position = (int) intent.getSerializableExtra("Position");
 
         pref = new GlobalPreferenceManager(this);
         myInfo = pref.getUserModel();

@@ -40,6 +40,8 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
         messageContent = (TextView) row.findViewById(R.id.messageContent);
         messageTime = (TextView) row.findViewById(R.id.messageTime);
 
+        new HttpManager.GetImageFromServer(messageAvatar).execute(listRooms.get(position).getAvatar());
+
         messageName.setText(listRooms.get(position).getName());
         if (listRooms.get(position).getMessages().size() != 0) {
             MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size() - 1);
