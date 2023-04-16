@@ -76,6 +76,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     Button backButton;
     ImageView chatImage;
     TextView chatName;
+    TextView memberNumber;
     GlobalPreferenceManager pref;
     UserModel myInfo;
     CustomMessageItem customMessageItem;
@@ -134,10 +135,12 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         backButton = (Button) findViewById(R.id.backButton);
         chatImage = (ImageView) findViewById(R.id.avatar);
         chatName = (TextView) findViewById(R.id.textName);
+        memberNumber = (TextView) findViewById(R.id.textSubName);
         // set image
         new HttpManager.GetImageFromServer(chatImage).execute(roomModel.getAvatar());
 
         chatName.setText(roomModel.getName());
+        memberNumber.setText(Integer.toString(roomModel.getOptions().getMembers().size()) + " members");
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
