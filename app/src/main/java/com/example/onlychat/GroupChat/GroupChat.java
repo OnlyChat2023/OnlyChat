@@ -104,6 +104,8 @@ public class GroupChat extends Fragment {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
+                messageBottomDialogFragment.setActivity(GroupChat.this);
+                messageBottomDialogFragment.setPostion(i);
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
 
                 return true;
@@ -149,7 +151,7 @@ public class GroupChat extends Fragment {
                         String newName = newGroupName.getText().toString();
                         if (!newName.equals("")){
                             HttpManager httpManager = new HttpManager(getContext());
-                            httpManager.AddGroupChat(newName, pref.getUserModel().getId(), new HttpResponse() {
+                            httpManager.AddGroupChat(newName, pref.getUserModel().get_id(), new HttpResponse() {
                                 @Override
                                 public void onSuccess(JSONObject response) throws JSONException {
                                     Reload();
@@ -166,7 +168,6 @@ public class GroupChat extends Fragment {
                         else {
                             overlayWindow.dismiss();
                             popupWindow.dismiss();
-                            Reload();
                         }
 //                        Intent addMember = new Intent(popupView.getContext(), AddMember.class);
 //                        startActivity(addMember);
@@ -188,7 +189,7 @@ public class GroupChat extends Fragment {
     public void Reload() {
 
         HttpManager httpManager = new HttpManager(getContext());
-        httpManager.GetListGroupChat(pref.getUserModel().getId(), new HttpResponse() {
+        httpManager.GetListGroupChat(pref.getUserModel().get_id(), new HttpResponse() {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
                 try{
@@ -205,6 +206,23 @@ public class GroupChat extends Fragment {
             @Override
             public void onError(String error) {
                 Log.i("HTTP Error",error);
+            }
+        });
+    }
+
+    public void LeaveGroup(MessageBottomDialogFragment current, int i){
+        HttpManager httpManager = new HttpManager(getContext());
+        httpManager.LeaveGroupChat(pref.getUserModel().get_id(), roomModels.get(i).getId(), new HttpResponse() {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException {
+                Reload();
+                current.dismiss();
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.i("HTTP Leave Group Chat Error",error);
+                current.dismiss();
             }
         });
     }

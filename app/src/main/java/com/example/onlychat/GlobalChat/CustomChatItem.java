@@ -55,11 +55,11 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
         else{
             messageContent.setText("");
  
-            if(lastMessage.getTime().getMinutes()<10){
-                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":0"+(listRooms.get(position).getUpdate_time().getMinutes());
+            if(listRooms.get(position).getUpdate_time().getMinutes()<10){
+                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":0"+(listRooms.get(position).getUpdate_time().getMinutes())));
             }
             else{
-                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":"+(listRooms.get(position).getUpdate_time().getMinutes());
+                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":"+(listRooms.get(position).getUpdate_time().getMinutes())));
             }
         }
         return row;
