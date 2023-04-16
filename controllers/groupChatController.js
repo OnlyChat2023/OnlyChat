@@ -22,7 +22,7 @@ const addGroup = catchAsync(async (req, res, next) =>{
         avatar: userInf.avatar
       }],
       name: req.body.name,
-      avatar: null,
+      avatar: "",
       options:[{
         user_id: userInf._id,
         notify: false,
@@ -48,8 +48,39 @@ const getListGroupChat = catchAsync(async (req, res, next) => {
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
     GroupChat.push(dmList);
   }
-  
+
   res.status(200).json({ status: 'success', data: GroupChat });
 });
 
-export {addGroup, getListGroupChat}
+const leaveGroupChat = catchAsync(async (req, res, next) => {
+  //disconnect user to GroupChat
+  const user = await User.findOne({_id : req.body._id});
+  for(let i of user.groupchat_channel){
+    if (i == req.body.grc_id){
+      user.groupchat_channel.pull(i);
+      user.save();
+      break;
+    }
+  }
+
+  //Remove members
+  const GroupChat = await groupChat.findOne({_id: req.body.grc_id});
+  for (let i of GroupChat.members){
+    if (i.user_id == req.body._id){
+      GroupChat.members.pull(i);
+      break;
+    }
+  }
+  //Remove options
+  for (let i of GroupChat.options){
+    if (i.user_id == req.body._id){
+      GroupChat.options.pull(i);
+      break;
+    }
+  }
+  GroupChat.save()
+
+  res.status(200).json({ status: 'success', data: {}});
+});
+
+export {addGroup, getListGroupChat, leaveGroupChat}

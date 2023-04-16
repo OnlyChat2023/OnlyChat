@@ -7,15 +7,16 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   username: { type: String },
   avatar: { type: String, default: '' },
-  anonymouse_avatar: { type: String, default: '' },
-  nickname: { type: String, default: '' },
+  anonymous_avatar: { type: String, default: '' },
   description: { type: String, default: '' },
   email: { type: String, default: '' },
   phone: { type: String },
   facebook: { type: String, default: '' },
   instagram: { type: String, default: '' },
   university: { type: String, default: '' },
-  chatbot_channel: [{ type: String }],
+  chatbot_channel: [{
+    type: String
+  }],
   directmessage_channel: [{
     type: String
   }],

@@ -18,9 +18,9 @@ const messageSchema = new mongoose.Schema({
   members: [
     {
       user_id: String,
-      avatar: String,
-      name: String,
-      nickname: String,
+      avatar: { type: String, default: '' },
+      name: { type: String, default: '' },
+      nickname: { type: String, default: '' },
     }
   ],
   options: [

@@ -54,6 +54,7 @@ const login = catchAsync(async (req, res, next) => {
             instagram: user.instagram,
             description: user.description,
             avatar: user.avatar,
+            anonymous_avatar: user.anonymous_avatar,
             token: token,
         },
         channel: {

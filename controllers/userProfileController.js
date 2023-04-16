@@ -24,6 +24,10 @@ const getUserInformation = catchAsync(async (req, res) => {
   const groupChat = []
   for (let i of user.groupchat_channel) {
     const dmList = await GroupChat.findOne({ _id: i });
+    for (let i of dmList.chats) {
+      i.avatar = dmList.members.filter(el => el.user_id == i.user_id)[0].avatar
+      i.nickname = dmList.members.filter(el => el.user_id == i.user_id)[0].nickname
+    }
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
     groupChat.push(dmList);
   }
@@ -59,18 +63,31 @@ const getUserInformation = catchAsync(async (req, res) => {
   })
 })
 
+const getListFriend = catchAsync(async (req, res, next) => {
 
-const getUserProfile = catchAsync(async (req, res) => {
-  const user = await User.findOne({ _id: req.body._id })
+  // const list_friends = await User.find({ _id: { $in: req.user.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request')
+  const list_friends = await User.find({ _id: { $in: req.user.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
+
+
+  const list_friend_requests = await User.find({ _id: { $in: req.user.friend_request } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description -phone')
 
   res.status(200).json({
     status: 'success',
     data: {
-      user,
-    },
-  })
-})
+      friends: list_friends,
+      friend_requests: list_friend_requests,
+    }
+  });
+});
 
+const getUserById = catchAsync(async (req, res, nex) => {
+  const user = await User.findOne({ _id: req.body._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -nickname')
+
+  res.status(200).json({
+    status: 'success',
+    data: user
+  });
+})
 
 
 
@@ -121,4 +138,4 @@ const updateProfile = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: { user: updatedUser } });
 })
 
-export { getUserInformation, updateProfile, getUserProfile }
+export { getUserInformation, updateProfile, getUserById, getListFriend }

@@ -14,7 +14,7 @@ const messageSchema = new mongoose.Schema({
       }],
       time: Date,
       user_id: String,
-      anonymous_avatar: String,
+      avatar: String,
       nickname: String,
     }
   ],
@@ -22,8 +22,9 @@ const messageSchema = new mongoose.Schema({
   members: [
     {
       user_id: String,
-      avatar: String,
-      nickname: String,
+      avatar: { type: String, default: '' },
+      name: { type: String, default: '' },
+      nickname: { type: String, default: '' },
     }
   ],
   options: [

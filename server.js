@@ -241,13 +241,6 @@ io.on('connection', (socket) => {
         io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
 
-    socket.on('add_friend', (friend) => {
-
-    });
-
-    socket.on('remove_friend', (friend) => {
-
-    });
 
     socket.on('restriction_friend', (friend) => {
 
@@ -264,7 +257,17 @@ io.on('connection', (socket) => {
     socket.on('send_add_friend_request', () => {
 
     });
+
+    socket.on('acceptRequestAddFriend', (id) => {
+        socket.emit('friends', {
+            message: message,
+            user: socket.user,
+            time: new Date().getTime()
+        });
+    })
+
 });
+
 
 process.on('unhandledRejection', (err) => {
     console.log('Unhandled Rejection. Shutting down...');
