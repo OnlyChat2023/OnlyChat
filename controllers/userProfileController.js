@@ -31,7 +31,7 @@ const getUserInformation = catchAsync(async (req, res) => {
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
     groupChat.push(dmList);
   }
-  // console.log("Group", groupChat)
+  console.log("Group", groupChat)
 
   const globalChat = []
   for (let i of user.globalchat_channel) {
