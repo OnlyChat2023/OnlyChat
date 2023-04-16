@@ -2,10 +2,10 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
-  _id: mongoose.Schema.ObjectId,
   name: { type: String },
   password: { type: String },
   username: { type: String },
+  nickname: { type: String, default: ''},
   avatar: { type: String, default: '' },
   anonymous_avatar: { type: String, default: '' },
   description: { type: String, default: '' },
