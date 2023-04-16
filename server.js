@@ -181,20 +181,19 @@ io.on('connection', (socket) => {
         socket.join(roomId);
     });
 
-    socket.on('sendStringMessage', async (message, user) => {
+    socket.on('sendStringMessage', async (message, position, user) => {
         const send_user = JSON.parse(user);
-
-        console.log(message);
 
         let messageModal = {};
 
         if (socket.channel === 'global_chat') {
             messageModal = {
-                message: message,
+                message: Buffer.from(message, 'utf-8').toString(),
                 user_id: send_user.id,
+                imges: [],
                 // anonymous_avatar: user.anonymous_avatar,
                 anonymous_avatar: '',
-                nickname: send_user.name,
+                nickname: send_user.nickname,
                 time: new Date()
             }
 
@@ -202,36 +201,39 @@ io.on('connection', (socket) => {
             GlobalChannel.chats.push(messageModal);
             await GlobalChannel.save();
         }
-
-        io.sockets.in(socket.room).emit('messageListener', messageModal, { ...send_user, token: '' });
+        
+        io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
 
-    socket.on('sendImageMessage', (images, user) => {
+    socket.on('sendImageMessage', (images, position, user) => {
         const send_user = JSON.parse(user);
 
         const image_list = JSON.parse(images);
+        const imagePath = [];
 
         for (let i = 0; i < image_list.length; i++) {
             const image = image_list[i];
             const filename = `assets/chats/${socket.channel}/${uuid()}`;
 
             saveBase64Image(image, filename);
+            imagePath.push(filename.replace('assets/', ''));
         }
 
         let messageModal = {};
 
-        // if (socket.channel === 'global_chat') {
-        //     messageModal = {
-        //         message: message,
-        //         user_id: send_user.id,
-        //         // anonymous_avatar: user.anonymous_avatar,
-        //         anonymous_avatar: '',
-        //         nickname: send_user.name,
-        //         time: new Date()
-        //     }
-        // }
+        if (socket.channel === 'global_chat') {
+            messageModal = {
+                message: '',
+                user_id: send_user.id,
+                images: imagePath,
+                // anonymous_avatar: user.anonymous_avatar,
+                anonymous_avatar: '',
+                nickname: send_user.nickname,
+                time: new Date()
+            }
+        }
 
-        // io.sockets.in(socket.room).emit('messageListener', messageModal, { ...send_user, token: '' });
+        // io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
 
     socket.on('add_friend', (friend) => {

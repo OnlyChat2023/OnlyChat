@@ -47,6 +47,7 @@ const login = catchAsync(async (req, res, next) => {
             id: user._id.toString(),
             name: user.name,
             username: user.username,
+            nickname: user.nickname,
             email: user.email,
             phone: user.phone,
             facebook: user.facebook,
@@ -170,9 +171,6 @@ const protect = catchAsync(async (req, res, next) => {
 
     // 2) Verfication token
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-
-
-    console.log(decoded.id);
 
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);

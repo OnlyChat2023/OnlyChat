@@ -8,10 +8,14 @@ const messageSchema = new mongoose.Schema({
     {
       _id: mongoose.Schema.ObjectId,
       message: String,
+      images: [{
+        type: String,
+        default: ''
+      }],
       time: Date,
       user_id: String,
       anonymous_avatar: String,
-      nick_name: String,
+      nickname: String,
     }
   ],
   qr_code: String,
