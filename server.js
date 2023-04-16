@@ -32,8 +32,9 @@ const saveBase64Image = async (dataString, filename) => {
   response.data = matches[2];
 
   fs.writeFile(`${filename}.${response.type}`, response.data, { encoding: 'base64' }, (err) => {
-
   });
+
+  return `${filename}.${response.type}`;
 }
 
 const io = new Server(server);
@@ -205,7 +206,7 @@ io.on('connection', (socket) => {
         io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
 
-    socket.on('sendImageMessage', (images, position, user) => {
+    socket.on('sendImageMessage', async (images, position, user) => {
         const send_user = JSON.parse(user);
 
         const image_list = JSON.parse(images);
@@ -215,8 +216,8 @@ io.on('connection', (socket) => {
             const image = image_list[i];
             const filename = `assets/chats/${socket.channel}/${uuid()}`;
 
-            saveBase64Image(image, filename);
-            imagePath.push(filename.replace('assets/', ''));
+            const real_filename = await saveBase64Image(image, filename);
+            imagePath.push(real_filename.replace('assets/', ''));
         }
 
         let messageModal = {};
@@ -233,7 +234,11 @@ io.on('connection', (socket) => {
             }
         }
 
-        // io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
+        const GlobalChannel = await globalChat.findOne({_id: socket.room });
+        GlobalChannel.chats.push(messageModal);
+        await GlobalChannel.save();
+
+        io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
 
     socket.on('add_friend', (friend) => {
