@@ -79,34 +79,42 @@ public class MainScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        HttpManager httpManager = new HttpManager(this);
-        httpManager.getListChat(
-            new HttpResponse(){
-                @Override
-                public void onSuccess(JSONObject Response) {
-                    try{
-                        JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
-                        JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
-                        JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
-                        JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
+        Bundle bundle = getIntent().getExtras();
+        isLogin = bundle.getBoolean("isLogin", false);
 
-                        direct_list = getListRoom(directChat);
-                        group_list = getListRoom(groupChat);
-                        global_list = getListRoom(globalChat);
-                        chatbot_list = getListRoom(botChat);
+//        GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
+//        pref.SignOut();
 
-                        directChatFragment.setRoomModels(direct_list);
+        if (isLogin) {
+
+            HttpManager httpManager = new HttpManager(this);
+            httpManager.getListChat(
+                new HttpResponse(){
+                    @Override
+                    public void onSuccess(JSONObject Response) {
+                        try{
+                            JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
+                            JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
+                            JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
+                            JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
+
+                            direct_list = getListRoom(directChat);
+                            group_list = getListRoom(groupChat);
+                            global_list = getListRoom(globalChat);
+                            chatbot_list = getListRoom(botChat);
+
+                            directChatFragment.setRoomModels(direct_list);
 //                        Log.i("TAG", global_list.get(0).getName());
 
-                        globalChatFragment.setRoomModels(global_list);
-                        groupChatFragment.setRoomModels(group_list);
-                        botChatFragment.setRoomModels(chatbot_list);
+                            globalChatFragment.setRoomModels(global_list);
+                            groupChatFragment.setRoomModels(group_list);
+                            botChatFragment.setRoomModels(chatbot_list);
 
 
-                        Log.i("Main - Direct", Integer.toString(direct_list.size()));
-                        Log.i("Main - Group", Integer.toString(group_list.size()));
-                        Log.i("Main - Global", Integer.toString(global_list.size()));
-                        Log.i("Main - Bot", Integer.toString(chatbot_list.size()));
+                            Log.i("Main - Direct", Integer.toString(direct_list.size()));
+                            Log.i("Main - Group", Integer.toString(group_list.size()));
+                            Log.i("Main - Global", Integer.toString(global_list.size()));
+                            Log.i("Main - Bot", Integer.toString(chatbot_list.size()));
 //                        Log.i("Custom chat", direct_list.get(0).getName());
 //                        Log.i("Custom chat", direct_list.get(0).getAvatar());
 //                        Log.i("Custom chat", direct_list.get(0).getId());
@@ -125,15 +133,7 @@ public class MainScreen extends AppCompatActivity {
                     public void onError(String error) {
                         Log.i("HTTP Error",error);
                     }
-                });
-
-        Bundle bundle = getIntent().getExtras();
-        isLogin = bundle.getBoolean("isLogin", false);
-
-//        GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
-//        pref.SignOut();
-
-        if (isLogin) {
+            });
 
             setContentView(R.layout.main_screen);
 

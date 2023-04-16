@@ -1,5 +1,6 @@
 package com.example.onlychat.GlobalChat;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
+import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
@@ -44,9 +46,7 @@ public class GlobalChat extends Fragment {
 
     public void setRoomModels(ArrayList<RoomModel> roomModels) {
 //        this.roomModels = roomModels;
-        for(RoomModel i:roomModels){
-            this.roomModels.add(i);
-        }
+        this.roomModels.addAll(roomModels);
         customChatItem.notifyDataSetChanged();
         Log.i("SET - Global", roomModels.get(0).getName());
     }
@@ -62,6 +62,12 @@ public class GlobalChat extends Fragment {
     GridView androidGridView;
 
     public GlobalChat(){}
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        customChatItem.notifyDataSetChanged();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,9 +102,11 @@ public class GlobalChat extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ListMessage.class);
+
                 intent.putExtra("Data", roomModels.get(i));
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
+                intent.putExtra("Position", i);
+                startActivityForResult(intent, 0);
+                getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
 
@@ -166,6 +174,24 @@ public class GlobalChat extends Fragment {
             }
         });
         return globalChat;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
+//            int pos = data.getIntExtra("Position", -1);
+//            boolean update = data.getBooleanExtra("Update", false);
+//
+//            if (pos != -1 && update) {
+//                RoomModel newRoom = (RoomModel) data.getSerializableExtra("RoomModel");
+//
+//                roomModels.remove(pos);
+//                roomModels.add(newRoom);
+//
+//                customChatItem.notifyDataSetChanged();
+//            }
+        }
     }
 
     public class ImageAdapterGridView extends BaseAdapter {

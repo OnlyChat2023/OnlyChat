@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class UserModel implements Serializable {
-    String id,name,username,email,phone,facebook,instagram,university,description,avatar;
+    String id,name,nickname,username,email,phone,facebook,instagram,university,description,avatar;
     String token;
 
     public String getUniversity() {
@@ -89,6 +89,14 @@ public class UserModel implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getNickName() {
+        return nickname;
+    }
+
+    public void setNickName(String nickname) {
+        this.nickname = nickname;
     }
 
 }
