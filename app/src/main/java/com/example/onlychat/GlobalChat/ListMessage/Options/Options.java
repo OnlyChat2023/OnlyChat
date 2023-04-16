@@ -26,6 +26,7 @@ public class Options extends AppCompatActivity {
     ImageView backButton;
 
     TextView name;
+    TextView memberNumbers;
     ImageView avatar;
 
 
@@ -40,9 +41,11 @@ public class Options extends AppCompatActivity {
         String avatars = (String) intent.getSerializableExtra("Avatar");
 
         name = (TextView) findViewById(R.id.group_name);
+        memberNumbers = (TextView) findViewById(R.id.member_text_layout);
         avatar = (ImageView) findViewById(R.id.avatar);
 
         name.setText(names);
+        memberNumbers.setText("Members (" + Integer.toString(options.getMembers().size()) + ")");
         new HttpManager.GetImageFromServer(avatar).execute(avatars);
 
 
