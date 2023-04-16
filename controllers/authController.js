@@ -44,7 +44,7 @@ const login = catchAsync(async (req, res, next) => {
 
     const userInfo = {
         info: {
-            id: user._id.toString(),
+            _id: user._id.toString(),
             name: user.name,
             username: user.username,
             nickname: user.nickname,
