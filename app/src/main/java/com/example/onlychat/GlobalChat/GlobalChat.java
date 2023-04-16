@@ -23,6 +23,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
@@ -48,7 +50,7 @@ public class GlobalChat extends Fragment {
             this.roomModels.add(i);
         }
         customChatItem.notifyDataSetChanged();
-        Log.i("SET - Global", roomModels.get(0).getName());
+//        Log.i("SET - Global", roomModels.get(0).getName());
     }
 
     Integer avatarsImage[] = {
@@ -74,6 +76,9 @@ public class GlobalChat extends Fragment {
         profile=(ImageView) globalChat.findViewById(R.id.profile);
         addChat = (ImageView) globalChat.findViewById(R.id.addChat);
         listChat = (ListView) globalChat.findViewById(R.id.listChat);
+
+        new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAnonymous_avatar());
+
 
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);

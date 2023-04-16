@@ -35,6 +35,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/add_friend_btn"
             android:layout_width="0dp"
             android:layout_height="34dp"
             android:layout_weight=".50"
@@ -47,6 +48,7 @@
             />
 
         <Button
+            android:id="@+id/remove_btn"
             android:layout_width="0dp"
             android:layout_weight=".50"
             android:text="Remove"

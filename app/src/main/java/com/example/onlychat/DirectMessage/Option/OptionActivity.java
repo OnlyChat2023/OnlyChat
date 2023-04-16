@@ -23,6 +23,7 @@ import com.example.onlychat.DirectMessage.ChattingActivity;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.MainScreen.MainScreen;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.R;
 
 public class OptionActivity extends AppCompatActivity {
@@ -61,7 +62,9 @@ public class OptionActivity extends AppCompatActivity {
         friendInf = (Member) main_chat.getSerializableExtra("friend");
         meInf = (Member) main_chat.getSerializableExtra("me");
 //        avatar.setImageResource(friendInf.getAvatar());
-        txtName.setText(friendInf.getName());
+        new HttpManager.GetImageFromServer(avatar).execute(meInf.getAvatar());
+
+        txtName.setText(meInf.getName());
         if (options.getNotify()){
             btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
             notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
@@ -144,6 +147,7 @@ public class OptionActivity extends AppCompatActivity {
     public void setNickname(String frNN, String meNN){
         friendInf.setNickname(frNN);
         meInf.setNickname(meNN);
+
         Log.i("CHANGENN", friendInf.getNickname());
         Log.i("CHANGENN", meInf.getNickname());
 //        if (preChat != null)

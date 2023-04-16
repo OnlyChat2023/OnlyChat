@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.GlobalChat.CustomChatItem;
-import com.example.onlychat.GroupChat.ListMessage.ListMessage;
+import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.MainScreen.MainScreen;
@@ -70,7 +70,6 @@ public class GroupChat extends Fragment {
         for(RoomModel i:roomModels){
             this.roomModels.add(i);
         }
-
         customChatItem.notifyDataSetChanged();
     }
 
@@ -83,7 +82,7 @@ public class GroupChat extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        groupChat = (RelativeLayout) inflater.inflate(R.layout.activity_group_chat, null);
+        groupChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
         // set value for widget
         chatTitle = (TextView) groupChat.findViewById(R.id.header_title);
         chatTitle.setText("group chat channel");
@@ -92,6 +91,7 @@ public class GroupChat extends Fragment {
         addChat = (ImageView) groupChat.findViewById(R.id.addChat);
         listChat = (ListView) groupChat.findViewById(R.id.listChat);
 
+        new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAvatar());
         pref = new GlobalPreferenceManager(getContext());
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);

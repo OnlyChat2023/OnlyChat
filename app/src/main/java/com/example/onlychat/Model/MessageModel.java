@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MessageModel implements Serializable {
-    String id,user_id,avatar;
+    String id,user_id="",avatar="";
     String name,nickname ,message;
     Date time;
     ArrayList<String> seenUser=new ArrayList<>();

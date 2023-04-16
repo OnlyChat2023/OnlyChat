@@ -12,11 +12,12 @@ public class Member implements Serializable {
         this.avatar = avatar;
     }
 
-    public String getUserId() {
+    public String getId() {
         return user_id;
     }
 
-    public void setUserId(String id) {
+    public void setId(String id) {
+
         this.user_id = id;
     }
 

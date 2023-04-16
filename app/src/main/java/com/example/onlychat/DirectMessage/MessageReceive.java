@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.R;
 
@@ -43,7 +44,9 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
             TextView msg = (TextView) row.findViewById(R.id.chatContent);
             ImageView avt = (ImageView) row.findViewById(R.id.avatar);
             TextView time = (TextView) row.findViewById(R.id.timeMessage);
-//            avt.setImageResource(this.avatar);
+            // set image
+            new HttpManager.GetImageFromServer(avt).execute(this.avatar);
+
             msg.setText(this.message.get(position).getMessage());
             Date timeMsg = this.message.get(position).getTime();
             time.setText("Sent at " + timeMsg.getHours() + ":" + timeMsg.getMinutes() + " " + timeMsg.getDate());

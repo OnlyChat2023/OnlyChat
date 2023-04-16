@@ -30,11 +30,11 @@
 <!--                android:layout_height="25dp"-->
 <!--                android:src="@drawable/global_chat_icon" />-->
 
-<!--            <ImageView-->
-<!--                android:id="@+id/profile"-->
-<!--                android:layout_width="60dp"-->
-<!--                android:layout_height="60dp"-->
-<!--                android:src="@drawable/global_chat_avatar" />-->
+            <ImageView
+                android:id="@+id/profile"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/global_chat_avatar" />
 
             <ImageView
                 android:id="@+id/addChat"

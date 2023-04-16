@@ -2,32 +2,56 @@ package com.example.onlychat.Friends.Invite;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 
-public class CustomInviteItem extends ArrayAdapter<String> {
+import java.util.ArrayList;
+
+public class CustomInviteItem extends ArrayAdapter<UserModel> {
 
     Context context;
-    Integer avatars[];
-    String names[];
-
     ImageView avatar;
     TextView name;
 
-    public CustomInviteItem(@NonNull Context context,Integer[] avatars, String[] names) {
-        super(context, R.layout.friends_invite_item,names);
+    Button addFriendBtn;
+    Button removeBtn;
+
+
+    public Button getAddFriendBtn() {
+        return addFriendBtn;
+    }
+
+    public void setAddFriendBtn(Button addFriendBtn) {
+        this.addFriendBtn = addFriendBtn;
+    }
+
+    public Button getRemoveBtn() {
+        return removeBtn;
+    }
+
+    public void setRemoveBtn(Button removeBtn) {
+        this.removeBtn = removeBtn;
+    }
+
+    ArrayList<UserModel> listInvite;
+
+    public CustomInviteItem(@NonNull Context context, ArrayList<UserModel> list_invite) {
+        super(context, R.layout.friends_invite_item,list_invite);
         this.context=context;
-        this.avatars=avatars;
-        this.names= names;
+        this.listInvite = list_invite;
     }
 
     @NonNull
@@ -36,11 +60,33 @@ public class CustomInviteItem extends ArrayAdapter<String> {
         View row;
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         row = inflater.inflate(R.layout.friends_invite_item,null);
+
         avatar = (ImageView) row.findViewById(R.id.avatar);
         name = (TextView) row.findViewById(R.id.name);
+//        Log.i("custom invite item", listInvite.get(position).getName());
 
-        avatar.setImageResource(avatars[position]);
-        name.setText(names[position]);
+        new HttpManager.GetImageFromServer(avatar).execute(listInvite.get(position).getAvatar());
+        name.setText(listInvite.get(position).getName());
+
+        addFriendBtn = (Button) row.findViewById(R.id.add_friend_btn);
+        removeBtn = (Button) row.findViewById(R.id.remove_btn);
+
+        addFriendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Invite.removeItem(position);
+
+            }
+        });
+
+        removeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Invite.removeItem(position);
+
+            }
+        });
+
 
         return row;
     }

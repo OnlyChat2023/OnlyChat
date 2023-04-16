@@ -22,6 +22,7 @@ import android.widget.ListView;
 import com.example.onlychat.DiaLog.DMBottomDialog;
 import com.example.onlychat.DirectMessage.Option.OptionActivity;
 import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
@@ -72,6 +73,7 @@ public class ChattingActivity extends AppCompatActivity {
         userInf = (RoomModel) main_chat.getSerializableExtra("roomChat");
 //        Log.i("CHATTING", userInf.getOptions().getMembers().get(0).getName());
 //        imgAvatar.setImageResource(userInf.getAvatar());
+        new HttpManager.GetImageFromServer(imgAvatar).execute(userInf.getAvatar());
         me_id = userInf.getOptions().getUser_id();
         txtName.setText(userInf.getName());
         txtOnline.setText("Online");
@@ -80,6 +82,7 @@ public class ChattingActivity extends AppCompatActivity {
         MessageReceive adapter = new MessageReceive(this, userInf.getAvatar(), me_id, userInf.getMessages());
         chatContent.setAdapter(adapter);
         chatContent.setSelection(adapter.getCount() - 1);
+
         chatContent.setMotionEventSplittingEnabled(true);
         chatContent.smoothScrollToPosition(adapter.getCount() - 1);
         chatContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -165,7 +168,7 @@ public class ChattingActivity extends AppCompatActivity {
                 Log.i("<Option>", userInf.getOptions().getNotify().toString());
                 for (Member mem : userInf.getOptions().getMembers()){
 
-                    if (!mem.getUserId().equals(me_id)){
+                    if (!mem.getId().equals(me_id)){
                         intent.putExtra("friend", mem);
                     }
                     else{
@@ -241,7 +244,7 @@ public class ChattingActivity extends AppCompatActivity {
 
     public void setNickname(String frNN, String meNN) {
         for(Member mem : this.userInf.getOptions().getMembers()){
-            if (mem.getUserId().equals(me_id)){
+            if (mem.getId().equals(me_id)){
                 mem.setNickname(meNN);
             } else{
                 mem.setNickname(frNN);

@@ -51,7 +51,7 @@ public class ChatBot extends Fragment {
             this.roomModels.add(i);
         }
         customChatItem.notifyDataSetChanged();
-        Log.i("SET - Bot", roomModels.get(0).getName());
+//        Log.i("SET - Bot", roomModels.get(0).getName());
     }
 
     public ChatBot(){}
@@ -79,6 +79,8 @@ public class ChatBot extends Fragment {
 
         Log.i("Bot chat", Integer.toString(roomModels.size()));
 
+        profile.setVisibility(View.GONE);
+
 
         chatTitle.setText("Bot Chat Channel");
 
@@ -94,16 +96,9 @@ public class ChatBot extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ListMessage.class);
-                Bundle userInf = new Bundle();
-                TextView name = (TextView) view.findViewById(R.id.messageName);
-                ImageView avatar = (ImageView) view.findViewById(R.id.messageAvatar);
-
-                userInf.putString("name", name.getText().toString());
-                avatar.setDrawingCacheEnabled(true);
-                Bitmap b = avatar.getDrawingCache();
-                intent.putExtras(userInf);
-                intent.putExtra("Bitmap", b);
+                intent.putExtra("Data", roomModels.get(i));
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
 
