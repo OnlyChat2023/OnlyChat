@@ -36,7 +36,7 @@ public class HttpManager {
     private Context context;
     private GlobalPreferenceManager pref;
     static private UserModel user = new UserModel();
-    private final String ip = "192.168.1.43";
+    private final String ip = "192.168.1.177";
 
     public HttpManager(Context _context) {
         this.context = _context;
@@ -168,5 +168,12 @@ public class HttpManager {
         params.put("update_time", Calendar.getInstance().getTime().toString());
 
         createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/addGroup", Request.Method.POST, "addGroup", params, responseReceiver);
+    }
+
+    public void GetListGroupChat(String userID, HttpResponse responseReceiver){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("_id", userID);
+
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/getListGroupChat", Request.Method.POST, "getListGroupChat", params, responseReceiver);
     }
 }

@@ -41,19 +41,15 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
         messageTime = (TextView) row.findViewById(R.id.messageTime);
 
         messageName.setText(listRooms.get(position).getName());
-        MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size()-1);
-
-        messageContent.setText(lastMessage.getMessage());
-        messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
-
+        if (listRooms.get(position).getMessages().size() != 0) {
+            MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size() - 1);
+            messageContent.setText(lastMessage.getMessage());
+            messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
+        }
+        else{
+            messageContent.setText("");
+            messageTime.setText(listRooms.get(position).getUpdate_time().getHours()+":"+listRooms.get(position).getUpdate_time().getMinutes());
+        }
         return row;
     }
-
-//    public void changeData(Integer[] avatars, String[] names,String[] messages,String[] times){
-//        this.avatars = avatars;
-//        this.names = names;
-//        this.messages = messages;
-//        this.times = times;
-//        this.notifyDataSetChanged();
-//    }
 }
