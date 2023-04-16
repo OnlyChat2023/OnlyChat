@@ -185,6 +185,8 @@ io.on('connection', (socket) => {
     socket.on('sendStringMessage', async (message, position, user) => {
         const send_user = JSON.parse(user);
 
+        console.log(send_user);
+
         let messageModal = {};
 
         if (socket.channel === 'global_chat') {
@@ -192,8 +194,7 @@ io.on('connection', (socket) => {
                 message: Buffer.from(message, 'utf-8').toString(),
                 user_id: send_user._id,
                 imges: [],
-                // anonymous_avatar: user.anonymous_avatar,
-                anonymous_avatar: '',
+                avatar: send_user.anonymous_avatar,
                 nickname: send_user.nickname,
                 time: new Date()
             }
@@ -208,6 +209,8 @@ io.on('connection', (socket) => {
 
     socket.on('sendImageMessage', async (images, position, user) => {
         const send_user = JSON.parse(user);
+
+        console.log(send_user);
 
         const image_list = JSON.parse(images);
         const imagePath = [];
@@ -227,8 +230,7 @@ io.on('connection', (socket) => {
                 message: '',
                 user_id: send_user._id,
                 images: imagePath,
-                // anonymous_avatar: user.anonymous_avatar,
-                anonymous_avatar: '',
+                avatar: send_user.anonymous_avatar,
                 nickname: send_user.nickname,
                 time: new Date()
             }
