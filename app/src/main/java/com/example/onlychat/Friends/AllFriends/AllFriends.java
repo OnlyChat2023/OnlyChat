@@ -32,6 +32,7 @@ public class AllFriends extends Fragment {
     ArrayList<UserModel> friend_list = new ArrayList<>();
 
     public void setFriend_list(ArrayList<UserModel> friend_list){
+        this.friend_list.clear();
         for(UserModel i:friend_list){
             this.friend_list.add(i);
         }

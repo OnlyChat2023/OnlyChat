@@ -63,7 +63,7 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
             message.setText(messageModels.get(position).getMessage());
             name.setText(messageModels.get(position).getNickName());
             // set image
-            Log.i("Custom message user", messageModels.get(position).getAvatar());
+//            Log.i("Custom message user", messageModels.get(position).getAvatar());
             new HttpManager.GetImageFromServer(imageView).execute(messageModels.get(position).getAvatar());
 //            imageView.setImageResource(messageModels.get(position).getAvatar());
 

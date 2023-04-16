@@ -14,7 +14,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.onlychat.Friends.Friends;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 
@@ -45,7 +48,8 @@ public class CustomInviteItem extends ArrayAdapter<UserModel> {
     public void setRemoveBtn(Button removeBtn) {
         this.removeBtn = removeBtn;
     }
-
+    GlobalPreferenceManager pref;
+    UserModel myInfo;
     ArrayList<UserModel> listInvite;
 
     public CustomInviteItem(@NonNull Context context, ArrayList<UserModel> list_invite) {
@@ -61,6 +65,9 @@ public class CustomInviteItem extends ArrayAdapter<UserModel> {
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         row = inflater.inflate(R.layout.friends_invite_item,null);
 
+        pref = new GlobalPreferenceManager(getContext());
+        myInfo = pref.getUserModel();
+
         avatar = (ImageView) row.findViewById(R.id.avatar);
         name = (TextView) row.findViewById(R.id.name);
 //        Log.i("custom invite item", listInvite.get(position).getName());
@@ -68,22 +75,28 @@ public class CustomInviteItem extends ArrayAdapter<UserModel> {
         new HttpManager.GetImageFromServer(avatar).execute(listInvite.get(position).getAvatar());
         name.setText(listInvite.get(position).getName());
 
+//        Log.i("Custom invite item", listInvite.get(position).get_id());
+
         addFriendBtn = (Button) row.findViewById(R.id.add_friend_btn);
         removeBtn = (Button) row.findViewById(R.id.remove_btn);
 
         addFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SocketManager.getInstance();
+                SocketManager.acceptRequestAddFriend(listInvite.get(position).get_id(),myInfo);
                 Invite.removeItem(position);
 
+                Friends.updateUI();
             }
         });
 
         removeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SocketManager.getInstance();
+                SocketManager.removeRequestAddFriend(listInvite.get(position).get_id(),myInfo);
                 Invite.removeItem(position);
-
             }
         });
 

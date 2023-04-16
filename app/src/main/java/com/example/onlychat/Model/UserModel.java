@@ -6,17 +6,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class UserModel implements Serializable {
-    String id,name,anonymous_avatar,username,email,phone,facebook,instagram,university,description,avatar;
+    String _id,name,anonymous_avatar,username,email,phone,facebook,instagram,university,description,avatar;
     String token;
 
     public UserModel(){}
 
     public String get_id() {
-        return id;
+        return _id;
     }
 
     public void set_id(String _id) {
-        this.id = _id;
+        this._id = _id;
     }
 
     public String getName() {

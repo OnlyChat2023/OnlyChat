@@ -4,6 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public interface HttpResponse {
-    void onSuccess(JSONObject response) throws JSONException;
+    void onSuccess(JSONObject response) throws JSONException, InterruptedException;
     void onError(String error);
 }

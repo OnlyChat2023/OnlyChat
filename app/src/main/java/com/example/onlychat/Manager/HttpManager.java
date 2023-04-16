@@ -64,6 +64,8 @@ public class HttpManager {
                         httpResponse.onSuccess(response);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             },
