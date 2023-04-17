@@ -30,11 +30,7 @@ public class SocketManager {
     public synchronized static void getInstance() {
         if (socket == null) {
             try {
-<<<<<<< HEAD
                 socket = IO.socket("http://192.168.1.147:5000");
-=======
-                socket = IO.socket("http://192.168.1.205:5000");
->>>>>>> 2576e0bd8763af3a9919008d5e3ca00634349887
                 socket.connect();
             } catch (Exception e) {
                 e.printStackTrace();
