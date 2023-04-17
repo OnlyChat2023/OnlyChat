@@ -29,7 +29,7 @@ public class DownloadImage extends AsyncTask<Void, Void, ArrayList<Bitmap>> {
         for (String url : imageUrls) {
             Bitmap mIcon11 = null;
             try {
-                InputStream in = new java.net.URL("http://"+Utils.ip+"/assets/" + url).openStream();
+                InputStream in = new java.net.URL("http://"+Utils.ip+":5000/assets/" + url).openStream();
                 imageBM.add(BitmapFactory.decodeStream(in));
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
