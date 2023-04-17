@@ -79,21 +79,9 @@ public class MainScreen extends AppCompatActivity {
     ChatBot botChatFragment = new ChatBot();
     Friends friendsFragment = new Friends();
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Bundle bundle = getIntent().getExtras();
-        isLogin = bundle.getBoolean("isLogin", false);
-
-//        GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
-//        pref.SignOut();
-
-        if (isLogin) {
-
-            HttpManager httpManager = new HttpManager(this);
-            httpManager.getListChat(
+    public void getMetaData() {
+        HttpManager httpManager = new HttpManager(this);
+        httpManager.getListChat(
                 new HttpResponse(){
                     @Override
                     public void onSuccess(JSONObject Response) {
@@ -103,7 +91,7 @@ public class MainScreen extends AppCompatActivity {
                             JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
                             JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
 
-                           
+
                             if(directChat.length()>0){
                                 direct_list = getListRoom(directChat);
                                 directChatFragment.setRoomModels(direct_list);
@@ -134,9 +122,9 @@ public class MainScreen extends AppCompatActivity {
                         Log.i("HTTP Error",error);
                     }
                 }
-            );
+        );
 
-            httpManager.getListFriends(
+        httpManager.getListFriends(
                 new HttpResponse() {
                     @Override
                     public void onSuccess(JSONObject response) throws JSONException {
@@ -154,8 +142,28 @@ public class MainScreen extends AppCompatActivity {
 
                     }
                 }
-            );
+        );
+    }
 
+    @Override
+    protected void onResume() {
+//        if (isLogin)
+//            getMetaData();
+        super.onResume();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle bundle = getIntent().getExtras();
+        isLogin = bundle.getBoolean("isLogin", false);
+
+//        GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
+//        pref.SignOut();
+
+        if (isLogin) {
+            getMetaData();
             setContentView(R.layout.main_screen);
 
             viewPager = (ViewPager) findViewById(R.id.viewPaper);

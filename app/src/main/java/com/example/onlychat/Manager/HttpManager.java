@@ -40,7 +40,7 @@ import java.util.Map;
 public class HttpManager {
     private Context context;
     private static GlobalPreferenceManager pref;
-    private static final String ip = "192.168.1.60";
+    private static final String ip = "192.168.1.205";
     static private UserModel user = new UserModel();
 
     public HttpManager(Context _context) {
@@ -94,7 +94,7 @@ public class HttpManager {
                                 String message = data.getString("message");
                                 Log.e("HTTP ERROR", message);
                             } catch (UnsupportedEncodingException | JSONException e) {
-                                throw new RuntimeException(e);
+                                //throw new RuntimeException(e);
                             }
                         }
                         httpResponse.onError(error.getMessage() == null ? error.toString() : error.getMessage());

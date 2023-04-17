@@ -45,7 +45,12 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
         messageName.setText(listRooms.get(position).getName());
         if (listRooms.get(position).getMessages().size() != 0) {
             MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size() - 1);
-            messageContent.setText(lastMessage.getMessage());
+
+            if (lastMessage.getMessage().isEmpty()) {
+                messageContent.setText("Đã gửi hình ảnh");
+            }
+            else
+                messageContent.setText(lastMessage.getMessage());
 
             if(lastMessage.getTime().getMinutes()<10){
                 messageTime.setText(lastMessage.getTime().getHours()+":0"+lastMessage.getTime().getMinutes());
@@ -57,12 +62,12 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
         else{
             messageContent.setText("");
  
-            if(listRooms.get(position).getUpdate_time().getMinutes()<10){
-                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":0"+(listRooms.get(position).getUpdate_time().getMinutes())));
-            }
-            else{
-                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":"+(listRooms.get(position).getUpdate_time().getMinutes())));
-            }
+//            if(listRooms.get(position).getUpdate_time().getMinutes()<10){
+//                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":0"+(listRooms.get(position).getUpdate_time().getMinutes())));
+//            }
+//            else{
+//                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":"+(listRooms.get(position).getUpdate_time().getMinutes())));
+//            }
         }
         return row;
     }

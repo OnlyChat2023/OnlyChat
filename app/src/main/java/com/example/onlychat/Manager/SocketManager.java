@@ -30,7 +30,7 @@ public class SocketManager {
     public synchronized static void getInstance() {
         if (socket == null) {
             try {
-                socket = IO.socket("http://192.168.1.60:5000");
+                socket = IO.socket("http://192.168.1.205:5000");
                 socket.connect();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -107,6 +107,12 @@ public class SocketManager {
                     listener.onMessage(message, position);
                 }
             });
+        }
+    }
+
+    public static void getMetaData(UserModel user) {
+        if (socket != null) {
+            socket.emit("getMetaData", new Gson().toJson(user));
         }
     }
 }
