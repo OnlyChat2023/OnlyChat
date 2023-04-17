@@ -13,6 +13,8 @@ import User from './models/userModel.js';
 import { json } from 'express';
 dotenv.config({ path: './config.env' });
 
+let basket = {};
+
 mongoose
     .connect(process.env.DATABASE)
     .then(() => {
@@ -33,16 +35,9 @@ const saveBase64Image = async (dataString, filename) => {
     response.type = matches[1];
     response.data = matches[2];
 
-<<<<<<< HEAD
     fs.writeFile(`${filename}.${response.type}`, response.data, { encoding: 'base64' }, (err) => {
 
     });
-=======
-  fs.writeFile(`${filename}.${response.type}`, response.data, { encoding: 'base64' }, (err) => {
-  });
-
-  return `${filename}.${response.type}`;
->>>>>>> 794c206c2d2edecc12866fbef6ae00997282f68b
 }
 
 const io = new Server(server);
@@ -181,6 +176,11 @@ io.of('/global_message').on('connection', (socket) => {
 
 io.on('connection', (socket) => {
 
+    socket.on("register", function (user) {
+        const _user = JSON.parse(user);
+        basket[_user._id] = socket.id;
+    });
+
     socket.on('joinRoom', (roomInfo, user) => {
         const [roomId, channel] = roomInfo.split('::');
         socket.room = roomId;
@@ -244,7 +244,7 @@ io.on('connection', (socket) => {
             }
         }
 
-        const GlobalChannel = await globalChat.findOne({_id: socket.room });
+        const GlobalChannel = await globalChat.findOne({ _id: socket.room });
         GlobalChannel.chats.push(messageModal);
         await GlobalChannel.save();
 
@@ -280,6 +280,9 @@ io.on('connection', (socket) => {
         const list_friends = await User.find({ _id: { $in: u.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
         io.sockets.emit('acceptRequestListener', list_friends);
 
+        const f_list_friends = await User.find({ _id: { $in: f.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
+        io.to(basket[id]).emit("waitAcceptFriend", f_list_friends);
+
         await u.save()
         await f.save()
     })
@@ -297,6 +300,10 @@ io.on('connection', (socket) => {
         u.friend.splice(u.friend.indexOf(id), 1)
         let f = await User.findOne({ _id: id })
         f.friend.splice(f.friend.indexOf(_user._id), 1)
+
+        const f_list_friends = await User.find({ _id: { $in: f.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
+        io.to(basket[id]).emit("waitDeleteFriend", f_list_friends);
+
         await u.save()
         await f.save()
     })
