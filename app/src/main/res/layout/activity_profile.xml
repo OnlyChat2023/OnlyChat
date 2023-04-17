@@ -52,21 +52,35 @@
                 android:layout_centerHorizontal="true">
 
                 <Button
-                    android:id="@+id/button2"
+                    android:layout_height="43dp"
+                    android:id="@+id/add_friend_btn"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/profile_btn_add"
                     android:drawableEnd="@drawable/ic_add_friend"
                     android:fontFamily="@font/montserrat_bold"
                     android:paddingHorizontal="13dp"
                     android:text="Add friend"
+
+                    android:textAllCaps="false"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/edit_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/profile_btn_add"
+                    android:drawableEnd="@drawable/ic_pencil"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:paddingHorizontal="13dp"
+                    android:text="Edit Profile"
                     android:textAlignment="textStart"
                     android:textAllCaps="false"
                     android:textSize="13sp" />
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/send_chat_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="43dp"
                     android:background="@drawable/profile_btn_send_chat"
@@ -95,10 +109,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:background="#181828"
-                    android:fontFamily="@font/montserrat_regular"
+                    android:fontFamily="@font/montserrat_bold"
                     app:tabIndicatorColor="@color/white"
                     app:tabSelectedTextColor="@color/white"
-                    app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+                    app:tabTextAppearance="@style/TabBar.TitleText"
                     app:tabTextColor="#FFFFFF" />
 
                 <androidx.viewpager.widget.ViewPager

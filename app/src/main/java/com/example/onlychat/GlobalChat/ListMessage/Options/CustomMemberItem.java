@@ -2,6 +2,7 @@ package com.example.onlychat.GlobalChat.ListMessage.Options;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,16 @@ import java.util.ArrayList;
 
 public class CustomMemberItem extends ArrayAdapter<Member> {
     Context context;
-    ArrayList<Member> userModels;
+    ArrayList<Member> memberList;
+    ImageView avatar;
+    TextView name;
     Boolean isAddMember = false;
 
 
-    public CustomMemberItem(Context context, ArrayList<Member> userList){
-        super(context, R.layout.global_chat_custom_chat_item, userList);
+    public CustomMemberItem(Context context, ArrayList<Member> members){
+        super(context, R.layout.global_chat_custom_chat_item,members);
         this.context = context;
-        this.userModels = userList;
+        memberList = members;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
@@ -39,8 +42,9 @@ public class CustomMemberItem extends ArrayAdapter<Member> {
             icon.setVisibility(View.INVISIBLE);
         }
 
-        new HttpManager.GetImageFromServer(avatar).execute(userModels.get(position).getAvatar());
-        name.setText(userModels.get(position).getName());
+//        avatar.setImageResource(memberList.get(position).getAvatar());
+        new HttpManager.GetImageFromServer(avatar).execute(memberList.get(position).getAvatar());
+        name.setText(memberList.get(position).getNickname());
 
         return row;
     }

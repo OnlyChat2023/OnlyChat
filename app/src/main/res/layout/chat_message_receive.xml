@@ -4,6 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingVertical="9dp"
+    android:descendantFocusability="blocksDescendants"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -26,12 +27,13 @@
         android:textColor="#818181"
         android:textSize="8sp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/chatLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/avatar"
         android:layout_below="@id/timeMessage"
+        android:descendantFocusability="blocksDescendants"
         android:background="@drawable/global_chat_round_left"
         android:orientation="vertical">
 
@@ -45,9 +47,15 @@
             android:textColor="@color/white"
             android:textSize="14sp" />
 
-        <ImageView
-            android:id="@+id/chatImage"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imagesLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:touchscreenBlocksFocus="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:descendantFocusability="blocksDescendants">
+        </androidx.recyclerview.widget.RecyclerView>
+    </RelativeLayout>
 </RelativeLayout>

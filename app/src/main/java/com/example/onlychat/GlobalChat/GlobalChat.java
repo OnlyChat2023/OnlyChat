@@ -24,6 +24,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
+import com.example.onlychat.Interfaces.MessageListener;
+import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
@@ -110,6 +112,7 @@ public class GlobalChat extends Fragment {
 
                 intent.putExtra("Data", roomModels.get(i));
                 intent.putExtra("Position", i);
+                intent.putExtra("channel", "global_chat");
                 startActivityForResult(intent, 0);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }

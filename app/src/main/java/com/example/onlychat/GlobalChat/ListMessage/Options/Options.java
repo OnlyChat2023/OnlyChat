@@ -3,6 +3,7 @@ package com.example.onlychat.GlobalChat.ListMessage.Options;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DialogFragment;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -59,6 +60,10 @@ public class Options extends AppCompatActivity {
     int UPDATEOPTION = -6;
     int ADDMEMBER = -7;
 
+    TextView memberQuantity;
+
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,9 +86,10 @@ public class Options extends AppCompatActivity {
         block.setVisibility(View.GONE);
 
         name = (TextView) findViewById(R.id.group_name);
-        memberNumbers = (TextView) findViewById(R.id.member_text_layout);
+        memberNumbers = (TextView) findViewById(R.id.memberQuantity);
         avatar = (ImageView) findViewById(R.id.avatar);
-
+        memberQuantity =  (TextView) findViewById(R.id.memberQuantity);
+        memberQuantity.setText("Members ("+options.getMembers().size()+")");
         name.setText(names);
         memberNumbers.setText("Members (" + Integer.toString(options.getMembers().size()) + ")");
         new HttpManager.GetImageFromServer(avatar).execute(avatars);
@@ -148,11 +154,14 @@ public class Options extends AppCompatActivity {
 
                 // Popup
                 View popupView = inflater.inflate(R.layout.global_chat_popup_members, null);
-                TextView title = (TextView) popupView.findViewById(R.id.title_members);
+                TextView title = (TextView) popupView.findViewById(R.id.quantity);
                 title.setText("Friends (" + Integer.toString(options.getMembers().size()) + ")");
 
                 // set list members
                 listMembers = (ListView)  popupView.findViewById(R.id.listMembers);
+                TextView quantity = (TextView) popupView.findViewById(R.id.quantity);
+                quantity.setText("Members ("+options.getMembers().size()+")");
+//                Log.i("Option", Integer.toString(options.getMembers().size()));
                 CustomMemberItem customMemberItem=new CustomMemberItem(popupView.getContext(),options.getMembers());
                 listMembers.setAdapter(customMemberItem);
                 listMembers.setSelection(0);

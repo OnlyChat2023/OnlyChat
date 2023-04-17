@@ -1,13 +1,20 @@
 package com.example.onlychat.DirectMessage;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -18,24 +25,39 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.onlychat.Async.ConvertImage;
 import com.example.onlychat.DiaLog.DMBottomDialog;
 import com.example.onlychat.DirectMessage.Option.OptionActivity;
+import com.example.onlychat.GlobalChat.ListMessage.CustomMessageItem;
+import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
+import com.example.onlychat.GroupChat.ListMessage.MainAdp;
+import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.Interfaces.MessageListener;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.SocketManager;
+import com.example.onlychat.Model.ImageModel;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 import com.vanniktech.emoji.EmojiPopup;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
+import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class ChattingActivity extends AppCompatActivity {
+public class ChattingActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
     ImageView imgAvatar, btnFile, btnImage, btnIcon, btnSend;
     String me_id;
     View gap;
@@ -45,7 +67,15 @@ public class ChattingActivity extends AppCompatActivity {
     ListView chatContent;
     RelativeLayout chatLayout;
     RoomModel userInf;
+    GlobalPreferenceManager pref;
+    UserModel myInfo;
+    MessageReceive adapter;
     ArrayList<Uri> arrayList = new ArrayList<>();
+    RecyclerView recyclerView;
+    MainAdp mainAdapter;
+    int position;
+    boolean update = false;
+    ImageModel myModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +101,15 @@ public class ChattingActivity extends AppCompatActivity {
 
         Intent main_chat = getIntent();
         userInf = (RoomModel) main_chat.getSerializableExtra("roomChat");
+
+        pref = new GlobalPreferenceManager(this);
+        myInfo = pref.getUserModel();
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mainAdapter = new MainAdp(arrayList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+        recyclerView.setAdapter(mainAdapter);
+
 //        Log.i("CHATTING", userInf.getOptions().getMembers().get(0).getName());
 //        imgAvatar.setImageResource(userInf.getAvatar());
         new HttpManager.GetImageFromServer(imgAvatar).execute(userInf.getAvatar());
@@ -79,21 +118,21 @@ public class ChattingActivity extends AppCompatActivity {
         txtOnline.setText("Online");
         txtOnline.setTextColor(getResources().getColor(R.color.online_green));
 
-        MessageReceive adapter = new MessageReceive(this, userInf.getAvatar(), me_id, userInf.getMessages());
-        chatContent.setAdapter(adapter);
-        chatContent.setSelection(adapter.getCount() - 1);
+        adapter = new MessageReceive(this, userInf.getAvatar(), me_id, userInf.getMessages());
 
-        chatContent.setMotionEventSplittingEnabled(true);
-        chatContent.smoothScrollToPosition(adapter.getCount() - 1);
         chatContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 TextView timeMsg = (TextView) v.findViewById(R.id.timeMessage);
-                if (timeMsg.getVisibility() == View.GONE)
+
+                if (timeMsg.getVisibility() == View.GONE) {
                     timeMsg.setVisibility(View.VISIBLE);
-                else
+                }
+                else {
                     timeMsg.setVisibility(View.GONE);
-            }});
+                }
+            }
+        });
 
         chatContent.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -103,6 +142,12 @@ public class ChattingActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        chatContent.setAdapter(adapter);
+        chatContent.setSelection(adapter.getCount() - 1);
+
+        chatContent.setMotionEventSplittingEnabled(true);
+        chatContent.smoothScrollToPosition(adapter.getCount() - 1);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,13 +195,33 @@ public class ChattingActivity extends AppCompatActivity {
         });
 
         btnSend.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onClick(View view) {
-                String msg = chatMessage.getText().toString();
-                if (msg.length() != 0) {
-                    adapter.AddMessage(new MessageModel("1234567890", me_id, null, "", "", msg, Calendar.getInstance().getTime(), null));
-                    chatMessage.setText("");
+                final String chatTXT = chatMessage.getText().toString();
 
+                if (!TextUtils.isEmpty(chatTXT)) {
+                    MessageModel newMessageModel = new MessageModel("", myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getName(), chatTXT, new Date(), new ArrayList<String>());
+
+                    userInf.pushMessage(newMessageModel);
+                    adapter.notifyDataSetChanged();
+
+                    SocketManager.sendMessage(chatTXT, userInf.getMessages().size() - 1, myInfo);
+                    chatMessage.setText("");
+                }
+
+                if (myModel != null && myModel.getImagesBM() != null) {
+                    MessageModel newMessageModel = new MessageModel("", myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getName(), new ArrayList<>(myModel.getImagesBM()), new Date(), new ArrayList<String>());
+
+                    userInf.getMessages().add(newMessageModel);
+                    adapter.notifyDataSetChanged();
+
+                    SocketManager.sendImageMessage(ChattingActivity.this, myModel.getImagesListStr(), userInf.getMessages().size() - 1, myInfo);
+
+                    arrayList.clear();
+                    mainAdapter.notifyDataSetChanged();
+
+                    myModel = null;
                 }
             }
         });
@@ -168,7 +233,7 @@ public class ChattingActivity extends AppCompatActivity {
                 Log.i("<Option>", userInf.getOptions().getNotify().toString());
                 for (Member mem : userInf.getOptions().getMembers()){
 
-                    if (!mem.getId().equals(me_id)){
+                    if (!mem.getUser_id().equals(me_id)){
                         intent.putExtra("friend", mem);
                     }
                     else{
@@ -228,6 +293,8 @@ public class ChattingActivity extends AppCompatActivity {
                 }
             }
         });
+
+        initSocket();
     }
 
     @Override
@@ -244,7 +311,7 @@ public class ChattingActivity extends AppCompatActivity {
 
     public void setNickname(String frNN, String meNN) {
         for(Member mem : this.userInf.getOptions().getMembers()){
-            if (mem.getId().equals(me_id)){
+            if (mem.getUser_id().equals(me_id)){
                 mem.setNickname(meNN);
             } else{
                 mem.setNickname(frNN);
@@ -263,5 +330,82 @@ public class ChattingActivity extends AppCompatActivity {
                 .pickPhoto(ChattingActivity.this);
         System.out.println();
 //        .setActivityTheme(Integer.parseInt("FFFFFF"))
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == FilePickerConst.REQUEST_CODE_PHOTO) {
+                ArrayList<Uri> images = data.getParcelableArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA);
+                arrayList.clear();
+                arrayList.addAll(images);
+                Collections.reverse(arrayList);
+
+                mainAdapter.notifyDataSetChanged();
+
+                AsyncTask<String, Void, ImageModel> image_convert = new ConvertImage(ChattingActivity.this, arrayList, new ConvertListener() {
+                    @Override
+                    public void onSuccess(ImageModel result) {
+                        ArrayList<String> imageStr = new ArrayList<String>(result.getImagesListStr());
+                        ArrayList<String> newImageStr = new ArrayList<String>();
+
+                        for (int i = 0; i < imageStr.size(); i++) {
+                            newImageStr.add("data:image/png;base64," + imageStr.get(i));
+                        }
+                        myModel = new ImageModel(result.getImagesBM(), newImageStr);
+                    }
+
+                    @Override
+                    public void onDownloadSuccess(ArrayList<Bitmap> result) {
+
+                    }
+                }).execute();
+            }
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        if (requestCode == 100 && perms.size() == 2) {
+            imagePicker();
+        }
+//        imagePicker();
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this).build().show();
+        }else {
+            Toast.makeText(getApplicationContext(),
+                    "Permission Denied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void initSocket() {
+        SocketManager.getInstance();
+        SocketManager.joinRoom(userInf.getId() + "::" + "direct_message", myInfo);
+
+        SocketManager.waitMessage(new MessageListener() {
+            @Override
+            public void onMessage(MessageModel message, int position) {
+                chatContent.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (message.getUserId().equals(myInfo.getId())) {
+                            userInf.getMessages().get(position).setId(message.getId());
+                            userInf.getMessages().get(position).setTime(message.getTime());
+                        } else {
+                            userInf.pushMessage(message);
+                            adapter.notifyDataSetChanged();
+                        }
+                        update = true;
+                    }
+                });
+            }
+        });
     }
 }

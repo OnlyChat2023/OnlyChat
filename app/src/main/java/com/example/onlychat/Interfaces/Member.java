@@ -3,22 +3,35 @@ package com.example.onlychat.Interfaces;
 import java.io.Serializable;
 
 public class Member implements Serializable {
-    String _id, name, nickname,avatar;
+    String _id, name, nickname,avatar,anonymous_avatar;
 
     public Member(String id, String name, String nickname, String avatar) {
         this._id = id;
         this.name = name;
         this.nickname = nickname;
         this.avatar = avatar;
+        this.anonymous_avatar = avatar;
     }
 
     public String getId() {
         return _id;
     }
 
-    public void setId(String id) {
 
-        this._id = id;
+    public String getUser_id() {
+        return _id;
+    }
+
+    public void setUser_id(String user_id) {
+        this._id = user_id;
+    }
+
+    public String getAnonymous_avatar() {
+        return anonymous_avatar;
+    }
+
+    public void setAnonymous_avatar(String anonymous_avatar) {
+        this.anonymous_avatar = anonymous_avatar;
     }
 
     public String getName() {

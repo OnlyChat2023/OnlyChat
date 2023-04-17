@@ -92,6 +92,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     int FINISH = -5;
     int UPDATEOPTION = -6;
     int ADDMEMBER = -7;
+    String channel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +101,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 
         Intent intent = getIntent();
         roomModel = (RoomModel) intent.getSerializableExtra("Data");
+        channel = intent.getStringExtra("channel");
 //        position = (int) intent.getSerializableExtra("Position");
 
         pref = new GlobalPreferenceManager(this);
@@ -369,7 +371,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 
     public void initSocket() {
         SocketManager.getInstance();
-        SocketManager.joinRoom(roomModel.getId() + "::" + "global_chat", myInfo);
+        SocketManager.joinRoom(roomModel.getId() + "::" + channel, myInfo);
 
         SocketManager.waitMessage(new MessageListener() {
             @Override

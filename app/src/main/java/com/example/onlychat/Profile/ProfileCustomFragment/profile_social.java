@@ -1,6 +1,10 @@
 package com.example.onlychat.Profile.ProfileCustomFragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -36,6 +41,8 @@ public class profile_social extends Fragment {
     private CustomIconLabelAdapter adapter;
 
     String[] contents = {"Facebook", "Instagram"};
+    String[] links = {"", ""};
+
     Integer[] thumbnails = { R.drawable.ic_facebook,R.drawable.ic_instagram};
 
     public profile_social() {
@@ -75,11 +82,20 @@ public class profile_social extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+    }
+
+    void getData() {
+        Intent intent = getActivity().getIntent();
+        Bundle myBundle = intent.getExtras();
+        links[0] = myBundle.getString("facebook");
+        links[1] = myBundle.getString("instagram");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getData();
         LinearLayout layout_profile2 = (LinearLayout) inflater.inflate(R.layout.fragment_profile_social, null);
         ListView listView = (ListView) layout_profile2.findViewById(R.id.list);
 
@@ -90,6 +106,16 @@ public class profile_social extends Fragment {
         listView.setAdapter(adapter);
         listView.setSelection(0);
         listView.smoothScrollToPosition(0);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (!links[i].equals("")) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(links[i]));
+                    startActivity(browserIntent);
+                }
+            }
+        });
 
         return layout_profile2;
     }
