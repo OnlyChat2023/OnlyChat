@@ -11,7 +11,11 @@ import app from "./app.js";
 import globalChat from './models/globalChatModel.js';
 import directChat from './models/directChatModel.js';
 import groupChat from './models/groupChatModel.js';
+import User from './models/userModel.js';
+import { json } from 'express';
 dotenv.config({ path: './config.env' });
+
+let basket = {};
 
 mongoose
     .connect(process.env.DATABASE)
@@ -24,19 +28,20 @@ const server = app.listen(port, () => {
 });
 
 const saveBase64Image = async (dataString, filename) => {
-  const matches = dataString.match(/^data:image\/([A-Za-z-+\/]+);base64,(.+)/), response = {};
+    const matches = dataString.match(/^data:image\/([A-Za-z-+\/]+);base64,(.+)/), response = {};
 
-  if (matches.length !== 3) {
-    return new Error('Invalid input string');
-  }
+    if (matches.length !== 3) {
+        return new Error('Invalid input string');
+    }
 
-  response.type = matches[1];
-  response.data = matches[2];
+    response.type = matches[1];
+    response.data = matches[2];
 
-  fs.writeFile(`${filename}.${response.type}`, response.data, { encoding: 'base64' }, (err) => {
-  });
+    fs.writeFile(`${filename}.${response.type}`, response.data, { encoding: 'base64' }, (err) => {
 
-  return `${filename}.${response.type}`;
+    });
+
+    return `${filename}.${response.type}`;
 }
 
 const io = new Server(server);
@@ -59,7 +64,7 @@ io.of('/group_message').on('connection', (socket) => {
     socket.on('delete_chat', (room) => {
         // cập nhật csdl
         socket.broadcast.to(room).emit('delete_chat');
-    }); 
+    });
 
     socket.on('seen_message', (room) => {
         socket.room = room;
@@ -175,6 +180,11 @@ io.of('/global_message').on('connection', (socket) => {
 
 io.on('connection', (socket) => {
 
+    socket.on("register", function (user) {
+        const _user = JSON.parse(user);
+        basket[_user._id] = socket.id;
+    });
+
     socket.on('joinRoom', (roomInfo, user) => {
         const [roomId, channel] = roomInfo.split('::');
         socket.room = roomId;
@@ -201,7 +211,7 @@ io.on('connection', (socket) => {
                 time: new Date()
             }
 
-            const GlobalChannel = await globalChat.findOne({_id: socket.room });
+            const GlobalChannel = await globalChat.findOne({ _id: socket.room });
             GlobalChannel.chats.push(messageModal);
             await GlobalChannel.save();
         }
@@ -340,14 +350,53 @@ io.on('connection', (socket) => {
 
     });
 
-    socket.on('acceptRequestAddFriend', (id) => {
-        socket.emit('friends', {
-            message: message,
-            user: socket.user,
-            time: new Date().getTime()
-        });
+    socket.on('acceptRequestAddFriend', async (id, user) => {
+        const _user = JSON.parse(user)
+        let u = await User.findOne({ _id: _user._id })
+        u.friend.push(id)
+        u.friend_request.splice(u.friend_request.indexOf(id), 1)
+
+        let f = await User.findOne({ _id: id })
+        f.friend.push(_user._id)
+
+        const list_friends = await User.find({ _id: { $in: u.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
+        io.sockets.emit('acceptRequestListener', list_friends);
+
+        const f_list_friends = await User.find({ _id: { $in: f.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
+        io.to(basket[id]).emit("waitAcceptFriend", f_list_friends);
+
+        await u.save()
+        await f.save()
     })
 
+    socket.on('removeRequestAddFriend', async (id, user) => {
+        const _user = JSON.parse(user)
+        let u = await User.findOne({ _id: _user._id })
+        u.friend_request.splice(u.friend_request.indexOf(id), 1)
+        await u.save()
+    })
+
+    socket.on('deleteFriend', async (id, user) => {
+        const _user = JSON.parse(user)
+        let u = await User.findOne({ _id: _user._id })
+        u.friend.splice(u.friend.indexOf(id), 1)
+        let f = await User.findOne({ _id: id })
+        f.friend.splice(f.friend.indexOf(_user._id), 1)
+
+        const f_list_friends = await User.find({ _id: { $in: f.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
+        io.to(basket[id]).emit("waitDeleteFriend", f_list_friends);
+
+        await u.save()
+        await f.save()
+    })
+
+    socket.on('blockFriend', async (id, user) => {
+        const _user = JSON.parse(user)
+        let u = await User.findOne({ _id: _user._id })
+        u.friend.splice(u.friend.indexOf(id), 1)
+        u.block.push(id)
+        await u.save()
+    })
 });
 
 

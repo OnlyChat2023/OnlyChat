@@ -40,7 +40,6 @@ const getUserInformation = catchAsync(async (req, res) => {
 
     const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
     newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
-
     newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
     newDM.options = [{...newDM.options[0], _id: newDM.options[0]._id.toString()}];
 
@@ -54,11 +53,8 @@ const getUserInformation = catchAsync(async (req, res) => {
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
 
     const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
+    newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
     newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
-
-    newDM.chats = newDM.chats.map(el => {
-      return ({ ...el, _id: el._id.toString() });
-    });
     newDM.options = [{...newDM.options[0], _id: newDM.options[0]._id.toString()}];
 
     globalChat.push(newDM);

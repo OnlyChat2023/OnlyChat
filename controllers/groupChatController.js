@@ -22,7 +22,7 @@ const addGroup = catchAsync(async (req, res, next) =>{
         avatar: userInf.avatar
       }],
       name: req.body.name,
-      avatar: "",
+      avatar: userInf.avatar,
       options:[{
         user_id: userInf._id,
         notify: false,
@@ -83,4 +83,72 @@ const leaveGroupChat = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: {}});
 });
 
-export {addGroup, getListGroupChat, leaveGroupChat}
+
+
+const updateOption = catchAsync(async (req, res, next) => {
+  const filterBody = filterObj(req.body, 'user_id', 'notify', 'block');
+  filterBody.notify = (req.body.notify === 'true');
+  filterBody.block = (req.body.block === 'true');
+  
+  const updateGroupChat = await groupChat.updateOne({_id : req.body.grc_id, "options.user_id" : req.body.user_id}, {$set : {"options.$": filterBody}});
+
+  res.status(200).json({ status: 'success', data: {}});
+});
+
+
+
+const getFriends2AddMember = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({_id: req.body.user_id});
+  const Group = await groupChat.findOne({_id: req.body.grc_id});
+  const addList = [];
+
+  if(user.friend.length != 0){
+    for (let i of user.friend){
+      const temp = Group.members.find(item => item.user_id === i);
+      if (temp){
+        user.friend.pull(i);
+      }
+    }
+  }
+  
+  if (user.friend.length != 0){
+    for (let i of user.friend){
+      const fr = await User.findOne({_id: i});
+      const filterBody = {
+          "_id" : fr._id.toString(),
+          "name": fr.name,
+          "nickname": fr.nickname,
+          "avatar": fr.avatar
+        };
+      addList.push(filterBody);
+    }
+  }
+  res.status(200).json({ status: 'success', data: addList});
+});
+
+
+
+const addMember = catchAsync(async (req, res, next) => {
+  const Group = await groupChat.findOne({_id: req.body.grc_id});
+  const user = await User.findOne({_id: req.body.user_id});
+
+  user.groupchat_channel.push(req.body.grc_id);
+  Group.members.push({
+    "user_id": req.body.user_id,
+    "name": req.body.name,
+    "nickname": req.body.nickname,
+    "avatar": req.body.avatar
+  });
+
+  Group.options.push({
+    "user_id": req.body.user_id,
+    "notify": false,
+    "block": false
+  })
+
+  await user.save();
+  await Group.save()
+  res.status(200).json({ status: 'success', data: {}});
+});
+
+export {addGroup, getListGroupChat, leaveGroupChat, updateOption, getFriends2AddMember, addMember}
