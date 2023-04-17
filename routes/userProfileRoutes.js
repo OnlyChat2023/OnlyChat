@@ -12,6 +12,8 @@ router.patch('/updateProfile', updateProfile);
 router.get('/userInformation', authController.protect, getUserInformation);
 router.get('/friends', authController.protect, getListFriend);
 
+router.post('/updateProfile', authController.protect, updateProfile);
+
 // get user profile
 router.patch('/getUserById', authController.protect, getUserById);
 
