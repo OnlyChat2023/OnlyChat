@@ -6,12 +6,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class UserModel implements Serializable {
-    String _id,name,anonymous_avatar,username,email,phone,facebook,instagram,university,description,avatar;
+    String _id,name,nickname,anonymous_avatar,username,email,phone,facebook,instagram,university,description,avatar;
     String token;
 
     public UserModel(){}
 
     public String get_id() {
+        return _id;
+    }
+    
+    public String getId() {
         return _id;
     }
 
@@ -97,6 +101,14 @@ public class UserModel implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getNickName() {
+        return nickname;
+    }
+
+    public void setNickName(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getToken() {

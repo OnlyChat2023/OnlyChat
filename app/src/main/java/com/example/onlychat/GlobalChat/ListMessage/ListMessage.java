@@ -5,7 +5,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.media.Image;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -31,13 +33,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.onlychat.Async.ConvertImage;
 import com.example.onlychat.GlobalChat.GlobalChat;
 import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
 import com.example.onlychat.GroupChat.ListMessage.MainAdp;
+import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.MessageListener;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
+import com.example.onlychat.Model.ImageModel;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.GroupChat.MessageBottomDialogFragmentChatting;
 import com.example.onlychat.Model.RoomModel;
@@ -50,6 +55,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import droidninja.filepicker.FilePickerBuilder;
@@ -70,12 +76,17 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     Button backButton;
     ImageView chatImage;
     TextView chatName;
+    TextView memberNumber;
     GlobalPreferenceManager pref;
     UserModel myInfo;
     CustomMessageItem customMessageItem;
     ArrayList<Uri> arrayList = new ArrayList<>();
     RecyclerView recyclerView;
     MainAdp mainAdapter;
+    RoomModel roomModel;
+    int position;
+    boolean update = false;
+    ImageModel myModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +94,8 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         setContentView(R.layout.global_chat_list_message);
 
         Intent intent = getIntent();
-        RoomModel roomModel = (RoomModel) intent.getSerializableExtra("Data");
+        roomModel = (RoomModel) intent.getSerializableExtra("Data");
+//        position = (int) intent.getSerializableExtra("Position");
 
         pref = new GlobalPreferenceManager(this);
         myInfo = pref.getUserModel();
@@ -95,7 +107,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 
         listView=(ListView) findViewById(R.id.listMessages);
         customMessageItem = new CustomMessageItem(this, roomModel.getMessages());
-
+        listView.setScrollingCacheEnabled(false);
         listView.setAdapter(customMessageItem);
         listView.setSelection(customMessageItem.getCount() - 1);
         listView.smoothScrollToPosition(customMessageItem.getCount() - 1);
@@ -123,10 +135,12 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         backButton = (Button) findViewById(R.id.backButton);
         chatImage = (ImageView) findViewById(R.id.avatar);
         chatName = (TextView) findViewById(R.id.textName);
+        memberNumber = (TextView) findViewById(R.id.textSubName);
         // set image
         new HttpManager.GetImageFromServer(chatImage).execute(roomModel.getAvatar());
 
         chatName.setText(roomModel.getName());
+        memberNumber.setText(Integer.toString(roomModel.getOptions().getMembers().size()) + " members");
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,15 +217,27 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                 final String chatTXT = chatText.getText().toString();
 
                 if (!TextUtils.isEmpty(chatTXT)) {
-                    SocketManager.sendMessage(chatTXT, myInfo);
+                    MessageModel newMessageModel = new MessageModel("", myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getName(), chatTXT, new Date(), new ArrayList<String>());
+
+                    roomModel.pushMessage(newMessageModel);
+                    customMessageItem.notifyDataSetChanged();
+
+                    SocketManager.sendMessage(chatTXT, roomModel.getMessages().size() - 1, myInfo);
                     chatText.setText("");
                 }
 
-                if (!arrayList.isEmpty()) {
-                    SocketManager.sendImageMessage(ListMessage.this, new ArrayList<Uri>(arrayList), myInfo);
+                if (myModel != null && myModel.getImagesBM() != null) {
+                    MessageModel newMessageModel = new MessageModel("", myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getName(), new ArrayList<>(myModel.getImagesBM()), new Date(), new ArrayList<String>());
+
+                    roomModel.getMessages().add(newMessageModel);
+                    customMessageItem.notifyDataSetChanged();
+
+                    SocketManager.sendImageMessage(ListMessage.this, new ArrayList<>(myModel.getImagesListStr()), roomModel.getMessages().size() - 1, myInfo);
+
                     arrayList.clear();
                     mainAdapter.notifyDataSetChanged();
 
+                    myModel = null;
                 }
             }
         });
@@ -242,11 +268,10 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
             }
         });
 
-        initSocket(roomModel);
+        initSocket();
     }
 
     private void imagePicker(){
-        System.out.println("RUN HERE");
         FilePickerBuilder.getInstance()
                 .setActivityTitle("Select Images")
                 .setSpan(FilePickerConst.SPAN_TYPE.FOLDER_SPAN, 3)
@@ -261,7 +286,6 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-//        System.out.println("RUN HERE");
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -277,11 +301,23 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 
                 mainAdapter.notifyDataSetChanged();
 
-//                Uri selectedfile = ;
-//                if (selectedfile != null) {
-//                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedfile);
-//                }
+                AsyncTask<String, Void, ImageModel> image_convert = new ConvertImage(ListMessage.this, arrayList, new ConvertListener() {
+                    @Override
+                    public void onSuccess(ImageModel result) {
+                        ArrayList<String> imageStr = new ArrayList<String>(result.getImagesListStr());
+                        ArrayList<String> newImageStr = new ArrayList<String>();
 
+                        for (int i = 0; i < imageStr.size(); i++) {
+                            newImageStr.add("data:image/png;base64," + imageStr.get(i));
+                        }
+                        myModel = new ImageModel(result.getImagesBM(), newImageStr);
+                    }
+
+                    @Override
+                    public void onDownloadSuccess(ArrayList<Bitmap> result) {
+
+                    }
+                }).execute();
             }
         }
     }
@@ -304,28 +340,40 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         }
     }
 
-    public void initSocket(RoomModel roomModel) {
+    public void initSocket() {
         SocketManager.getInstance();
         SocketManager.joinRoom(roomModel.getId() + "::" + "global_chat", myInfo);
 
         SocketManager.waitMessage(new MessageListener() {
             @Override
-            public void onMessage(MessageModel message) {
+            public void onMessage(MessageModel message, int position) {
                 listView.post(new Runnable() {
                     @Override
                     public void run() {
-                        roomModel.pushMessage(message);
-                        customMessageItem.notifyDataSetChanged();
+
+                        if (message.getUserId().equals(myInfo.getId())) {
+                            roomModel.getMessages().get(position).setId(message.getId());
+                            roomModel.getMessages().get(position).setTime(message.getTime());
+                        } else {
+                            roomModel.pushMessage(message);
+                            customMessageItem.notifyDataSetChanged();
+                        }
+                        update = true;
                     }
                 });
-
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                    }
-//                });
             }
         });
+    }
+
+    @Override
+    public void finish() {
+//        Intent output = new Intent();
+//
+//        output.putExtra("Position", position);
+//        output.putExtra("RoomModel", roomModel);
+//        output.putExtra("Update", update);
+//
+//        setResult(RESULT_OK, output);
+        super.finish();
     }
 }

@@ -87,44 +87,51 @@ public class MainScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // register socket id
-        pref = new GlobalPreferenceManager(this);
-        myInfo = pref.getUserModel();
-        SocketManager.getInstance();
-        SocketManager.register(myInfo);
-
         // get list chat
-        HttpManager httpManager = new HttpManager(this);
-        httpManager.getListChat(
-            new HttpResponse(){
-                @Override
-                public void onSuccess(JSONObject Response) {
-                    try{
-                        JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
-                        JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
-                        JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
-                        JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
+        Bundle bundle = getIntent().getExtras();
+        isLogin = bundle.getBoolean("isLogin", false);
 
-                        if(directChat.length()>0){
-                            direct_list = getListRoom(directChat);
-                            directChatFragment.setRoomModels(direct_list);
-                        }
+//        GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
+//        pref.SignOut();
 
-                        if(groupChat.length()>0){
-                            group_list = getListRoom(groupChat);
-                            groupChatFragment.setRoomModels(group_list);
-                        }
+        if (isLogin) {
 
-                        if(globalChat.length()>0){
-                            global_list = getListRoom(globalChat);
-                            globalChatFragment.setRoomModels(global_list);
-                        }
+            // register socket id
+            pref = new GlobalPreferenceManager(this);
+            myInfo = pref.getUserModel();
+            SocketManager.getInstance();
+            SocketManager.register(myInfo);
 
-                        if(botChat.length()>0){
-                            chatbot_list = getListRoom(botChat);
-                            botChatFragment.setRoomModels(chatbot_list);
-                        }
+            HttpManager httpManager = new HttpManager(this);
+            httpManager.getListChat(
+                new HttpResponse(){
+                    @Override
+                    public void onSuccess(JSONObject Response) {
+                        try{
+                            JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
+                            JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
+                            JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
+                            JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
+                           
+                            if(directChat.length()>0){
+                                direct_list = getListRoom(directChat);
+                                directChatFragment.setRoomModels(direct_list);
+                            }
 
+                            if(groupChat.length()>0){
+                                group_list = getListRoom(groupChat);
+                                groupChatFragment.setRoomModels(group_list);
+                            }
+
+                            if(globalChat.length()>0){
+                                global_list = getListRoom(globalChat);
+                                globalChatFragment.setRoomModels(global_list);
+                            }
+
+                            if(botChat.length()>0){
+                                chatbot_list = getListRoom(botChat);
+                                botChatFragment.setRoomModels(chatbot_list);
+                            }
                         }
                         catch (Exception e){
                             Log.i("HTTP Success Error",e.toString());
@@ -135,9 +142,10 @@ public class MainScreen extends AppCompatActivity {
                     public void onError(String error) {
                         Log.i("HTTP Error",error);
                     }
-                });
+                }
+            );
 
-        httpManager.getListFriends(
+            httpManager.getListFriends(
                 new HttpResponse() {
                     @Override
                     public void onSuccess(JSONObject response) throws JSONException {
@@ -155,16 +163,7 @@ public class MainScreen extends AppCompatActivity {
 
                     }
                 }
-        );
-
-
-        Bundle bundle = getIntent().getExtras();
-        isLogin = bundle.getBoolean("isLogin", false);
-
-//        GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
-//        pref.SignOut();
-
-        if (isLogin) {
+            );
 
             setContentView(R.layout.main_screen);
 
@@ -186,7 +185,6 @@ public class MainScreen extends AppCompatActivity {
                 }
                 tabLayout.getTabAt(i).setCustomView(tab);
             }
-
 
             tabLayout.setOnTabSelectedListener(
                     new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {

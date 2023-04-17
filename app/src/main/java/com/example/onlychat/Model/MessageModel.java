@@ -1,17 +1,24 @@
 package com.example.onlychat.Model;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class MessageModel implements Serializable {
-    String id,user_id="",avatar="";
-    String name,nickname ,message;
+    String _id,user_id,avatar;
+    String name,nickname,message;
+    ArrayList<Bitmap> bitimages;
+    ArrayList<String> images;
     Date time;
     ArrayList<String> seenUser=new ArrayList<>();
+
     public MessageModel(){}
+
     public MessageModel(String id, String userId, String avatar, String name, String nickName, String message, Date time, ArrayList<String> seenUser) {
-        this.id = id;
+        this._id = id;
         this.user_id = userId;
         this.avatar = avatar;
         this.name = name;
@@ -21,12 +28,23 @@ public class MessageModel implements Serializable {
         this.seenUser = seenUser;
     }
 
+    public MessageModel(String id, String userId, String avatar, String name, String nickName, ArrayList<Bitmap> images, Date time, ArrayList<String> seenUser) {
+        this._id = id;
+        this.user_id = userId;
+        this.avatar = avatar;
+        this.name = name;
+        this.nickname = nickName;
+        this.bitimages = images;
+        this.time = time;
+        this.seenUser = seenUser;
+    }
+
     public String getId() {
-        return id;
+        return _id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this._id = id;
     }
 
     public String getUserId() {
@@ -83,5 +101,31 @@ public class MessageModel implements Serializable {
 
     public void setSeenUser(ArrayList<String> seenUser) {
         this.seenUser = seenUser;
+    }
+    public boolean hasImages() {
+        return bitimages != null && !bitimages.isEmpty();
+    }
+    public ArrayList<Bitmap> getImages() {
+        return bitimages;
+    }
+
+    public int getViewType(UserModel myInfo) {
+        return (this.user_id.equals(myInfo.getId())) ? 0 : 1;
+    }
+    public ArrayList<String> getImagesStr() {
+        return images;
+    }
+    public void setImages(ArrayList<Bitmap> images) {
+        if (bitimages == null)
+            bitimages = new ArrayList<Bitmap>();
+        else
+            bitimages.clear();
+        bitimages.addAll(images);
+    }
+    public void clearImages() {
+        bitimages.clear();
+    }
+    public boolean hasImagesStr() {
+        return images != null && !images.isEmpty();
     }
 }

@@ -42,7 +42,6 @@ public class HttpManager {
     private static GlobalPreferenceManager pref;
     private static final String ip = "192.168.1.200";
     static private UserModel user = new UserModel();
-//    private static final String ip = "192.168.2.16";
 
     public HttpManager(Context _context) {
         this.context = _context;
@@ -162,6 +161,10 @@ public class HttpManager {
 
     public static class GetImageFromServer extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
+
+        public void DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
 
         public GetImageFromServer(ImageView avatar) {
             this.bmImage = avatar;

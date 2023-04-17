@@ -21,12 +21,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_medium"
-        android:text="Klee Bunbara"
+        android:text=""
         android:layout_marginBottom="5dp"
         android:textColor="@color/white"
         android:textSize="13sp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/chatLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_regular"
             android:lineHeight="20dp"
-            android:text="What's the problem?"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -49,5 +49,11 @@
             android:id="@+id/chatImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imagesLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </androidx.recyclerview.widget.RecyclerView>
+    </RelativeLayout>
 </RelativeLayout>

@@ -54,9 +54,9 @@ public class SocketManager {
         }
     }
 
-    public static void sendMessage(String message, UserModel user) {
+    public static void sendMessage(String message, int position, UserModel user) {
         if (socket != null){
-            socket.emit("sendStringMessage", message, new Gson().toJson(user));
+            socket.emit("sendStringMessage", message, position, new Gson().toJson(user));
         }
     }
 
@@ -84,18 +84,8 @@ public class SocketManager {
         }
     }
 
-    public static void sendImageMessage(Context ctx, ArrayList<Uri> arrayList, UserModel user) {
-        AsyncTask<String, Void, ArrayList<String>> image_convert = new ConvertImage(ctx, arrayList, new ConvertListener() {
-            @Override
-            public void onSuccess(ArrayList<String> result) {
-                ArrayList<String> imageStr = new ArrayList<String>();
-                for (int i = 0; i < result.size(); i++) {
-                    imageStr.add("data:image/png;base64," + result.get(i));
-                }
-
-                socket.emit("sendImageMessage", new Gson().toJson(imageStr), new Gson().toJson(user));
-            }
-        }).execute();
+    public static void sendImageMessage(Context ctx, ArrayList<String> arrayList, int position, UserModel user) {
+        socket.emit("sendImageMessage", new Gson().toJson(arrayList), position, new Gson().toJson(user));
     }
 
     public static void waitMessage(MessageListener listener) {
@@ -104,13 +94,15 @@ public class SocketManager {
                 @Override
                 public void call(Object... args) {
                     JSONObject messageJson = (JSONObject) args[0];
+                    int position = (int) args[1];
+
                     MessageModel message = new Gson().fromJson(String.valueOf(messageJson), MessageModel.class);
 
                     String dtStart = null;
-                        try {
-                            dtStart = messageJson.getString("time");
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                    try {
+                        dtStart = messageJson.getString("time");
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
 
                     @SuppressLint("SimpleDateFormat")
@@ -123,9 +115,7 @@ public class SocketManager {
                         e.printStackTrace();
                     }
 
-//                    Log.e("AGAS", message.getMessage() + ": " + message.getTime());
-
-                    listener.onMessage(message);
+                    listener.onMessage(message, position);
                 }
             });
         }
