@@ -33,10 +33,9 @@ const saveBase64Image = async (dataString, filename) => {
     response.type = matches[1];
     response.data = matches[2];
 
-  fs.writeFile(`${filename}.${response.type}`, response.data, { encoding: 'base64' }, (err) => {
-  });
+    fs.writeFile(`${filename}.${response.type}`, response.data, { encoding: 'base64' }, (err) => {
 
-  return `${filename}.${response.type}`;
+    });
 }
 
 const io = new Server(server);
