@@ -210,7 +210,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                     chatMessage.setText("");
                 }
 
-                if (myModel != null && myModel.getImagesBM() != null) {
+                if (myModel != null && myModel.getImagesBM() != null && !arrayList.isEmpty()) {
                     MessageModel newMessageModel = new MessageModel("", myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getName(), new ArrayList<>(myModel.getImagesBM()), new Date(), new ArrayList<String>());
 
                     userInf.getMessages().add(newMessageModel);

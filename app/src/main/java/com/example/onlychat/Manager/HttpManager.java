@@ -34,7 +34,7 @@ import java.util.Map;
 public class HttpManager {
     private Context context;
     private static GlobalPreferenceManager pref;
-    private static final String ip = "192.168.1.200";
+    private static final String ip = "192.168.1.205";
     static private UserModel user = new UserModel();
 
     public HttpManager(Context _context) {

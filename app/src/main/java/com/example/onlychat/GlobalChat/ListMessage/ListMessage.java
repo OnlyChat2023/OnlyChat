@@ -235,7 +235,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                     chatText.setText("");
                 }
 
-                if (myModel != null && myModel.getImagesBM() != null) {
+                if (myModel != null && myModel.getImagesBM() != null && !arrayList.isEmpty()) {
                     MessageModel newMessageModel = new MessageModel("", myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getName(), new ArrayList<>(myModel.getImagesBM()), new Date(), new ArrayList<String>());
 
                     roomModel.getMessages().add(newMessageModel);
