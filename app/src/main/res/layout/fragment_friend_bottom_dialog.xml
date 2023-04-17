@@ -12,24 +12,24 @@
 
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/delete"
         android:layout_width="100dp"
         android:layout_height="42dp"
         android:src="@drawable/delete_of_dialog_bottom" />
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/block"
         android:layout_width="92dp"
         android:layout_height="42dp"
         android:layout_marginVertical="15dp"
-        android:layout_below="@+id/imageView2"
+        android:layout_below="@+id/delete"
         android:src="@drawable/block_of_dialog__bottom" />
 
     <ImageView
-        android:id="@+id/imageView8"
+        android:id="@+id/restrict"
         android:layout_width="136dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/imageView6"
+        android:layout_below="@+id/block"
         android:src="@drawable/restriction_of_bottome_dialog" />
 
 </RelativeLayout>

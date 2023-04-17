@@ -38,6 +38,16 @@ public class SocketManager {
         }
     }
 
+    public static Socket getSocket() {
+        return socket;
+    }
+
+    public static void register(UserModel user) {
+        if (socket != null) {
+            socket.emit("register", new Gson().toJson(user));
+        }
+    }
+
     public static void joinRoom(String roomName, UserModel user) {
         if (socket != null) {
             socket.emit("joinRoom", roomName, new Gson().toJson(user));
@@ -62,19 +72,20 @@ public class SocketManager {
         }
     }
 
-    public static void sendImageMessage(Context ctx, ArrayList<String> arrayList, int position, UserModel user) {
-        socket.emit("sendImageMessage", new Gson().toJson(arrayList), position, new Gson().toJson(user));
+    public static void deleteFriend(String id, UserModel user){
+        if(socket != null){
+            socket.emit("deleteFriend",id,new Gson().toJson(user));
+        }
     }
 
-    public static void acceptRequestListener(){
+    public static void blockFriend(String id, UserModel user){
         if(socket != null){
-            socket.on("acceptRequestListener", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    JSONArray friends = (JSONArray) args[0];
-                }
-            });
+            socket.emit("blockFriend",id,new Gson().toJson(user));
         }
+    }
+
+    public static void sendImageMessage(Context ctx, ArrayList<String> arrayList, int position, UserModel user) {
+        socket.emit("sendImageMessage", new Gson().toJson(arrayList), position, new Gson().toJson(user));
     }
 
     public static void waitMessage(MessageListener listener) {

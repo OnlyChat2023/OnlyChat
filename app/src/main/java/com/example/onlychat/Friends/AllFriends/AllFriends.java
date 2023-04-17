@@ -12,11 +12,14 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.onlychat.Friends.Friends;
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 
 import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 
@@ -28,8 +31,12 @@ import java.util.ArrayList;
 
 public class AllFriends extends Fragment {
     ListView listFriends;
-    CustomFriendItem customFriendItem;
-    ArrayList<UserModel> friend_list = new ArrayList<>();
+    static CustomFriendItem customFriendItem;
+    static ArrayList<UserModel> friend_list = new ArrayList<>();
+    static FriendBottomDialogFragment friendBottomDialogFragment;
+
+    GlobalPreferenceManager pref;
+    static UserModel myInfo;
 
     public void setFriend_list(ArrayList<UserModel> friend_list){
         this.friend_list.clear();
@@ -43,6 +50,9 @@ public class AllFriends extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout allFriends = (LinearLayout) inflater.inflate(R.layout.friends_fragment_all_friends, null);
+
+        pref = new GlobalPreferenceManager(getContext());
+        myInfo = pref.getUserModel();
 
         listFriends = (ListView) allFriends.findViewById(R.id.listFriends);
 
@@ -78,12 +88,34 @@ public class AllFriends extends Fragment {
         listFriends.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                FriendBottomDialogFragment friendBottomDialogFragment = new FriendBottomDialogFragment();
+                friendBottomDialogFragment = new FriendBottomDialogFragment();
+                friendBottomDialogFragment.setI(i);
                 friendBottomDialogFragment.show(getChildFragmentManager(), friendBottomDialogFragment.getTag());
-                return false;
+
+                return true;
             }
         });
 
         return allFriends;
+    }
+
+    public static void removeFriend(int i){
+        SocketManager.getInstance();
+        SocketManager.deleteFriend(friend_list.get(i).get_id(),myInfo);
+
+        friendBottomDialogFragment.dismiss();
+        friend_list.remove(i);
+        customFriendItem.notifyDataSetChanged();
+        Friends.getQuatity().setText(friend_list.size()+" available");
+    }
+
+    public static void blockFriend(int i){
+        SocketManager.getInstance();
+        SocketManager.blockFriend(friend_list.get(i).get_id(),myInfo);
+
+        friendBottomDialogFragment.dismiss();
+        friend_list.remove(i);
+        customFriendItem.notifyDataSetChanged();
+        Friends.getQuatity().setText(friend_list.size()+" available");
     }
 }

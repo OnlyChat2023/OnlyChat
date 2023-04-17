@@ -233,7 +233,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                 Log.i("<Option>", userInf.getOptions().getNotify().toString());
                 for (Member mem : userInf.getOptions().getMembers()){
 
-                    if (!mem.getId().equals(me_id)){
+                    if (!mem.getUser_id().equals(me_id)){
                         intent.putExtra("friend", mem);
                     }
                     else{
@@ -311,7 +311,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
 
     public void setNickname(String frNN, String meNN) {
         for(Member mem : this.userInf.getOptions().getMembers()){
-            if (mem.getId().equals(me_id)){
+            if (mem.getUser_id().equals(me_id)){
                 mem.setNickname(meNN);
             } else{
                 mem.setNickname(frNN);

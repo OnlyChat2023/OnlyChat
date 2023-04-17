@@ -78,7 +78,8 @@ public class Invite extends Fragment {
 
     public static void removeItem(int i){
         invite_list.remove(i);
-        listInvites.setAdapter(customInviteItem);
+        customInviteItem.notifyDataSetChanged();
+//        listInvites.setAdapter(customInviteItem);
     }
 
 
