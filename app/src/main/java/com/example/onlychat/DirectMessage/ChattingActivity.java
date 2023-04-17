@@ -384,6 +384,14 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
         }
     }
 
+    public void updateMessage() {
+        ArrayList<MessageModel> currentListMessage = userInf.getMessages();
+        String idLastMessage = (currentListMessage.size() > 0)
+                ? currentListMessage.get(currentListMessage.size() - 1).getId()
+                : "";
+        SocketManager.notifyUpdateMessage(idLastMessage);
+    }
+
     public void initSocket() {
         SocketManager.getInstance();
         SocketManager.joinRoom(userInf.getId() + "::" + "direct_message", myInfo);
@@ -395,17 +403,25 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                     @Override
                     public void run() {
 
-                        if (message.getUserId().equals(myInfo.getId())) {
-                            userInf.getMessages().get(position).setId(message.getId());
-                            userInf.getMessages().get(position).setTime(message.getTime());
-                        } else {
+                        if (position != -2) {
+                            if (message.getUserId().equals(myInfo.getId())) {
+                                userInf.getMessages().get(position).setId(message.getId());
+                                userInf.getMessages().get(position).setTime(message.getTime());
+                            } else {
+                                userInf.pushMessage(message);
+                                adapter.notifyDataSetChanged();
+                            }
+                            update = true;
+                        }
+                        else {
                             userInf.pushMessage(message);
                             adapter.notifyDataSetChanged();
                         }
-                        update = true;
                     }
                 });
             }
         });
+
+        updateMessage();
     }
 }

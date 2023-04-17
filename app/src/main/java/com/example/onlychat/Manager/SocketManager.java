@@ -85,7 +85,15 @@ public class SocketManager {
     }
 
     public static void sendImageMessage(Context ctx, ArrayList<String> arrayList, int position, UserModel user) {
-        socket.emit("sendImageMessage", new Gson().toJson(arrayList), position, new Gson().toJson(user));
+        if (socket != null) {
+            socket.emit("sendImageMessage", new Gson().toJson(arrayList), position, new Gson().toJson(user));
+        }
+    }
+
+    public static void notifyUpdateMessage(String LastMessageID) {
+        if (socket != null) {
+            socket.emit("notifyUpdateMessage", LastMessageID);
+        }
     }
 
     public static void waitMessage(MessageListener listener) {

@@ -88,6 +88,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     boolean update = false;
     ImageModel myModel;
     String channel;
+    boolean notifyUpdate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -353,18 +354,39 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                     @Override
                     public void run() {
 
-                        if (message.getUserId().equals(myInfo.getId())) {
-                            roomModel.getMessages().get(position).setId(message.getId());
-                            roomModel.getMessages().get(position).setTime(message.getTime());
-                        } else {
+                        if (position != -2) {
+                            if (message.getUserId().equals(myInfo.getId())) {
+                                roomModel.getMessages().get(position).setId(message.getId());
+                                roomModel.getMessages().get(position).setTime(message.getTime());
+                            } else {
+                                roomModel.pushMessage(message);
+                                customMessageItem.notifyDataSetChanged();
+                            }
+                            update = true;
+                        }
+                        else {
                             roomModel.pushMessage(message);
                             customMessageItem.notifyDataSetChanged();
                         }
-                        update = true;
                     }
                 });
             }
         });
+
+        updateMessage();
+    }
+
+    public void updateMessage() {
+        ArrayList<MessageModel> currentListMessage = roomModel.getMessages();
+        String idLastMessage = (currentListMessage.size() > 0)
+                ? currentListMessage.get(currentListMessage.size() - 1).getId()
+                : "";
+        SocketManager.notifyUpdateMessage(idLastMessage);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
