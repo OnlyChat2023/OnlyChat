@@ -30,11 +30,21 @@ public class SocketManager {
     public synchronized static void getInstance() {
         if (socket == null) {
             try {
-                socket = IO.socket("http://192.168.1.109:5000");
+                socket = IO.socket("http://192.168.1.200:5000");
                 socket.connect();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static Socket getSocket() {
+        return socket;
+    }
+
+    public static void register(UserModel user) {
+        if (socket != null) {
+            socket.emit("register", new Gson().toJson(user));
         }
     }
 
@@ -62,6 +72,18 @@ public class SocketManager {
         }
     }
 
+    public static void deleteFriend(String id, UserModel user){
+        if(socket != null){
+            socket.emit("deleteFriend",id,new Gson().toJson(user));
+        }
+    }
+
+    public static void blockFriend(String id, UserModel user){
+        if(socket != null){
+            socket.emit("blockFriend",id,new Gson().toJson(user));
+        }
+    }
+
     public static void sendImageMessage(Context ctx, ArrayList<Uri> arrayList, UserModel user) {
         AsyncTask<String, Void, ArrayList<String>> image_convert = new ConvertImage(ctx, arrayList, new ConvertListener() {
             @Override
@@ -74,17 +96,6 @@ public class SocketManager {
                 socket.emit("sendImageMessage", new Gson().toJson(imageStr), new Gson().toJson(user));
             }
         }).execute();
-    }
-
-    public static void acceptRequestListener(){
-        if(socket != null){
-            socket.on("acceptRequestListener", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    JSONArray friends = (JSONArray) args[0];
-                }
-            });
-        }
     }
 
     public static void waitMessage(MessageListener listener) {

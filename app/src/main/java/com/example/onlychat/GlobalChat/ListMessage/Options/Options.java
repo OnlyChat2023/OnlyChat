@@ -2,8 +2,10 @@ package com.example.onlychat.GlobalChat.ListMessage.Options;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +30,10 @@ public class Options extends AppCompatActivity {
     TextView name;
     ImageView avatar;
 
+    TextView memberQuantity;
 
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +46,8 @@ public class Options extends AppCompatActivity {
 
         name = (TextView) findViewById(R.id.group_name);
         avatar = (ImageView) findViewById(R.id.avatar);
-
+        memberQuantity =  (TextView) findViewById(R.id.memberQuantity);
+        memberQuantity.setText("Members ("+options.getMembers().size()+")");
         name.setText(names);
         new HttpManager.GetImageFromServer(avatar).execute(avatars);
 
@@ -101,12 +107,15 @@ public class Options extends AppCompatActivity {
 
                 // set list members
                 listMembers = (ListView)  popupView.findViewById(R.id.listMembers);
-//                CustomMemberItem customMemberItem=new CustomMemberItem(popupView.getContext(),avatars,names);
-//                listMembers.setAdapter(customMemberItem);
-//                listMembers.setSelection(0);
-//                listMembers.smoothScrollToPosition(0);
-//                listMembers.setDivider(null);
-//                listMembers.setDividerHeight(0);
+                TextView quantity = (TextView) popupView.findViewById(R.id.quantity);
+                quantity.setText("Members ("+options.getMembers().size()+")");
+//                Log.i("Option", Integer.toString(options.getMembers().size()));
+                CustomMemberItem customMemberItem=new CustomMemberItem(popupView.getContext(),options.getMembers());
+                listMembers.setAdapter(customMemberItem);
+                listMembers.setSelection(0);
+                listMembers.smoothScrollToPosition(0);
+                listMembers.setDivider(null);
+                listMembers.setDividerHeight(0);
 
 
                 boolean focusable = true; // lets taps outside the popup also dismiss it

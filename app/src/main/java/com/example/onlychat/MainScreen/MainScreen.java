@@ -79,11 +79,21 @@ public class MainScreen extends AppCompatActivity {
     ChatBot botChatFragment = new ChatBot();
     Friends friendsFragment = new Friends();
 
+    GlobalPreferenceManager pref;
+    static UserModel myInfo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // register socket id
+        pref = new GlobalPreferenceManager(this);
+        myInfo = pref.getUserModel();
+        SocketManager.getInstance();
+        SocketManager.register(myInfo);
+
+        // get list chat
         HttpManager httpManager = new HttpManager(this);
         httpManager.getListChat(
             new HttpResponse(){
@@ -317,8 +327,15 @@ public class MainScreen extends AppCompatActivity {
 
                 //set members
                 ArrayList<Member> members = new ArrayList<>();
+                Log.i("================= main screen group =================", roomModel.getName());
+
                 for(int l=0;l<channel.getJSONObject(i).getJSONArray("members").length();l++){
                     Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
+                    Log.i("main screen", member.getUser_id());
+                    Log.i("main screen", member.getName());
+                    Log.i("main screen", member.getNickname());
+                    Log.i("main screen", member.getAvatar());
+                    Log.i("main screen >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>","");
                     members.add(member);
                 }
                 roomOptions.setMembers(members);

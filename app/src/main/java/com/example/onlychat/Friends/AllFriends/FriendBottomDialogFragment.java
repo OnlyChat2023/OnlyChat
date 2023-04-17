@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.onlychat.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -27,6 +28,12 @@ public class FriendBottomDialogFragment extends BottomSheetDialogFragment {
     private String mParam1;
     private String mParam2;
 
+    ImageView delete;
+    ImageView block;
+    Integer i;
+    public void setI(int i){
+        this.i = i;
+    }
     public FriendBottomDialogFragment() {
         // Required empty public constructor
     }
@@ -61,7 +68,25 @@ public class FriendBottomDialogFragment extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friend_bottom_dialog, container, false);
+        View row = inflater.inflate(R.layout.fragment_friend_bottom_dialog, container, false);
+
+        delete = (ImageView) row.findViewById(R.id.delete);
+        block = (ImageView) row.findViewById(R.id.block);
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AllFriends.removeFriend(i);
+            }
+        });
+
+        block.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AllFriends.blockFriend(i);
+            }
+        });
+
+        return row;
     }
 }
