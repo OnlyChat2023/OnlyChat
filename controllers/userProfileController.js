@@ -82,8 +82,14 @@ const getListFriend = catchAsync(async (req, res, next) => {
 
 const getUserById = catchAsync(async (req, res, nex) => {
   const _user = await User.findOne({ _id: req.body._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend_request -anonymous_avatar -nickname').lean()
+  let status = 0
+  // friend
+  if (req.user.friend.includes(_user._id)) status = 1;
+  // invite to me
+  if (req.user.friend_request.includes(_user._id)) status = 2;
+  // if (_user.friend_request.includes(req.user_id)) status = 3;
 
-  const newUser = {..._user, isFriend: req.user.friend.includes(_user._id)};
+  const newUser = { ..._user, isFriend: status };
   res.status(200).json({
     status: 'success',
     data: newUser
