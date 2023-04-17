@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Model.UserModel;
+import com.example.onlychat.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +35,7 @@ import java.util.Map;
 public class HttpManager {
     private Context context;
     private static GlobalPreferenceManager pref;
-    private static final String ip = "192.168.1.205";
+    private static final String ip = Utils.ip;
     static private UserModel user = new UserModel();
 
     public HttpManager(Context _context) {

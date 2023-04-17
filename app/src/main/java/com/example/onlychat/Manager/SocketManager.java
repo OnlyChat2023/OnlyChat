@@ -11,6 +11,7 @@ import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.MessageListener;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.UserModel;
+import com.example.onlychat.utils.Utils;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -30,7 +31,7 @@ public class SocketManager {
     public synchronized static void getInstance() {
         if (socket == null) {
             try {
-                socket = IO.socket("http://192.168.1.205:5000");
+                socket = IO.socket("http://"+ Utils.ip+":5000");
 
                 socket.connect();
             } catch (Exception e) {
