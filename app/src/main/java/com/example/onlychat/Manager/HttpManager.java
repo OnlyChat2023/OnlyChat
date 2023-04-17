@@ -40,7 +40,7 @@ import java.util.Map;
 public class HttpManager {
     private Context context;
     private static GlobalPreferenceManager pref;
-    private static final String ip = "192.168.1.147";
+    private static final String ip = "192.168.1.95";
     static private UserModel user = new UserModel();
 
     public HttpManager(Context _context) {
@@ -211,5 +211,34 @@ public class HttpManager {
         params.put("grc_id", GroupChatID);
 
         createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/leaveGroupChat", Request.Method.POST, "leaveGroupChat", params, responseReceiver);
+    }
+
+    public void UpdateGroupNotufy(String userID, String GroupChatID, Boolean notify, Boolean block, HttpResponse responseReceiver){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userID);
+        params.put("grc_id", GroupChatID);
+        params.put("notify", notify.toString());
+        params.put("block", block.toString());
+
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/updateNotify", Request.Method.POST, "updateNotify", params, responseReceiver);
+    }
+
+    public void GetListNewMember(String userID, String GroupChatID, HttpResponse responseReceiver){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userID);
+        params.put("grc_id", GroupChatID);
+
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/getAddMember", Request.Method.POST, "getListNewMember", params, responseReceiver);
+    }
+
+    public void addMemberGroup(String userID, String GroupChatID, String name, String nickname, String avatar, HttpResponse responseReceiver){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userID);
+        params.put("grc_id", GroupChatID);
+        params.put("name", name);
+        params.put("nickname", nickname);
+        params.put("avatar", avatar);
+
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/addMember", Request.Method.POST, "getListNewMember", params, responseReceiver);
     }
 }

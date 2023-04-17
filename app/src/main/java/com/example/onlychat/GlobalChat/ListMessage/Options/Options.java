@@ -209,7 +209,7 @@ public class Options extends AppCompatActivity {
 
                     // Popup
                     View popupView = inflater.inflate(R.layout.global_chat_popup_members, null);
-                    TextView title = (TextView) popupView.findViewById(R.id.title_members);
+                    TextView title = (TextView) popupView.findViewById(R.id.quantity);
 
 
                     // set list members
