@@ -31,6 +31,7 @@ public class SocketManager {
         if (socket == null) {
             try {
                 socket = IO.socket("http://192.168.1.200:5000");
+
                 socket.connect();
             } catch (Exception e) {
                 e.printStackTrace();

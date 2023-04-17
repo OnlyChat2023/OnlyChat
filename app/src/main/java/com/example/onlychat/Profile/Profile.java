@@ -44,6 +44,7 @@ public class Profile extends AppCompatActivity {
     private Button sendChatBtn;
     private String user_id;
     UserModel user;
+    private ImageView backBtn;
 
     public UserModel getUser() {
         return user;
@@ -75,6 +76,13 @@ public class Profile extends AppCompatActivity {
         addFriendBtn = (Button) findViewById(R.id.add_friend_btn);
         editBtn = (Button) findViewById(R.id.edit_btn);
         sendChatBtn = (Button) findViewById(R.id.send_chat_btn);
+        backBtn = (ImageView) findViewById(R.id.backButton);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         HttpManager httpManager = new HttpManager(this);
         httpManager.getUserById(user_id, new HttpResponse() {
@@ -114,6 +122,8 @@ public class Profile extends AppCompatActivity {
                 Intent editProfile = new Intent(Profile.this, EditProfile.class);
                 editProfile.putExtras(myBundle);
                 startActivity(editProfile);
+
+                finish();
             }
         });
 

@@ -22,6 +22,7 @@ public class CustomMemberItem extends ArrayAdapter<Member> {
     ArrayList<Member> memberList;
     ImageView avatar;
     TextView name;
+    Boolean isAddMember = false;
 
 
     public CustomMemberItem(Context context, ArrayList<Member> members){
@@ -34,13 +35,21 @@ public class CustomMemberItem extends ArrayAdapter<Member> {
         View row;
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         row = inflater.inflate(R.layout.global_chat_custom_member_item,null);
-        avatar = (ImageView) row.findViewById(R.id.avatar);
-        name = (TextView) row.findViewById(R.id.name);
+        ImageView avatar = (ImageView) row.findViewById(R.id.avatar);
+        TextView name = (TextView) row.findViewById(R.id.name);
+        ImageView icon = (ImageView) row.findViewById(R.id.imageView22);
+        if (isAddMember == true){
+            icon.setVisibility(View.INVISIBLE);
+        }
 
 //        avatar.setImageResource(memberList.get(position).getAvatar());
         new HttpManager.GetImageFromServer(avatar).execute(memberList.get(position).getAvatar());
         name.setText(memberList.get(position).getNickname());
 
         return row;
+    }
+
+    public void setIsAddMember(Boolean addMember){
+        this.isAddMember = addMember;
     }
 }
