@@ -38,7 +38,9 @@ import com.example.onlychat.GlobalChat.GlobalChat;
 import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
 import com.example.onlychat.GroupChat.ListMessage.MainAdp;
 import com.example.onlychat.Interfaces.ConvertListener;
+import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.MessageListener;
+import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
@@ -87,6 +89,9 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     int position;
     boolean update = false;
     ImageModel myModel;
+    int FINISH = -5;
+    int UPDATEOPTION = -6;
+    int ADDMEMBER = -7;
     String channel;
 
     @Override
@@ -157,9 +162,10 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
             public void onClick(View view) {
                 Intent intent = new Intent(optionButton.getContext(), Options.class);
                 intent.putExtra("Name",roomModel.getName());
+                intent.putExtra("GroupID", roomModel.getId());
                 intent.putExtra("Avatar",roomModel.getAvatar());
                 intent.putExtra("Data",roomModel.getOptions());
-                startActivity(intent);
+                startActivityForResult(intent, 1);
                 overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
@@ -294,6 +300,27 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == ADDMEMBER && data != null){
+            Member newMem = (Member) data.getSerializableExtra("data");
+            if (newMem != null){
+                roomModel.getOptions().getMembers().add(newMem);
+                memberNumber.setText(Integer.toString(roomModel.getOptions().getMembers().size()) + " members");
+            }
+            else
+                Log.i("<<ADD Member>>:", "fail");
+        }
+
+        if (resultCode == UPDATEOPTION && data != null){
+            RoomOptions newOption = (RoomOptions) data.getSerializableExtra("data");
+            if (newOption != null) {
+                roomModel.setOptions(newOption);
+            }
+            else
+                Log.i("<<CHANGE OPTION>>:", "fail");
+        }
+        if (resultCode == FINISH){
+            finish();
+        }
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == FilePickerConst.REQUEST_CODE_PHOTO) {
                 ArrayList<Uri> images = data.getParcelableArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA);
@@ -378,4 +405,6 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 //        setResult(RESULT_OK, output);
         super.finish();
     }
+
+
 }

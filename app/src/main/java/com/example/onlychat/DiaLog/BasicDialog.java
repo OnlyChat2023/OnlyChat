@@ -1,5 +1,6 @@
 package com.example.onlychat.DiaLog;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 
+import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
+import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.R;
 
 import java.util.prefs.BackingStoreException;
@@ -17,6 +20,7 @@ import java.util.zip.Inflater;
 
 public class BasicDialog extends DialogFragment {
     String notify;
+    String activity;
 
     public BasicDialog(){
 
@@ -54,6 +58,9 @@ public class BasicDialog extends DialogFragment {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (activity == "LEAVEGROUP"){
+                    ((Options)getActivity()).LeaveGroup(BasicDialog.this);
+                }
                 dismiss();
             }
         });
@@ -65,5 +72,9 @@ public class BasicDialog extends DialogFragment {
             }
         });
         return layout;
+    }
+
+    public void setActivity(String activity){
+        this.activity = activity;
     }
 }

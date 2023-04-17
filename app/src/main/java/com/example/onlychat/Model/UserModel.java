@@ -1,5 +1,7 @@
 package com.example.onlychat.Model;
 
+import com.example.onlychat.Interfaces.Member;
+
 import org.json.JSONArray;
 
 import java.io.Serializable;
