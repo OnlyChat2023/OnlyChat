@@ -1,5 +1,6 @@
 package com.example.onlychat.Friends.AllFriends;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,7 +19,9 @@ import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.UserModel;
+import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,6 +68,28 @@ public class AllFriends extends Fragment {
                         JSONObject profile = response.getJSONObject("data");
                         Log.i("all friends click item", profile.toString());
 
+                        String profileJson = profile.toString();
+                        UserModel userInfo = new Gson().fromJson(profileJson, UserModel.class);
+                        Boolean isFriend = profile.getBoolean("isFriend");
+                        Log.i("isFriend", isFriend.toString());
+
+                        Bundle myBundle = new Bundle();
+//                        System.out.println("RUN HERE " + userInfo.getName());
+                        myBundle.putString("user_id", userInfo.getId());
+                        myBundle.putString("name", userInfo.getName());
+                        myBundle.putString("avatar", userInfo.getAvatar());
+                        myBundle.putString("nickName", userInfo.getNickName());
+                        myBundle.putString("phoneNumber", userInfo.getPhone());
+                        myBundle.putString("university", userInfo.getUniversity());
+                        myBundle.putString("email", userInfo.getEmail());
+                        myBundle.putString("description", userInfo.getDescription());
+                        myBundle.putString("facebook", userInfo.getFacebook());
+                        myBundle.putString("instagram", userInfo.getInstagram());
+                        myBundle.putBoolean("isFriend", isFriend);
+
+                        Intent intentToProfile = new Intent (listFriends.getContext(), Profile.class);
+                        intentToProfile.putExtras(myBundle);
+                        startActivity(intentToProfile);
                     }
 
                     @Override

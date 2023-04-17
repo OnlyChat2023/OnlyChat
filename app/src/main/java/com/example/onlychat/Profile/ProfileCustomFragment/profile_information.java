@@ -1,6 +1,7 @@
 package com.example.onlychat.Profile.ProfileCustomFragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -78,9 +79,19 @@ public class profile_information extends Fragment {
 
     }
 
+    void getData() {
+        Intent intent = getActivity().getIntent();
+        Bundle myBundle = intent.getExtras();
+        contents[0] = myBundle.getString("name");
+        contents[1] = myBundle.getString("phoneNumber");
+        contents[2] = myBundle.getString("email");
+        contents[3] = myBundle.getString("university");
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getData();
         LinearLayout layout_profile1 = (LinearLayout) inflater.inflate(R.layout.fragment_profile_information, null);
         ListView listView = (ListView) layout_profile1.findViewById(R.id.list);
 

@@ -35,11 +35,12 @@
         android:orientation="horizontal">
 
         <Button
+            android:focusable="false"
             android:id="@+id/add_friend_btn"
             android:layout_width="0dp"
             android:layout_height="34dp"
             android:layout_weight=".50"
-            android:text="Add friend"
+            android:text="Confirm"
             android:textAllCaps="false"
             android:fontFamily="@font/montserrat_semibold"
             android:textSize="14sp"
@@ -48,6 +49,7 @@
             />
 
         <Button
+            android:focusable="false"
             android:id="@+id/remove_btn"
             android:layout_width="0dp"
             android:layout_weight=".50"
