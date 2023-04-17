@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.onlychat.Profile.CustomItem.CustomIconLabelAdapter;
+import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
 
 /**

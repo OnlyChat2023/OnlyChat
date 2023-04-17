@@ -72,41 +72,15 @@ public class AllFriends extends Fragment {
         listFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                httpManager.getUserById(friend_list.get(i).get_id(), new HttpResponse() {
-                    @Override
-                    public void onSuccess(JSONObject response) throws JSONException {
-                        JSONObject profile = response.getJSONObject("data");
-                        Log.i("all friends click item", profile.toString());
+                Bundle myBundle = new Bundle();
+                myBundle.putInt("index",i);
+                myBundle.putString("user_id",friend_list.get(i).get_id());
 
-                        String profileJson = profile.toString();
-                        UserModel userInfo = new Gson().fromJson(profileJson, UserModel.class);
-                        Boolean isFriend = profile.getBoolean("isFriend");
-                        Log.i("isFriend", isFriend.toString());
 
-                        Bundle myBundle = new Bundle();
-//                        System.out.println("RUN HERE " + userInfo.getName());
-                        myBundle.putString("user_id", userInfo.getId());
-                        myBundle.putString("name", userInfo.getName());
-                        myBundle.putString("avatar", userInfo.getAvatar());
-                        myBundle.putString("nickName", userInfo.getNickName());
-                        myBundle.putString("phoneNumber", userInfo.getPhone());
-                        myBundle.putString("university", userInfo.getUniversity());
-                        myBundle.putString("email", userInfo.getEmail());
-                        myBundle.putString("description", userInfo.getDescription());
-                        myBundle.putString("facebook", userInfo.getFacebook());
-                        myBundle.putString("instagram", userInfo.getInstagram());
-                        myBundle.putBoolean("isFriend", isFriend);
+                Intent intentToProfile = new Intent (listFriends.getContext(), Profile.class);
+                intentToProfile.putExtras(myBundle);
+                startActivity(intentToProfile);
 
-                        Intent intentToProfile = new Intent (listFriends.getContext(), Profile.class);
-                        intentToProfile.putExtras(myBundle);
-                        startActivity(intentToProfile);
-                    }
-
-                    @Override
-                    public void onError(String error) {
-
-                    }
-                });
             }
         });
 
@@ -128,7 +102,7 @@ public class AllFriends extends Fragment {
         SocketManager.getInstance();
         SocketManager.deleteFriend(friend_list.get(i).get_id(),myInfo);
 
-        friendBottomDialogFragment.dismiss();
+        if(friendBottomDialogFragment != null) friendBottomDialogFragment.dismiss();
         friend_list.remove(i);
         customFriendItem.notifyDataSetChanged();
         Friends.getQuatity().setText(friend_list.size()+" available");

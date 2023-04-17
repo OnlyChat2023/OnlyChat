@@ -20,12 +20,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.onlychat.EditProfile.EditProfile;
+import com.example.onlychat.Friends.AllFriends.AllFriends;
+import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 public class Profile extends AppCompatActivity {
@@ -37,12 +42,24 @@ public class Profile extends AppCompatActivity {
     private Button editBtn;
     private Button addFriendBtn;
     private Button sendChatBtn;
+    private String user_id;
+    UserModel user;
 
+    public UserModel getUser() {
+        return user;
+    }
+
+    Integer isFriend;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        // Set data on Profile
+        Intent myCallerIntent = getIntent();
+        Bundle myBundle = myCallerIntent.getExtras();
+        user_id = myBundle.getString("user_id");
 
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.view_pager);
@@ -54,64 +71,113 @@ public class Profile extends AppCompatActivity {
         userName = (TextView) findViewById(R.id.username);
         avatar = (ImageView) findViewById(R.id.avatar);
 
-        // Set data on Profile
-        Intent myCallerIntent = getIntent();
-        Bundle myBundle = myCallerIntent.getExtras();
-//        System.out.println(myBundle.getString("name"));
-        userName.setText(myBundle.getString("name"));
-
-        new HttpManager.GetImageFromServer(avatar).execute(myBundle.getString("avatar"));
-//        adapter = new CustomIconLabelAdapter(this, R.layout.info_item, contents, thumbnails);
-//        setListAdapter(adapter);
-
         // Handle Button
         addFriendBtn = (Button) findViewById(R.id.add_friend_btn);
         editBtn = (Button) findViewById(R.id.edit_btn);
         sendChatBtn = (Button) findViewById(R.id.send_chat_btn);
 
-        // If isFriend = true
-        System.out.println("isFRIEND: " + myBundle.getBoolean("isFriend"));
-        if (myBundle.getBoolean("isFriend")){
-            Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_white_trash);
-            addFriendBtn.setText("Remove");
-            addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
-        }
-        else {
-            Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_check);
-            addFriendBtn.setText("Confirm");
-            addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
-        }
-        Log.i("TAG", myBundle.getString("user_id") + "----" + (new GlobalPreferenceManager(Profile.this).getUserModel().get_id()) );
+        HttpManager httpManager = new HttpManager(this);
+        httpManager.getUserById(user_id, new HttpResponse() {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException {
+                JSONObject profile = response.getJSONObject("data");
+                Log.i("all friends click item", profile.toString());
+
+                user = new Gson().fromJson(profile.toString(), UserModel.class);
+                isFriend = profile.getInt("isFriend");
+                Log.i("isFriend", isFriend.toString());
+
+                userName.setText(user.getName());
+                new HttpManager.GetImageFromServer(avatar).execute(user.getAvatar());
+
+                setButtonUI();
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+
+
+
+//        Log.i("TAG", myBundle.getString("user_id") + "----" + (new GlobalPreferenceManager(Profile.this).getUserModel().get_id()) );
         // If click my own user profile
-        if (!myBundle.getString("user_id").equals(new GlobalPreferenceManager(Profile.this).getUserModel().get_id())){
-            editBtn.setVisibility(View.GONE);
-        }
-        else {
-            addFriendBtn.setVisibility(View.GONE);
-            sendChatBtn.setVisibility(View.GONE);
-        }
+
 
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 UserModel userInfo = new GlobalPreferenceManager(Profile.this).getUserModel();
                 Bundle myBundle = new Bundle();
-//                        System.out.println("RUN HERE " + userInfo.getName());
-                myBundle.putString("user_id", userInfo.getId());
-                myBundle.putString("name", userInfo.getName());
-                myBundle.putString("avatar", userInfo.getAvatar());
-                myBundle.putString("nickName", userInfo.getNickName());
-                myBundle.putString("phoneNumber", userInfo.getPhone());
-                myBundle.putString("university", userInfo.getUniversity());
-                myBundle.putString("email", userInfo.getEmail());
-                myBundle.putString("description", userInfo.getDescription());
-                myBundle.putString("facebook", userInfo.getFacebook());
-                myBundle.putString("instagram", userInfo.getInstagram());
 
                 Intent editProfile = new Intent(Profile.this, EditProfile.class);
                 editProfile.putExtras(myBundle);
                 startActivity(editProfile);
             }
         });
+
+        // add, remove, confirm
+        addFriendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isFriend == 1){
+//                    AllFriends.removeFriend(myBundle.getInt("index"));
+                    isFriend = 0;
+                    setButtonUI();
+                }
+                else if(isFriend == 0) {
+//                    AllFriends.adFriend(myBundle.getInt("index"));
+                    isFriend = 3;
+                    setButtonUI();
+                }
+                else if(isFriend == 2){
+//                    AllFriends.removeFriend(myBundle.getInt("index"));
+                    isFriend = 1;
+                    setButtonUI();
+                }
+                else{
+                    isFriend = 0;
+                    setButtonUI();
+                }
+            }
+        });
+    }
+
+    public void setButtonUI(){
+        Log.i("button ui", isFriend.toString());
+        // friend
+        if (isFriend==1){
+            Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_white_trash);
+            addFriendBtn.setText("Remove");
+            addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+        }
+        // invite to me
+        else if(isFriend == 2){
+            Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_check);
+            addFriendBtn.setText("Confirm");
+            addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+        }
+        else if(isFriend == 0){
+            Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_add_friend);
+            addFriendBtn.setText("Add friend");
+            addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+        }
+        else {
+//            Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_add_friend);
+            addFriendBtn.setText("Sended");
+            addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        }
+
+        // not me
+        if (!user_id.equals(new GlobalPreferenceManager(Profile.this).getUserModel().get_id())){
+            editBtn.setVisibility(View.GONE);
+        }
+        // me
+        else {
+            addFriendBtn.setVisibility(View.GONE);
+            sendChatBtn.setVisibility(View.GONE);
+        }
+
     }
 }

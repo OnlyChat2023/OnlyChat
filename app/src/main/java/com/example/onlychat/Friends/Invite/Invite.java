@@ -68,7 +68,7 @@ public class Invite extends Fragment {
 
                         String profileJson = profile.toString();
                         UserModel userInfo = new Gson().fromJson(profileJson, UserModel.class);
-                        Boolean isFriend = profile.getBoolean("isFriend");
+                        Integer isFriend = profile.getInt("isFriend");
                         Log.i("isFriend", isFriend.toString());
 
                         Bundle myBundle = new Bundle();
@@ -83,7 +83,7 @@ public class Invite extends Fragment {
                         myBundle.putString("description", userInfo.getDescription());
                         myBundle.putString("facebook", userInfo.getFacebook());
                         myBundle.putString("instagram", userInfo.getInstagram());
-                        myBundle.putBoolean("isFriend", isFriend);
+                        myBundle.putInt("isFriend", isFriend);
 
                         Intent intentToProfile = new Intent (listInvites.getContext(), Profile.class);
                         intentToProfile.putExtras(myBundle);
