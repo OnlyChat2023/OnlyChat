@@ -28,6 +28,8 @@ import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.RoomModel;
+import com.example.onlychat.Model.UserModel;
+import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
 
 import java.util.ArrayList;
@@ -111,37 +113,56 @@ public class DirectMessage extends Fragment {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LayoutInflater inflater = (LayoutInflater) globalChat.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                // overlay
-                View overlayView = inflater.inflate(R.layout.global_chat_overlay, null);
+//                LayoutInflater inflater = (LayoutInflater) globalChat.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+//                // overlay
+//                View overlayView = inflater.inflate(R.layout.global_chat_overlay, null);
+////                boolean focusable = true; // lets taps outside the popup also dismiss it
+//                int width = LinearLayout.LayoutParams.MATCH_PARENT;
+//                int height = LinearLayout.LayoutParams.MATCH_PARENT;
+//                final PopupWindow overlayWindow = new PopupWindow(overlayView,width,height,true);
+//                overlayWindow.showAtLocation(view, Gravity.TOP, 0, 0);
+//
+//                // Popup
+//                View popupView = inflater.inflate(R.layout.global_chat_popup, null);
+//                androidGridView = (GridView) popupView.findViewById(R.id.gridview_android_example);
+//                androidGridView.setAdapter(new DirectMessage.ImageAdapterGridView(popupView.getContext()));
+//
+//                androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+//
+//                    }
+//                });
+//
 //                boolean focusable = true; // lets taps outside the popup also dismiss it
-                int width = LinearLayout.LayoutParams.MATCH_PARENT;
-                int height = LinearLayout.LayoutParams.MATCH_PARENT;
-                final PopupWindow overlayWindow = new PopupWindow(overlayView,width,height,true);
-                overlayWindow.showAtLocation(view, Gravity.TOP, 0, 0);
+//                final PopupWindow popupWindow = new PopupWindow(popupView,900,1360,focusable);
+//
+//                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//                    @Override
+//                    public void onDismiss() {
+//                        overlayWindow.dismiss();
+//                    }
+//                });
+//
+//                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+                UserModel userInfo = new GlobalPreferenceManager(profile.getContext()).getUserModel();
 
-                // Popup
-                View popupView = inflater.inflate(R.layout.global_chat_popup, null);
-                androidGridView = (GridView) popupView.findViewById(R.id.gridview_android_example);
-                androidGridView.setAdapter(new DirectMessage.ImageAdapterGridView(popupView.getContext()));
+                Bundle myBundle = new Bundle();
+                myBundle.putString("user_id", userInfo.getId());
+                myBundle.putString("name", userInfo.getName());
+                myBundle.putString("avatar", userInfo.getAvatar());
+                myBundle.putString("nickName", userInfo.getNickName());
+                myBundle.putString("phoneNumber", userInfo.getPhone());
+                myBundle.putString("university", userInfo.getUniversity());
+                myBundle.putString("email", userInfo.getEmail());
+                myBundle.putString("description", userInfo.getDescription());
+                myBundle.putString("facebook", userInfo.getFacebook());
+                myBundle.putString("instagram", userInfo.getInstagram());
 
-                androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-                    }
-                });
-
-                boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView,900,1360,focusable);
-
-                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        overlayWindow.dismiss();
-                    }
-                });
-
-                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+                System.out.println("userInfo: " + userInfo.getDescription());
+//                System.out.println("FB: " + userInfo.getEmail());
+                Intent intentToProfile = new Intent (profile.getContext(), Profile.class);
+                intentToProfile.putExtras(myBundle);
+                startActivity(intentToProfile);
             }
         });
 

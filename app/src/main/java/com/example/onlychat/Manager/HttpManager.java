@@ -27,12 +27,6 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +34,7 @@ import java.util.Map;
 public class HttpManager {
     private Context context;
     private static GlobalPreferenceManager pref;
-    private static final String ip = "192.168.1.205";
+    private static final String ip = "192.168.1.200";
     static private UserModel user = new UserModel();
 
     public HttpManager(Context _context) {
@@ -57,34 +51,32 @@ public class HttpManager {
             jsonRequest = new JSONObject(postParam);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(method, url, jsonRequest,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        httpResponse.onSuccess(response);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            httpResponse.onSuccess(response);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-                }
-            },
-            new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if (error instanceof NetworkError) {
-                        //handle your network error here.
-                    } else if(error instanceof ServerError) {
-                        //handle if server error occurs with 5** status code
-                    } else if(error instanceof AuthFailureError) {
-                        //handle if authFailure occurs.This is generally because of invalid credentials
-                    } else if(error instanceof ParseError) {
-                        //handle if the volley is unable to parse the response data.
-                    } else if(error instanceof TimeoutError) {
-                        //handle if socket time out is occurred.
-                    }
-
-
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof NetworkError) {
+                            //handle your network error here.
+                        } else if (error instanceof ServerError) {
+                            //handle if server error occurs with 5** status code
+                        } else if (error instanceof AuthFailureError) {
+                            //handle if authFailure occurs.This is generally because of invalid credentials
+                        } else if (error instanceof ParseError) {
+                            //handle if the volley is unable to parse the response data.
+                        } else if (error instanceof TimeoutError) {
+                            //handle if socket time out is occurred.
+                        }
 
 
                         if (error.networkResponse != null && error.networkResponse.data != null) {
@@ -97,7 +89,7 @@ public class HttpManager {
                                 //throw new RuntimeException(e);
                             }
                         }
-                        httpResponse.onError(error.getMessage() == null ? error.toString() : error.getMessage());
+//                        httpResponse.onError(error.getMessage() == null ? error.toString() : error.getMessage());
                     }
                 }) {
             @Override
@@ -205,11 +197,55 @@ public class HttpManager {
         createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/getListGroupChat", Request.Method.POST, "getListGroupChat", params, responseReceiver);
     }
 
-    public void LeaveGroupChat(String userID, String GroupChatID, HttpResponse responseReceiver){
+    public void LeaveGroupChat(String userID, String GroupChatID, HttpResponse responseReceiver) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("_id", userID);
         params.put("grc_id", GroupChatID);
 
         createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/leaveGroupChat", Request.Method.POST, "leaveGroupChat", params, responseReceiver);
     }
-}
+
+    public void updateProfile(UserModel userModel) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("username", userModel.getName());
+        params.put("phone", userModel.getPhone());
+        params.put("email", userModel.getEmail());
+        params.put("university", userModel.getUniversity());
+        params.put("facebook", userModel.getFacebook());
+        params.put("instagram", userModel.getInstagram());
+        params.put("description", userModel.getDescription());
+
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/updateProfile", Request.Method.POST, "userprofile", params, null);}
+
+        public void UpdateGroupNotufy (String userID, String GroupChatID, Boolean notify, Boolean
+        block, HttpResponse responseReceiver){
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("user_id", userID);
+            params.put("grc_id", GroupChatID);
+            params.put("notify", notify.toString());
+            params.put("block", block.toString());
+
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/updateNotify", Request.Method.POST, "updateNotify", params, responseReceiver);
+        }
+
+        public void GetListNewMember (String userID, String GroupChatID, HttpResponse
+        responseReceiver){
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("user_id", userID);
+            params.put("grc_id", GroupChatID);
+
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/getAddMember", Request.Method.POST, "getListNewMember", params, responseReceiver);
+        }
+
+        public void addMemberGroup (String userID, String GroupChatID, String name, String
+        nickname, String avatar, HttpResponse responseReceiver){
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("user_id", userID);
+            params.put("grc_id", GroupChatID);
+            params.put("name", name);
+            params.put("nickname", nickname);
+            params.put("avatar", avatar);
+
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/addMember", Request.Method.POST, "getListNewMember", params, responseReceiver);
+        }
+    }

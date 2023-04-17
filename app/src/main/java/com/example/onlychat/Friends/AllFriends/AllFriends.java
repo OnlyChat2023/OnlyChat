@@ -1,5 +1,6 @@
 package com.example.onlychat.Friends.AllFriends;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -21,7 +22,9 @@ import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.UserModel;
+import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,19 +72,15 @@ public class AllFriends extends Fragment {
         listFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                httpManager.getUserById(friend_list.get(i).get_id(), new HttpResponse() {
-                    @Override
-                    public void onSuccess(JSONObject response) throws JSONException {
-                        JSONObject profile = response.getJSONObject("data");
-                        Log.i("all friends click item", profile.toString());
+                Bundle myBundle = new Bundle();
+                myBundle.putInt("index",i);
+                myBundle.putString("user_id",friend_list.get(i).get_id());
 
-                    }
 
-                    @Override
-                    public void onError(String error) {
+                Intent intentToProfile = new Intent (listFriends.getContext(), Profile.class);
+                intentToProfile.putExtras(myBundle);
+                startActivity(intentToProfile);
 
-                    }
-                });
             }
         });
 
@@ -103,7 +102,7 @@ public class AllFriends extends Fragment {
         SocketManager.getInstance();
         SocketManager.deleteFriend(friend_list.get(i).get_id(),myInfo);
 
-        friendBottomDialogFragment.dismiss();
+        if(friendBottomDialogFragment != null) friendBottomDialogFragment.dismiss();
         friend_list.remove(i);
         customFriendItem.notifyDataSetChanged();
         Friends.getQuatity().setText(friend_list.size()+" available");

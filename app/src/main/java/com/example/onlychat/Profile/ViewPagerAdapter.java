@@ -41,7 +41,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return title = "Information";
             case 1:
-                return title = "Socials";
+                return title = "Social media";
             case 2:
                 return title = "Description";
         }

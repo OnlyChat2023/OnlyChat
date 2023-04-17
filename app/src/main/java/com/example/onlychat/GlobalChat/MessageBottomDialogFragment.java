@@ -27,7 +27,7 @@ public class MessageBottomDialogFragment extends BottomSheetDialogFragment {
 
     private String mParam1;
     private String mParam2;
-    private int postion;
+    private String id;
     private GroupChat activity;
 
     public ImageView delete;
@@ -69,17 +69,18 @@ public class MessageBottomDialogFragment extends BottomSheetDialogFragment {
         leave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.LeaveGroup(MessageBottomDialogFragment.this, postion);
+                activity.LeaveGroup(MessageBottomDialogFragment.this, id);
             }
         });
         return layout;
     }
 
-    public void setPostion(int postion) {
-        this.postion = postion;
-    }
 
     public void setActivity(GroupChat activity) {
         this.activity = activity;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

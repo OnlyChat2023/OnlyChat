@@ -1,5 +1,6 @@
 package com.example.onlychat.Profile.ProfileCustomFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.onlychat.R;
 
@@ -61,6 +64,15 @@ public class profile_description extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_description, container, false);
+        LinearLayout layout_profile3 = (LinearLayout) inflater.inflate(R.layout.fragment_profile_description, null);
+        TextView description = (TextView) layout_profile3.findViewById(R.id.content);
+
+        // Get & set data
+        Intent intent = getActivity().getIntent();
+        Bundle myBundle = intent.getExtras();
+        description.setText(myBundle.getString("description"));
+
+        return layout_profile3;
+//        return inflater.inflate(R.layout.fragment_profile_description, container, false);
     }
 }
