@@ -40,6 +40,29 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/option_add_member"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:paddingHorizontal="50dp">
+
+        <Button
+            android:id="@+id/add_member_btn"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_add_member"
+            android:stateListAnimator="@null"
+            android:gravity="center" />
+
+    </LinearLayout>
+
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -84,11 +107,13 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/global_notify"
             android:layout_width="match_parent"
             android:layout_marginBottom="18dp"
             android:paddingVertical="6dp"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/notify_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Turn off notification"
@@ -139,6 +164,7 @@
                 app:srcCompat="@drawable/dm_option_icon_profile" />
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/global_delete"
             android:layout_width="match_parent"
             android:layout_marginBottom="18dp"
             android:paddingVertical="6dp"
@@ -163,6 +189,7 @@
                 app:srcCompat="@drawable/dm_option_icon_delete" />
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/global_leave"
             android:layout_width="match_parent"
             android:layout_marginBottom="25dp"
             android:paddingVertical="6dp"
@@ -198,6 +225,7 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/montserrat_semibold" />
         <RelativeLayout
+            android:id="@+id/global_block"
             android:layout_width="match_parent"
             android:layout_marginBottom="18dp"
             android:paddingVertical="6dp"
@@ -225,6 +253,7 @@
 
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/global_report"
             android:layout_width="match_parent"
             android:layout_marginBottom="18dp"
             android:paddingVertical="6dp"
@@ -252,4 +281,5 @@
         </RelativeLayout>
 
     </LinearLayout>
+</ScrollView>
 </LinearLayout>

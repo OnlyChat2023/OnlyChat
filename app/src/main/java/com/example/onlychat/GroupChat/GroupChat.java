@@ -54,6 +54,7 @@ public class GroupChat extends Fragment {
     RelativeLayout groupChat;
     ArrayList<RoomModel> roomModels = new ArrayList<>();
     GlobalPreferenceManager pref;
+    Boolean isCreate = true;
 
     public ArrayList<RoomModel> getRoomModels() {
         return roomModels;
@@ -105,7 +106,7 @@ public class GroupChat extends Fragment {
 
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
                 messageBottomDialogFragment.setActivity(GroupChat.this);
-                messageBottomDialogFragment.setPostion(i);
+                messageBottomDialogFragment.setId(roomModels.get(i).getId());
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
 
                 return true;
@@ -137,7 +138,7 @@ public class GroupChat extends Fragment {
                 // Popup
                 View popupView = inflater.inflate(R.layout.global_chat_popup_new_group, null);
                 boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView,900,650,focusable);
+                final PopupWindow popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT,focusable);
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
 
@@ -210,9 +211,9 @@ public class GroupChat extends Fragment {
         });
     }
 
-    public void LeaveGroup(MessageBottomDialogFragment current, int i){
+    public void LeaveGroup(MessageBottomDialogFragment current, String id){
         HttpManager httpManager = new HttpManager(getContext());
-        httpManager.LeaveGroupChat(pref.getUserModel().get_id(), roomModels.get(i).getId(), new HttpResponse() {
+        httpManager.LeaveGroupChat(pref.getUserModel().get_id(), id, new HttpResponse() {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
                 Reload();
@@ -225,5 +226,16 @@ public class GroupChat extends Fragment {
                 current.dismiss();
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (isCreate == false){
+            Reload();
+        }else {
+            isCreate = false;
+        }
     }
 }
