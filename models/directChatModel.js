@@ -7,6 +7,7 @@ const messageSchema = new mongoose.Schema({
     {
       message: String,
       time: Date,
+      images: [],
       user_id: String,
       seen_user: [
         String

@@ -17,19 +17,34 @@ const getUserInformation = catchAsync(async (req, res) => {
     dmList.avatar = dmList.members.filter(el => el.user_id != user._id.toString())[0].avatar
     dmList.name = dmList.members.filter(el => el.user_id != user._id.toString())[0].nickname
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
-    directChat.push(dmList);
+
+    const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
+    newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
+    newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
+    newDM.options = [{...newDM.options[0], _id: newDM.options[0]._id.toString()}];
+
+    directChat.push(newDM);
   }
   // console.log("Direct", directChat)
 
   const groupChat = []
   for (let i of user.groupchat_channel) {
     const dmList = await GroupChat.findOne({ _id: i });
+
     for (let i of dmList.chats) {
       i.avatar = dmList.members.filter(el => el.user_id == i.user_id)[0].avatar
       i.nickname = dmList.members.filter(el => el.user_id == i.user_id)[0].nickname
     }
+
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
-    groupChat.push(dmList);
+
+    const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
+    newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
+
+    newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
+    newDM.options = [{...newDM.options[0], _id: newDM.options[0]._id.toString()}];
+
+    groupChat.push(newDM);
   }
   // console.log("Group", groupChat)
 
@@ -37,7 +52,16 @@ const getUserInformation = catchAsync(async (req, res) => {
   for (let i of user.globalchat_channel) {
     const dmList = await GlobalChat.findOne({ _id: i });
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
-    globalChat.push(dmList);
+
+    const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
+    newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
+
+    newDM.chats = newDM.chats.map(el => {
+      return ({ ...el, _id: el._id.toString() });
+    });
+    newDM.options = [{...newDM.options[0], _id: newDM.options[0]._id.toString()}];
+
+    globalChat.push(newDM);
   }
   // console.log("Global", globalChat)
 

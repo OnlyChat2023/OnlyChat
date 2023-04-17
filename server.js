@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, {ObjectId} from 'mongoose';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import fs from 'fs';
@@ -9,6 +9,8 @@ const port = process.env.PORT || 5000;
 
 import app from "./app.js";
 import globalChat from './models/globalChatModel.js';
+import directChat from './models/directChatModel.js';
+import groupChat from './models/groupChatModel.js';
 dotenv.config({ path: './config.env' });
 
 mongoose
@@ -203,14 +205,41 @@ io.on('connection', (socket) => {
             GlobalChannel.chats.push(messageModal);
             await GlobalChannel.save();
         }
+        else if (socket.channel === 'direct_message') {
+            messageModal = {
+                message: Buffer.from(message, 'utf-8').toString(),
+                user_id: send_user._id,
+                imges: [],
+                send_user: [],
+                time: new Date()
+            }
+
+            const DirectMessage = await directChat.findOne({_id: socket.room });
+            DirectMessage.chats.push(messageModal);
+            await DirectMessage.save();
+        }
+        else if (socket.channel === 'group_chat') {
+            messageModal = {
+                message: Buffer.from(message, 'utf-8').toString(),
+                user_id: send_user._id,
+                imges: [],
+                avatar: send_user.avatar,
+                nickname: send_user.nickname,
+                send_user: [],
+                time: new Date()
+            }
+
+            const GroupChat = await groupChat.findOne({_id: socket.room });
+            GroupChat.chats.push(messageModal);
+            await GroupChat.save();
+        }
+        // else if (socket.channel === 'group_chat') {
         
         io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
 
     socket.on('sendImageMessage', async (images, position, user) => {
         const send_user = JSON.parse(user);
-
-        console.log(send_user);
 
         const image_list = JSON.parse(images);
         const imagePath = [];
@@ -234,15 +263,66 @@ io.on('connection', (socket) => {
                 nickname: send_user.nickname,
                 time: new Date()
             }
-        }
 
-        const GlobalChannel = await globalChat.findOne({_id: socket.room });
-        GlobalChannel.chats.push(messageModal);
-        await GlobalChannel.save();
+            const GlobalChannel = await globalChat.findOne({_id: socket.room });
+            GlobalChannel.chats.push(messageModal);
+            await GlobalChannel.save();
+        }
+        else if (socket.channel === 'direct_message') {
+            messageModal = {
+                message: '',
+                user_id: send_user._id,
+                images: imagePath,
+                send_user: [],
+                time: new Date()
+            }
+
+            const DirectMessage = await directChat.findOne({_id: socket.room });
+            DirectMessage.chats.push(messageModal);
+            await DirectMessage.save();
+        }
+        else if (socket.channel === 'group_chat') {
+            messageModal = {
+                message: '',
+                user_id: send_user._id,
+                images: imagePath,
+                avatar: send_user.avatar,
+                nickname: send_user.nickname,
+                send_user: [],
+                time: new Date()
+            }
+
+            const GroupChat = await groupChat.findOne({_id: socket.room });
+            GroupChat.chats.push(messageModal);
+            await GroupChat.save();
+        }
 
         io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
+    
+    socket.on("notifyUpdateMessage", async (lastMessageID) => {
+        if (socket.channel) {
+            let newMessageList = null;
 
+            if (socket.channel === 'direct_message')
+                newMessageList = await directChat.findOne({ 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) }});
+                
+            if (socket.channel === 'global_chat')
+                newMessageList = await globalChat.findOne({ 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) }});
+            
+            if (socket.channel === 'group_chat')
+                newMessageList = await groupChat.findOne({ 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) }});
+
+            if (newMessageList) {
+                const start = newMessageList.chats.findIndex((item) => item._id.toString() === lastMessageID);
+                    console.log(newMessageList.chats[start]);
+
+                for (let i = start + 1; i < newMessageList.chats.length; i++) {
+                    socket.emit('messageListener', newMessageList.chats[i], -2, { token: '' });
+                }
+            }
+        }
+    });
 
     socket.on('restriction_friend', (friend) => {
 

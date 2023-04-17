@@ -5,12 +5,12 @@ const messageSchema = new mongoose.Schema({
   name: String,
   chats: [
     {
-      _id: mongoose.Schema.ObjectId,
       message: String,
       time: Date,
       user_id: String,
-      nickname: String,
+      images: [],
       avatar: { type: String, default: '' },
+      nickname: { type: String, default: '' },
       seen_user: [
         String
       ]
