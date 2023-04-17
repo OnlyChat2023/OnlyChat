@@ -27,12 +27,6 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,7 +91,7 @@ public class HttpManager {
                                 //throw new RuntimeException(e);
                             }
                         }
-                        httpResponse.onError(error.getMessage() == null ? error.toString() : error.getMessage());
+//                        httpResponse.onError(error.getMessage() == null ? error.toString() : error.getMessage());
                     }
                 }) {
             @Override
@@ -211,5 +205,18 @@ public class HttpManager {
         params.put("grc_id", GroupChatID);
 
         createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/leaveGroupChat", Request.Method.POST, "leaveGroupChat", params, responseReceiver);
+    }
+
+    public void updateProfile(UserModel userModel) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("username", userModel.getName());
+        params.put("phone", userModel.getPhone());
+        params.put("email", userModel.getEmail());
+        params.put("university", userModel.getUniversity());
+        params.put("facebook", userModel.getFacebook());
+        params.put("instagram", userModel.getInstagram());
+        params.put("description", userModel.getDescription());
+
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/updateProfile", Request.Method.POST, "userprofile", params, null);
     }
 }
