@@ -36,7 +36,7 @@ public class ConvertImage extends AsyncTask<String, Void, ImageModel> {
         ArrayList<String> imageList = new ArrayList<String>();
         ArrayList<Bitmap> imageListBitmap = new ArrayList<Bitmap>();
 
-        for (int i = 0; i < arrayList.size(); i++) {
+        for (int i = arrayList.size() - 1; i >= 0; i--) {
             Bitmap bitmap = null;
 
             try {

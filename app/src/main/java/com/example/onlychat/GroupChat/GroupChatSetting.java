@@ -139,12 +139,12 @@ public class GroupChatSetting extends AppCompatActivity implements ChangeGroupNa
 
                 // set list members
                 listMembers = (ListView)  popupView.findViewById(R.id.listMembers);
-                CustomMemberItem customMemberItem=new CustomMemberItem(popupView.getContext(),avatars,names);
-                listMembers.setAdapter(customMemberItem);
-                listMembers.setSelection(0);
-                listMembers.smoothScrollToPosition(0);
-                listMembers.setDivider(null);
-                listMembers.setDividerHeight(0);
+//                CustomMemberItem customMemberItem=new CustomMemberItem(popupView.getContext(),);
+//                listMembers.setAdapter(customMemberItem);
+//                listMembers.setSelection(0);
+//                listMembers.smoothScrollToPosition(0);
+//                listMembers.setDivider(null);
+//                listMembers.setDividerHeight(0);
 
 
                 boolean focusable = true; // lets taps outside the popup also dismiss it

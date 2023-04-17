@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingVertical="8dp"
     android:paddingHorizontal="12dp"
+    android:descendantFocusability="blocksDescendants"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -32,6 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/avatar"
         android:layout_below="@id/name"
+        android:descendantFocusability="blocksDescendants"
         android:background="@drawable/global_chat_round_left"
         android:orientation="vertical">
 
@@ -53,7 +55,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/imagesLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:touchscreenBlocksFocus="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:descendantFocusability="blocksDescendants">
         </androidx.recyclerview.widget.RecyclerView>
     </RelativeLayout>
 </RelativeLayout>

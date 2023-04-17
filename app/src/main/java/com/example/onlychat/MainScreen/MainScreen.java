@@ -78,65 +78,57 @@ public class MainScreen extends AppCompatActivity {
     GroupChat groupChatFragment = new GroupChat();
     ChatBot botChatFragment = new ChatBot();
     Friends friendsFragment = new Friends();
+    GlobalPreferenceManager pref;
+    static UserModel myInfo;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void getMetaData() {
+        HttpManager httpManager = new HttpManager(this);
+        httpManager.getListChat(
+            new HttpResponse(){
+                @Override
+                public void onSuccess(JSONObject Response) {
+                    try{
+                        JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
+                        JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
+                        JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
+                        JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
 
-        Bundle bundle = getIntent().getExtras();
-        isLogin = bundle.getBoolean("isLogin", false);
 
-//        GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
-//        pref.SignOut();
-
-        if (isLogin) {
-
-            HttpManager httpManager = new HttpManager(this);
-            httpManager.getListChat(
-                new HttpResponse(){
-                    @Override
-                    public void onSuccess(JSONObject Response) {
-                        try{
-                            JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
-                            JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
-                            JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
-                            JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
-
-                           
-                            if(directChat.length()>0){
-                                direct_list = getListRoom(directChat);
-                                directChatFragment.setRoomModels(direct_list);
-                            }
-
-                            if(groupChat.length()>0){
-                                group_list = getListRoom(groupChat);
-                                groupChatFragment.setRoomModels(group_list);
-                            }
-
-                            if(globalChat.length()>0){
-                                global_list = getListRoom(globalChat);
-                                globalChatFragment.setRoomModels(global_list);
-                            }
-
-                            if(botChat.length()>0){
-                                chatbot_list = getListRoom(botChat);
-                                botChatFragment.setRoomModels(chatbot_list);
-                            }
+                        
+                        if(directChat.length()>0){
+                            direct_list = getListRoom(directChat);
+                            directChatFragment.setRoomModels(direct_list);
                         }
-                        catch (Exception e){
-                            Log.i("HTTP Success Error",e.toString());
+
+                        if(groupChat.length()>0){
+                            group_list = getListRoom(groupChat);
+                            groupChatFragment.setRoomModels(group_list);
+                        }
+
+                        if(globalChat.length()>0){
+                            global_list = getListRoom(globalChat);
+                            globalChatFragment.setRoomModels(global_list);
+                        }
+
+                        if(botChat.length()>0){
+                            chatbot_list = getListRoom(botChat);
+                            botChatFragment.setRoomModels(chatbot_list);
                         }
                     }
-
-                    @Override
-                    public void onError(String error) {
-                        Log.i("HTTP Error",error);
+                    catch (Exception e){
+                        Log.i("HTTP Success Error",e.toString());
                     }
                 }
-            );
 
-            httpManager.getListFriends(
+                @Override
+                public void onError(String error) {
+                    Log.i("HTTP Error",error);
+                }
+            }
+        );
+
+        httpManager.getListFriends(
                 new HttpResponse() {
                     @Override
                     public void onSuccess(JSONObject response) throws JSONException {
@@ -154,8 +146,33 @@ public class MainScreen extends AppCompatActivity {
 
                     }
                 }
-            );
+        );
+    }
 
+    @Override
+    protected void onResume() {
+//        if (isLogin)
+//            getMetaData();
+        super.onResume();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle bundle = getIntent().getExtras();
+        isLogin = bundle.getBoolean("isLogin", false);
+
+//        GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
+//        pref.SignOut();
+
+        if (isLogin) {
+            pref = new GlobalPreferenceManager(this);
+            myInfo = pref.getUserModel();
+            SocketManager.getInstance();
+            SocketManager.register(myInfo);
+            
+            getMetaData();
             setContentView(R.layout.main_screen);
 
             viewPager = (ViewPager) findViewById(R.id.viewPaper);
@@ -316,8 +333,15 @@ public class MainScreen extends AppCompatActivity {
 
                 //set members
                 ArrayList<Member> members = new ArrayList<>();
+                Log.i("================= main screen group =================", roomModel.getName());
+
                 for(int l=0;l<channel.getJSONObject(i).getJSONArray("members").length();l++){
                     Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
+                    Log.i("main screen", member.getUser_id());
+                    Log.i("main screen", member.getName());
+                    Log.i("main screen", member.getNickname());
+                    Log.i("main screen", member.getAvatar());
+                    Log.i("main screen >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>","");
                     members.add(member);
                 }
                 roomOptions.setMembers(members);

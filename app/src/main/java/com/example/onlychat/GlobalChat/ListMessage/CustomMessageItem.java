@@ -69,11 +69,9 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
                 imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);
                 imageLayout.setItemAnimator(null);
 
-                int numcol = 1;
-                if (messageItem.getImages().size() > 1)
-                    numcol = 2;
+                int num_col = messageItem.getImages().size() > 1 ? 2 : 1;
 
-                imageLayout.setLayoutManager(new GridLayoutManager(context, numcol) {
+                imageLayout.setLayoutManager(new GridLayoutManager(context, num_col) {
                     @Override
                     public boolean canScrollVertically() {
                         return false;
@@ -84,19 +82,6 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
                 imageLayout.setAdapter(myImageChat);
             }
             else if (messageItem.hasImagesStr()) {
-                imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);
-                imageLayout.setItemAnimator(null);
-
-                int numcol = 1;
-                if (messageItem.getImagesStr().size() > 1)
-                    numcol = 2;
-
-                imageLayout.setLayoutManager(new GridLayoutManager(context, numcol) {
-                    @Override
-                    public boolean canScrollVertically() {
-                        return false;
-                    }
-                });
 //                new LoadImage(imageLayout).execute(messageItem.getTempImages());
 
                 new DownloadImage(messageItem.getImagesStr(), new ConvertListener(){
@@ -107,9 +92,25 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
 
                     @Override
                     public void onDownloadSuccess(ArrayList<Bitmap> res) {
-                        ImageChat myImageChat = new ImageChat(res);
-                        messageItem.setImages(res);
-                        imageLayout.setAdapter(myImageChat);
+                        row.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                messageItem.setImages(res);
+
+                                imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);
+                                imageLayout.setItemAnimator(null);
+
+                                int num_col = messageItem.getImagesStr().size() > 1 ? 2 : 1;
+
+                                imageLayout.setLayoutManager(new GridLayoutManager(context, num_col) {
+                                    @Override
+                                    public boolean canScrollVertically() {
+                                        return false;
+                                    }
+                                });
+                                imageLayout.setAdapter(new ImageChat(res));
+                            }
+                        });
                     }
                 }).execute();
             }
@@ -131,11 +132,9 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
                 imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);
                 imageLayout.setItemAnimator(null);
 
-                int numcol = 1;
-                if (messageItem.getImages().size() > 1)
-                    numcol = 2;
+                int num_col = messageItem.getImages().size() > 1 ? 2 : 1;
 
-                imageLayout.setLayoutManager(new GridLayoutManager(context, numcol) {
+                imageLayout.setLayoutManager(new GridLayoutManager(context, num_col) {
                     @Override
                     public boolean canScrollVertically() {
                         return false;
@@ -146,21 +145,7 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
                 imageLayout.setAdapter(myImageChat);
             }
             else if (messageItem.hasImagesStr()) {
-                imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);
-                imageLayout.setItemAnimator(null);
-
-                int numcol = 1;
-                if (messageItem.getImagesStr().size() > 1)
-                    numcol = 2;
-
-                imageLayout.setLayoutManager(new GridLayoutManager(context, numcol) {
-                    @Override
-                    public boolean canScrollVertically() {
-                        return false;
-                    }
-                });
 //                new LoadImage(imageLayout).execute(messageItem.getTempImages());
-
                 new DownloadImage(messageItem.getImagesStr(), new ConvertListener(){
                     @Override
                     public void onSuccess(ImageModel result) {
@@ -169,9 +154,25 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
 
                     @Override
                     public void onDownloadSuccess(ArrayList<Bitmap> res) {
-                        ImageChat myImageChat = new ImageChat(res);
-                        messageItem.setImages(res);
-                        imageLayout.setAdapter(myImageChat);
+                        row.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                messageItem.setImages(res);
+
+                                imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);
+                                imageLayout.setItemAnimator(null);
+
+                                int num_col = messageItem.getImagesStr().size() > 1 ? 2 : 1;
+
+                                imageLayout.setLayoutManager(new GridLayoutManager(context, num_col) {
+                                    @Override
+                                    public boolean canScrollVertically() {
+                                        return false;
+                                    }
+                                });
+                                imageLayout.setAdapter(new ImageChat(res));
+                            }
+                        });
                     }
                 }).execute();
             }
