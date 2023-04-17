@@ -13,6 +13,6 @@ router.get('/userInformation', authController.protect, getUserInformation);
 router.get('/friends', authController.protect, getListFriend);
 
 // get user profile
-router.patch('/getUserById', getUserById);
+router.patch('/getUserById', authController.protect, getUserById);
 
 export default router;
