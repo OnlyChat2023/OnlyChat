@@ -31,7 +31,7 @@ const getUserInformation = catchAsync(async (req, res) => {
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
     groupChat.push(dmList);
   }
-  console.log("Group", groupChat)
+  // console.log("Group", groupChat)
 
   const globalChat = []
   for (let i of user.globalchat_channel) {
@@ -81,11 +81,12 @@ const getListFriend = catchAsync(async (req, res, next) => {
 });
 
 const getUserById = catchAsync(async (req, res, nex) => {
-  const user = await User.findOne({ _id: req.body._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -nickname')
+  const _user = await User.findOne({ _id: req.body._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend_request -anonymous_avatar -nickname').lean()
 
+  const newUser = {..._user, isFriend: req.user.friend.includes(_user._id)};
   res.status(200).json({
     status: 'success',
-    data: user
+    data: newUser
   });
 })
 
