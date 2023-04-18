@@ -62,9 +62,9 @@ public class OptionActivity extends AppCompatActivity {
         friendInf = (Member) main_chat.getSerializableExtra("friend");
         meInf = (Member) main_chat.getSerializableExtra("me");
 //        avatar.setImageResource(friendInf.getAvatar());
-        new HttpManager.GetImageFromServer(avatar).execute(meInf.getAvatar());
+        new HttpManager.GetImageFromServer(avatar).execute(friendInf.getAvatar());
 
-        txtName.setText(meInf.getName());
+        txtName.setText(friendInf.getName());
         if (options.getNotify()){
             btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
             notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);

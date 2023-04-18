@@ -42,6 +42,7 @@ public class GlobalChat extends Fragment {
     ImageView profile;
     ImageView addChat;
     ListView listChat;
+    String typeChat = "globalChat";
     ArrayList<RoomModel> roomModels = new ArrayList<>();
 
     CustomChatItem customChatItem;
@@ -111,7 +112,7 @@ public class GlobalChat extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ListMessage.class);
-
+                intent.putExtra("typeChat", typeChat);
                 intent.putExtra("Data", roomModels.get(i));
                 intent.putExtra("Position", i);
                 intent.putExtra("channel", "global_chat");

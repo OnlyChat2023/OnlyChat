@@ -117,7 +117,7 @@ public class MainScreen extends AppCompatActivity {
                         }
                     }
                     catch (Exception e){
-                        Log.i("HTTP Success Error",e.toString());
+                        Log.i("HTTP Success 11111 Error",e.toString());
                     }
                 }
 

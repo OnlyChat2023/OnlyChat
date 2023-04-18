@@ -230,10 +230,11 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ChattingActivity.this, OptionActivity.class);
-                Log.i("<Option>", userInf.getOptions().getNotify().toString());
                 for (Member mem : userInf.getOptions().getMembers()){
 
                     if (!mem.getUser_id().equals(me_id)){
+                        Log.i("<<<<<<<<<<>>>>>>>>>>>", me_id);
+                        Log.i("<<<<<<<<<<<>>>>>>>>>>>>>>>", mem.getUser_id());
                         intent.putExtra("friend", mem);
                     }
                     else{
@@ -241,7 +242,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                     }
                 }
                 intent.putExtra("option", userInf.getOptions());
-                startActivity(intent);
+                startActivityForResult(intent, -3);
                 overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });

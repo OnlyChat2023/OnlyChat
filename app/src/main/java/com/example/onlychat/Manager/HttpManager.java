@@ -189,28 +189,28 @@ public class HttpManager {
         }
     }
 
-    public void AddGroupChat(String newName, String userID, HttpResponse responseReceiver) {
+    public void AddGroupChat(String typeChat, String newName, String userID, HttpResponse responseReceiver) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("_id", userID);
         params.put("name", newName);
         params.put("update_time", Calendar.getInstance().getTime().toString());
 
-        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/addGroup", Request.Method.POST, "addGroup", params, responseReceiver);
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/" + typeChat +"/addGroup", Request.Method.POST, "addGroup", params, responseReceiver);
     }
 
-    public void GetListGroupChat(String userID, HttpResponse responseReceiver) {
+    public void GetListGroupChat(String typeChat, String userID, HttpResponse responseReceiver) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("_id", userID);
 
-        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/getListGroupChat", Request.Method.POST, "getListGroupChat", params, responseReceiver);
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/" + typeChat +"/getListGroupChat", Request.Method.POST, "getListGroupChat", params, responseReceiver);
     }
 
-    public void LeaveGroupChat(String userID, String GroupChatID, HttpResponse responseReceiver) {
+    public void LeaveGroupChat(String typeChat, String userID, String GroupChatID, HttpResponse responseReceiver) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("_id", userID);
         params.put("grc_id", GroupChatID);
 
-        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/leaveGroupChat", Request.Method.POST, "leaveGroupChat", params, responseReceiver);
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/" + typeChat +"/leaveGroupChat", Request.Method.POST, "leaveGroupChat", params, responseReceiver);
     }
 
     public void updateProfile(UserModel userModel) {
@@ -225,7 +225,7 @@ public class HttpManager {
 
         createRequest("http://" + ip + ":5000/api/onlychat/v1/user/updateProfile", Request.Method.POST, "userprofile", params, null);}
 
-        public void UpdateGroupNotufy (String userID, String GroupChatID, Boolean notify, Boolean
+        public void UpdateGroupNotufy (String typeChat, String userID, String GroupChatID, Boolean notify, Boolean
         block, HttpResponse responseReceiver){
             Map<String, String> params = new HashMap<String, String>();
             params.put("user_id", userID);
@@ -233,20 +233,18 @@ public class HttpManager {
             params.put("notify", notify.toString());
             params.put("block", block.toString());
 
-            createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/updateNotify", Request.Method.POST, "updateNotify", params, responseReceiver);
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/" + typeChat +"/updateNotify", Request.Method.POST, "updateNotify", params, responseReceiver);
         }
 
-        public void GetListNewMember (String userID, String GroupChatID, HttpResponse
-        responseReceiver){
+        public void GetListNewMember (String typeChat, String userID, String GroupChatID, HttpResponse responseReceiver){
             Map<String, String> params = new HashMap<String, String>();
             params.put("user_id", userID);
             params.put("grc_id", GroupChatID);
 
-            createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/getAddMember", Request.Method.POST, "getListNewMember", params, responseReceiver);
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/" + typeChat +"/getAddMember", Request.Method.POST, "getListNewMember", params, responseReceiver);
         }
 
-        public void addMemberGroup (String userID, String GroupChatID, String name, String
-        nickname, String avatar, HttpResponse responseReceiver){
+        public void addMemberGroup (String typeChat, String userID, String GroupChatID, String name, String nickname, String avatar, HttpResponse responseReceiver){
             Map<String, String> params = new HashMap<String, String>();
             params.put("user_id", userID);
             params.put("grc_id", GroupChatID);
@@ -254,6 +252,14 @@ public class HttpManager {
             params.put("nickname", nickname);
             params.put("avatar", avatar);
 
-            createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/addMember", Request.Method.POST, "getListNewMember", params, responseReceiver);
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/" + typeChat +"/addMember", Request.Method.POST, "getListNewMember", params, responseReceiver);
+        }
+
+        public void addDirectMessage(String user_id1, String user_id2, HttpResponse responseReceiver){
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("id_1", user_id1);
+            params.put("id_2", user_id2);
+
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/addDirectMessage", Request.Method.POST, "addDirectMessage", params, responseReceiver);
         }
     }
