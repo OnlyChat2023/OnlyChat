@@ -77,6 +77,11 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     int position;
     boolean update = false;
     ImageModel myModel;
+    int OPTION = 1;
+    Integer CHANGENOTIFY = -7;
+    Integer CHANGEBLOCK = -8;
+    Integer CHANGEFRNN = 5;
+    Integer CHANGEMENN = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,16 +242,15 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                 for (Member mem : userInf.getOptions().getMembers()){
 
                     if (!mem.getUser_id().equals(me_id)){
-                        Log.i("<<<<<<<<<<>>>>>>>>>>>", me_id);
-                        Log.i("<<<<<<<<<<<>>>>>>>>>>>>>>>", mem.getUser_id());
                         intent.putExtra("friend", mem);
                     }
                     else{
                         intent.putExtra("me", mem);
                     }
                 }
+                intent.putExtra("DM_id", userInf.getId());
                 intent.putExtra("option", userInf.getOptions());
-                startActivityForResult(intent, -3);
+                startActivityForResult(intent, OPTION);
                 overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
@@ -341,6 +345,38 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("<<<<<<<<REQUEST CODE>>>>>>>>>>>>>>>", Integer.toString(resultCode));
+        if (resultCode == CHANGENOTIFY && data != null){
+            Boolean temp = (Boolean) data.getSerializableExtra("data");
+            userInf.getOptions().setNotify(temp);
+        }
+        if (resultCode == CHANGEBLOCK  && data != null){
+            Boolean temp = (Boolean) data.getSerializableExtra("data");
+            //Show layout block chat.
+        }
+        if (resultCode == CHANGEFRNN && data != null){
+            String nn = (String) data.getSerializableExtra("data");
+            Log.i("<<<<<<<<FR NN>>>>>>>>>>>>>>>", nn);
+            for (Member mem : userInf.getOptions().getMembers()){
+                if (!mem.getUser_id().equals(me_id)){
+                    mem.setNickname(nn);
+                    userInf.setName(nn);
+                    txtName.setText(nn);
+                    break;
+                }
+            }
+        }
+
+        if (resultCode == CHANGEMENN && data != null){
+            String nn = (String) data.getSerializableExtra("data");
+            Log.i("<<<<<<<<Me NN>>>>>>>>>>>>>>>", nn);
+            for (Member mem : userInf.getOptions().getMembers()){
+                if (mem.getUser_id().equals(me_id)){
+                    mem.setNickname(nn);
+                    break;
+                }
+            }
+        }
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == FilePickerConst.REQUEST_CODE_PHOTO) {
                 ArrayList<Uri> images = data.getParcelableArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA);

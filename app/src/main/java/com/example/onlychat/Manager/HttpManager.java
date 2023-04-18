@@ -262,4 +262,31 @@ public class HttpManager {
 
             createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/addDirectMessage", Request.Method.POST, "addDirectMessage", params, responseReceiver);
         }
+
+        public void changeOptionDM(String user_id, String dmc_id, Boolean notify, Boolean block, HttpResponse responseReceiver){
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("user_id", user_id);
+            params.put("dmc_id", dmc_id);
+            params.put("notify", notify.toString());
+            params.put("block", block.toString());
+
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/changeOptions", Request.Method.POST, "changeOptions", params, responseReceiver);
+        }
+
+        public void getBlockDM(String user_id, String dmc_id, HttpResponse responseReceiver){
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("user_id", user_id);
+            params.put("dmc_id", dmc_id);
+
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/getBlock", Request.Method.POST, "getBlock", params, responseReceiver);
+        }
+
+        public void changeNicknameDM(String user_id, String dmc_id, String nickname, HttpResponse responseReceiver){
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("user_id", user_id);
+            params.put("dmc_id", dmc_id);
+            params.put("nickname", nickname);
+
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/changeNickname", Request.Method.POST, "changeNickname", params, responseReceiver);
+        }
     }
