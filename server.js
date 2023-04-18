@@ -1,4 +1,4 @@
-import mongoose, {ObjectId} from 'mongoose';
+import mongoose, { ObjectId } from 'mongoose';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import fs from 'fs';
@@ -197,7 +197,7 @@ io.on('connection', (socket) => {
     socket.on('sendStringMessage', async (message, position, user) => {
         const send_user = JSON.parse(user);
 
-        console.log(send_user);
+        // console.log(send_user);
 
         let messageModal = {};
 
@@ -224,7 +224,7 @@ io.on('connection', (socket) => {
                 time: new Date()
             }
 
-            const DirectMessage = await directChat.findOne({_id: socket.room });
+            const DirectMessage = await directChat.findOne({ _id: socket.room });
             DirectMessage.chats.push(messageModal);
             await DirectMessage.save();
         }
@@ -239,12 +239,12 @@ io.on('connection', (socket) => {
                 time: new Date()
             }
 
-            const GroupChat = await groupChat.findOne({_id: socket.room });
+            const GroupChat = await groupChat.findOne({ _id: socket.room });
             GroupChat.chats.push(messageModal);
             await GroupChat.save();
         }
         // else if (socket.channel === 'group_chat') {
-        
+
         io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
 
@@ -274,7 +274,7 @@ io.on('connection', (socket) => {
                 time: new Date()
             }
 
-            const GlobalChannel = await globalChat.findOne({_id: socket.room });
+            const GlobalChannel = await globalChat.findOne({ _id: socket.room });
             GlobalChannel.chats.push(messageModal);
             await GlobalChannel.save();
         }
@@ -287,7 +287,7 @@ io.on('connection', (socket) => {
                 time: new Date()
             }
 
-            const DirectMessage = await directChat.findOne({_id: socket.room });
+            const DirectMessage = await directChat.findOne({ _id: socket.room });
             DirectMessage.chats.push(messageModal);
             await DirectMessage.save();
         }
@@ -302,30 +302,30 @@ io.on('connection', (socket) => {
                 time: new Date()
             }
 
-            const GroupChat = await groupChat.findOne({_id: socket.room });
+            const GroupChat = await groupChat.findOne({ _id: socket.room });
             GroupChat.chats.push(messageModal);
             await GroupChat.save();
         }
 
         io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
-    
+
     socket.on("notifyUpdateMessage", async (lastMessageID) => {
         if (socket.channel && lastMessageID) {
             let newMessageList = null;
 
             if (socket.channel === 'direct_message')
-                newMessageList = await directChat.findOne({ 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) }});
-                
+                newMessageList = await directChat.findOne({ 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) } });
+
             if (socket.channel === 'global_chat')
-                newMessageList = await globalChat.findOne({ 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) }});
-            
+                newMessageList = await globalChat.findOne({ 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) } });
+
             if (socket.channel === 'group_chat')
-                newMessageList = await groupChat.findOne({ 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) }});
+                newMessageList = await groupChat.findOne({ 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) } });
 
             if (newMessageList) {
                 const start = newMessageList.chats.findIndex((item) => item._id.toString() === lastMessageID);
-                    console.log(newMessageList.chats[start]);
+                // console.log(newMessageList.chats[start]);
 
                 for (let i = start + 1; i < newMessageList.chats.length; i++) {
                     socket.emit('messageListener', newMessageList.chats[i], -2, { token: '' });
@@ -366,6 +366,18 @@ io.on('connection', (socket) => {
         io.to(basket[id]).emit("waitAcceptFriend", f_list_friends);
 
         await u.save()
+        await f.save()
+    })
+
+    socket.on('sendRequestAddFriend', async (id, user) => {
+        const _user = JSON.parse(user)
+
+        let f = await User.findOne({ _id: id })
+        f.friend_request.push(_user._id)
+
+        const list_friend_requests = await User.find({ _id: { $in: f.friend_request } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description -phone')
+
+        io.to(basket[id]).emit("waitRequestAddFriend", list_friend_requests);
         await f.save()
     })
 
