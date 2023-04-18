@@ -199,6 +199,8 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
                 }).execute();
             }
 
+            msg.setText(messageItem.getMessage());
+
             SimpleDateFormat writeDate = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             writeDate.setTimeZone(TimeZone.getTimeZone("GMT+07:00"));
             String s = writeDate.format(messageItem.getTime());
