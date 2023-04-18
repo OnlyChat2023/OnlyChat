@@ -90,6 +90,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     int position;
     boolean update = false;
     ImageModel myModel;
+    String typeChat;
     int FINISH = -5;
     int UPDATEOPTION = -6;
     int ADDMEMBER = -7;
@@ -104,6 +105,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         Intent intent = getIntent();
         roomModel = (RoomModel) intent.getSerializableExtra("Data");
         channel = intent.getStringExtra("channel");
+        typeChat = (String) intent.getStringExtra("typeChat");
 //        position = (int) intent.getSerializableExtra("Position");
 
         pref = new GlobalPreferenceManager(this);
@@ -167,6 +169,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
             public void onClick(View view) {
                 Intent intent = new Intent(optionButton.getContext(), Options.class);
                 intent.putExtra("Name",roomModel.getName());
+                intent.putExtra("typeChat", typeChat);
                 intent.putExtra("GroupID", roomModel.getId());
                 intent.putExtra("Avatar",roomModel.getAvatar());
                 intent.putExtra("Data",roomModel.getOptions());
@@ -392,12 +395,18 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                             } else {
                                 roomModel.pushMessage(message);
                                 customMessageItem.notifyDataSetChanged();
+
+                                listView.setSelection(customMessageItem.getCount() - 1);
+                                listView.smoothScrollToPosition(customMessageItem.getCount() - 1);
                             }
                             update = true;
                         }
                         else {
                             roomModel.pushMessage(message);
                             customMessageItem.notifyDataSetChanged();
+
+                            listView.setSelection(customMessageItem.getCount() - 1);
+                            listView.smoothScrollToPosition(customMessageItem.getCount() - 1);
                         }
                     }
                 });
@@ -450,9 +459,11 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 
                         @Override
                         public void onDownloadSuccess(ArrayList<Bitmap> result) {
-                            for (int i = 0; i < result.size(); ++i) {
-                                messageItem.setBitmapAvatar(result.get(i));
-                                customMessageItem.notifyDataSetChanged();
+                            if (!messageItem.hasBitmapAvatar()) {
+                                for (int i = 0; i < result.size(); ++i) {
+                                    messageItem.setBitmapAvatar(result.get(i));
+                                    customMessageItem.notifyDataSetChanged();
+                                }
                             }
                         }
                     }).execute();

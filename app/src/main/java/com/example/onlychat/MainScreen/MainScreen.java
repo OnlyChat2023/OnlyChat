@@ -50,6 +50,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 public class MainScreen extends AppCompatActivity {
 
@@ -117,7 +118,7 @@ public class MainScreen extends AppCompatActivity {
                         }
                     }
                     catch (Exception e){
-                        Log.i("HTTP Success Error",e.toString());
+                        Log.i("HTTP Success 11111 Error",e.toString());
                     }
                 }
 
@@ -202,6 +203,28 @@ public class MainScreen extends AppCompatActivity {
                             View tabView = tab.getCustomView();
                             ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
                             tab_icon.setBackgroundColor(Color.parseColor("#352159"));
+
+                            if(tab.getPosition()==4){
+                            HttpManager httpManager = new HttpManager(tabLayout.getContext());
+                            httpManager.getListFriends(
+                                    new HttpResponse() {
+                                        @Override
+                                        public void onSuccess(JSONObject response) throws JSONException {
+                                            JSONArray friend_request = response.getJSONObject("data").getJSONArray("friend_requests");
+//                                            Log.i("Da vao day", Integer.toString(friend_request.length()));
+                                            invite_list = getListInvite(friend_request);
+
+                                            friendsFragment.getInvite().setInvite_list(invite_list);
+                                        }
+
+                                        @Override
+                                        public void onError(String error) {
+
+                                        }
+                                    }
+                            );
+                            }
+
                         }
 
                         @Override
@@ -315,6 +338,7 @@ public class MainScreen extends AppCompatActivity {
                 // set time message send
                 String dtStart = messageJson.getString("time");
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                format.setTimeZone(TimeZone.getTimeZone("GMT"));
                 try {
                     java.util.Date date = format.parse(dtStart);
                     messageModel.setTime(date);

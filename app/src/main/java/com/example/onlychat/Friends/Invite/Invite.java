@@ -14,25 +14,34 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.onlychat.Friends.AllFriends.CustomFriendItem;
+import com.example.onlychat.Friends.Friends;
 import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import io.socket.emitter.Emitter;
 
 public class Invite extends Fragment {
     static ListView listInvites;
 
     static CustomInviteItem customInviteItem;
     static ArrayList<UserModel> invite_list = new ArrayList<>();
+    static UserModel myInfo;
+    GlobalPreferenceManager pref;
 
     public void setInvite_list(ArrayList<UserModel> invite_list){
+        this.invite_list.clear();
         for(UserModel i:invite_list){
             this.invite_list.add(i);
         }
@@ -43,6 +52,9 @@ public class Invite extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         LinearLayout invite = (LinearLayout) inflater.inflate(R.layout.friends_fragment_invite, null);
+
+        pref = new GlobalPreferenceManager(getContext());
+        myInfo = pref.getUserModel();
 
         listInvites = (ListView) invite.findViewById(R.id.listInvites);
 
@@ -59,52 +71,53 @@ public class Invite extends Fragment {
         listInvites.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.i("invite list click item", "============");
-                httpManager.getUserById(invite_list.get(i).get_id(), new HttpResponse() {
-                    @Override
-                    public void onSuccess(JSONObject response) throws JSONException {
-                        JSONObject profile = response.getJSONObject("data");
-                        Log.i("invite list click item", profile.toString());
+                Bundle myBundle = new Bundle();
+                myBundle.putInt("index",i);
+                myBundle.putString("user_id",invite_list.get(i).get_id());
 
-                        String profileJson = profile.toString();
-                        UserModel userInfo = new Gson().fromJson(profileJson, UserModel.class);
-                        Integer isFriend = profile.getInt("isFriend");
-                        Log.i("isFriend", isFriend.toString());
-
-                        Bundle myBundle = new Bundle();
-//                        System.out.println("RUN HERE " + userInfo.getName());
-                        myBundle.putString("user_id", userInfo.getId());
-                        myBundle.putString("name", userInfo.getName());
-                        myBundle.putString("avatar", userInfo.getAvatar());
-                        myBundle.putString("nickName", userInfo.getNickName());
-                        myBundle.putString("phoneNumber", userInfo.getPhone());
-                        myBundle.putString("university", userInfo.getUniversity());
-                        myBundle.putString("email", userInfo.getEmail());
-                        myBundle.putString("description", userInfo.getDescription());
-                        myBundle.putString("facebook", userInfo.getFacebook());
-                        myBundle.putString("instagram", userInfo.getInstagram());
-                        myBundle.putInt("isFriend", isFriend);
-
-                        Intent intentToProfile = new Intent (listInvites.getContext(), Profile.class);
-                        intentToProfile.putExtras(myBundle);
-                        startActivity(intentToProfile);
-                    }
-
-                    @Override
-                    public void onError(String error) {
-
-                    }
-                });
+                Intent intentToProfile = new Intent (listInvites.getContext(), Profile.class);
+                intentToProfile.putExtras(myBundle);
+                startActivity(intentToProfile);
             }
         });
 
         return invite;
     }
 
+
+    public static void addFriend(int i){
+        SocketManager.getInstance();
+        SocketManager.acceptRequestAddFriend(invite_list.get(i).get_id(),myInfo);
+        removeItem(i);
+    }
+
+    public static void addFriend(String id){
+        SocketManager.getInstance();
+        SocketManager.acceptRequestAddFriend(id,myInfo);
+        for(int i=0;i<invite_list.size();i++){
+            if(invite_list.get(i).get_id().equals(id))removeItem(i);
+        }
+    }
+
+    public static void removeRequest(int i){
+        SocketManager.getInstance();
+        SocketManager.removeRequestAddFriend(invite_list.get(i).get_id(),myInfo);
+        removeItem(i);
+    }
+
+    public static void removeSent(String id){
+        UserModel u = new UserModel();
+        u.set_id(id);
+        SocketManager.getInstance();
+        SocketManager.removeRequestAddFriend(myInfo.get_id(),u);
+    }
+
     public static void removeItem(int i){
+
         invite_list.remove(i);
         customInviteItem.notifyDataSetChanged();
-//        listInvites.setAdapter(customInviteItem);
+
+        Friends.updateUI();
     }
 
 

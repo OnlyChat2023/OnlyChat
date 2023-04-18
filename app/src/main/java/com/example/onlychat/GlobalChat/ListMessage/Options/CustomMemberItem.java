@@ -23,6 +23,7 @@ public class CustomMemberItem extends ArrayAdapter<Member> {
     ImageView avatar;
     TextView name;
     Boolean isAddMember = false;
+    Boolean isGroupChat = true;
 
 
     public CustomMemberItem(Context context, ArrayList<Member> members){
@@ -44,7 +45,10 @@ public class CustomMemberItem extends ArrayAdapter<Member> {
 
 //        avatar.setImageResource(memberList.get(position).getAvatar());
         new HttpManager.GetImageFromServer(avatar).execute(memberList.get(position).getAvatar());
-        name.setText(memberList.get(position).getNickname());
+        if (!isGroupChat)
+            name.setText(memberList.get(position).getNickname());
+        else
+            name.setText(memberList.get(position).getName());
 
         return row;
     }
@@ -52,4 +56,5 @@ public class CustomMemberItem extends ArrayAdapter<Member> {
     public void setIsAddMember(Boolean addMember){
         this.isAddMember = addMember;
     }
+    public void setIsGroupChat(Boolean isGroupChat) {this.isGroupChat = isGroupChat; }
 }

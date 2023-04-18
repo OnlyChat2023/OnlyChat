@@ -68,6 +68,7 @@ public class DirectMessage extends Fragment {
         chatIcon = (ImageView) globalChat.findViewById(R.id.chatIcon);
         profile=(ImageView) globalChat.findViewById(R.id.profile);
         addChat = (ImageView) globalChat.findViewById(R.id.addChat);
+        addChat.setVisibility(View.GONE);
         listChat = (ListView) globalChat.findViewById(R.id.listChat);
 
         new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAvatar());
@@ -88,7 +89,6 @@ public class DirectMessage extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ChattingActivity.class);
                 intent.putExtra("roomChat", roomModels.get(i));
-                Log.i("DIRECTMESSAGE", roomModels.get(i).getOptions().getMembers().get(0).getNickname());
 
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);

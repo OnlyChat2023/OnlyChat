@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -59,6 +60,12 @@ public class SocketManager {
     public static void sendMessage(String message, int position, UserModel user) {
         if (socket != null){
             socket.emit("sendStringMessage", message, position, new Gson().toJson(user));
+        }
+    }
+
+    public static void sendRequestAddFriend(String id, UserModel user) {
+        if (socket != null){
+            socket.emit("sendRequestAddFriend", id, new Gson().toJson(user));
         }
     }
 
@@ -117,6 +124,7 @@ public class SocketManager {
 
                     @SuppressLint("SimpleDateFormat")
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    format.setTimeZone(TimeZone.getTimeZone("GMT"));
 
                     try {
                         java.util.Date date = format.parse(dtStart);

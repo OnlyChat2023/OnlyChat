@@ -26,6 +26,7 @@ import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
 
 import org.json.JSONArray;
@@ -54,6 +55,7 @@ public class Options extends AppCompatActivity {
     ImageView notify_icon;
     TextView notify_txt;
     RoomOptions options;
+    String typeChat;
     String GroupID;
     Button addMember;
     int FINISH = -5;
@@ -74,6 +76,7 @@ public class Options extends AppCompatActivity {
         GroupID = (String) intent.getSerializableExtra("GroupID");
         String names = (String) intent.getSerializableExtra("Name");
         String avatars = (String) intent.getSerializableExtra("Avatar");
+        typeChat = (String) intent.getSerializableExtra("typeChat");
 
         notify = (RelativeLayout) findViewById(R.id.global_notify);
         notify_txt = (TextView) findViewById(R.id.notify_txt);
@@ -83,6 +86,9 @@ public class Options extends AppCompatActivity {
         block = (RelativeLayout) findViewById(R.id.global_block);
         report = (RelativeLayout) findViewById(R.id.global_report);
         addMember = (Button) findViewById(R.id.add_member_btn);
+        if (typeChat.equals("globalChat")){
+            addMember.setVisibility(View.GONE);
+        }
         block.setVisibility(View.GONE);
 
         name = (TextView) findViewById(R.id.group_name);
@@ -112,6 +118,9 @@ public class Options extends AppCompatActivity {
         });
 
         share = (RelativeLayout) findViewById(R.id.share);
+        if (typeChat.equals("groupChat")){
+            share.setVisibility(View.GONE);
+        }
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,13 +170,34 @@ public class Options extends AppCompatActivity {
                 listMembers = (ListView)  popupView.findViewById(R.id.listMembers);
                 TextView quantity = (TextView) popupView.findViewById(R.id.quantity);
                 quantity.setText("Members ("+options.getMembers().size()+")");
-//                Log.i("Option", Integer.toString(options.getMembers().size()));
+
                 CustomMemberItem customMemberItem=new CustomMemberItem(popupView.getContext(),options.getMembers());
+                if (typeChat.equals("groupChat")){
+                    customMemberItem.setIsGroupChat(true);
+                }else{
+                    customMemberItem.setIsGroupChat(false);
+                }
                 listMembers.setAdapter(customMemberItem);
                 listMembers.setSelection(0);
                 listMembers.smoothScrollToPosition(0);
                 listMembers.setDivider(null);
                 listMembers.setDividerHeight(0);
+
+                listMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Log.i("Option", "===========>>>>>>");
+
+                        Bundle myBundle = new Bundle();
+                        myBundle.putInt("index",i);
+                        myBundle.putString("user_id",options.getMembers().get(i).getId());
+
+
+                        Intent intentToProfile = new Intent (listMembers.getContext(), Profile.class);
+                        intentToProfile.putExtras(myBundle);
+                        startActivity(intentToProfile);
+                    }
+                });
 
 
                 boolean focusable = true; // lets taps outside the popup also dismiss it
@@ -186,7 +216,7 @@ public class Options extends AppCompatActivity {
         addMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            new HttpManager(addMember.getContext()).GetListNewMember(options.getUser_id(), GroupID, new HttpResponse() {
+            new HttpManager(addMember.getContext()).GetListNewMember(typeChat, options.getUser_id(), GroupID, new HttpResponse() {
                 @Override
                 public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
                     JSONArray listFriends = response.getJSONArray("data");
@@ -217,6 +247,11 @@ public class Options extends AppCompatActivity {
 
                     title.setText("Suggested Friends (" + Integer.toString(friendMms.size()) + ")");
                     CustomMemberItem customMemberItem = new CustomMemberItem(popupView.getContext(), friendMms);
+                    if (typeChat.equals("groupChat")){
+                        customMemberItem.setIsGroupChat(true);
+                    }else{
+                        customMemberItem.setIsGroupChat(false);
+                    }
                     customMemberItem.setIsAddMember(true);
                     listMembers.setAdapter(customMemberItem);
                     listMembers.setSelection(0);
@@ -238,7 +273,7 @@ public class Options extends AppCompatActivity {
                     listMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            new HttpManager(listMembers.getContext()).addMemberGroup(friendMms.get(i).getId(), GroupID, friendMms.get(i).getName(), friendMms.get(i).getNickname(), friendMms.get(i).getAvatar(), new HttpResponse() {
+                            new HttpManager(listMembers.getContext()).addMemberGroup(typeChat, friendMms.get(i).getId(), GroupID, friendMms.get(i).getName(), friendMms.get(i).getNickname(), friendMms.get(i).getAvatar(), new HttpResponse() {
                                 @Override
                                 public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
                                     popupWindow.dismiss();
@@ -277,7 +312,7 @@ public class Options extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (options.getNotify() == true){
-                    new HttpManager(Options.this).UpdateGroupNotufy(options.getUser_id(), GroupID, false, options.getBlock(), new HttpResponse() {
+                    new HttpManager(Options.this).UpdateGroupNotufy(typeChat, options.getUser_id(), GroupID, false, options.getBlock(), new HttpResponse() {
                         @Override
                         public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
                             notify_txt.setText("Turn on notification");
@@ -293,7 +328,7 @@ public class Options extends AppCompatActivity {
                     });
 
                 }else{
-                    new HttpManager(Options.this).UpdateGroupNotufy(options.getUser_id(), GroupID, true, options.getBlock(), new HttpResponse() {
+                    new HttpManager(Options.this).UpdateGroupNotufy(typeChat, options.getUser_id(), GroupID, true, options.getBlock(), new HttpResponse() {
                         @Override
                         public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
                             notify_txt.setText("Turn off notification");
@@ -315,7 +350,7 @@ public class Options extends AppCompatActivity {
     public void LeaveGroup(BasicDialog basicDialog){
         HttpManager httpManager = new HttpManager(Options.this);
 
-        httpManager.LeaveGroupChat(options.getUser_id(), GroupID, new HttpResponse() {
+        httpManager.LeaveGroupChat(typeChat, options.getUser_id(), GroupID, new HttpResponse() {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
                 basicDialog.dismiss();

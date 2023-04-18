@@ -25,8 +25,10 @@ import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class MessageReceive extends ArrayAdapter<MessageModel> {
     Context context; Bitmap avatar; ArrayList<MessageModel> message; String me_id;
@@ -110,8 +112,11 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
 
             msg.setText(messageItem.getMessage());
 
-            Date timeMsg = messageItem.getTime();
-            time.setText("Sent at " + timeMsg.getHours() + ":" + timeMsg.getMinutes() + " " + timeMsg.getDate());
+            SimpleDateFormat writeDate = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            writeDate.setTimeZone(TimeZone.getTimeZone("GMT+07:00"));
+            String s = writeDate.format(messageItem.getTime());
+
+            time.setText("Sent at " + s);
             time.setVisibility(View.GONE);
             return row;
         } else {
@@ -124,6 +129,25 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
             if (roomModel.hasBitmapAvatar()) {
                 ImageView imageView = (ImageView) row.findViewById(R.id.avatar);
                 imageView.setImageBitmap(roomModel.getBitmapAvatar());
+            }
+            else if (roomModel.hasAvatar()){
+                ArrayList<String> userAvt = new ArrayList<String>();
+                userAvt.add(roomModel.getAvatar());
+                new DownloadImage(userAvt, new ConvertListener() {
+                    @Override
+                    public void onSuccess(ImageModel result) {
+
+                    }
+
+                    @Override
+                    public void onDownloadSuccess(ArrayList<Bitmap> result) {
+                        for (int i = 0; i < result.size(); ++i) {
+                            roomModel.setBitmapAvatar(result.get(i));
+                            ImageView imageView = (ImageView) row.findViewById(R.id.avatar);
+                            imageView.setImageBitmap(result.get(i));
+                        }
+                    }
+                }).execute();
             }
 
             if (messageItem.hasImages()) {
@@ -175,9 +199,11 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
                 }).execute();
             }
 
-            msg.setText(messageItem.getMessage());
-            Date timeMsg = messageItem.getTime();
-            time.setText("Sent at " + timeMsg.getHours() + ":" + timeMsg.getMinutes() + " " + timeMsg.getDate());
+            SimpleDateFormat writeDate = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            writeDate.setTimeZone(TimeZone.getTimeZone("GMT+07:00"));
+            String s = writeDate.format(messageItem.getTime());
+
+            time.setText("Sent at " + s);
             time.setVisibility(View.GONE);
 
             return row;

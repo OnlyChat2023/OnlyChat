@@ -54,6 +54,9 @@ public class AllFriends extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout allFriends = (LinearLayout) inflater.inflate(R.layout.friends_fragment_all_friends, null);
 
+        Log.i("all friends", "onCreateView");
+
+
         pref = new GlobalPreferenceManager(getContext());
         myInfo = pref.getUserModel();
 
@@ -80,7 +83,6 @@ public class AllFriends extends Fragment {
                 Intent intentToProfile = new Intent (listFriends.getContext(), Profile.class);
                 intentToProfile.putExtras(myBundle);
                 startActivity(intentToProfile);
-
             }
         });
 
@@ -98,10 +100,21 @@ public class AllFriends extends Fragment {
         return allFriends;
     }
 
+    public static void removeFriend(String id){
+        SocketManager.getInstance();
+        SocketManager.deleteFriend(id,myInfo);
+        for(int i=0;i<friend_list.size();i++){
+            if(friend_list.get(i).get_id().equals(id))removeFriendUpdateUI(i);
+        }
+    }
+
     public static void removeFriend(int i){
         SocketManager.getInstance();
         SocketManager.deleteFriend(friend_list.get(i).get_id(),myInfo);
+        removeFriendUpdateUI(i);
+    }
 
+    public static void removeFriendUpdateUI(int i){
         if(friendBottomDialogFragment != null) friendBottomDialogFragment.dismiss();
         friend_list.remove(i);
         customFriendItem.notifyDataSetChanged();

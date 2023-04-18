@@ -55,6 +55,7 @@ public class GroupChat extends Fragment {
     ArrayList<RoomModel> roomModels = new ArrayList<>();
     GlobalPreferenceManager pref;
     Boolean isCreate = true;
+    String typeChat = "groupChat";
 
     public ArrayList<RoomModel> getRoomModels() {
         return roomModels;
@@ -84,6 +85,7 @@ public class GroupChat extends Fragment {
         profile=(ImageView) groupChat.findViewById(R.id.profile);
         addChat = (ImageView) groupChat.findViewById(R.id.addChat);
         listChat = (ListView) groupChat.findViewById(R.id.listChat);
+        chatIcon.setImageResource(R.drawable.global_chat_icon);
 
         new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAvatar());
         pref = new GlobalPreferenceManager(getContext());
@@ -110,6 +112,7 @@ public class GroupChat extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ListMessage.class);
+                intent.putExtra("typeChat", typeChat);
                 intent.putExtra("Data",roomModels.get(i));
                 intent.putExtra("channel", "group_chat");
                 startActivity(intent);
@@ -146,7 +149,7 @@ public class GroupChat extends Fragment {
                         String newName = newGroupName.getText().toString();
                         if (!newName.equals("")){
                             HttpManager httpManager = new HttpManager(getContext());
-                            httpManager.AddGroupChat(newName, pref.getUserModel().get_id(), new HttpResponse() {
+                            httpManager.AddGroupChat(typeChat, newName, pref.getUserModel().get_id(), new HttpResponse() {
                                 @Override
                                 public void onSuccess(JSONObject response) throws JSONException {
 //                                    Reload();
@@ -207,7 +210,7 @@ public class GroupChat extends Fragment {
 
     public void LeaveGroup(MessageBottomDialogFragment current, String id){
         HttpManager httpManager = new HttpManager(getContext());
-        httpManager.LeaveGroupChat(pref.getUserModel().get_id(), id, new HttpResponse() {
+        httpManager.LeaveGroupChat(typeChat, pref.getUserModel().get_id(), id, new HttpResponse() {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
 //                Reload();

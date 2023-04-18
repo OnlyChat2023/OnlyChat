@@ -65,6 +65,9 @@
             android:name=".Profile.Profile"
             android:exported="false" />
         <activity
+            android:name=".Profile.ProfileNotFound"
+            android:exported="false" />
+        <activity
             android:name=".Authetication.ResetPassword"
             android:exported="true" />
         <activity
