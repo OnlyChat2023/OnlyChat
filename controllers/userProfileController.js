@@ -25,7 +25,7 @@ const getUserInformation = catchAsync(async (req, res) => {
 
     directChat.push(newDM);
   }
-  console.log(JSON.stringify(directChat, null, 2));
+  // console.log(JSON.stringify(directChat, null, 2));
 
   const groupChat = []
   for (let i of user.groupchat_channel) {
