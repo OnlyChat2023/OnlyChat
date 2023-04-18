@@ -121,11 +121,16 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
             row = inflater.inflate(R.layout.global_chat_custom_message_item,null);
             message = (TextView) row.findViewById(R.id.chatContent);
             name = (TextView) row.findViewById(R.id.name);
-            imageView = (ImageView) row.findViewById(R.id.avatar);
 
             // set image
 //            Log.i("Custom message user", messageModels.get(position).getAvatar());
-            new HttpManager.GetImageFromServer(imageView).execute(messageModels.get(position).getAvatar());
+
+            if (messageItem.hasBitmapAvatar()) {
+                imageView = (ImageView) row.findViewById(R.id.avatar);
+                imageView.setImageBitmap(messageItem.getBitmapAvatar());
+            }
+
+//            new HttpManager.GetImageFromServer(imageView).execute(messageModels.get(position).getAvatar());
 //            imageView.setImageResource(messageModels.get(position).getAvatar());
 
             if (messageItem.hasImages()) {

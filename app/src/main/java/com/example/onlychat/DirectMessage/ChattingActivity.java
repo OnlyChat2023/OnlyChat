@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.onlychat.Async.ConvertImage;
+import com.example.onlychat.Async.DownloadImage;
 import com.example.onlychat.DiaLog.DMBottomDialog;
 import com.example.onlychat.DirectMessage.Option.OptionActivity;
 import com.example.onlychat.GlobalChat.ListMessage.CustomMessageItem;
@@ -118,7 +119,9 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
         txtOnline.setText("Online");
         txtOnline.setTextColor(getResources().getColor(R.color.online_green));
 
-        adapter = new MessageReceive(this, userInf.getAvatar(), me_id, userInf.getMessages());
+        adapter = new MessageReceive(this, me_id, userInf);
+
+        loadAvatar();
 
         chatContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -143,6 +146,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
             }
         });
 
+        chatContent.setScrollingCacheEnabled(false);
         chatContent.setAdapter(adapter);
         chatContent.setSelection(adapter.getCount() - 1);
 
@@ -423,5 +427,29 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
         });
 
         updateMessage();
+    }
+
+    private void loadAvatar() {
+        if (!userInf.hasBitmapAvatar()) {
+            if (userInf.hasAvatar()) {
+                ArrayList<String> userAvt = new ArrayList<String>();
+                userAvt.add(userInf.getAvatar());
+
+                new DownloadImage(userAvt, new ConvertListener() {
+                    @Override
+                    public void onSuccess(ImageModel result) {
+
+                    }
+
+                    @Override
+                    public void onDownloadSuccess(ArrayList<Bitmap> result) {
+                        for (int i = 0; i < result.size(); ++i) {
+                            userInf.setBitmapAvatar(result.get(i));
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                }).execute();
+            }
+        }
     }
 }

@@ -14,6 +14,7 @@ public class MessageModel implements Serializable {
     ArrayList<String> images;
     Date time;
     ArrayList<String> seenUser=new ArrayList<>();
+    Bitmap bitmapAvt;
 
     public MessageModel(){}
 
@@ -127,5 +128,18 @@ public class MessageModel implements Serializable {
     }
     public boolean hasImagesStr() {
         return images != null && !images.isEmpty();
+    }
+    public Bitmap getBitmapAvatar() {
+        return bitmapAvt;
+    }
+    public void setBitmapAvatar(Bitmap bitmap) {
+        bitmapAvt = bitmap;
+    }
+
+    public boolean hasBitmapAvatar() {
+        return bitmapAvt != null;
+    }
+    public boolean hasAvatar() {
+        return avatar != null;
     }
 }

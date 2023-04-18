@@ -21,6 +21,7 @@ import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.ImageModel;
 import com.example.onlychat.Model.MessageModel;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 
@@ -28,15 +29,16 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MessageReceive extends ArrayAdapter<MessageModel> {
-    Context context; String avatar; ArrayList<MessageModel> message; String me_id;
+    Context context; Bitmap avatar; ArrayList<MessageModel> message; String me_id;
     RecyclerView imageLayout;
     GlobalPreferenceManager pref;
     UserModel myInfo;
+    RoomModel roomModel;
 
-    public MessageReceive(Context context, String avatar, String me_id, ArrayList<MessageModel> message) {
-        super(context, R.layout.main_chat_content_item, message);
-        this.avatar = avatar;
-        this.message = message;
+    public MessageReceive(Context context, String me_id, RoomModel message) {
+        super(context, R.layout.main_chat_content_item, message.getMessages());
+        this.message = message.getMessages();
+        this.roomModel = message;
         this.me_id = me_id;
         this.context = context;
 
@@ -115,10 +117,14 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
         } else {
             row = inflater.inflate(R.layout.chat_message_receive, null);
             TextView msg = (TextView) row.findViewById(R.id.chatContent);
-            ImageView avt = (ImageView) row.findViewById(R.id.avatar);
             TextView time = (TextView) row.findViewById(R.id.timeMessage);
             // set image
-            new HttpManager.GetImageFromServer(avt).execute(this.avatar);
+//            new HttpManager.GetImageFromServer(avt).execute(this.avatar);
+
+            if (roomModel.hasBitmapAvatar()) {
+                ImageView imageView = (ImageView) row.findViewById(R.id.avatar);
+                imageView.setImageBitmap(roomModel.getBitmapAvatar());
+            }
 
             if (messageItem.hasImages()) {
                 imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);

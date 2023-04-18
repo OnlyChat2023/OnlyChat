@@ -50,10 +50,9 @@ public class DirectMessage extends Fragment {
     }
 
     public void setRoomModels(ArrayList<RoomModel> roomModels) {
+        this.roomModels.clear();
 //        this.roomModels = roomModels;
-        for(RoomModel i:roomModels){
-            this.roomModels.add(i);
-        }
+        this.roomModels.addAll(roomModels);
         customChatItem.notifyDataSetChanged();
 //        Log.i("SET - Direct", roomModels.get(0).getName());
     }
@@ -72,7 +71,6 @@ public class DirectMessage extends Fragment {
         listChat = (ListView) globalChat.findViewById(R.id.listChat);
 
         new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAvatar());
-
 
         Log.i("Direct chat", Integer.toString(roomModels.size()));
 

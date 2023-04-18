@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.onlychat.Async.ConvertImage;
+import com.example.onlychat.Async.DownloadImage;
 import com.example.onlychat.GlobalChat.GlobalChat;
 import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
 import com.example.onlychat.GroupChat.ListMessage.MainAdp;
@@ -107,6 +108,21 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 
         pref = new GlobalPreferenceManager(this);
         myInfo = pref.getUserModel();
+        chatLayout = (RelativeLayout) findViewById(R.id.chatLayout);
+        enclose = (ImageView) findViewById(R.id.encloseIcon);
+        image = (ImageView) findViewById(R.id.imageIcon);
+        icon =(ImageView) findViewById(R.id.iconIcon);
+        sendBtn = (ImageView) findViewById(R.id.sendIcon);
+        gap =(View) findViewById(R.id.gap);
+        chatText = (EditText) findViewById(R.id.chatText);
+        optionButton = (Button) findViewById(R.id.optionButton);
+        backButton = (Button) findViewById(R.id.backButton);
+        chatImage = (ImageView) findViewById(R.id.avatar);
+        chatName = (TextView) findViewById(R.id.textName);
+        memberNumber = (TextView) findViewById(R.id.textSubName);
+
+        // set image
+        new HttpManager.GetImageFromServer(chatImage).execute(roomModel.getAvatar());
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mainAdapter = new MainAdp(arrayList);
@@ -115,6 +131,9 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 
         listView=(ListView) findViewById(R.id.listMessages);
         customMessageItem = new CustomMessageItem(this, roomModel.getMessages());
+
+        loadAvatar();
+
         listView.setScrollingCacheEnabled(false);
         listView.setAdapter(customMessageItem);
         listView.setSelection(customMessageItem.getCount() - 1);
@@ -131,21 +150,6 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                 return true;
             }
         });
-
-        chatLayout = (RelativeLayout) findViewById(R.id.chatLayout);
-        enclose = (ImageView) findViewById(R.id.encloseIcon);
-        image = (ImageView) findViewById(R.id.imageIcon);
-        icon =(ImageView) findViewById(R.id.iconIcon);
-        sendBtn = (ImageView) findViewById(R.id.sendIcon);
-        gap =(View) findViewById(R.id.gap);
-        chatText = (EditText) findViewById(R.id.chatText);
-        optionButton = (Button) findViewById(R.id.optionButton);
-        backButton = (Button) findViewById(R.id.backButton);
-        chatImage = (ImageView) findViewById(R.id.avatar);
-        chatName = (TextView) findViewById(R.id.textName);
-        memberNumber = (TextView) findViewById(R.id.textSubName);
-        // set image
-        new HttpManager.GetImageFromServer(chatImage).execute(roomModel.getAvatar());
 
         chatName.setText(roomModel.getName());
         memberNumber.setText(Integer.toString(roomModel.getOptions().getMembers().size()) + " members");
@@ -427,6 +431,33 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 //        setResult(RESULT_OK, output);
         super.finish();
     }
+    
+    private void loadAvatar() {
+        ArrayList<MessageModel> messageList = roomModel.getMessages();
 
+        for (int i = 0; i < messageList.size(); i++) {
+            MessageModel messageItem = messageList.get(i);
 
+            if (!messageItem.hasBitmapAvatar()) {
+                if (messageItem.hasAvatar()) {
+                    ArrayList<String> userAvt = new ArrayList<String>();
+                    userAvt.add(messageItem.getAvatar());
+                    new DownloadImage(userAvt, new ConvertListener() {
+                        @Override
+                        public void onSuccess(ImageModel result) {
+
+                        }
+
+                        @Override
+                        public void onDownloadSuccess(ArrayList<Bitmap> result) {
+                            for (int i = 0; i < result.size(); ++i) {
+                                messageItem.setBitmapAvatar(result.get(i));
+                                customMessageItem.notifyDataSetChanged();
+                            }
+                        }
+                    }).execute();
+                }
+            }
+        }
+    }
 }

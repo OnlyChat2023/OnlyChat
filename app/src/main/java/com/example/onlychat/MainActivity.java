@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         pref = new GlobalPreferenceManager(this);
         pref.ValidateRemember();
 
-        pref.SignOut();
+//        pref.SignOut();
 
         Bundle bundle = new Bundle();
         bundle.putBoolean("isLogin", pref.getIsLoggedIn());
@@ -39,5 +39,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtras(bundle);
 
         startActivity(intent);
+        finish();
     }
 }

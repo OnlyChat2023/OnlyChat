@@ -68,7 +68,7 @@ public class OptionActivity extends AppCompatActivity {
         if (options.getNotify()){
             btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
             notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
-        } else{
+        } else {
             btn_notify.setBackgroundResource(R.drawable.dm_icon_off_notify);
             notify_icon.setBackgroundResource(R.drawable.dm_option_icon_off_notifycation);
         }
