@@ -20,21 +20,31 @@ import android.widget.TextView;
 import com.example.onlychat.DiaLog.BasicDialog;
 import com.example.onlychat.DiaLog.ChangeNickNameDialog;
 import com.example.onlychat.DirectMessage.ChattingActivity;
+import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class OptionActivity extends AppCompatActivity {
     ChattingActivity preChat;
     ImageView avatar, notify_icon;
     Button btn_back, btn_nickname, btn_profile, btn_notify;
-    TextView txtName;
+    TextView txtName, txtBlock;
     RelativeLayout nick_name, notify, profile, delete, block, report;
     RoomOptions options;
     Member meInf;
     Member friendInf;
+    Boolean valueBlock;
+    String DM_id;
+    Integer CHANGENOTIFY = -7;
+    Integer CHANGEBLOCK = -8;
+    Integer CHANGEFRNN = 5;
+    Integer CHANGEMENN = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +64,12 @@ public class OptionActivity extends AppCompatActivity {
         profile = (RelativeLayout) findViewById(R.id.profile_page);
         delete = (RelativeLayout) findViewById(R.id.delete_chat);
         block = (RelativeLayout) findViewById(R.id.block);
+        txtBlock = (TextView)findViewById(R.id.block_text);
         report = (RelativeLayout) findViewById(R.id.report);
 
         Intent main_chat = getIntent();
         preChat = (ChattingActivity) getParent();
+        DM_id = (String) main_chat.getSerializableExtra("DM_id");
         options = (RoomOptions) main_chat.getSerializableExtra("option");
         friendInf = (Member) main_chat.getSerializableExtra("friend");
         meInf = (Member) main_chat.getSerializableExtra("me");
@@ -72,6 +84,22 @@ public class OptionActivity extends AppCompatActivity {
             btn_notify.setBackgroundResource(R.drawable.dm_icon_off_notify);
             notify_icon.setBackgroundResource(R.drawable.dm_option_icon_off_notifycation);
         }
+        new HttpManager(OptionActivity.this).getBlockDM(friendInf.getUser_id(), DM_id, new HttpResponse() {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
+                valueBlock = (Boolean) response.getBoolean("data");
+                if (valueBlock){
+                    txtBlock.setText("Unblock");
+                } else{
+                    txtBlock.setText("Block");
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.i("Get Block Option Error: ", error);
+            }
+        });
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,13 +129,37 @@ public class OptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (options.getNotify()){
-                    options.setNotify(false);
-                    btn_notify.setBackgroundResource(R.drawable.dm_icon_off_notify);
-                    notify_icon.setBackgroundResource(R.drawable.dm_option_icon_off_notifycation);
+                    new HttpManager(btn_notify.getContext()).changeOptionDM(meInf.getUser_id(), DM_id, false, options.getBlock(), new HttpResponse() {
+                        @Override
+                        public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
+                            setResult(CHANGENOTIFY, new Intent(btn_notify.getContext(), ChattingActivity.class).putExtra("data", false));
+                            options.setNotify(false);
+                            btn_notify.setBackgroundResource(R.drawable.dm_icon_off_notify);
+                            notify_icon.setBackgroundResource(R.drawable.dm_option_icon_off_notifycation);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Log.i("CHANGE NOTIFY: ", error);
+                        }
+                    });
+
                 } else{
-                    options.setNotify(true);
-                    btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
-                    notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
+
+                    new HttpManager(btn_notify.getContext()).changeOptionDM(meInf.getUser_id(), DM_id, true, options.getBlock(), new HttpResponse() {
+                        @Override
+                        public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
+                            setResult(CHANGENOTIFY, new Intent(btn_notify.getContext(), ChattingActivity.class).putExtra("data", true));
+                            options.setNotify(true);
+                            btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
+                            notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Log.i("CHANGE NOTIFY: ", error);
+                        }
+                    });
                 }
             }
         });
@@ -116,13 +168,37 @@ public class OptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (options.getNotify()){
-                    options.setNotify(false);
-                    btn_notify.setBackgroundResource(R.drawable.dm_icon_off_notify);
-                    notify_icon.setBackgroundResource(R.drawable.dm_option_icon_off_notifycation);
+                    new HttpManager(btn_notify.getContext()).changeOptionDM(meInf.getUser_id(), DM_id, false, options.getBlock(), new HttpResponse() {
+                        @Override
+                        public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
+                            setResult(CHANGENOTIFY, new Intent(notify.getContext(), ChattingActivity.class).putExtra("data", false));
+                            options.setNotify(false);
+                            btn_notify.setBackgroundResource(R.drawable.dm_icon_off_notify);
+                            notify_icon.setBackgroundResource(R.drawable.dm_option_icon_off_notifycation);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Log.i("CHANGE NOTIFY: ", error);
+                        }
+                    });
+
                 } else{
-                    options.setNotify(true);
-                    btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
-                    notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
+
+                    new HttpManager(btn_notify.getContext()).changeOptionDM(meInf.getUser_id(), DM_id, true, options.getBlock(), new HttpResponse() {
+                        @Override
+                        public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
+                            setResult(CHANGENOTIFY, new Intent(notify.getContext(), ChattingActivity.class).putExtra("data", true));
+                            options.setNotify(true);
+                            btn_notify.setBackgroundResource(R.drawable.dm_icon_on_notify_nav);
+                            notify_icon.setBackgroundResource(R.drawable.dm_option_icon_on_notification);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Log.i("CHANGE NOTIFY: ", error);
+                        }
+                    });
                 }
             }
         });
@@ -138,21 +214,64 @@ public class OptionActivity extends AppCompatActivity {
         block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BasicDialog dialog = new BasicDialog().newInstance("Do you stil want to block this message?");
+                String ms = (valueBlock) ? "Do you still want to unblock this person?" : "Do you still want to block this person?";
+                BasicDialog dialog = new BasicDialog().newInstance(ms);
+                dialog.setActivity("BLOCKDM");
                 dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
             }
         });
     }
 
-    public void setNickname(String frNN, String meNN){
-        friendInf.setNickname(frNN);
-        meInf.setNickname(meNN);
+    public void setNickname(ChangeNickNameDialog current, String frNN, String meNN){
+        if (!frNN.equals("") && !frNN.equals(friendInf.getNickname())){
+            new HttpManager(nick_name.getContext()).changeNicknameDM(friendInf.getUser_id(), DM_id, frNN, new HttpResponse() {
+                @Override
+                public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
+                    friendInf.setNickname(frNN);
+                    setResult(CHANGEFRNN, new Intent(nick_name.getContext(), ChattingActivity.class).putExtra("data", frNN));
+                }
 
-        Log.i("CHANGENN", friendInf.getNickname());
-        Log.i("CHANGENN", meInf.getNickname());
-//        if (preChat != null)
-//            preChat.setNickname(frNN, meNN);
-//        else
-//            Log.e("<<previous chat", "NULLLLLLLL");
+                @Override
+                public void onError(String error) {
+                    Log.i("CHANGE FRIEND NICKNAME ERROR:", error);
+                }
+            });
+        }
+        if (!meNN.equals(meInf.getNickname()) && !meNN.equals("")){
+            new HttpManager(nick_name.getContext()).changeNicknameDM(meInf.getUser_id(), DM_id, meNN, new HttpResponse() {
+                @Override
+                public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
+                    meInf.setNickname(meNN);
+                    setResult(CHANGEMENN, new Intent(nick_name.getContext(), ChattingActivity.class).putExtra("data", meNN));
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
+        }
+        current.dismiss();
+    }
+
+    public void Block(BasicDialog current){
+        valueBlock = (valueBlock) ? false : true;
+        new HttpManager(block.getContext()).changeOptionDM(friendInf.getUser_id(), DM_id, options.getNotify(), valueBlock, new HttpResponse() {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
+                if (valueBlock){
+                    txtBlock.setText("Unblock");
+                }else{
+                    txtBlock.setText("Block");
+                }
+                setResult(CHANGEBLOCK, new Intent(block.getContext(), ChattingActivity.class).putExtra("data", valueBlock));
+                current.dismiss();
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.i("Block DM Error", error);
+            }
+        });
     }
 }

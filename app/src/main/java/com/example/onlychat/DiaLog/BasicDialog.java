@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 
+import com.example.onlychat.DirectMessage.ChattingActivity;
+import com.example.onlychat.DirectMessage.Option.OptionActivity;
 import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
 import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.R;
@@ -60,6 +62,9 @@ public class BasicDialog extends DialogFragment {
             public void onClick(View view) {
                 if (activity == "LEAVEGROUP"){
                     ((Options)getActivity()).LeaveGroup(BasicDialog.this);
+                }
+                if (activity == "BLOCKDM"){
+                    ((OptionActivity) getActivity()).Block(BasicDialog.this);
                 }
                 dismiss();
             }

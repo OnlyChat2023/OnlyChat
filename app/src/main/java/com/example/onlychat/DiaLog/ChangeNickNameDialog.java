@@ -68,19 +68,7 @@ public class ChangeNickNameDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
 
-                String temp1 = friendNickname.getText().toString();
-                String temp2 = userNickname.getText().toString();
-                Boolean flag = false;
-                if (!temp1.equals(fr_nickname) && !temp1.equals("")) {
-                    fr_nickname = temp1;
-                    flag = true;
-                }
-                if (!temp2.equals(user_nickname) && !temp2.equals("")) {
-                    user_nickname = temp2;
-                    flag = true;
-                }
-                if (flag == true)
-                    activity.setNickname(fr_nickname, user_nickname);
+                activity.setNickname(ChangeNickNameDialog.this, friendNickname.getText().toString(), userNickname.getText().toString());
                 dismiss();
             }
         });
