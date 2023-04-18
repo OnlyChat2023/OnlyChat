@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_regular"
             android:layout_marginStart="16dp"
-            android:text="Robert Granne"
+            android:text=""
             android:textColor="#ffffff"
             android:textSize="16sp" />
     </LinearLayout>

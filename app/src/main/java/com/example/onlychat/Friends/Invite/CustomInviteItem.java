@@ -49,7 +49,6 @@ public class CustomInviteItem extends ArrayAdapter<UserModel> {
         this.removeBtn = removeBtn;
     }
     GlobalPreferenceManager pref;
-    UserModel myInfo;
     ArrayList<UserModel> listInvite;
 
     public CustomInviteItem(@NonNull Context context, ArrayList<UserModel> list_invite) {
@@ -65,8 +64,7 @@ public class CustomInviteItem extends ArrayAdapter<UserModel> {
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         row = inflater.inflate(R.layout.friends_invite_item,null);
 
-        pref = new GlobalPreferenceManager(getContext());
-        myInfo = pref.getUserModel();
+
 
         avatar = (ImageView) row.findViewById(R.id.avatar);
         name = (TextView) row.findViewById(R.id.name);
@@ -83,20 +81,14 @@ public class CustomInviteItem extends ArrayAdapter<UserModel> {
         addFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SocketManager.getInstance();
-                SocketManager.acceptRequestAddFriend(listInvite.get(position).get_id(),myInfo);
-                Invite.removeItem(position);
-
-                Friends.updateUI();
+               Invite.addFriend(position);
             }
         });
 
         removeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SocketManager.getInstance();
-                SocketManager.removeRequestAddFriend(listInvite.get(position).get_id(),myInfo);
-                Invite.removeItem(position);
+                Invite.removeRequest(position);
             }
         });
 

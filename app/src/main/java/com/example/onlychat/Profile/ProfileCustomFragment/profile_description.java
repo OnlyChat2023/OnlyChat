@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 
 /**
@@ -19,7 +20,7 @@ import com.example.onlychat.R;
  * create an instance of this fragment.
  */
 public class profile_description extends Fragment {
-
+    TextView description;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -60,17 +61,16 @@ public class profile_description extends Fragment {
         }
     }
 
+    public void setData(UserModel userModel) {
+        description.setText(userModel.getDescription());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         LinearLayout layout_profile3 = (LinearLayout) inflater.inflate(R.layout.fragment_profile_description, null);
-        TextView description = (TextView) layout_profile3.findViewById(R.id.content);
-
-        // Get & set data
-        Intent intent = getActivity().getIntent();
-        Bundle myBundle = intent.getExtras();
-        description.setText(myBundle.getString("description"));
+        description = (TextView) layout_profile3.findViewById(R.id.content);
 
         return layout_profile3;
 //        return inflater.inflate(R.layout.fragment_profile_description, container, false);

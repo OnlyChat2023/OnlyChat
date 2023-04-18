@@ -21,10 +21,16 @@ import android.widget.TextView;
 
 import com.example.onlychat.EditProfile.EditProfile;
 import com.example.onlychat.Friends.AllFriends.AllFriends;
+import com.example.onlychat.Friends.Friends;
+import com.example.onlychat.Friends.Invite.Invite;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.UserModel;
+import com.example.onlychat.Profile.ProfileCustomFragment.profile_description;
+import com.example.onlychat.Profile.ProfileCustomFragment.profile_information;
+import com.example.onlychat.Profile.ProfileCustomFragment.profile_social;
 import com.example.onlychat.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
@@ -50,7 +56,16 @@ public class Profile extends AppCompatActivity {
         return user;
     }
 
+    profile_information profileInformation = new profile_information();
+    profile_social profileSocial = new profile_social();
+    profile_description profileDescription = new profile_description();
+
     Integer isFriend;
+
+    static UserModel myInfo;
+    GlobalPreferenceManager pref;
+
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +80,13 @@ public class Profile extends AppCompatActivity {
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.view_pager);
 
+        pref = new GlobalPreferenceManager(this);
+        myInfo = pref.getUserModel();
+
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        viewPagerAdapter.addFragment(profileInformation, "Information");
+        viewPagerAdapter.addFragment(profileSocial,"Social media");
+        viewPagerAdapter.addFragment(profileDescription,"Description");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -81,6 +102,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                overridePendingTransition(R.anim.fixed, R.anim.left_to_right);
             }
         });
 
@@ -92,12 +114,23 @@ public class Profile extends AppCompatActivity {
                 Log.i("all friends click item", profile.toString());
 
                 user = new Gson().fromJson(profile.toString(), UserModel.class);
+//                viewPagerAdapter.getItem(0);
+                profileInformation.setData(user);
+                profileSocial.setData(user);
+                profileDescription.setData(user);
+
+
+
+
                 isFriend = profile.getInt("isFriend");
-                Log.i("isFriend", isFriend.toString());
+                Log.i("Profile",isFriend.toString());
 
-                userName.setText(user.getName());
+
+                        userName.setText(user.getName());
                 new HttpManager.GetImageFromServer(avatar).execute(user.getAvatar());
-
+                addFriendBtn.setVisibility(View.VISIBLE);
+                editBtn.setVisibility(View.VISIBLE);
+                sendChatBtn.setVisibility(View.VISIBLE);
                 setButtonUI();
             }
 
@@ -106,12 +139,6 @@ public class Profile extends AppCompatActivity {
 
             }
         });
-
-
-
-//        Log.i("TAG", myBundle.getString("user_id") + "----" + (new GlobalPreferenceManager(Profile.this).getUserModel().get_id()) );
-        // If click my own user profile
-
 
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,36 +158,56 @@ public class Profile extends AppCompatActivity {
         addFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // unfriend
                 if (isFriend == 1){
-//                    AllFriends.removeFriend(myBundle.getInt("index"));
+                    AllFriends.removeFriend(user_id);
                     isFriend = 0;
                     setButtonUI();
+                    Log.i("Profile", "1");
                 }
+                // add friend
                 else if(isFriend == 0) {
-//                    AllFriends.adFriend(myBundle.getInt("index"));
+                    SocketManager.getInstance();
+                    SocketManager.sendRequestAddFriend(user_id,myInfo);
                     isFriend = 3;
                     setButtonUI();
+                    Log.i("Profile", "2");
                 }
+                // accept
                 else if(isFriend == 2){
-//                    AllFriends.removeFriend(myBundle.getInt("index"));
+                    Invite.addFriend(user_id);
                     isFriend = 1;
                     setButtonUI();
+                    Log.i("Profile", "3");
                 }
+                // send invite click == unfriend
                 else{
+                    Invite.removeSent(user_id);
                     isFriend = 0;
                     setButtonUI();
+                    Log.i("Profile", "4");
                 }
             }
         });
     }
 
     public void setButtonUI(){
-        Log.i("button ui", isFriend.toString());
+        // not me
+        if (!user_id.equals(new GlobalPreferenceManager(Profile.this).getUserModel().get_id())){
+            editBtn.setVisibility(View.GONE);
+            sendChatBtn.setVisibility(View.GONE);
+        }
+        // me
+        else {
+            addFriendBtn.setVisibility(View.GONE);
+        }
+
         // friend
         if (isFriend==1){
             Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_white_trash);
             addFriendBtn.setText("Remove");
             addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+            sendChatBtn.setVisibility(View.VISIBLE);
         }
         // invite to me
         else if(isFriend == 2){
@@ -175,18 +222,8 @@ public class Profile extends AppCompatActivity {
         }
         else {
 //            Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_add_friend);
-            addFriendBtn.setText("Sended");
+            addFriendBtn.setText("Sent");
             addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-        }
-
-        // not me
-        if (!user_id.equals(new GlobalPreferenceManager(Profile.this).getUserModel().get_id())){
-            editBtn.setVisibility(View.GONE);
-        }
-        // me
-        else {
-            addFriendBtn.setVisibility(View.GONE);
-            sendChatBtn.setVisibility(View.GONE);
         }
 
     }
