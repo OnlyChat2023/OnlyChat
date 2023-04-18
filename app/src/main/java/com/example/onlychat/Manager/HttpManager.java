@@ -125,6 +125,13 @@ public class HttpManager {
                 }}, response);
     }
 
+    public void getUserByPhone(String phone, HttpResponse response) {
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/getUserByPhone", Request.Method.PATCH, "userprofile",
+                new HashMap<String, String>() {{
+                    put("phone", phone);
+                }}, response);
+    }
+
 
     public void validateAccount(String phoneNumber, HttpResponse responseReceiver) {
         Map<String, String> params = new HashMap<String, String>();

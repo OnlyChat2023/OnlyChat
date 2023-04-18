@@ -3,6 +3,7 @@ package com.example.onlychat.GlobalChat;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -172,6 +174,14 @@ public class GlobalChat extends Fragment {
                 boolean focusable = true; // lets taps outside the popup also dismiss it
                 final PopupWindow popupWindow = new PopupWindow(popupView,900,500,focusable);
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button searchBtn = (Button) popupView.findViewById(R.id.searchBtn);
+                searchBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.i("popup", "onClick: ");
+                    }
+                });
 
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override

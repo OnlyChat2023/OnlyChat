@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.CustomItem.CustomIconLabelAdapter;
 import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
@@ -86,17 +87,14 @@ public class profile_social extends Fragment {
 
     }
 
-    void getData() {
-        Intent intent = getActivity().getIntent();
-        Bundle myBundle = intent.getExtras();
-        links[0] = myBundle.getString("facebook");
-        links[1] = myBundle.getString("instagram");
+    public void setData(UserModel userModel) {
+        links[0] = userModel.getFacebook();
+        links[1] = userModel.getInstagram();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getData();
         LinearLayout layout_profile2 = (LinearLayout) inflater.inflate(R.layout.fragment_profile_social, null);
         ListView listView = (ListView) layout_profile2.findViewById(R.id.list);
 

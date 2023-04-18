@@ -202,6 +202,28 @@ public class MainScreen extends AppCompatActivity {
                             View tabView = tab.getCustomView();
                             ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
                             tab_icon.setBackgroundColor(Color.parseColor("#352159"));
+
+                            if(tab.getPosition()==4){
+                            HttpManager httpManager = new HttpManager(tabLayout.getContext());
+                            httpManager.getListFriends(
+                                    new HttpResponse() {
+                                        @Override
+                                        public void onSuccess(JSONObject response) throws JSONException {
+                                            JSONArray friend_request = response.getJSONObject("data").getJSONArray("friend_requests");
+//                                            Log.i("Da vao day", Integer.toString(friend_request.length()));
+                                            invite_list = getListInvite(friend_request);
+
+                                            friendsFragment.getInvite().setInvite_list(invite_list);
+                                        }
+
+                                        @Override
+                                        public void onError(String error) {
+
+                                        }
+                                    }
+                            );
+                            }
+
                         }
 
                         @Override

@@ -1,7 +1,6 @@
 package com.example.onlychat.Profile.ProfileCustomFragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.onlychat.MainActivity;
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.CustomItem.CustomIconLabelAdapter;
 import com.example.onlychat.R;
 
@@ -37,7 +37,7 @@ public class profile_information extends Fragment {
     Context context = null;
     private CustomIconLabelAdapter adapter;
 
-    String[] contents = {"Tran Nguyen Phong", "092 790 74 19", "tranphong@gmail.com", "University Science"};
+    static String[] contents = {"", "", "", ""};
     Integer[] thumbnails = { R.drawable.ic_user_svg,R.drawable.ic_phone,R.drawable.ic_email,R.drawable.ic_graduated};
     public profile_information() {
         // Required empty public constructor
@@ -52,7 +52,7 @@ public class profile_information extends Fragment {
      * @return A new instance of fragment frag_profile1.
      */
     // TODO: Rename and change types and number of parameters
-    public static profile_information newInstance(String param1, String param2) {
+    public static profile_information newInstance(String param1, String param2,UserModel userModel) {
         profile_information fragment = new profile_information();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -79,19 +79,16 @@ public class profile_information extends Fragment {
 
     }
 
-    void getData() {
-        Intent intent = getActivity().getIntent();
-        Bundle myBundle = intent.getExtras();
-        contents[0] = myBundle.getString("name");
-        contents[1] = myBundle.getString("phoneNumber");
-        contents[2] = myBundle.getString("email");
-        contents[3] = myBundle.getString("university");
+    public void setData(UserModel userModel) {
+        contents[0] = userModel.getName();
+        contents[1] = userModel.getPhone();
+        contents[2] = userModel.getEmail();
+        contents[3] = userModel.getUniversity();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getData();
         LinearLayout layout_profile1 = (LinearLayout) inflater.inflate(R.layout.fragment_profile_information, null);
         ListView listView = (ListView) layout_profile1.findViewById(R.id.list);
 

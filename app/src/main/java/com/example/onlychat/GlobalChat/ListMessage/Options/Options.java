@@ -26,6 +26,7 @@ import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
 
 import org.json.JSONArray;
@@ -161,13 +162,29 @@ public class Options extends AppCompatActivity {
                 listMembers = (ListView)  popupView.findViewById(R.id.listMembers);
                 TextView quantity = (TextView) popupView.findViewById(R.id.quantity);
                 quantity.setText("Members ("+options.getMembers().size()+")");
-//                Log.i("Option", Integer.toString(options.getMembers().size()));
+                Log.i("Option", Integer.toString(options.getMembers().size()));
                 CustomMemberItem customMemberItem=new CustomMemberItem(popupView.getContext(),options.getMembers());
                 listMembers.setAdapter(customMemberItem);
                 listMembers.setSelection(0);
                 listMembers.smoothScrollToPosition(0);
                 listMembers.setDivider(null);
                 listMembers.setDividerHeight(0);
+
+                listMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Log.i("Option", "===========>>>>>>");
+
+                        Bundle myBundle = new Bundle();
+                        myBundle.putInt("index",i);
+                        myBundle.putString("user_id",options.getMembers().get(i).getId());
+
+
+                        Intent intentToProfile = new Intent (listMembers.getContext(), Profile.class);
+                        intentToProfile.putExtras(myBundle);
+                        startActivity(intentToProfile);
+                    }
+                });
 
 
                 boolean focusable = true; // lets taps outside the popup also dismiss it

@@ -62,6 +62,12 @@ public class SocketManager {
         }
     }
 
+    public static void sendRequestAddFriend(String id, UserModel user) {
+        if (socket != null){
+            socket.emit("sendRequestAddFriend", id, new Gson().toJson(user));
+        }
+    }
+
     public static void acceptRequestAddFriend(String id, UserModel user){
         if(socket != null){
             socket.emit("acceptRequestAddFriend",id,new Gson().toJson(user));
