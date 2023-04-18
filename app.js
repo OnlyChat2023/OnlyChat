@@ -20,7 +20,7 @@ const limiter = rateLimit({
 }); // define how many requests per IP we are going to allow in a certain of time
 
 const app = express();
-app.use(limiter);
+// app.use(limiter);
 app.use(cors());
 app.use(mongoSanitize());
 app.use(xss());
