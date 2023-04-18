@@ -25,7 +25,7 @@ const getUserInformation = catchAsync(async (req, res) => {
 
     directChat.push(newDM);
   }
-  // console.log("Direct", directChat)
+  console.log(JSON.stringify(directChat, null, 2));
 
   const groupChat = []
   for (let i of user.groupchat_channel) {
@@ -52,7 +52,7 @@ const getUserInformation = catchAsync(async (req, res) => {
 
     groupChat.push(newDM);
   }
-  // console.log("Group", groupChat)
+  // console.log(JSON.stringify(groupChat.members, null, 2));
 
   const globalChat = []
   for (let i of user.globalchat_channel) {
@@ -66,7 +66,7 @@ const getUserInformation = catchAsync(async (req, res) => {
 
     globalChat.push(newDM);
   }
-  // console.log("Global", globalChat)
+  // console.log(JSON.stringify(globalChat.members, null, 2));
 
   const botChat = []
   for (let i of user.chatbot_channel) {
@@ -76,8 +76,7 @@ const getUserInformation = catchAsync(async (req, res) => {
     botChat.push(dmList);
   }
   // console.log("Bot", botChat)
-
-
+  ``
   res.status(200).json({
     status: 'success',
     data: {

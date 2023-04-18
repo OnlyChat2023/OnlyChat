@@ -311,7 +311,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("notifyUpdateMessage", async (lastMessageID) => {
-        if (socket.channel) {
+        if (socket.channel && lastMessageID) {
             let newMessageList = null;
 
             if (socket.channel === 'direct_message')
