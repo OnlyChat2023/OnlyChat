@@ -21,7 +21,7 @@ const getUserInformation = catchAsync(async (req, res) => {
     const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
     newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
     newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
-    newDM.options = [{...newDM.options[0], _id: newDM.options[0]._id.toString()}];
+    newDM.options = [{ ...newDM.options[0], _id: newDM.options[0]._id.toString() }];
 
     directChat.push(newDM);
   }
@@ -30,10 +30,17 @@ const getUserInformation = catchAsync(async (req, res) => {
   const groupChat = []
   for (let i of user.groupchat_channel) {
     const dmList = await GroupChat.findOne({ _id: i });
-
+    // console.log(i)
     for (let i of dmList.chats) {
-      i.avatar = dmList.members.filter(el => el.user_id == i.user_id)[0].avatar
-      i.nickname = dmList.members.filter(el => el.user_id == i.user_id)[0].nickname
+      if (dmList.members.filter(el => el.user_id == i.user_id).length != 0) {
+        i.avatar = dmList.members.filter(el => el.user_id == i.user_id)[0].avatar
+        i.nickname = dmList.members.filter(el => el.user_id == i.user_id)[0].nickname
+      }
+      else {
+        let _u = await User.findOne({ _id: i.user_id })
+        i.avatar = _u.avatar
+        i.nickname = _u.name
+      }
     }
 
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
@@ -41,7 +48,7 @@ const getUserInformation = catchAsync(async (req, res) => {
     const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
     newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
     newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
-    newDM.options = [{...newDM.options[0], _id: newDM.options[0]._id.toString()}];
+    newDM.options = [{ ...newDM.options[0], _id: newDM.options[0]._id.toString() }];
 
     groupChat.push(newDM);
   }
@@ -55,7 +62,7 @@ const getUserInformation = catchAsync(async (req, res) => {
     const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
     newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
     newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
-    newDM.options = [{...newDM.options[0], _id: newDM.options[0]._id.toString()}];
+    newDM.options = [{ ...newDM.options[0], _id: newDM.options[0]._id.toString() }];
 
     globalChat.push(newDM);
   }
@@ -101,12 +108,47 @@ const getListFriend = catchAsync(async (req, res, next) => {
 });
 
 const getUserById = catchAsync(async (req, res, nex) => {
-  const user = await User.findOne({ _id: req.body._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -nickname')
+  const _user = await User.findOne({ _id: req.body._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -anonymous_avatar -nickname').lean()
+  let status = 0
+  // friend
+  if (req.user.friend.includes(_user._id)) status = 1;
+  // invite to me
+  if (req.user.friend_request.includes(_user._id)) status = 2;
+  // send invite
+  if (_user.friend_request.includes(req.user.id)) status = 3;
 
+  const newUser = { ..._user, isFriend: status };
   res.status(200).json({
     status: 'success',
-    data: user
+    data: newUser
   });
+})
+
+const getUserByPhone = catchAsync(async (req, res, nex) => {
+  const _user = await User.findOne({ phone: req.body.phone }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -anonymous_avatar -nickname').lean()
+
+  if (_user) {
+
+    let status = 0
+    // friend
+    if (req.user.friend.includes(_user._id)) status = 1;
+    // invite to me
+    if (req.user.friend_request.includes(_user._id)) status = 2;
+    // send invite
+    if (_user.friend_request.includes(req.user.id)) status = 3;
+
+    const newUser = { ..._user, isFriend: status };
+    res.status(200).json({
+      status: 'success',
+      data: newUser
+    });
+  }
+  else {
+    res.status(200).json({
+      status: '',
+      data: {}
+    });
+  }
 })
 
 
@@ -154,8 +196,8 @@ const updateProfile = catchAsync(async (req, res, next) => {
   if (!gender.includes(req.body.gender)) return next(new AppError('Giới tính không tồn tại'));
   // 3) Update user account
   const updatedUser = await User.findByIdAndUpdate("64312f06ab1ff0a59daf4263", filterBody, { new: true, runValidators: true });
-  console.log(updatedUser)
+  // console.log(updatedUser)
   res.status(200).json({ status: 'success', data: { user: updatedUser } });
 })
 
-export { getUserInformation, updateProfile, getUserById, getListFriend }
+export { getUserInformation, updateProfile, getUserById, getListFriend, getUserByPhone }

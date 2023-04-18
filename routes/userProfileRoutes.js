@@ -1,5 +1,5 @@
 import express from 'express'
-import { updateProfile, getUserInformation, getUserById, getListFriend } from '../controllers/userProfileController.js'
+import { updateProfile, getUserInformation, getUserById, getListFriend, getUserByPhone } from '../controllers/userProfileController.js'
 import authController from '../controllers/authController.js';
 const router = express.Router()
 
@@ -16,5 +16,8 @@ router.post('/updateProfile', authController.protect, updateProfile);
 
 // get user profile
 router.patch('/getUserById', authController.protect, getUserById);
+
+// get user by phone
+router.patch('/getUserByPhone', authController.protect, getUserByPhone);
 
 export default router;
