@@ -4,6 +4,7 @@ import static java.security.AccessController.getContext;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.onlychat.EditProfile.EditProfile;
+import com.example.onlychat.EditProfile.EditProfileStep2;
 import com.example.onlychat.Friends.AllFriends.AllFriends;
 import com.example.onlychat.Friends.Friends;
 import com.example.onlychat.Friends.Invite.Invite;
@@ -32,6 +34,7 @@ import com.example.onlychat.Profile.ProfileCustomFragment.profile_description;
 import com.example.onlychat.Profile.ProfileCustomFragment.profile_information;
 import com.example.onlychat.Profile.ProfileCustomFragment.profile_social;
 import com.example.onlychat.R;
+import com.example.onlychat.ViewLargerImageMessage.ViewLargerImageMessage;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
@@ -76,12 +79,12 @@ public class Profile extends AppCompatActivity {
         Intent myCallerIntent = getIntent();
         Bundle myBundle = myCallerIntent.getExtras();
         user_id = myBundle.getString("user_id");
-
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.view_pager);
 
         pref = new GlobalPreferenceManager(this);
         myInfo = pref.getUserModel();
+        System.out.println("myInfo" + myInfo.getName());
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPagerAdapter.addFragment(profileInformation, "Information");
@@ -115,18 +118,23 @@ public class Profile extends AppCompatActivity {
 
                 user = new Gson().fromJson(profile.toString(), UserModel.class);
 //                viewPagerAdapter.getItem(0);
+
+                // refresh Fragment
+                final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.detach(profileInformation);
+                ft.attach(profileInformation);
+                ft.commit();
+
                 profileInformation.setData(user);
                 profileSocial.setData(user);
                 profileDescription.setData(user);
-
-
 
 
                 isFriend = profile.getInt("isFriend");
                 Log.i("Profile",isFriend.toString());
 
 
-                        userName.setText(user.getName());
+                userName.setText(user.getName());
                 new HttpManager.GetImageFromServer(avatar).execute(user.getAvatar());
                 addFriendBtn.setVisibility(View.VISIBLE);
                 editBtn.setVisibility(View.VISIBLE);
@@ -143,8 +151,20 @@ public class Profile extends AppCompatActivity {
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserModel userInfo = new GlobalPreferenceManager(Profile.this).getUserModel();
+//                UserModel userInfo = new GlobalPreferenceManager(Profile.this).getUserModel();
                 Bundle myBundle = new Bundle();
+
+//                System.out.println("HERE: " + userInfo.getName());
+
+                myBundle.putString("user_id", user_id);
+                myBundle.putString("name", user.getName());
+                myBundle.putString("avatar", user.getAvatar());
+                myBundle.putString("phone", user.getPhone());
+                myBundle.putString("email", user.getEmail());
+                myBundle.putString("university", user.getUniversity());
+                myBundle.putString("facebook", user.getFacebook());
+                myBundle.putString("instagram", user.getInstagram());
+                myBundle.putString("description", user.getDescription());
 
                 Intent editProfile = new Intent(Profile.this, EditProfile.class);
                 editProfile.putExtras(myBundle);
@@ -200,6 +220,7 @@ public class Profile extends AppCompatActivity {
         // me
         else {
             addFriendBtn.setVisibility(View.GONE);
+            sendChatBtn.setVisibility(View.GONE);
         }
 
         // friend

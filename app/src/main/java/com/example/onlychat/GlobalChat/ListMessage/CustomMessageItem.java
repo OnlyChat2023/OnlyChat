@@ -2,11 +2,14 @@ package com.example.onlychat.GlobalChat.ListMessage;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -23,6 +26,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import com.example.onlychat.Adapter.ImageChat;
 //import com.example.onlychat.Async.LoadImage;
 import com.example.onlychat.Async.DownloadImage;
+import com.example.onlychat.EditProfile.EditProfile;
 import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Model.ImageModel;
@@ -30,6 +34,7 @@ import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
+import com.example.onlychat.ViewLargerImageMessage.ViewLargerImageMessage;
 
 import java.util.ArrayList;
 
@@ -80,6 +85,21 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
 //                new LoadImage(imageLayout).execute(messageItem.getTempImages());
                 ImageChat myImageChat = new ImageChat(messageItem.getImages());
                 imageLayout.setAdapter(myImageChat);
+
+                imageLayout.addOnItemTouchListener(new RecyclerItemClickListener(context, imageLayout, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(context, ViewLargerImageMessage.class);
+                        intent.putExtra("data", messageItem.getImages().get(position));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        view.getContext().startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+                }));
             }
             else if (messageItem.hasImagesStr()) {
 //                new LoadImage(imageLayout).execute(messageItem.getTempImages());
@@ -95,6 +115,7 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
                         row.post(new Runnable() {
                             @Override
                             public void run() {
+                                System.out.println("RUN FUN");
                                 messageItem.setImages(res);
 
                                 imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);
@@ -109,6 +130,21 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
                                     }
                                 });
                                 imageLayout.setAdapter(new ImageChat(res));
+                                imageLayout.addOnItemTouchListener(new RecyclerItemClickListener(context, imageLayout, new RecyclerItemClickListener.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View view, int position) {
+                                        System.out.println("HERE1");
+                                        Intent intent = new Intent(context, ViewLargerImageMessage.class);
+                                        intent.putExtra("data", messageItem.getImages().get(position));
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        view.getContext().startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onLongItemClick(View view, int position) {
+
+                                    }
+                                }));
                             }
                         });
                     }

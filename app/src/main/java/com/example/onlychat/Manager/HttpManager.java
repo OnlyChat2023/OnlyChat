@@ -93,7 +93,7 @@ public class HttpManager {
                                 //throw new RuntimeException(e);
                             }
                         }
-//                        httpResponse.onError(error.getMessage() == null ? error.toString() : error.getMessage());
+                        httpResponse.onError("ERROR");
                     }
                 }) {
             @Override
@@ -226,6 +226,7 @@ public class HttpManager {
     public void updateProfile(UserModel userModel) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("username", userModel.getName());
+        params.put("avatar", userModel.getAvatar());
         params.put("phone", userModel.getPhone());
         params.put("email", userModel.getEmail());
         params.put("university", userModel.getUniversity());
@@ -289,5 +290,25 @@ public class HttpManager {
             params.put("dmc_id", dmc_id);
 
             createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/getBlock", Request.Method.POST, "getBlock", params, responseReceiver);
+        }
+
+        public void changeNicknameDM(String user_id, String dmc_id, String nickname, HttpResponse responseReceiver){
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("user_id", user_id);
+            params.put("dmc_id", dmc_id);
+            params.put("nickname", nickname);
+
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/changeNickname", Request.Method.POST, "changeNickname", params, responseReceiver);
+        }
+        
+        public void getGlobalMetaData(HttpResponse responseReceiver) {
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/metadata/globalchat", Request.Method.GET, "getGlobalMetaData", null, responseReceiver);
+        }
+
+        public void getGroupMetaData(HttpResponse responseReceiver) {
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/metadata/groupchat", Request.Method.GET, "getGroupMetaData", null, responseReceiver);
+        }
+        public void getDirectMetaData(HttpResponse responseReceiver) {
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/metadata/directchat", Request.Method.GET, "getDirectMetaData", null, responseReceiver);
         }
     }

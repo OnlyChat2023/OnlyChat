@@ -88,7 +88,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     MainAdp mainAdapter;
     RoomModel roomModel;
     int position;
-    boolean update = false;
+    boolean change = false;
     ImageModel myModel;
     String typeChat;
     int FINISH = -5;
@@ -233,7 +233,9 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                 final String chatTXT = chatText.getText().toString();
 
                 if (!TextUtils.isEmpty(chatTXT)) {
-                    MessageModel newMessageModel = new MessageModel("", myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getName(), chatTXT, new Date(), new ArrayList<String>());
+                    MessageModel newMessageModel = (channel.equals("group_chat"))
+                            ? new MessageModel("", myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getName(), chatTXT, new Date(), new ArrayList<String>())
+                            : new MessageModel("", myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getNickName(), chatTXT, new Date(), new ArrayList<String>());
 
                     roomModel.pushMessage(newMessageModel);
                     customMessageItem.notifyDataSetChanged();
@@ -243,7 +245,9 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                 }
 
                 if (myModel != null && myModel.getImagesBM() != null && !arrayList.isEmpty()) {
-                    MessageModel newMessageModel = new MessageModel("", myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getName(), new ArrayList<>(myModel.getImagesBM()), new Date(), new ArrayList<String>());
+                    MessageModel newMessageModel = (channel.equals("group_chat"))
+                            ? new MessageModel("", myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getName(), new ArrayList<>(myModel.getImagesBM()), new Date(), new ArrayList<String>())
+                            : new MessageModel("", myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getNickName(), new ArrayList<>(myModel.getImagesBM()), new Date(), new ArrayList<String>());
 
                     roomModel.getMessages().add(newMessageModel);
                     customMessageItem.notifyDataSetChanged();
@@ -399,7 +403,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                                 listView.setSelection(customMessageItem.getCount() - 1);
                                 listView.smoothScrollToPosition(customMessageItem.getCount() - 1);
                             }
-                            update = true;
+                            change = true;
                         }
                         else {
                             roomModel.pushMessage(message);
@@ -421,6 +425,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         String idLastMessage = (currentListMessage.size() > 0)
                 ? currentListMessage.get(currentListMessage.size() - 1).getId()
                 : "";
+
         SocketManager.notifyUpdateMessage(idLastMessage);
     }
 
@@ -431,13 +436,27 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 
     @Override
     public void finish() {
-//        Intent output = new Intent();
-//
-//        output.putExtra("Position", position);
-//        output.putExtra("RoomModel", roomModel);
-//        output.putExtra("Update", update);
-//
-//        setResult(RESULT_OK, output);
+        Intent output = new Intent();
+
+        output.putExtra("RoomModelID", roomModel.getId());
+        output.putExtra("Change", change);
+
+        ArrayList<MessageModel> mess = roomModel.getMessages();
+        if (mess.size() - 1 >= 0) {
+
+            MessageModel lastMessage = mess.get(mess.size() - 1);
+
+            String message = lastMessage.getNickName() + ": ";
+            message += (lastMessage.hasImagesStr()) ? "Đã gửi hình ảnh" : lastMessage.getMessage();
+
+            output.putExtra("LastMessage", message);
+            output.putExtra("LastTime", lastMessage.getTime());
+        }
+        output.putExtra("Update", true);
+
+        setResult(RESULT_OK, output);
+
+        SocketManager.leaveRoom();
         super.finish();
     }
     
