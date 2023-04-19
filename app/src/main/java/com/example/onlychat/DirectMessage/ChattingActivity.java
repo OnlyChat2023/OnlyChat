@@ -34,6 +34,7 @@ import com.example.onlychat.GlobalChat.ListMessage.CustomMessageItem;
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GroupChat.ListMessage.MainAdp;
 import com.example.onlychat.Interfaces.ConvertListener;
+import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.MessageListener;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
@@ -45,6 +46,9 @@ import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 import com.vanniktech.emoji.EmojiPopup;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -76,6 +80,8 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     int position;
     boolean update = false;
     ImageModel myModel;
+    RelativeLayout blockLayout;
+    TextView txtBlockLayout;
     int OPTION = 1;
     Integer CHANGENOTIFY = -7;
     Integer CHANGEBLOCK = -8;
@@ -93,6 +99,8 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
         imgAvatar = (ImageView) findViewById(R.id.avatar);
         txtName = (TextView) findViewById(R.id.textName);
         txtOnline = (TextView) findViewById(R.id.textSubName);
+        blockLayout = (RelativeLayout) findViewById(R.id.block_relative);
+        txtBlockLayout = (TextView) findViewById(R.id.block_text_layout);
 
         chatContent = (ListView) findViewById(R.id.listMessages);
 
@@ -122,6 +130,37 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
         txtName.setText(userInf.getName());
         txtOnline.setText("Online");
         txtOnline.setTextColor(getResources().getColor(R.color.online_green));
+
+        //Set block
+        if (userInf.getOptions().getBlock()){
+            chatLayout.setVisibility(View.INVISIBLE);
+            blockLayout.setVisibility(View.VISIBLE);
+            txtBlockLayout.setText("Your chatting feature is blocked");
+        }else{
+            Member friendssss = new Member("", "", "", "");
+            for (Member mem : userInf.getOptions().getMembers()){
+                if (!mem.getUser_id().equals(me_id)){
+                    friendssss = mem;
+                    break;
+                }
+            }
+
+            new HttpManager(blockLayout.getContext()).getBlockDM(friendssss.getUser_id(), userInf.getId(), new HttpResponse() {
+                @Override
+                public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
+                    if ((Boolean) response.getBoolean("data")) {
+                        chatLayout.setVisibility(View.INVISIBLE);
+                        blockLayout.setVisibility(View.VISIBLE);
+                        txtBlockLayout.setText("You blocked chatting feature");
+                        txtBlockLayout.setTextColor(getResources().getColor(R.color.online_green));
+                    }
+                }
+                @Override
+                public void onError(String error) {
+                    Log.i("Show block Layout", error);
+                }
+            });
+        }
 
         adapter = new MessageReceive(this, userInf.getAvatar(), me_id, userInf.getMessages());
 
@@ -349,10 +388,18 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
         if (resultCode == CHANGEBLOCK  && data != null){
             Boolean temp = (Boolean) data.getSerializableExtra("data");
             //Show layout block chat.
+            if (temp){
+                chatLayout.setVisibility(View.INVISIBLE);
+                blockLayout.setVisibility(View.VISIBLE);
+                txtBlockLayout.setText("You blocked chatting feature");
+                txtBlockLayout.setTextColor(getResources().getColor(R.color.online_green));
+            } else {
+                chatLayout.setVisibility(View.VISIBLE);
+                blockLayout.setVisibility(View.GONE);
+            }
         }
         if (resultCode == CHANGEFRNN && data != null){
             String nn = (String) data.getSerializableExtra("data");
-            Log.i("<<<<<<<<FR NN>>>>>>>>>>>>>>>", nn);
             for (Member mem : userInf.getOptions().getMembers()){
                 if (!mem.getUser_id().equals(me_id)){
                     mem.setNickname(nn);
@@ -365,7 +412,6 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
 
         if (resultCode == CHANGEMENN && data != null){
             String nn = (String) data.getSerializableExtra("data");
-            Log.i("<<<<<<<<Me NN>>>>>>>>>>>>>>>", nn);
             for (Member mem : userInf.getOptions().getMembers()){
                 if (mem.getUser_id().equals(me_id)){
                     mem.setNickname(nn);
