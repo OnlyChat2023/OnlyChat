@@ -89,6 +89,7 @@ public class profile_information extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         LinearLayout layout_profile1 = (LinearLayout) inflater.inflate(R.layout.fragment_profile_information, null);
         ListView listView = (ListView) layout_profile1.findViewById(R.id.list);
 
