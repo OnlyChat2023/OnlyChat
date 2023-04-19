@@ -193,7 +193,9 @@ public class Profile extends AppCompatActivity {
                     for (Member m : e.getOptions().getMembers()){
                         if (m.getUser_id().equals(user_id)){
                             Intent intent = new Intent(Profile.this, ChattingActivity.class);
+                            e.setBitmapAvatar(null);
                             intent.putExtra("roomChat", e);
+                            Log.i("e", e.getId());
                             startActivity(intent);
                         }
                     }
