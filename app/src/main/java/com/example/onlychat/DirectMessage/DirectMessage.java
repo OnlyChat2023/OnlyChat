@@ -49,9 +49,9 @@ public class DirectMessage extends Fragment {
     ImageView addChat;
     ListView listChat;
     CustomChatItem customChatItem;
-    ArrayList<RoomModel> roomModels = new ArrayList<>();
+    static ArrayList<RoomModel> roomModels = new ArrayList<>();
     GlobalPreferenceManager pref;
-    public ArrayList<RoomModel> getRoomModels() {
+    public static ArrayList<RoomModel> getRoomModels() {
         return roomModels;
     }
 

@@ -20,15 +20,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.onlychat.DirectMessage.ChattingActivity;
+import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.EditProfile.EditProfile;
 import com.example.onlychat.EditProfile.EditProfileStep2;
 import com.example.onlychat.Friends.AllFriends.AllFriends;
 import com.example.onlychat.Friends.Friends;
 import com.example.onlychat.Friends.Invite.Invite;
 import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.ProfileCustomFragment.profile_description;
 import com.example.onlychat.Profile.ProfileCustomFragment.profile_information;
@@ -38,9 +43,14 @@ import com.example.onlychat.ViewLargerImageMessage.ViewLargerImageMessage;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+
+import okhttp3.Response;
 
 public class Profile extends AppCompatActivity {
     private TabLayout tabLayout;
@@ -171,6 +181,23 @@ public class Profile extends AppCompatActivity {
                 startActivity(editProfile);
 
                 finish();
+            }
+        });
+
+        // sendChat
+        sendChatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<RoomModel> direct_list= DirectMessage.getRoomModels();
+                for (RoomModel e : direct_list){
+                    for (Member m : e.getOptions().getMembers()){
+                        if (m.getUser_id().equals(user_id)){
+                            Intent intent = new Intent(Profile.this, ChattingActivity.class);
+                            intent.putExtra("roomChat", e);
+                            startActivity(intent);
+                        }
+                    }
+                }
             }
         });
 
