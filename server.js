@@ -446,10 +446,27 @@ io.on('connection', (socket) => {
         await u.save()
     })
 
+<<<<<<< HEAD
+    socket.on("addNewAvatarToServer", async (avtImage, user) => {
+        // const userInfo = JSON.parse(user);
+
+        console.log(avtImage, user);
+
+        const new_filename = await saveBase64Image(avtImage, `assets/avatar/users/${user}`);
+
+        const myUser = await User.findOne({ _id: user });
+        // console.log(myUser);
+        myUser.avatar = new_filename.replace('assets/', '');
+        await myUser.save();
+
+        socket.emit("editDone", new_filename.replace('assets/', ''));
+    })
+=======
     socket.on('register_notification', (user) => {
         const _user = JSON.parse(user);
         notification_list[_user._id] = socket.id;
     });
+>>>>>>> bdd9250d711145873fed91573d3c74f3ad56f99a
 });
 
 
