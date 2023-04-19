@@ -446,7 +446,6 @@ io.on('connection', (socket) => {
         await u.save()
     })
 
-<<<<<<< HEAD
     socket.on("addNewAvatarToServer", async (avtImage, user) => {
         // const userInfo = JSON.parse(user);
 
@@ -461,12 +460,10 @@ io.on('connection', (socket) => {
 
         socket.emit("editDone", new_filename.replace('assets/', ''));
     })
-=======
     socket.on('register_notification', (user) => {
         const _user = JSON.parse(user);
         notification_list[_user._id] = socket.id;
     });
->>>>>>> bdd9250d711145873fed91573d3c74f3ad56f99a
 });
 
 
