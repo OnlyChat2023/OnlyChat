@@ -409,6 +409,21 @@ io.on('connection', (socket) => {
         u.block.push(id)
         await u.save()
     })
+
+    socket.on("addNewAvatarToServer", async (avtImage, user) => {
+        // const userInfo = JSON.parse(user);
+
+        console.log(avtImage, user);
+
+        const new_filename = await saveBase64Image(avtImage, `assets/avatar/users/${user}`);
+
+        const myUser = await User.findOne({ _id: user });
+        // console.log(myUser);
+        myUser.avatar = new_filename.replace('assets/', '');
+        await myUser.save();
+
+        socket.emit("editDone", new_filename.replace('assets/', ''));
+    })
 });
 
 
