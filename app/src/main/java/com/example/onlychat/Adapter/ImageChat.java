@@ -1,5 +1,6 @@
 package com.example.onlychat.Adapter;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
@@ -8,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.onlychat.R;
+import com.example.onlychat.ViewLargerImageMessage.ViewLargerImageMessage;
 
 import java.util.ArrayList;
 

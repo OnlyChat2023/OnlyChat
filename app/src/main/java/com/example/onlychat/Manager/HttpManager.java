@@ -216,6 +216,7 @@ public class HttpManager {
     public void updateProfile(UserModel userModel) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("username", userModel.getName());
+        params.put("avatar", userModel.getAvatar());
         params.put("phone", userModel.getPhone());
         params.put("email", userModel.getEmail());
         params.put("university", userModel.getUniversity());
