@@ -2,6 +2,7 @@ package com.example.onlychat.GlobalChat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.onlychat.Async.DownloadImage;
+import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Model.ImageModel;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
@@ -37,28 +41,64 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
         View row;
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         row = inflater.inflate(R.layout.global_chat_custom_chat_item,null);
-        messageAvatar = (ImageView) row.findViewById(R.id.messageAvatar);
         messageName = (TextView) row.findViewById(R.id.messageName);
         messageContent = (TextView) row.findViewById(R.id.messageContent);
         messageTime = (TextView) row.findViewById(R.id.messageTime);
 
-        new HttpManager.GetImageFromServer(messageAvatar).execute(listRooms.get(position).getAvatar());
+        RoomModel roomModel = listRooms.get(position);
+
+//        new HttpManager.GetImageFromServer(messageAvatar).execute(listRooms.get(position).getAvatar());
+        if (roomModel.hasBitmapAvatar()) {
+            messageAvatar = (ImageView) row.findViewById(R.id.messageAvatar);
+            messageAvatar.setImageBitmap(roomModel.getBitmapAvatar());
+        }
+        else if (roomModel.hasAvatar()){
+            ArrayList<String> userAvt = new ArrayList<String>();
+            userAvt.add(roomModel.getAvatar());
+            new DownloadImage(userAvt, new ConvertListener() {
+                @Override
+                public void onSuccess(ImageModel result) {
+
+                }
+
+                @Override
+                public void onDownloadSuccess(ArrayList<Bitmap> result) {
+                    for (int i = 0; i < result.size(); ++i) {
+                        roomModel.setBitmapAvatar(result.get(i));
+                        messageAvatar = (ImageView) row.findViewById(R.id.messageAvatar);
+                        messageAvatar.setImageBitmap(result.get(i));
+                    }
+                }
+            }).execute();
+        }
+
 
         messageName.setText(listRooms.get(position).getName());
         if (listRooms.get(position).getMessages().size() != 0) {
             MessageModel lastMessage = listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size() - 1);
 
+            String nickname = lastMessage.getNickName();
+            if (nickname != null && nickname.length() > 0)
+                nickname += ": ";
+            else
+                nickname = "";
+
             if (lastMessage.getMessage().isEmpty()) {
-                messageContent.setText("Đã gửi hình ảnh");
+                messageContent.setText(nickname + "Đã gửi hình ảnh");
             }
             else
-                messageContent.setText(lastMessage.getMessage());
+                messageContent.setText(nickname + lastMessage.getMessage());
 
             SimpleDateFormat writeDate = new SimpleDateFormat("HH:mm");
             writeDate.setTimeZone(TimeZone.getTimeZone("GMT+07:00"));
             String s = writeDate.format(lastMessage.getTime());
 
             messageTime.setText(s);
+
+            if (lastMessage.getId().equals("tmp")) {
+                listRooms.get(position).getMessages().remove(lastMessage);
+            }
+
 //            if(lastMessage.getTime().getMinutes()<10){
 //                messageTime.setText(lastMessage.getTime().getHours()+":0"+lastMessage.getTime().getMinutes());
 //            }

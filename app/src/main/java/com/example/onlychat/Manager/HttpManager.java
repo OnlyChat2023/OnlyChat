@@ -90,7 +90,7 @@ public class HttpManager {
                                 //throw new RuntimeException(e);
                             }
                         }
-//                        httpResponse.onError(error.getMessage() == null ? error.toString() : error.getMessage());
+                        httpResponse.onError("ERROR");
                     }
                 }) {
             @Override
@@ -288,5 +288,16 @@ public class HttpManager {
             params.put("nickname", nickname);
 
             createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/changeNickname", Request.Method.POST, "changeNickname", params, responseReceiver);
+        }
+        
+        public void getGlobalMetaData(HttpResponse responseReceiver) {
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/metadata/globalchat", Request.Method.GET, "getGlobalMetaData", null, responseReceiver);
+        }
+
+        public void getGroupMetaData(HttpResponse responseReceiver) {
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/metadata/groupchat", Request.Method.GET, "getGroupMetaData", null, responseReceiver);
+        }
+        public void getDirectMetaData(HttpResponse responseReceiver) {
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/metadata/directchat", Request.Method.GET, "getDirectMetaData", null, responseReceiver);
         }
     }

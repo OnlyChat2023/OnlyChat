@@ -75,7 +75,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     RecyclerView recyclerView;
     MainAdp mainAdapter;
     int position;
-    boolean update = false;
+    boolean change = false;
     ImageModel myModel;
     int OPTION = 1;
     Integer CHANGENOTIFY = -7;
@@ -456,7 +456,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                                 chatContent.smoothScrollToPosition(adapter.getCount() - 1);
 
                             }
-                            update = true;
+                            change = true;
                         }
                         else {
                             userInf.pushMessage(message);
@@ -497,5 +497,31 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                 }).execute();
             }
         }
+    }
+
+    @Override
+    public void finish() {
+        Intent output = new Intent();
+
+        output.putExtra("RoomModelID", userInf.getId());
+        output.putExtra("Change", change);
+
+        ArrayList<MessageModel> mess = userInf.getMessages();
+        if (mess.size() - 1 >= 0) {
+
+            MessageModel lastMessage = mess.get(mess.size() - 1);
+
+            String message = "";
+            message += (lastMessage.hasImagesStr()) ? "Đã gửi hình ảnh" : lastMessage.getMessage();
+
+            output.putExtra("LastMessage", message);
+            output.putExtra("LastTime", lastMessage.getTime());
+        }
+        output.putExtra("Update", true);
+
+        setResult(RESULT_OK, output);
+
+        SocketManager.leaveRoom();
+        super.finish();
     }
 }

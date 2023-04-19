@@ -144,4 +144,10 @@ public class SocketManager {
             socket.emit("getMetaData", new Gson().toJson(user));
         }
     }
+
+    public static void leaveRoom() {
+        if (socket != null) {
+            socket.emit("leaveRoom");
+        }
+    }
 }
