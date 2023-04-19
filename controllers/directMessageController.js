@@ -86,4 +86,33 @@ const changeNickname = catchAsync(async (req, res, next) => {
     res.status(200).json({ status: 'success', data: {}});
 });
 
-export {addDirectMessage, changeOptions, getBlock, changeNickname}
+const getMetaData = catchAsync(async(req, res, next) => {
+    const user = await User.findOne({ _id: req.user.id })
+    // console.log(req.user.id)
+  
+    const directChats = []
+    for (let i of user.directmessage_channel) {
+        const dmList = await directChat.findOne({ _id: i });
+        dmList.avatar = dmList.members.filter(el => el.user_id != user._id.toString())[0].avatar
+        dmList.name = dmList.members.filter(el => el.user_id != user._id.toString())[0].nickname
+        dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+
+        const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
+        newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
+        newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
+        newDM.options = [{ ...newDM.options[0], _id: newDM.options[0]._id.toString() }];
+
+        directChats.push(newDM);
+    }
+    
+    res.status(200).json({
+        status: 'success',
+        data: {
+            user: user,
+            directChat: directChats
+        },
+    })
+});
+  
+
+export {addDirectMessage, changeOptions, getBlock, changeNickname, getMetaData}

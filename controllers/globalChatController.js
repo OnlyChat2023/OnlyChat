@@ -151,4 +151,31 @@ const addMember = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: {}});
 });
 
-export {addGroup, getListGroupChat, leaveGroupChat, updateOption, getFriends2AddMember, addMember}
+const getMetaData = catchAsync(async(req, res, next) => {
+  const user = await User.findOne({ _id: req.user.id })
+  // console.log(req.user.id)
+
+  const globalChat = []
+  for (let i of user.globalchat_channel) {
+    const dmList = await groupChat.findOne({ _id: i });
+    dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+
+    const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
+    newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
+    newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
+    newDM.options = [{ ...newDM.options[0], _id: newDM.options[0]._id.toString() }];
+
+    globalChat.push(newDM);
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: user,
+      globalChat: globalChat,
+    },
+  })
+});
+
+
+export {addGroup, getListGroupChat, leaveGroupChat, updateOption, getFriends2AddMember, addMember, getMetaData}

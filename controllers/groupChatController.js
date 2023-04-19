@@ -151,4 +151,43 @@ const addMember = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: {}});
 });
 
-export {addGroup, getListGroupChat, leaveGroupChat, updateOption, getFriends2AddMember, addMember}
+const getMetaData = catchAsync(async(req, res, next) => {
+  const user = await User.findOne({ _id: req.user.id })
+  // console.log(req.user.id)
+
+  const groupChats = []
+  for (let i of user.groupchat_channel) {
+    const dmList = await groupChat.findOne({ _id: i });
+    // console.log(i)
+    for (let i of dmList.chats) {
+      if (dmList.members.filter(el => el.user_id == i.user_id).length != 0) {
+        i.avatar = dmList.members.filter(el => el.user_id == i.user_id)[0].avatar
+        i.nickname = dmList.members.filter(el => el.user_id == i.user_id)[0].nickname
+      }
+      else {
+        let _u = await User.findOne({ _id: i.user_id })
+        i.avatar = _u.avatar
+        i.nickname = _u.name
+      }
+    }
+
+    dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+
+    const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
+    newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
+    newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
+    newDM.options = [{ ...newDM.options[0], _id: newDM.options[0]._id.toString() }];
+
+    groupChats.push(newDM);
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: user,
+      groupChat: groupChats,
+    },
+  })
+});
+
+export {addGroup, getListGroupChat, leaveGroupChat, updateOption, getFriends2AddMember, addMember, getMetaData}
