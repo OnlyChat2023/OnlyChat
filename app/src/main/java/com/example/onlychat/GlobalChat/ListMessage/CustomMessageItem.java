@@ -24,6 +24,7 @@ import com.example.onlychat.Adapter.ImageChat;
 //import com.example.onlychat.Async.LoadImage;
 import com.example.onlychat.Async.DownloadImage;
 import com.example.onlychat.Interfaces.ConvertListener;
+import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Model.ImageModel;
 import com.example.onlychat.Manager.HttpManager;
@@ -43,6 +44,7 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
     RecyclerView imageLayout;
     TextView name;
     ImageView imageView;
+    ArrayList<Member> members;
 
     public CustomMessageItem(Context context, ArrayList<MessageModel> messageModels) {
         super(context, R.layout.global_chat_custom_chat_item, messageModels);
@@ -121,6 +123,22 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
             row = inflater.inflate(R.layout.global_chat_custom_message_item,null);
             message = (TextView) row.findViewById(R.id.chatContent);
             name = (TextView) row.findViewById(R.id.name);
+
+            if (!messageItem.hasAvatar() && !messageItem.hasBitmapAvatar()){
+                Boolean flag = false;
+                for (Member mem : members){
+                    if (mem.getUser_id().equals(messageItem.getUserId())){
+                        messageItem.setAvatar(mem.getAvatar());
+                        messageItem.setNickName(mem.getNickname());
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag){
+                    messageItem.setAvatar("avatar/bot.png");
+                    messageItem.setNickName("Bot");
+                }
+            }
 
             // set image
 //            Log.i("Custom message user", messageModels.get(position).getAvatar());
@@ -207,7 +225,11 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
         return row;
     }
 
-//     private class ViewHolder {
+    public void setMembers(ArrayList<Member> members) {
+        this.members = members;
+    }
+
+    //     private class ViewHolder {
 //         public RecyclerView imageLayout;
 //         public TextView name;
 //         public TextView message;

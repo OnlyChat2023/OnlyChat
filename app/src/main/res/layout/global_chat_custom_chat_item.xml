@@ -47,6 +47,7 @@
     </LinearLayout>
 
     <TextView
+        android:layout_centerVertical="true"
         android:id="@+id/messageTime"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"

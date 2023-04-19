@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,8 +28,14 @@ import androidx.fragment.app.Fragment;
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
+import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
+import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -38,6 +46,8 @@ public class ChatBot extends Fragment {
     ImageView addChat;
     ListView listChat;
     CustomChatItem customChatItem;
+    String typeChat = "botChat";
+    GlobalPreferenceManager pref;
 
     ArrayList<RoomModel> roomModels = new ArrayList<>();
 
@@ -77,9 +87,10 @@ public class ChatBot extends Fragment {
         addChat = (ImageView) botChat.findViewById(R.id.addChat);
         listChat = (ListView) botChat.findViewById(R.id.listChat);
 
-        Log.i("Bot chat", Integer.toString(roomModels.size()));
+        Log.i("<<<<<<Bot chat>>>>>>>>>", Integer.toString(roomModels.size()));
 
         profile.setVisibility(View.GONE);
+        pref = new GlobalPreferenceManager(getContext());
 
 
         chatTitle.setText("Bot Chat Channel");
@@ -97,7 +108,10 @@ public class ChatBot extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ListMessage.class);
                 intent.putExtra("Data", roomModels.get(i));
-                startActivity(intent);
+                intent.putExtra("typeChat", typeChat);
+                intent.putExtra("Position", i);
+                intent.putExtra("channel", "bot_chat");
+                startActivityForResult(intent, 5);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
@@ -108,7 +122,7 @@ public class ChatBot extends Fragment {
 
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
-                return false;
+                return true;
             }
         });
 
@@ -133,9 +147,44 @@ public class ChatBot extends Fragment {
 
                 // Popup
                 View popupView = inflater.inflate(R.layout.global_chat_popup_new_group, null);
+                TextView tt = (TextView) popupView.findViewById(R.id.title);
+                tt.setText("New Bot Chat");
                 boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView,900,500,focusable);
+                final PopupWindow popupWindow = new PopupWindow(popupView,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT,focusable);
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+                // After set name for new groupChat name ---> switch to add member activity
+                Button okBtn = (Button) popupView.findViewById(R.id.okBtn);
+                EditText newGroupName = (EditText) popupView.findViewById(R.id.newGroupName);
+                okBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        String newName = newGroupName.getText().toString();
+                        if (!newName.equals("")){
+                            HttpManager httpManager = new HttpManager(getContext());
+                            httpManager.addBotChat(newName, pref.getUserModel().get_id(), new HttpResponse() {
+                                @Override
+                                public void onSuccess(JSONObject response) throws JSONException {
+//                                    Reload();
+                                    overlayWindow.dismiss();
+                                    popupWindow.dismiss();
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    Log.i("HTTP Error",error);
+                                }
+                            });
+                        }
+                        else {
+                            overlayWindow.dismiss();
+                            popupWindow.dismiss();
+                        }
+//                        Intent addMember = new Intent(popupView.getContext(), AddMember.class);
+//                        startActivity(addMember);
+                    }
+                });
 
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override

@@ -59,22 +59,22 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
             String s = writeDate.format(lastMessage.getTime());
 
             messageTime.setText(s);
-//            if(lastMessage.getTime().getMinutes()<10){
-//                messageTime.setText(lastMessage.getTime().getHours()+":0"+lastMessage.getTime().getMinutes());
-//            }
-//            else{
-//                messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
-//            }
+            if(lastMessage.getTime().getMinutes()<10){
+                messageTime.setText(lastMessage.getTime().getHours()+":0"+lastMessage.getTime().getMinutes());
+            }
+            else{
+                messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
+            }
         }
         else{
             messageContent.setText("");
  
-//            if(listRooms.get(position).getUpdate_time().getMinutes()<10){
-//                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":0"+(listRooms.get(position).getUpdate_time().getMinutes())));
-//            }
-//            else{
-//                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":"+(listRooms.get(position).getUpdate_time().getMinutes())));
-//            }
+            if(listRooms.get(position).getUpdate_time().getMinutes()<10){
+                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":0"+(listRooms.get(position).getUpdate_time().getMinutes())));
+            }
+            else{
+                messageTime.setText((listRooms.get(position).getUpdate_time().getHours()+":"+(listRooms.get(position).getUpdate_time().getMinutes())));
+            }
         }
         return row;
     }

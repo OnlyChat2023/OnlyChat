@@ -351,7 +351,7 @@ public class MainScreen extends AppCompatActivity {
             }
 
             // set options
-            RoomOptions roomOptions = null;
+            RoomOptions roomOptions = new RoomOptions();
             if(channel.getJSONObject(i).getJSONArray("options").length()>0){
                 roomOptions = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("options").get(0)),RoomOptions.class);
 
@@ -359,6 +359,19 @@ public class MainScreen extends AppCompatActivity {
                 ArrayList<Member> members = new ArrayList<>();
                 Log.i("================= main screen group =================", roomModel.getName());
 
+                for(int l=0;l<channel.getJSONObject(i).getJSONArray("members").length();l++){
+                    Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
+                    Log.i("main screen", member.getUser_id());
+                    Log.i("main screen", member.getName());
+                    Log.i("main screen", member.getNickname());
+                    Log.i("main screen", member.getAvatar());
+                    Log.i("main screen >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>","");
+                    members.add(member);
+                }
+                roomOptions.setMembers(members);
+            } else if (channel.getJSONObject(i).getJSONArray("members").length() > 0){ //Chat bot case
+                Log.i (">>>>><<<<<<<<<<<", "Chat bot ======");
+                ArrayList<Member> members = new ArrayList<>();
                 for(int l=0;l<channel.getJSONObject(i).getJSONArray("members").length();l++){
                     Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
                     Log.i("main screen", member.getUser_id());

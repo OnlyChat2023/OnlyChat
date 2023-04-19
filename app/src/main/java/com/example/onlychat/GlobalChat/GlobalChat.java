@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
+import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.MessageListener;
 import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.MessageModel;
@@ -33,6 +35,9 @@ import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -46,6 +51,7 @@ public class GlobalChat extends Fragment {
     ArrayList<RoomModel> roomModels = new ArrayList<>();
 
     CustomChatItem customChatItem;
+    GlobalPreferenceManager pref;
 
     public ArrayList<RoomModel> getRoomModels() {
         return roomModels;
@@ -87,6 +93,7 @@ public class GlobalChat extends Fragment {
         profile=(ImageView) globalChat.findViewById(R.id.profile);
         addChat = (ImageView) globalChat.findViewById(R.id.addChat);
         listChat = (ListView) globalChat.findViewById(R.id.listChat);
+        pref = new GlobalPreferenceManager(getContext());
 
         new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAnonymous_avatar());
 
@@ -172,17 +179,52 @@ public class GlobalChat extends Fragment {
 
                 // Popup
                 View popupView = inflater.inflate(R.layout.global_chat_popup_new_group, null);
+                TextView tt = (TextView) popupView.findViewById(R.id.title);
+                tt.setText("New Global Chat");
                 boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView,900,500,focusable);
+                final PopupWindow popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT,focusable);
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button searchBtn = (Button) popupView.findViewById(R.id.searchBtn);
-                searchBtn.setOnClickListener(new View.OnClickListener() {
+                // After set name for new groupChat name ---> switch to add member activity
+                Button okBtn = (Button) popupView.findViewById(R.id.okBtn);
+                EditText newGroupName = (EditText) popupView.findViewById(R.id.newGroupName);
+                okBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.i("popup", "onClick: ");
+
+                        String newName = newGroupName.getText().toString();
+                        if (!newName.equals("")){
+                            HttpManager httpManager = new HttpManager(getContext());
+                            httpManager.AddGroupChat(typeChat, newName, pref.getUserModel().get_id(), new HttpResponse() {
+                                @Override
+                                public void onSuccess(JSONObject response) throws JSONException {
+//                                    Reload();
+                                    overlayWindow.dismiss();
+                                    popupWindow.dismiss();
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    Log.i("HTTP Error",error);
+                                }
+                            });
+                        }
+                        else {
+                            overlayWindow.dismiss();
+                            popupWindow.dismiss();
+                        }
+//                        Intent addMember = new Intent(popupView.getContext(), AddMember.class);
+//                        startActivity(addMember);
                     }
                 });
+
+//                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button searchBtn = (Button) popupView.findViewById(R.id.searchBtn);
+//                searchBtn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Log.i("popup", "onClick: ");
+//                    }
+//                });
 
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override

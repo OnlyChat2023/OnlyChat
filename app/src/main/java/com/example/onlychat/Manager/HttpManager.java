@@ -10,16 +10,19 @@ import android.widget.ImageView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.Interfaces.MySingleton;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.utils.Utils;
 
@@ -36,6 +39,7 @@ public class HttpManager {
     private Context context;
     private static GlobalPreferenceManager pref;
     private static final String ip = Utils.ip;
+    private String accessToken = "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";
     static private UserModel user = new UserModel();
 
     public HttpManager(Context _context) {
@@ -288,5 +292,48 @@ public class HttpManager {
             params.put("nickname", nickname);
 
             createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/changeNickname", Request.Method.POST, "changeNickname", params, responseReceiver);
+        }
+
+        public void SendBotChat(String message, Response.Listener<JSONObject> responseReceiver, Response.ErrorListener responseError){
+            JSONObject requestBody = new JSONObject();
+            try {
+                requestBody.put("model", "text-davinci-003");
+                requestBody.put("prompt", message);
+                requestBody.put("max_tokens", 1000);
+                requestBody.put("temperature", 1);
+                requestBody.put("top_p", 1);
+                requestBody.put("frequency_penalty", 0.0);
+                requestBody.put("presence_penalty", 0.0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, "https://api.openai.com/v1/completions", requestBody, responseReceiver, responseError){
+                @Override
+                public Map < String, String > getHeaders() throws AuthFailureError {
+                    Map < String, String > headers = new HashMap < > ();
+                    headers.put("Authorization", "Bearer " + accessToken);
+                    headers.put("Content-Type", "application/json");
+                    return headers;
+                }
+                @Override
+                protected Response < JSONObject > parseNetworkResponse(NetworkResponse response) {
+                    return super.parseNetworkResponse(response);
+                }
+            };
+            int timeoutMs = 25000; // 25 seconds timeout
+            RetryPolicy policy = new DefaultRetryPolicy(timeoutMs, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            request.setRetryPolicy(policy);
+            // Add the request to the RequestQueue
+            MySingleton.getInstance(context).addToRequestQueue(request);
+        }
+
+        public void addBotChat(String newName, String user_id, HttpResponse responseReceiver){
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("_id", user_id   );
+            params.put("name", newName);
+            params.put("update_time", Calendar.getInstance().getTime().toString());
+
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/botChat/addBotChat", Request.Method.POST, "addBotChat", params, responseReceiver);
         }
     }

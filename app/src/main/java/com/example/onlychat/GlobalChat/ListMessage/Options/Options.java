@@ -186,11 +186,10 @@ public class Options extends AppCompatActivity {
                 listMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Log.i("Option", "===========>>>>>>");
-
                         Bundle myBundle = new Bundle();
                         myBundle.putInt("index",i);
                         myBundle.putString("user_id",options.getMembers().get(i).getId());
+
 
 
                         Intent intentToProfile = new Intent (listMembers.getContext(), Profile.class);
