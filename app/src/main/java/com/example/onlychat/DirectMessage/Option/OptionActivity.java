@@ -20,15 +20,20 @@ import android.widget.TextView;
 import com.example.onlychat.DiaLog.BasicDialog;
 import com.example.onlychat.DiaLog.ChangeNickNameDialog;
 import com.example.onlychat.DirectMessage.ChattingActivity;
+import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.SocketManager;
+import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import io.socket.emitter.Emitter;
 
 public class OptionActivity extends AppCompatActivity {
     ChattingActivity preChat;
@@ -37,8 +42,8 @@ public class OptionActivity extends AppCompatActivity {
     TextView txtName, txtBlock;
     RelativeLayout nick_name, notify, profile, delete, block, report;
     RoomOptions options;
-    Member meInf;
-    Member friendInf;
+    static Member meInf;
+    static Member friendInf;
     Boolean valueBlock;
     String DM_id;
     Integer CHANGENOTIFY = -7;
@@ -203,6 +208,8 @@ public class OptionActivity extends AppCompatActivity {
             }
         });
 
+        waitSetNickname();
+
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -220,38 +227,58 @@ public class OptionActivity extends AppCompatActivity {
                 dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
             }
         });
+
+        btn_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle myBundle = new Bundle();
+                myBundle.putInt("index",0);
+                myBundle.putString("user_id",friendInf.getUser_id());
+
+                Intent intentToProfile = new Intent (btn_profile.getContext(), Profile.class);
+                intentToProfile.putExtras(myBundle);
+                startActivity(intentToProfile);
+            }
+        });
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle myBundle = new Bundle();
+                myBundle.putInt("index",0);
+                myBundle.putString("user_id",friendInf.getUser_id());
+
+                Intent intentToProfile = new Intent (btn_profile.getContext(), Profile.class);
+                intentToProfile.putExtras(myBundle);
+                startActivity(intentToProfile);
+            }
+        });
+
     }
 
     public void setNickname(ChangeNickNameDialog current, String frNN, String meNN){
-        if (!frNN.equals("") && !frNN.equals(friendInf.getNickname())){
-            new HttpManager(nick_name.getContext()).changeNicknameDM(friendInf.getUser_id(), DM_id, frNN, new HttpResponse() {
-                @Override
-                public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
-                    friendInf.setNickname(frNN);
-                    setResult(CHANGEFRNN, new Intent(nick_name.getContext(), ChattingActivity.class).putExtra("data", frNN));
-                }
+        SocketManager.getInstance();
+        SocketManager.changeNickname(meInf.getUser_id(),meNN,friendInf.getUser_id(),frNN,DM_id);
 
-                @Override
-                public void onError(String error) {
-                    Log.i("CHANGE FRIEND NICKNAME ERROR:", error);
-                }
-            });
-        }
-        if (!meNN.equals(meInf.getNickname()) && !meNN.equals("")){
-            new HttpManager(nick_name.getContext()).changeNicknameDM(meInf.getUser_id(), DM_id, meNN, new HttpResponse() {
-                @Override
-                public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
-                    meInf.setNickname(meNN);
-                    setResult(CHANGEMENN, new Intent(nick_name.getContext(), ChattingActivity.class).putExtra("data", meNN));
-                }
-
-                @Override
-                public void onError(String error) {
-
-                }
-            });
-        }
         current.dismiss();
+    }
+
+    public static void waitSetNickname(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitSetNickname", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    String myNickname = (String) args[0];
+                    String friendNickname = (String) args[1];
+
+                    Log.i("Option activity", myNickname);
+                    Log.i("Option activity", friendNickname);
+                    meInf.setNickname(myNickname);
+                    friendInf.setNickname(friendNickname);
+                }
+            });
+        }
     }
 
     public void Block(BasicDialog current){

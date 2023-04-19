@@ -26,6 +26,8 @@ import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.SocketManager;
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
 
@@ -36,6 +38,8 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.socket.emitter.Emitter;
 
 public class Options extends AppCompatActivity {
 
@@ -77,6 +81,7 @@ public class Options extends AppCompatActivity {
         String names = (String) intent.getSerializableExtra("Name");
         String avatars = (String) intent.getSerializableExtra("Avatar");
         typeChat = (String) intent.getSerializableExtra("typeChat");
+        Log.i("Options", typeChat);
 
         notify = (RelativeLayout) findViewById(R.id.global_notify);
         notify_txt = (TextView) findViewById(R.id.notify_txt);
@@ -183,25 +188,28 @@ public class Options extends AppCompatActivity {
                 listMembers.setDivider(null);
                 listMembers.setDividerHeight(0);
 
-                listMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Log.i("Option", "===========>>>>>>");
+                if(typeChat.equals("groupChat")){
+                    listMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Log.i("Option", "===========>>>>>>");
 
-                        Bundle myBundle = new Bundle();
-                        myBundle.putInt("index",i);
-                        myBundle.putString("user_id",options.getMembers().get(i).getId());
+                            Bundle myBundle = new Bundle();
+                            myBundle.putInt("index",i);
+                            myBundle.putString("user_id",options.getMembers().get(i).getId());
 
 
-                        Intent intentToProfile = new Intent (listMembers.getContext(), Profile.class);
-                        intentToProfile.putExtras(myBundle);
-                        startActivity(intentToProfile);
-                    }
-                });
+                            Intent intentToProfile = new Intent (listMembers.getContext(), Profile.class);
+                            intentToProfile.putExtras(myBundle);
+                            startActivity(intentToProfile);
+                        }
+                    });
+                }
+
 
 
                 boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView,LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,focusable);
+                final PopupWindow popupWindow = new PopupWindow(popupView,750, LinearLayout.LayoutParams.WRAP_CONTENT,focusable);
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -346,6 +354,9 @@ public class Options extends AppCompatActivity {
             }
         });
     }
+
+
+
 
     public void LeaveGroup(BasicDialog basicDialog){
         HttpManager httpManager = new HttpManager(Options.this);

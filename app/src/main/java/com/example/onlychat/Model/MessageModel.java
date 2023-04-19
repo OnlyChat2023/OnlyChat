@@ -124,7 +124,15 @@ public class MessageModel implements Serializable {
         bitimages.addAll(images);
     }
     public void clearImages() {
-        bitimages.clear();
+        if (bitimages != null) {
+            bitimages.clear();
+            bitimages = null;
+        }
+    }
+    public void clearAvatar() {
+        if (avatar != null) {
+            avatar = null;
+        }
     }
     public boolean hasImagesStr() {
         return images != null && !images.isEmpty();

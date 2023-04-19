@@ -82,6 +82,12 @@ public class SocketManager {
         }
     }
 
+    public static void changeNickname(String id_1,String nickname_1,String id_2,String nickname_2,String chat_id){
+        if(socket != null){
+            socket.emit("changeNickname",id_1,nickname_1,id_2,nickname_2,chat_id);
+        }
+    }
+
     public static void deleteFriend(String id, UserModel user){
         if(socket != null){
             socket.emit("deleteFriend",id,new Gson().toJson(user));
@@ -161,6 +167,12 @@ public class SocketManager {
     public static void getMetaData(UserModel user) {
         if (socket != null) {
             socket.emit("getMetaData", new Gson().toJson(user));
+        }
+    }
+
+    public static void leaveRoom() {
+        if (socket != null) {
+            socket.emit("leaveRoom");
         }
     }
 }
