@@ -107,6 +107,7 @@ public class ChatBot extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(listChat.getContext(), ListMessage.class);
+                roomModels.get(i).setBitmapAvatar(null);
                 intent.putExtra("Data", roomModels.get(i));
                 intent.putExtra("typeChat", typeChat);
                 intent.putExtra("Position", i);

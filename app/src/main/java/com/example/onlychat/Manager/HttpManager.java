@@ -40,7 +40,7 @@ public class HttpManager {
     private Context context;
     private static GlobalPreferenceManager pref;
     private static final String ip = Utils.ip;
-    private String accessToken = "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";
+    private String accessToken = "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";
     static private UserModel user = new UserModel();
 
     public HttpManager(Context _context) {

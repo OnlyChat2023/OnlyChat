@@ -68,7 +68,6 @@ public class GlobalChat extends Fragment {
     CustomChatItem customChatItem;
     GlobalPreferenceManager pref;
 
-    GlobalPreferenceManager pref;
     static UserModel myInfo;
 
     public ArrayList<RoomModel> getRoomModels() {
