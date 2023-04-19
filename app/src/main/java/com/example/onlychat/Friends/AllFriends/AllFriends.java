@@ -79,7 +79,6 @@ public class AllFriends extends Fragment {
                 myBundle.putInt("index",i);
                 myBundle.putString("user_id",friend_list.get(i).get_id());
 
-
                 Intent intentToProfile = new Intent (listFriends.getContext(), Profile.class);
                 intentToProfile.putExtras(myBundle);
                 startActivity(intentToProfile);

@@ -6,6 +6,7 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,14 +28,25 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
+import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.MessageListener;
+import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.RoomModel;
+import com.example.onlychat.Model.UserModel;
+import com.example.onlychat.Profile.Profile;
+import com.example.onlychat.Profile.ProfileNotFound;
 import com.example.onlychat.R;
+import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class GlobalChat extends Fragment {
@@ -46,6 +59,9 @@ public class GlobalChat extends Fragment {
     ArrayList<RoomModel> roomModels = new ArrayList<>();
 
     CustomChatItem customChatItem;
+
+    GlobalPreferenceManager pref;
+    static UserModel myInfo;
 
     public ArrayList<RoomModel> getRoomModels() {
         return roomModels;
@@ -90,6 +106,8 @@ public class GlobalChat extends Fragment {
 
         new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAnonymous_avatar());
 
+        pref = new GlobalPreferenceManager(getContext());
+        myInfo = pref.getUserModel();
 
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
@@ -135,17 +153,89 @@ public class GlobalChat extends Fragment {
 
                 // Popup
                 View popupView = inflater.inflate(R.layout.global_chat_popup, null);
-                androidGridView = (GridView) popupView.findViewById(R.id.gridview_android_example);
-                androidGridView.setAdapter(new ImageAdapterGridView(popupView.getContext()));
+                EditText nickname = popupView.findViewById(R.id.nickname);
 
-                androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+//                Log.i("anonymous avatar", myInfo.getAnonymous_avatar());
+
+
+//                Log.i("anonymous avatar",part2[0]);
+                final int[] avatarIndex = {1};
+
+                HttpManager httpManager= new HttpManager(globalChat.getContext());
+                httpManager.getUserById(myInfo.get_id(), new HttpResponse() {
+                    @Override
+                    public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
+                        JSONObject profile = response.getJSONObject("data");
+                        Log.i("all friends click item", profile.toString());
+
+                        UserModel user = new Gson().fromJson(profile.toString(), UserModel.class);
+                        nickname.setText(user.getNickName());
+
+                        String[] part1 =user.getAnonymous_avatar().split("/");
+                        String[] part2= part1[1].split("\\.");
+                        avatarIndex[0] = Integer.parseInt(part2[0]);
+
+                    }
+
+                    @Override
+                    public void onError(String error) {
 
                     }
                 });
 
+
+
+                Button okBtn = popupView.findViewById(R.id.okBtn);
+
+                BaseAdapter baseAdapter = new ImageAdapterGridView(popupView.getContext());
+
+                androidGridView = (GridView) popupView.findViewById(R.id.gridview_android_example);
+                androidGridView.setAdapter(baseAdapter);
+                Log.i("TAG=======", Integer.toString(androidGridView.getChildCount()));;
+
+//                Log.i("TAG=======", androidGridView.getChildAt(Integer.parseInt(part2[0])-1).toString());;
+                for(int i=0;i<androidGridView.getChildCount();i++){
+                    androidGridView.getChildAt(i).setBackgroundColor(Color.BLACK);
+                }
+                androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                        for(int i=0;i<androidGridView.getChildCount();i++){
+                            androidGridView.getChildAt(i).setBackgroundColor(0);
+                        }
+                        avatarIndex[0] = position+1;
+                        v.setBackgroundColor(Color.parseColor("#adb5bd"));
+
+                    }
+                });
                 boolean focusable = true; // lets taps outside the popup also dismiss it
                 final PopupWindow popupWindow = new PopupWindow(popupView,900,1360,focusable);
+                okBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        HttpManager httpManager = new HttpManager(globalChat.getContext());
+                        httpManager.setAnonymousInformation(nickname.getText().toString(),"avatar/"+avatarIndex[0]+".png", new HttpResponse() {
+                            @Override
+                            public void onSuccess(JSONObject response) throws JSONException, ParseException {
+                                popupWindow.dismiss();
+                                new HttpManager.GetImageFromServer(profile).execute(response.getJSONObject("data").getString("anonymous_avatar"));
+                                JSONArray globalChat = response.getJSONObject("data").getJSONArray("globalChat");
+//                                Log.i("OK BUTTON", Integer.toString(globalChat.length()));
+                                if(globalChat.length()>0){
+                                   setRoomModels(MainScreen.getListRoom(globalChat));
+                                }
+
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                Log.i("popup click error", error);
+                            }
+                        });
+                    }
+
+                });
 
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
@@ -224,7 +314,7 @@ public class GlobalChat extends Fragment {
             return avatarsImage.length;
         }
 
-        public Object getItem(int position) {
+        public ImageView getItem(int position) {
             return null;
         }
 
@@ -234,7 +324,6 @@ public class GlobalChat extends Fragment {
 
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView mImageView;
-
             if (convertView == null) {
                 mImageView = new ImageView(mContext);
                 mImageView.setLayoutParams(new GridView.LayoutParams(160, 160));

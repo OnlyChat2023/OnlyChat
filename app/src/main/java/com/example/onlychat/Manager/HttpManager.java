@@ -28,6 +28,7 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +61,8 @@ public class HttpManager {
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
                     }
@@ -132,6 +135,13 @@ public class HttpManager {
                 }}, response);
     }
 
+    public void setAnonymousInformation(String nickname, String avatar,HttpResponse response){
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/setAnonymousInformation", Request.Method.PATCH, "userprofile",
+                new HashMap<String, String>() {{
+                    put("nickname",nickname);
+                    put("anonymous_avatar",avatar);
+                }}, response);
+    }
 
     public void validateAccount(String phoneNumber, HttpResponse responseReceiver) {
         Map<String, String> params = new HashMap<String, String>();
@@ -279,14 +289,5 @@ public class HttpManager {
             params.put("dmc_id", dmc_id);
 
             createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/getBlock", Request.Method.POST, "getBlock", params, responseReceiver);
-        }
-
-        public void changeNicknameDM(String user_id, String dmc_id, String nickname, HttpResponse responseReceiver){
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("user_id", user_id);
-            params.put("dmc_id", dmc_id);
-            params.put("nickname", nickname);
-
-            createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/changeNickname", Request.Method.POST, "changeNickname", params, responseReceiver);
         }
     }

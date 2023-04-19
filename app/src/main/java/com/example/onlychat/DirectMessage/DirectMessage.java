@@ -25,15 +25,24 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
+import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import io.socket.emitter.Emitter;
 
 public class DirectMessage extends Fragment {
     TextView chatTitle;
@@ -60,9 +69,12 @@ public class DirectMessage extends Fragment {
 
     public DirectMessage(){}
 
+    GlobalPreferenceManager pref;
+    static UserModel myInfo;
+    RelativeLayout globalChat;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RelativeLayout globalChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
+        globalChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
         // set value for widget
         chatTitle=(TextView) globalChat.findViewById(R.id.header_title);
         chatIcon = (ImageView) globalChat.findViewById(R.id.chatIcon);
@@ -73,6 +85,8 @@ public class DirectMessage extends Fragment {
 
         new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAvatar());
 
+        pref = new GlobalPreferenceManager(getContext());
+        myInfo = pref.getUserModel();
         Log.i("Direct chat", Integer.toString(roomModels.size()));
 
         chatTitle.setText("direct message channel");
@@ -111,37 +125,6 @@ public class DirectMessage extends Fragment {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                LayoutInflater inflater = (LayoutInflater) globalChat.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-//                // overlay
-//                View overlayView = inflater.inflate(R.layout.global_chat_overlay, null);
-////                boolean focusable = true; // lets taps outside the popup also dismiss it
-//                int width = LinearLayout.LayoutParams.MATCH_PARENT;
-//                int height = LinearLayout.LayoutParams.MATCH_PARENT;
-//                final PopupWindow overlayWindow = new PopupWindow(overlayView,width,height,true);
-//                overlayWindow.showAtLocation(view, Gravity.TOP, 0, 0);
-//
-//                // Popup
-//                View popupView = inflater.inflate(R.layout.global_chat_popup, null);
-//                androidGridView = (GridView) popupView.findViewById(R.id.gridview_android_example);
-//                androidGridView.setAdapter(new DirectMessage.ImageAdapterGridView(popupView.getContext()));
-//
-//                androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-//
-//                    }
-//                });
-//
-//                boolean focusable = true; // lets taps outside the popup also dismiss it
-//                final PopupWindow popupWindow = new PopupWindow(popupView,900,1360,focusable);
-//
-//                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-//                    @Override
-//                    public void onDismiss() {
-//                        overlayWindow.dismiss();
-//                    }
-//                });
-//
-//                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
                 UserModel userInfo = new GlobalPreferenceManager(profile.getContext()).getUserModel();
 
                 Bundle myBundle = new Bundle();
@@ -190,8 +173,52 @@ public class DirectMessage extends Fragment {
                 });
             }
         });
+        waitSetNickname();
         return globalChat;
     }
+
+    public void waitSetNickname(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitSetNickname", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    String myNickname = (String) args[0];
+                    String friendNickname = (String) args[1];
+                    String chat_id = (String) args[2];
+                    Log.i("Socketttttttttttt", chat_id);
+                    profile.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(RoomModel roomMode: roomModels){
+                                if(roomMode.getId().equals(chat_id)){
+                                    roomMode.setName(friendNickname);
+//
+                                    for(Member member:roomMode.getOptions().getMembers()){
+                                        if(member.getUser_id().equals(myInfo.get_id())){
+                                            member.setNickname(myNickname);
+
+                                            Log.i("socket>>", myNickname);
+                                        }else{
+                                            member.setNickname(friendNickname);
+
+                                            Log.i("socket>>>>", friendNickname);
+                                        }
+
+                                    }
+
+                                }
+                            }
+                            customChatItem.notifyDataSetChanged();
+//                            customChatItem.notifyDataSetInvalidated();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+
 
     public class ImageAdapterGridView extends BaseAdapter {
         private Context mContext;

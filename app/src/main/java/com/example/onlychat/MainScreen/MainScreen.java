@@ -313,7 +313,7 @@ public class MainScreen extends AppCompatActivity {
     }
 
 
-    public ArrayList<RoomModel> getListRoom(JSONArray channel) throws JSONException, ParseException {
+    public static ArrayList<RoomModel> getListRoom(JSONArray channel) throws JSONException, ParseException {
         // create list room
         ArrayList<RoomModel> listRoom = new ArrayList<>();
 
