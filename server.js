@@ -3,6 +3,7 @@ import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import { v4 as uuid } from 'uuid';
+import bcrypt from 'bcryptjs';
 
 
 const port = process.env.PORT || 5000;
@@ -11,6 +12,7 @@ import app from "./app.js";
 import globalChat from './models/globalChatModel.js';
 import directChat from './models/directChatModel.js';
 import groupChat from './models/groupChatModel.js';
+import botChat from './models/botChatModel.js';
 import User from './models/userModel.js';
 import { json } from 'express';
 dotenv.config({ path: './config.env' });
@@ -24,7 +26,9 @@ mongoose
         console.log('Connected to DB successfully');
     });
 
-const server = app.listen(port, () => {
+const server = app.listen(port, async () => {
+    console.log(await bcrypt.hash('paimon01', 12));
+    console.log(await bcrypt.hash('yaemiko01', 12));
     console.log(`App is running on port ${port}...`);
 });
 

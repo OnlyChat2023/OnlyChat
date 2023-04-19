@@ -84,7 +84,7 @@ const getUserInformation = catchAsync(async (req, res) => {
       directChat: directChat,
       groupChat: groupChat,
       globalChat: globalChat,
-      botChat: [],
+      botChat: botChat,
     },
   })
 })
