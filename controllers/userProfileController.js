@@ -76,7 +76,7 @@ const getUserInformation = catchAsync(async (req, res) => {
     botChat.push(dmList);
   }
   // console.log("Bot", botChat)
-  ``
+  
   res.status(200).json({
     status: 'success',
     data: {

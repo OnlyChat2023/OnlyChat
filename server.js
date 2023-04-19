@@ -16,6 +16,7 @@ import { json } from 'express';
 dotenv.config({ path: './config.env' });
 
 let basket = {};
+const notification_list = {};
 
 mongoose
     .connect(process.env.DATABASE)
@@ -186,12 +187,27 @@ io.on('connection', (socket) => {
     });
 
     socket.on('joinRoom', (roomInfo, user) => {
+        if (socket.room) {
+            socket.leave(socket.room);
+        }
+
+        if (socket.channel) {
+            socket.channel = null;
+        }
+        
         const [roomId, channel] = roomInfo.split('::');
         socket.room = roomId;
         socket.channel = channel;
 
         socket.user = JSON.parse(user);
         socket.join(roomId);
+    });
+
+    socket.on('leaveRoom', () => { 
+        // socket.room = null;
+        socket.leave(socket.room);
+        socket.channel = null;
+        socket.room = null;
     });
 
     socket.on('sendStringMessage', async (message, position, user) => {
@@ -243,7 +259,21 @@ io.on('connection', (socket) => {
             GroupChat.chats.push(messageModal);
             await GroupChat.save();
         }
-        // else if (socket.channel === 'group_chat') {
+        else if (socket.channel === 'bot_chat') {
+            messageModal = {
+                message: Buffer.from(message, 'utf-8').toString(),
+                user_id: send_user._id,
+                imges: [],
+                avatar: "",
+                nickname: "",
+                send_user: [],
+                time: new Date()
+            }
+
+            const BotChat = await botChat.findOne({ _id: socket.room});
+            BotChat.chats.push(messageModal);
+            await BotChat.save();
+        }
 
         io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
@@ -315,17 +345,19 @@ io.on('connection', (socket) => {
             let newMessageList = null;
 
             if (socket.channel === 'direct_message')
-                newMessageList = await directChat.findOne({ 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) } });
+                newMessageList = await directChat.findOne({ _id: socket.room, 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) } });
 
             if (socket.channel === 'global_chat')
-                newMessageList = await globalChat.findOne({ 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) } });
+                newMessageList = await globalChat.findOne({ _id: socket.room, 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) } });
 
             if (socket.channel === 'group_chat')
-                newMessageList = await groupChat.findOne({ 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) } });
-
+                newMessageList = await groupChat.findOne({ _id: socket.room, 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) } });
+            
             if (newMessageList) {
                 const start = newMessageList.chats.findIndex((item) => item._id.toString() === lastMessageID);
                 // console.log(newMessageList.chats[start]);
+                
+                console.log(lastMessageID);
 
                 for (let i = start + 1; i < newMessageList.chats.length; i++) {
                     socket.emit('messageListener', newMessageList.chats[i], -2, { token: '' });
@@ -410,6 +442,7 @@ io.on('connection', (socket) => {
         await u.save()
     })
 
+<<<<<<< HEAD
     socket.on("addNewAvatarToServer", async (avtImage, user) => {
         // const userInfo = JSON.parse(user);
 
@@ -424,6 +457,12 @@ io.on('connection', (socket) => {
 
         socket.emit("editDone", new_filename.replace('assets/', ''));
     })
+=======
+    socket.on('register_notification', (user) => {
+        const _user = JSON.parse(user);
+        notification_list[_user._id] = socket.id;
+    });
+>>>>>>> bdd9250d711145873fed91573d3c74f3ad56f99a
 });
 
 
