@@ -9,6 +9,7 @@ import android.util.Log;
 import com.example.onlychat.Async.ConvertImage;
 import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.MessageListener;
+import com.example.onlychat.Interfaces.ProfileReceiver;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.utils.Utils;
@@ -81,6 +82,12 @@ public class SocketManager {
         }
     }
 
+    public static void changeNickname(String id_1,String nickname_1,String id_2,String nickname_2,String chat_id){
+        if(socket != null){
+            socket.emit("changeNickname",id_1,nickname_1,id_2,nickname_2,chat_id);
+        }
+    }
+
     public static void deleteFriend(String id, UserModel user){
         if(socket != null){
             socket.emit("deleteFriend",id,new Gson().toJson(user));
@@ -96,6 +103,12 @@ public class SocketManager {
     public static void sendImageMessage(Context ctx, ArrayList<String> arrayList, int position, UserModel user) {
         if (socket != null) {
             socket.emit("sendImageMessage", new Gson().toJson(arrayList), position, new Gson().toJson(user));
+        }
+    }
+
+    public static void addNewAvatarToServer(Context ctx, String avt, String user_id) {
+        if (socket != null) {
+            socket.emit("addNewAvatarToServer", "data:image/png;base64,"+avt, user_id);
         }
     }
 
@@ -139,9 +152,27 @@ public class SocketManager {
         }
     }
 
+    public static void waitFinishEditProfile(ProfileReceiver listener) {
+        if (socket != null) {
+            socket.on("editDone", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    String new_filename = (String) args[0];
+                    listener.onSuccess(new_filename);
+                }
+            });
+        }
+    }
+
     public static void getMetaData(UserModel user) {
         if (socket != null) {
             socket.emit("getMetaData", new Gson().toJson(user));
+        }
+    }
+
+    public static void leaveRoom() {
+        if (socket != null) {
+            socket.emit("leaveRoom");
         }
     }
 }

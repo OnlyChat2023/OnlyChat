@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
@@ -26,6 +27,7 @@ public class EditProfileStep2 extends AppCompatActivity {
     EditText et_twitter;
     EditText et_description;
     Button finishBtn;
+    ImageView backBtn;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +42,20 @@ public class EditProfileStep2 extends AppCompatActivity {
         et_twitter = (EditText) findViewById(R.id.et_twitter);
         et_description = (EditText) findViewById(R.id.et_description);
         finishBtn = (Button) findViewById(R.id.finishBtn);
+        backBtn = (ImageView) findViewById(R.id.backButton);
 
         et_facebook.setText(myBundle.getString("facebook"));
         et_instagram.setText(myBundle.getString("instagram"));
 //        et_twitter.setText(userInfo.getTw());
         et_description.setText(myBundle.getString("description"));
 
-        UserModel user = new UserModel();
+        UserModel user = new GlobalPreferenceManager(EditProfileStep2.this).getUserModel();
 //        Log.i("RUN", user.getName());
         finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Send new data to server
+                user.set_id(myBundle.getString("user_id"));
                 user.setName(myBundle.getString("name"));
                 user.setPhone(myBundle.getString("phone"));
                 user.setEmail(myBundle.getString("email"));
@@ -59,11 +63,28 @@ public class EditProfileStep2 extends AppCompatActivity {
                 user.setFacebook(et_facebook.getText().toString());
                 user.setInstagram(et_instagram.getText().toString());
                 user.setDescription(et_description.getText().toString());
+                user.setAvatar(myBundle.getString("avatar"));
 
-                System.out.println("user: " + user.getName());
+//                System.out.println("user: " + user.getName());
 
                 HttpManager httpManager = new HttpManager(EditProfileStep2.this);
                 httpManager.updateProfile(user);
+
+                EditProfile.editProfileActivity.finish();
+
+                new GlobalPreferenceManager(EditProfileStep2.this).saveUser(user);
+                finish();
+
+//                System.out.println("HERE: " + myBundle.getString("user_id"));
+//                Intent intentToProfile = new Intent (finishBtn.getContext(), Profile.class);
+//                intentToProfile.putExtras(myBundle);
+//                startActivity(intentToProfile);
+            }
+        });
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 finish();
             }
         });

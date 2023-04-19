@@ -4,6 +4,7 @@ import static java.security.AccessController.getContext;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
@@ -19,25 +20,37 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.onlychat.DirectMessage.ChattingActivity;
+import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.EditProfile.EditProfile;
+import com.example.onlychat.EditProfile.EditProfileStep2;
 import com.example.onlychat.Friends.AllFriends.AllFriends;
 import com.example.onlychat.Friends.Friends;
 import com.example.onlychat.Friends.Invite.Invite;
 import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.ProfileCustomFragment.profile_description;
 import com.example.onlychat.Profile.ProfileCustomFragment.profile_information;
 import com.example.onlychat.Profile.ProfileCustomFragment.profile_social;
 import com.example.onlychat.R;
+import com.example.onlychat.ViewLargerImageMessage.ViewLargerImageMessage;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+
+import okhttp3.Response;
 
 public class Profile extends AppCompatActivity {
     private TabLayout tabLayout;
@@ -76,12 +89,12 @@ public class Profile extends AppCompatActivity {
         Intent myCallerIntent = getIntent();
         Bundle myBundle = myCallerIntent.getExtras();
         user_id = myBundle.getString("user_id");
-
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.view_pager);
 
         pref = new GlobalPreferenceManager(this);
         myInfo = pref.getUserModel();
+        System.out.println("myInfo" + myInfo.getName());
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPagerAdapter.addFragment(profileInformation, "Information");
@@ -115,18 +128,23 @@ public class Profile extends AppCompatActivity {
 
                 user = new Gson().fromJson(profile.toString(), UserModel.class);
 //                viewPagerAdapter.getItem(0);
+
+                // refresh Fragment
+                final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.detach(profileInformation);
+                ft.attach(profileInformation);
+                ft.commit();
+
                 profileInformation.setData(user);
                 profileSocial.setData(user);
                 profileDescription.setData(user);
-
-
 
 
                 isFriend = profile.getInt("isFriend");
                 Log.i("Profile",isFriend.toString());
 
 
-                        userName.setText(user.getName());
+                userName.setText(user.getName());
                 new HttpManager.GetImageFromServer(avatar).execute(user.getAvatar());
                 addFriendBtn.setVisibility(View.VISIBLE);
                 editBtn.setVisibility(View.VISIBLE);
@@ -143,14 +161,43 @@ public class Profile extends AppCompatActivity {
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserModel userInfo = new GlobalPreferenceManager(Profile.this).getUserModel();
+//                UserModel userInfo = new GlobalPreferenceManager(Profile.this).getUserModel();
                 Bundle myBundle = new Bundle();
+
+//                System.out.println("HERE: " + userInfo.getName());
+
+                myBundle.putString("user_id", user_id);
+                myBundle.putString("name", user.getName());
+                myBundle.putString("avatar", user.getAvatar());
+                myBundle.putString("phone", user.getPhone());
+                myBundle.putString("email", user.getEmail());
+                myBundle.putString("university", user.getUniversity());
+                myBundle.putString("facebook", user.getFacebook());
+                myBundle.putString("instagram", user.getInstagram());
+                myBundle.putString("description", user.getDescription());
 
                 Intent editProfile = new Intent(Profile.this, EditProfile.class);
                 editProfile.putExtras(myBundle);
                 startActivity(editProfile);
 
                 finish();
+            }
+        });
+
+        // sendChat
+        sendChatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<RoomModel> direct_list= DirectMessage.getRoomModels();
+                for (RoomModel e : direct_list){
+                    for (Member m : e.getOptions().getMembers()){
+                        if (m.getUser_id().equals(user_id)){
+                            Intent intent = new Intent(Profile.this, ChattingActivity.class);
+                            intent.putExtra("roomChat", e);
+                            startActivity(intent);
+                        }
+                    }
+                }
             }
         });
 
@@ -200,6 +247,7 @@ public class Profile extends AppCompatActivity {
         // me
         else {
             addFriendBtn.setVisibility(View.GONE);
+            sendChatBtn.setVisibility(View.GONE);
         }
 
         // friend

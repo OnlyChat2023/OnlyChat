@@ -61,8 +61,8 @@ public class ChangeNickNameDialog extends DialogFragment {
         no = (Button) layout.findViewById(R.id.no_btn);
 
         friendName.setText("Editting " + fr_name + "'s nickname");
-        friendNickname.setHint(fr_nickname);
-        userNickname.setHint(user_nickname);
+        friendNickname.setText(fr_nickname);
+        userNickname.setText(user_nickname);
 
         yes.setOnClickListener(new View.OnClickListener() {
             @Override

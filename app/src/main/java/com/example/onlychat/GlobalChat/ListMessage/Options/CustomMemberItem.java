@@ -38,10 +38,7 @@ public class CustomMemberItem extends ArrayAdapter<Member> {
         row = inflater.inflate(R.layout.global_chat_custom_member_item,null);
         ImageView avatar = (ImageView) row.findViewById(R.id.avatar);
         TextView name = (TextView) row.findViewById(R.id.name);
-        ImageView icon = (ImageView) row.findViewById(R.id.imageView22);
-        if (isAddMember == true){
-            icon.setVisibility(View.INVISIBLE);
-        }
+
 
 //        avatar.setImageResource(memberList.get(position).getAvatar());
         new HttpManager.GetImageFromServer(avatar).execute(memberList.get(position).getAvatar());

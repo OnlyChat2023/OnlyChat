@@ -313,7 +313,7 @@ public class MainScreen extends AppCompatActivity {
     }
 
 
-    public ArrayList<RoomModel> getListRoom(JSONArray channel) throws JSONException, ParseException {
+    public static ArrayList<RoomModel> getListRoom(JSONArray channel) throws JSONException, ParseException {
         // create list room
         ArrayList<RoomModel> listRoom = new ArrayList<>();
 
@@ -357,15 +357,15 @@ public class MainScreen extends AppCompatActivity {
 
                 //set members
                 ArrayList<Member> members = new ArrayList<>();
-                Log.i("================= main screen group =================", roomModel.getName());
+//                Log.i("================= main screen group =================", roomModel.getName());
 
                 for(int l=0;l<channel.getJSONObject(i).getJSONArray("members").length();l++){
                     Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
-                    Log.i("main screen", member.getUser_id());
-                    Log.i("main screen", member.getName());
-                    Log.i("main screen", member.getNickname());
-                    Log.i("main screen", member.getAvatar());
-                    Log.i("main screen >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>","");
+//                    Log.i("main screen", member.getUser_id());
+//                    Log.i("main screen", member.getName());
+//                    Log.i("main screen", member.getNickname());
+//                    Log.i("main screen", member.getAvatar());
+//                    Log.i("main screen >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>","");
                     members.add(member);
                 }
                 roomOptions.setMembers(members);

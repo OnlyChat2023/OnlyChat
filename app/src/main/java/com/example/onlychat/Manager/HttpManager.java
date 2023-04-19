@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,6 +66,8 @@ public class HttpManager {
                             throw new RuntimeException(e);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
                         }
                     }
                 },
@@ -94,7 +97,7 @@ public class HttpManager {
                                 //throw new RuntimeException(e);
                             }
                         }
-//                        httpResponse.onError(error.getMessage() == null ? error.toString() : error.getMessage());
+                        httpResponse.onError("ERROR");
                     }
                 }) {
             @Override
@@ -136,6 +139,13 @@ public class HttpManager {
                 }}, response);
     }
 
+    public void setAnonymousInformation(String nickname, String avatar,HttpResponse response){
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/setAnonymousInformation", Request.Method.PATCH, "userprofile",
+                new HashMap<String, String>() {{
+                    put("nickname",nickname);
+                    put("anonymous_avatar",avatar);
+                }}, response);
+    }
 
     public void validateAccount(String phoneNumber, HttpResponse responseReceiver) {
         Map<String, String> params = new HashMap<String, String>();
@@ -220,6 +230,7 @@ public class HttpManager {
     public void updateProfile(UserModel userModel) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("username", userModel.getName());
+        params.put("avatar", userModel.getAvatar());
         params.put("phone", userModel.getPhone());
         params.put("email", userModel.getEmail());
         params.put("university", userModel.getUniversity());
@@ -335,5 +346,16 @@ public class HttpManager {
             params.put("update_time", Calendar.getInstance().getTime().toString());
 
             createRequest("http://" + ip + ":5000/api/onlychat/v1/botChat/addBotChat", Request.Method.POST, "addBotChat", params, responseReceiver);
+        }
+        
+        public void getGlobalMetaData(HttpResponse responseReceiver) {
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/metadata/globalchat", Request.Method.GET, "getGlobalMetaData", null, responseReceiver);
+        }
+
+        public void getGroupMetaData(HttpResponse responseReceiver) {
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/metadata/groupchat", Request.Method.GET, "getGroupMetaData", null, responseReceiver);
+        }
+        public void getDirectMetaData(HttpResponse responseReceiver) {
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/metadata/directchat", Request.Method.GET, "getDirectMetaData", null, responseReceiver);
         }
     }

@@ -59,6 +59,7 @@ import java.util.List;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
+import io.socket.emitter.Emitter;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -67,7 +68,8 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     String me_id;
     View gap;
     Button btnBack, btnSetting;
-    TextView txtName, txtOnline;
+    static TextView txtName;
+    TextView txtOnline;
     EditText chatMessage;
     ListView chatContent;
     RelativeLayout chatLayout;
@@ -79,7 +81,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     RecyclerView recyclerView;
     MainAdp mainAdapter;
     int position;
-    boolean update = false;
+    boolean change = false;
     ImageModel myModel;
     RelativeLayout blockLayout;
     TextView txtBlockLayout;
@@ -88,6 +90,9 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     Integer CHANGEBLOCK = -8;
     Integer CHANGEFRNN = 5;
     Integer CHANGEMENN = 6;
+
+    static String friend_nick_name="";
+    static String my_nick_name="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +133,8 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
 //        imgAvatar.setImageResource(userInf.getAvatar());
         new HttpManager.GetImageFromServer(imgAvatar).execute(userInf.getAvatar());
         me_id = userInf.getOptions().getUser_id();
-        txtName.setText(userInf.getName());
+        friend_nick_name = userInf.getName();
+        txtName.setText(friend_nick_name);
         txtOnline.setText("Online");
         txtOnline.setTextColor(getResources().getColor(R.color.online_green));
 
@@ -282,9 +288,12 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                 for (Member mem : userInf.getOptions().getMembers()){
 
                     if (!mem.getUser_id().equals(me_id)){
+                        mem.setNickname(friend_nick_name);
                         intent.putExtra("friend", mem);
                     }
                     else{
+                        if(my_nick_name.length()>0) mem.setNickname(my_nick_name);
+                        Log.i("chatting......>>>>>>>>>>", my_nick_name);
                         intent.putExtra("me", mem);
                     }
                 }
@@ -344,6 +353,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
         });
 
         initSocket();
+        waitSetNickname();
     }
 
     @Override
@@ -365,6 +375,30 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
             } else{
                 mem.setNickname(frNN);
             }
+        }
+    }
+
+    public static void waitSetNickname(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitSetNickname", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    String myNickname = (String) args[0];
+                    String friendNickname = (String) args[1];
+
+                    Log.i("chatting activity", myNickname);
+                    Log.i("chatting activity", friendNickname);
+                    txtName.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtName.setText(friendNickname);
+                            friend_nick_name = friendNickname;
+                            my_nick_name = myNickname;
+                        }
+                    });
+                }
+            });
         }
     }
 
@@ -503,7 +537,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                                 chatContent.smoothScrollToPosition(adapter.getCount() - 1);
 
                             }
-                            update = true;
+                            change = true;
                         }
                         else {
                             userInf.pushMessage(message);
@@ -544,5 +578,31 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                 }).execute();
             }
         }
+    }
+
+    @Override
+    public void finish() {
+        Intent output = new Intent();
+
+        output.putExtra("RoomModelID", userInf.getId());
+        output.putExtra("Change", change);
+
+        ArrayList<MessageModel> mess = userInf.getMessages();
+        if (mess.size() - 1 >= 0) {
+
+            MessageModel lastMessage = mess.get(mess.size() - 1);
+
+            String message = "";
+            message += (lastMessage.hasImagesStr()) ? "Đã gửi hình ảnh" : lastMessage.getMessage();
+
+            output.putExtra("LastMessage", message);
+            output.putExtra("LastTime", lastMessage.getTime());
+        }
+        output.putExtra("Update", true);
+
+        setResult(RESULT_OK, output);
+
+        SocketManager.leaveRoom();
+        super.finish();
     }
 }

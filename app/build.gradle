@@ -63,4 +63,5 @@ dependencies {
     // Emoji
     implementation 'com.vanniktech:emoji-google:0.7.0'
     implementation 'com.android.volley:volley:1.2.1'
+
 }
