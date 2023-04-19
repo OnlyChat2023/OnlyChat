@@ -52,10 +52,10 @@ public class GlobalChat extends Fragment {
     }
 
     public void setRoomModels(ArrayList<RoomModel> roomModels) {
-//        this.roomModels = roomModels;
+        this.roomModels.clear();
+
         this.roomModels.addAll(roomModels);
         customChatItem.notifyDataSetChanged();
-//        Log.i("SET - Global", roomModels.get(0).getName());
     }
 
     Integer avatarsImage[] = {

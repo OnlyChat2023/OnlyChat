@@ -62,16 +62,9 @@ public class GroupChat extends Fragment {
     }
 
     public void setRoomModels(ArrayList<RoomModel> roomModels) {
-        roomModels.sort(new Comparator<RoomModel>() {
-            @Override
-            public int compare(RoomModel roomModel, RoomModel t1) {
-                return roomModel.getUpdate_time().compareTo(t1.getUpdate_time());
-            }
-        }.reversed());
+        this.roomModels.clear();
 
-        for(RoomModel i:roomModels){
-            this.roomModels.add(i);
-        }
+        this.roomModels.addAll(roomModels);
         customChatItem.notifyDataSetChanged();
     }
 
@@ -159,7 +152,7 @@ public class GroupChat extends Fragment {
                             httpManager.AddGroupChat(typeChat, newName, pref.getUserModel().get_id(), new HttpResponse() {
                                 @Override
                                 public void onSuccess(JSONObject response) throws JSONException {
-                                    Reload();
+//                                    Reload();
                                     overlayWindow.dismiss();
                                     popupWindow.dismiss();
                                 }
@@ -191,36 +184,36 @@ public class GroupChat extends Fragment {
     }
 
 
-    public void Reload() {
-
-        HttpManager httpManager = new HttpManager(getContext());
-        httpManager.GetListGroupChat(typeChat, pref.getUserModel().get_id(), new HttpResponse() {
-            @Override
-            public void onSuccess(JSONObject response) throws JSONException {
-                try{
-                    JSONArray groupChat = response.getJSONArray("data");
-                    ArrayList<RoomModel> rooms = ((MainScreen) getActivity()).getListRoom(groupChat);
-                    roomModels.clear();
-                    setRoomModels(rooms);
-                }
-                catch (Exception e){
-                    Log.i("HTTP Group Chat Success Error",e.toString());
-                }
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.i("HTTP Error",error);
-            }
-        });
-    }
+//    public void Reload() {
+//
+//        HttpManager httpManager = new HttpManager(getContext());
+//        httpManager.GetListGroupChat(pref.getUserModel().get_id(), new HttpResponse() {
+//            @Override
+//            public void onSuccess(JSONObject response) throws JSONException {
+//                try{
+//                    JSONArray groupChat = response.getJSONArray("data");
+//                    ArrayList<RoomModel> rooms = ((MainScreen) getActivity()).getListRoom(groupChat);
+//                    roomModels.clear();
+//                    setRoomModels(rooms);
+//                }
+//                catch (Exception e){
+//                    Log.i("HTTP Group Chat Success Error",e.toString());
+//                }
+//            }
+//
+//            @Override
+//            public void onError(String error) {
+//                Log.i("HTTP Error",error);
+//            }
+//        });
+//    }
 
     public void LeaveGroup(MessageBottomDialogFragment current, String id){
         HttpManager httpManager = new HttpManager(getContext());
         httpManager.LeaveGroupChat(typeChat, pref.getUserModel().get_id(), id, new HttpResponse() {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
-                Reload();
+//                Reload();
                 current.dismiss();
             }
 
@@ -237,7 +230,7 @@ public class GroupChat extends Fragment {
         super.onStart();
 
         if (isCreate == false){
-            Reload();
+//            Reload();
         }else {
             isCreate = false;
         }

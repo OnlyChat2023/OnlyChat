@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -123,6 +124,7 @@ public class SocketManager {
 
                     @SuppressLint("SimpleDateFormat")
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    format.setTimeZone(TimeZone.getTimeZone("GMT"));
 
                     try {
                         java.util.Date date = format.parse(dtStart);

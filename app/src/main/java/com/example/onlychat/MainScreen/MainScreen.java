@@ -50,6 +50,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 public class MainScreen extends AppCompatActivity {
 
@@ -337,6 +338,7 @@ public class MainScreen extends AppCompatActivity {
                 // set time message send
                 String dtStart = messageJson.getString("time");
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                format.setTimeZone(TimeZone.getTimeZone("GMT"));
                 try {
                     java.util.Date date = format.parse(dtStart);
                     messageModel.setTime(date);

@@ -1,5 +1,7 @@
 package com.example.onlychat.Model;
 
+import android.graphics.Bitmap;
+
 import com.example.onlychat.Interfaces.RoomOptions;
 
 import java.io.Serializable;
@@ -14,6 +16,7 @@ public class RoomModel implements Serializable {
     ArrayList<MessageModel> messages;
     RoomOptions options;
     Date update_time;
+    Bitmap bitmapAvatar;
 
     public RoomModel() {}
 
@@ -74,5 +77,21 @@ public class RoomModel implements Serializable {
 
     public void setOptions(RoomOptions options) {
         this.options = options;
+    }
+
+    public boolean hasBitmapAvatar() {
+        return bitmapAvatar != null;
+    }
+
+    public void setBitmapAvatar(Bitmap bitmap) {
+        this.bitmapAvatar = bitmap;
+    }
+
+    public Bitmap getBitmapAvatar() {
+        return this.bitmapAvatar;
+    }
+
+    public boolean hasAvatar() {
+        return this.avatar != null;
     }
 }

@@ -21,22 +21,26 @@ import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.ImageModel;
 import com.example.onlychat.Model.MessageModel;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class MessageReceive extends ArrayAdapter<MessageModel> {
-    Context context; String avatar; ArrayList<MessageModel> message; String me_id;
+    Context context; Bitmap avatar; ArrayList<MessageModel> message; String me_id;
     RecyclerView imageLayout;
     GlobalPreferenceManager pref;
     UserModel myInfo;
+    RoomModel roomModel;
 
-    public MessageReceive(Context context, String avatar, String me_id, ArrayList<MessageModel> message) {
-        super(context, R.layout.main_chat_content_item, message);
-        this.avatar = avatar;
-        this.message = message;
+    public MessageReceive(Context context, String me_id, RoomModel message) {
+        super(context, R.layout.main_chat_content_item, message.getMessages());
+        this.message = message.getMessages();
+        this.roomModel = message;
         this.me_id = me_id;
         this.context = context;
 
@@ -108,17 +112,43 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
 
             msg.setText(messageItem.getMessage());
 
-            Date timeMsg = messageItem.getTime();
-            time.setText("Sent at " + timeMsg.getHours() + ":" + timeMsg.getMinutes() + " " + timeMsg.getDate());
+            SimpleDateFormat writeDate = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            writeDate.setTimeZone(TimeZone.getTimeZone("GMT+07:00"));
+            String s = writeDate.format(messageItem.getTime());
+
+            time.setText("Sent at " + s);
             time.setVisibility(View.GONE);
             return row;
         } else {
             row = inflater.inflate(R.layout.chat_message_receive, null);
             TextView msg = (TextView) row.findViewById(R.id.chatContent);
-            ImageView avt = (ImageView) row.findViewById(R.id.avatar);
             TextView time = (TextView) row.findViewById(R.id.timeMessage);
             // set image
-            new HttpManager.GetImageFromServer(avt).execute(this.avatar);
+//            new HttpManager.GetImageFromServer(avt).execute(this.avatar);
+
+            if (roomModel.hasBitmapAvatar()) {
+                ImageView imageView = (ImageView) row.findViewById(R.id.avatar);
+                imageView.setImageBitmap(roomModel.getBitmapAvatar());
+            }
+            else if (roomModel.hasAvatar()){
+                ArrayList<String> userAvt = new ArrayList<String>();
+                userAvt.add(roomModel.getAvatar());
+                new DownloadImage(userAvt, new ConvertListener() {
+                    @Override
+                    public void onSuccess(ImageModel result) {
+
+                    }
+
+                    @Override
+                    public void onDownloadSuccess(ArrayList<Bitmap> result) {
+                        for (int i = 0; i < result.size(); ++i) {
+                            roomModel.setBitmapAvatar(result.get(i));
+                            ImageView imageView = (ImageView) row.findViewById(R.id.avatar);
+                            imageView.setImageBitmap(result.get(i));
+                        }
+                    }
+                }).execute();
+            }
 
             if (messageItem.hasImages()) {
                 imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);
@@ -170,8 +200,12 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
             }
 
             msg.setText(messageItem.getMessage());
-            Date timeMsg = messageItem.getTime();
-            time.setText("Sent at " + timeMsg.getHours() + ":" + timeMsg.getMinutes() + " " + timeMsg.getDate());
+
+            SimpleDateFormat writeDate = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            writeDate.setTimeZone(TimeZone.getTimeZone("GMT+07:00"));
+            String s = writeDate.format(messageItem.getTime());
+
+            time.setText("Sent at " + s);
             time.setVisibility(View.GONE);
 
             return row;

@@ -15,7 +15,9 @@ import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 public class CustomChatItem extends ArrayAdapter<RoomModel> {
     Context context;
@@ -52,12 +54,17 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
             else
                 messageContent.setText(lastMessage.getMessage());
 
-            if(lastMessage.getTime().getMinutes()<10){
-                messageTime.setText(lastMessage.getTime().getHours()+":0"+lastMessage.getTime().getMinutes());
-            }
-            else{
-                messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
-            }
+            SimpleDateFormat writeDate = new SimpleDateFormat("HH:mm");
+            writeDate.setTimeZone(TimeZone.getTimeZone("GMT+07:00"));
+            String s = writeDate.format(lastMessage.getTime());
+
+            messageTime.setText(s);
+//            if(lastMessage.getTime().getMinutes()<10){
+//                messageTime.setText(lastMessage.getTime().getHours()+":0"+lastMessage.getTime().getMinutes());
+//            }
+//            else{
+//                messageTime.setText(lastMessage.getTime().getHours()+":"+lastMessage.getTime().getMinutes());
+//            }
         }
         else{
             messageContent.setText("");
