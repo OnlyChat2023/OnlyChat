@@ -119,7 +119,10 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
         chatLayout = (RelativeLayout) findViewById(R.id.chatLayout);
 
         Intent main_chat = getIntent();
+        Log.i("Profile call","vvvvvvvvvvvvvvvvvvvv");
+
         userInf = (RoomModel) main_chat.getSerializableExtra("roomChat");
+        Log.i("Profile call", userInf.getId());
 
         pref = new GlobalPreferenceManager(this);
         myInfo = pref.getUserModel();
