@@ -10,6 +10,7 @@ import groupChatRouter from './routes/groupChatRoutes.js';
 import globalChatRouter from './routes/globalChatRoutes.js';
 import directMessageRouter from './routes/directMessageRoutes.js'
 import metaDataRouter from './routes/metaDataRoutes.js'
+import botChatRouter from './routes/botChatRoutes.js'
 
 import messageRoutes from "./routes/messageRoutes.js"
 
@@ -41,6 +42,7 @@ app.use('/api/onlychat/v1/groupChat', groupChatRouter);
 app.use('/api/onlychat/v1/globalChat', globalChatRouter);
 app.use('/api/onlychat/v1/directMessage', directMessageRouter);
 app.use('/api/onlychat/v1/metadata', metaDataRouter);
+app.use('/api/onlychat/v1/botChat', botChatRouter);
 
 app.use(globalErrorhandler);
 

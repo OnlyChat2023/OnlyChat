@@ -259,7 +259,21 @@ io.on('connection', (socket) => {
             GroupChat.chats.push(messageModal);
             await GroupChat.save();
         }
-        // else if (socket.channel === 'group_chat') {
+        else if (socket.channel === 'bot_chat') {
+            messageModal = {
+                message: Buffer.from(message, 'utf-8').toString(),
+                user_id: send_user._id,
+                imges: [],
+                avatar: "",
+                nickname: "",
+                send_user: [],
+                time: new Date()
+            }
+
+            const BotChat = await botChat.findOne({ _id: socket.room});
+            BotChat.chats.push(messageModal);
+            await BotChat.save();
+        }
 
         io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
