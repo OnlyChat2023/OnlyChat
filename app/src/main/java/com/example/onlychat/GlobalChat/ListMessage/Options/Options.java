@@ -303,6 +303,7 @@ public class Options extends AppCompatActivity {
                                     String channel = typeChat.equals("groupChat") ? "group_chat" : "global_chat";
 
                                     SocketManager.notifyUpdateRoom(GroupID, channel);
+
                                     popupWindow.dismiss();
                                     overlayWindow.dismiss();
                                     setResult(ADDMEMBER, new Intent(listMembers.getContext(), ListMessage.class).putExtra("data", friendMms.get(i)));
