@@ -37,14 +37,17 @@
                 android:drawableStart="@drawable/global_chat_back"
                 android:padding="18dp" />
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/avatar"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_centerInParent="true"
                 android:layout_marginRight="12dp"
                 android:layout_toRightOf="@id/backButton"
-                app:srcCompat="@drawable/global_chat_avatar1" />
+                app:shapeAppearanceOverlay="@style/roundedImagesStyle"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                />
 
             <LinearLayout
                 android:layout_width="wrap_content"

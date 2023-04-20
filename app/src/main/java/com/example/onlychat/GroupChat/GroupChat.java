@@ -307,6 +307,21 @@ public class GroupChat extends Fragment {
         }
     }
 
+    public void pushFirst(String roomID) {
+        groupChat.post(new Runnable() {
+            @Override
+            public void run() {
+                for (RoomModel room : roomModels)
+                    if (room.getId().equals(roomID)) {
+                        roomModels.remove(room);
+                        roomModels.add(0, room);
+                        customChatItem.notifyDataSetChanged();
+                        return;
+                    }
+            }
+        });
+    }
+
     public void updateListRoom() {
         HttpManager httpRequest = new HttpManager(getContext());
         httpRequest.getGroupMetaData(new HttpResponse() {
@@ -344,7 +359,7 @@ public class GroupChat extends Fragment {
                         }
                         for (RoomModel new_room : rooms) {
                             if (!founded.contains(new_room.getId())) {
-                                roomModels.add(new_room);
+                                roomModels.add(0, new_room);
                                 customChatItem.notifyDataSetChanged();
                                 customChatItem.notifyDataSetInvalidated();
                             }

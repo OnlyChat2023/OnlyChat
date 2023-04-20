@@ -30,6 +30,7 @@ import com.example.onlychat.GlobalChat.GlobalChat;
 import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.Interfaces.RoomListener;
 import com.example.onlychat.Interfaces.RoomOptions;
 
 import com.example.onlychat.Manager.GlobalPreferenceManager;
@@ -164,15 +165,38 @@ public class MainScreen extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         isLogin = bundle.getBoolean("isLogin", false);
 
-//        GlobalPreferenceManager pref = new GlobalPreferenceManager(this);
-//        pref.SignOut();
-
         if (isLogin) {
             pref = new GlobalPreferenceManager(this);
             myInfo = pref.getUserModel();
+
+            HttpManager httpRequest = new HttpManager(this);
+            httpRequest.updateNotify(pref.getNotify());
+
             SocketManager.getInstance();
             SocketManager.register(myInfo);
-            
+            SocketManager.waitRoomChange(new RoomListener(){
+
+                @Override
+                public void onLoaded(String roomId, String channel) {
+                    if (channel.equals("group_chat")) {
+                        groupChatFragment.updateListRoom();
+                        groupChatFragment.pushFirst(roomId);
+                    }
+                    if (channel.equals("global_chat")) {
+                        globalChatFragment.updateListRoom();
+                        globalChatFragment.pushFirst(roomId);
+                    }
+                    if (channel.equals("direct_message")) {
+                        directChatFragment.updateListRoom();
+                        directChatFragment.pushFirst(roomId);
+                    }
+//                    if (channel.equals("bot_chat")) {
+//                        globalChatFragment.updateListRoom();
+//                        globalChatFragment.pushFirst(roomId);
+//                    }
+                }
+            });
+
             getMetaData();
             setContentView(R.layout.main_screen);
 

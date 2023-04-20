@@ -7,10 +7,14 @@
     android:paddingVertical="14dp"
     >
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/avatar"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:src="@drawable/avatar_img"
+        app:shapeAppearanceOverlay="@style/roundedImagesStyle"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         />
 
     <LinearLayout

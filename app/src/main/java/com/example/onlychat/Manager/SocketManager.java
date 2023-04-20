@@ -10,6 +10,7 @@ import com.example.onlychat.Async.ConvertImage;
 import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.MessageListener;
 import com.example.onlychat.Interfaces.ProfileReceiver;
+import com.example.onlychat.Interfaces.RoomListener;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.utils.Utils;
@@ -44,6 +45,14 @@ public class SocketManager {
 
     public static Socket getSocket() {
         return socket;
+    }
+
+    public static void disconnect() {
+        if (socket != null) {
+            socket.off();
+            socket.disconnect();
+            socket = null;
+        }
     }
 
     public static void register(UserModel user) {
@@ -173,6 +182,27 @@ public class SocketManager {
     public static void leaveRoom() {
         if (socket != null) {
             socket.emit("leaveRoom");
+        }
+    }
+
+    public static void waitRoomChange(RoomListener listener) {
+        if (socket != null) {
+            socket.on("roomListener", new Emitter.Listener(){
+
+                @Override
+                public void call(Object... args) {
+                    String roomID = (String) args[0];
+                    String channel = (String) args[1];
+
+                    listener.onLoaded(roomID, channel);
+                }
+            });
+        }
+    }
+
+    public static void notifyUpdateRoom(String room_id, String channel) {
+        if (socket != null) {
+            socket.emit("updateRoom", room_id, channel);
         }
     }
 }

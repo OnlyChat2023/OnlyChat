@@ -5,13 +5,16 @@
     android:layout_height="wrap_content"
     android:paddingVertical="8dp">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/avatar"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
-        app:srcCompat="@drawable/global_chat_avatar2" />
+        app:shapeAppearanceOverlay="@style/roundedImagesStyle"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        />
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"

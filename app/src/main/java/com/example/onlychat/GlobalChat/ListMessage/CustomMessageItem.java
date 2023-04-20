@@ -162,6 +162,8 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
 
 //            if (!messageItem.hasAvatar() && !messageItem.hasBitmapAvatar()){
 //                Boolean flag = false;
+            if (!messageItem.hasAvatar() && !messageItem.hasBitmapAvatar()){
+                Boolean flag = false;
 //                for (Member mem : members){
 //                    if (mem.getUser_id().equals(messageItem.getUserId())){
 //                        messageItem.setAvatar(mem.getAvatar());
@@ -175,6 +177,11 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
 //                    messageItem.setNickName("Bot");
 //                }
 //            }
+                if (!flag){
+                    messageItem.setAvatar("avatar/bot.png");
+                    messageItem.setNickName("Bot");
+                }
+            }
 
             // set image
 //            Log.i("Custom message user", messageModels.get(position).getAvatar());

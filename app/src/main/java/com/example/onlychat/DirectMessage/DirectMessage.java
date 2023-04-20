@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
+import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
@@ -131,9 +132,14 @@ public class DirectMessage extends Fragment {
         listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//                MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
+//                messageBottomDialogFragment.leave.setVisibility(View.GONE);
+//                messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
 
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
-                messageBottomDialogFragment.leave.setVisibility(View.GONE);
+//                messageBottomDialogFragment.setActivity(this);
+                messageBottomDialogFragment.setId(roomModels.get(i).getId());
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
 
                 return true;
@@ -266,6 +272,21 @@ public class DirectMessage extends Fragment {
         }
     }
 
+    public void pushFirst(String roomID) {
+        globalChat.post(new Runnable() {
+            @Override
+            public void run() {
+                for (RoomModel room : roomModels)
+                    if (room.getId().equals(roomID)) {
+                        roomModels.remove(room);
+                        roomModels.add(0, room);
+                        customChatItem.notifyDataSetChanged();
+                        return;
+                    }
+            }
+        });
+    }
+
     public void updateListRoom() {
         HttpManager httpRequest = new HttpManager(getContext());
         httpRequest.getDirectMetaData(new HttpResponse() {
@@ -299,7 +320,7 @@ public class DirectMessage extends Fragment {
                         }
                         for (RoomModel new_room : rooms) {
                             if (!founded.contains(new_room.getId())) {
-                                roomModels.add(new_room);
+                                roomModels.add(0, new_room);
                             }
                         }
                         customChatItem.notifyDataSetChanged();

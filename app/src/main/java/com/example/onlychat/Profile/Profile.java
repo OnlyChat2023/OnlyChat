@@ -216,11 +216,13 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 pref.SignOut();
+                SocketManager.disconnect();
                 Intent intent = new Intent(Profile.this, MainScreen.class);
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("isLogin", false);
                 intent.putExtras(bundle);
                 startActivity(intent);
+                finishAffinity();
             }
         });
 

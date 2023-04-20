@@ -28,6 +28,14 @@ public class GlobalPreferenceManager {
         pref = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    public void saveNotify(String token) {
+        pref.edit().putString("NOTIFY", token).apply();
+    }
+
+    public String getNotify() {
+        return pref.getString("NOTIFY", "");
+    }
+
     public void saveUser(com.example.onlychat.Model.UserModel user) {
         String jsonObject = new Gson().toJson(user);
         pref.edit().putString(LOGIN_USERMODEL, jsonObject).apply();

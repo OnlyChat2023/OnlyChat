@@ -358,4 +358,19 @@ public class HttpManager {
         public void getDirectMetaData(HttpResponse responseReceiver) {
             createRequest("http://" + ip + ":5000/api/onlychat/v1/metadata/directchat", Request.Method.GET, "getDirectMetaData", null, responseReceiver);
         }
+        public void updateNotify(String token) {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("token", token);
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/notify/update", Request.Method.PATCH, "updateNotify", params, new HttpResponse() {
+                @Override
+                public void onSuccess(JSONObject response) throws JSONException, InterruptedException, ParseException {
+
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
+        }
     }

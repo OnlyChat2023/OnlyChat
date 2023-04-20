@@ -69,6 +69,7 @@ public class GlobalChat extends Fragment {
     GlobalPreferenceManager pref;
 
     static UserModel myInfo;
+    RelativeLayout globalChat;
 
     public ArrayList<RoomModel> getRoomModels() {
         return roomModels;
@@ -101,7 +102,7 @@ public class GlobalChat extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RelativeLayout globalChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
+        globalChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
 
         // set value for widget
         chatTitle=(TextView) globalChat.findViewById(R.id.header_title);
@@ -126,16 +127,16 @@ public class GlobalChat extends Fragment {
         customChatItem = new CustomChatItem(globalChat.getContext(),roomModels );
         listChat.setAdapter(customChatItem);
 
-        listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
-                messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
-
-                return true;
-            }
-        });
+//        listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//                MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
+//                messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
+//
+//                return true;
+//            }
+//        });
 
         listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -181,9 +182,11 @@ public class GlobalChat extends Fragment {
                         JSONObject profile = response.getJSONObject("data");
                         Log.i("all friends click item", profile.toString());
 
+
+                        Log.i("global chat", profile.toString());
+
                         UserModel user = new Gson().fromJson(profile.toString(), UserModel.class);
                         nickname.setText(user.getNickName());
-
                         String[] part1 =user.getAnonymous_avatar().split("/");
                         String[] part2= part1[1].split("\\.");
                         avatarIndex[0] = Integer.parseInt(part2[0]);
@@ -296,6 +299,8 @@ public class GlobalChat extends Fragment {
 //                                    Reload();
                                     overlayWindow.dismiss();
                                     popupWindow.dismiss();
+                                    
+                                    updateListRoom();
                                 }
 
                                 @Override
@@ -361,6 +366,21 @@ public class GlobalChat extends Fragment {
         }
     }
 
+    public void pushFirst(String roomID) {
+        globalChat.post(new Runnable() {
+            @Override
+            public void run() {
+                for (RoomModel room : roomModels)
+                    if (room.getId().equals(roomID)) {
+                        roomModels.remove(room);
+                        roomModels.add(0, room);
+                        customChatItem.notifyDataSetChanged();
+                        return;
+                    }
+            }
+        });
+    }
+
     public void updateListRoom() {
         HttpManager httpRequest = new HttpManager(getContext());
         httpRequest.getGlobalMetaData(new HttpResponse() {
@@ -394,7 +414,7 @@ public class GlobalChat extends Fragment {
                         }
                         for (RoomModel new_room : rooms) {
                             if (!founded.contains(new_room.getId())) {
-                                roomModels.add(new_room);
+                                roomModels.add(0, new_room);
                             }
                         }
                         customChatItem.notifyDataSetChanged();

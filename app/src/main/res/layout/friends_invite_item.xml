@@ -6,12 +6,15 @@
     android:layout_height="wrap_content">
 
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/avatar"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        app:shapeAppearanceOverlay="@style/roundedImagesStyle"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         />
     <TextView
         android:id="@+id/name"

@@ -9,11 +9,17 @@
     android:paddingVertical="8dp"
     >
 
-    <ImageView
+
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/messageAvatar"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="14dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        app:shapeAppearanceOverlay="@style/roundedImagesStyle"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         />
 
     <LinearLayout
