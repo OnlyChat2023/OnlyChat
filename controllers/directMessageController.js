@@ -1,4 +1,5 @@
 import directChat from "../models/directChatModel.js";
+import groupChat from "../models/groupChatModel.js";
 import User from "../models/userModel.js";
 import catchAsync from "../utils/catchAsync.js";
 
@@ -13,6 +14,19 @@ const filterObj = (obj, ...allowedFields) => {
 const addDirectMessage = catchAsync(async (req, res, next) => {
     const user1 = await User.findOne({_id: req.body.id_1});
     const user2 = await User.findOne({_id: req.body.id_2});
+    var isHasDirect = false;
+
+    for (let dm of user1.directmessage_channel){
+        const DirectMessage = await directChat.findOne({_id: dm})
+
+        for (let i of DirectMessage.members){
+            if (i.user_id == user2._id){
+                isHasDirect = true;
+                res.status(200).json({ status: 'success', data: {} });
+                return;
+            }
+        }
+    }
 
     const newChat = {
         avatar: "",
