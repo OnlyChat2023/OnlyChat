@@ -630,10 +630,10 @@ io.on('connection', (socket) => {
         // console.log("4")
 
         const list_friends = await User.find({ _id: { $in: u.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
-        io.sockets.emit('acceptRequestListener', list_friends, newChat);
+        io.sockets.emit('acceptRequestListener', list_friends);
 
         const f_list_friends = await User.find({ _id: { $in: f.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
-        io.to(basket[id]).emit("waitAcceptFriend", f_list_friends, newChat);
+        io.to(basket[id]).emit("waitAcceptFriend", f_list_friends);
 
         await u.save()
         await f.save()
