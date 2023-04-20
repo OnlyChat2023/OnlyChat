@@ -209,8 +209,6 @@ public class Friends extends Fragment {
         return friends;
     }
 
-
-
     public static void waitAcceptFriend(){
         SocketManager.getInstance();
         if(SocketManager.getSocket() !=null){
