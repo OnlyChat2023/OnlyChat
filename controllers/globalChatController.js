@@ -35,7 +35,7 @@ const addGroup = catchAsync(async (req, res, next) =>{
       userInf.globalchat_channel.push(String(result.insertedIds[0]));
       await userInf.save();
 
-      res.status(200).json({ status: 'success', data: {} });
+      res.status(200).json({ status: 'success', data: { id: String(result.insertedIds[0]) } });
     });
 });
 
