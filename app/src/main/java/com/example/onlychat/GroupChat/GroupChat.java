@@ -33,6 +33,7 @@ import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
@@ -277,6 +278,21 @@ public class GroupChat extends Fragment {
         }
     }
 
+    public void pushFirst(String roomID) {
+        groupChat.post(new Runnable() {
+            @Override
+            public void run() {
+                for (RoomModel room : roomModels)
+                    if (room.getId().equals(roomID)) {
+                        roomModels.remove(room);
+                        roomModels.add(0, room);
+                        customChatItem.notifyDataSetChanged();
+                        return;
+                    }
+            }
+        });
+    }
+
     public void updateListRoom() {
         HttpManager httpRequest = new HttpManager(getContext());
         httpRequest.getGroupMetaData(new HttpResponse() {
@@ -314,7 +330,7 @@ public class GroupChat extends Fragment {
                         }
                         for (RoomModel new_room : rooms) {
                             if (!founded.contains(new_room.getId())) {
-                                roomModels.add(new_room);
+                                roomModels.add(0, new_room);
                                 customChatItem.notifyDataSetChanged();
                                 customChatItem.notifyDataSetInvalidated();
                             }

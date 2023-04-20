@@ -162,14 +162,14 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
 
             if (!messageItem.hasAvatar() && !messageItem.hasBitmapAvatar()){
                 Boolean flag = false;
-                for (Member mem : members){
-                    if (mem.getUser_id().equals(messageItem.getUserId())){
-                        messageItem.setAvatar(mem.getAvatar());
-                        messageItem.setNickName(mem.getNickname());
-                        flag = true;
-                        break;
-                    }
-                }
+//                for (Member mem : members){
+//                    if (mem.getUser_id().equals(messageItem.getUserId())){
+//                        messageItem.setAvatar(mem.getAvatar());
+//                        messageItem.setNickName(mem.getNickname());
+//                        flag = true;
+//                        break;
+//                    }
+//                }
                 if (!flag){
                     messageItem.setAvatar("avatar/bot.png");
                     messageItem.setNickName("Bot");

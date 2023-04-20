@@ -69,6 +69,7 @@ public class GlobalChat extends Fragment {
     GlobalPreferenceManager pref;
 
     static UserModel myInfo;
+    RelativeLayout globalChat;
 
     public ArrayList<RoomModel> getRoomModels() {
         return roomModels;
@@ -101,7 +102,7 @@ public class GlobalChat extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RelativeLayout globalChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
+        globalChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
 
         // set value for widget
         chatTitle=(TextView) globalChat.findViewById(R.id.header_title);
@@ -294,6 +295,8 @@ public class GlobalChat extends Fragment {
 //                                    Reload();
                                     overlayWindow.dismiss();
                                     popupWindow.dismiss();
+                                    
+                                    updateListRoom();
                                 }
 
                                 @Override
@@ -359,6 +362,21 @@ public class GlobalChat extends Fragment {
         }
     }
 
+    public void pushFirst(String roomID) {
+        globalChat.post(new Runnable() {
+            @Override
+            public void run() {
+                for (RoomModel room : roomModels)
+                    if (room.getId().equals(roomID)) {
+                        roomModels.remove(room);
+                        roomModels.add(0, room);
+                        customChatItem.notifyDataSetChanged();
+                        return;
+                    }
+            }
+        });
+    }
+
     public void updateListRoom() {
         HttpManager httpRequest = new HttpManager(getContext());
         httpRequest.getGlobalMetaData(new HttpResponse() {
@@ -392,7 +410,7 @@ public class GlobalChat extends Fragment {
                         }
                         for (RoomModel new_room : rooms) {
                             if (!founded.contains(new_room.getId())) {
-                                roomModels.add(new_room);
+                                roomModels.add(0, new_room);
                             }
                         }
                         customChatItem.notifyDataSetChanged();
