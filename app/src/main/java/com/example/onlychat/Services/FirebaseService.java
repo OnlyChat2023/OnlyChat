@@ -49,43 +49,43 @@ public class FirebaseService {
             this.credential = PhoneAuthProvider.getCredential(this.mVerificationId, code);
 
         this.auth.signInWithCredential(this.credential)
-        .addOnCompleteListener(this.activity, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d("verificate code", "signInWithCredential:success");
+                .addOnCompleteListener(this.activity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("verificate code", "signInWithCredential:success");
 
-                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                    if (currentUser != null) {
+                            if (currentUser != null) {
 
-                        currentUser.getIdToken(false)
-                        .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<GetTokenResult> token_task) {
-                                if (token_task.isSuccessful()) {
-                                    FirebaseService.this.OTPValidator.onSuccess(token_task.getResult().getToken());
-                                }
+                                currentUser.getIdToken(false)
+                                        .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<GetTokenResult> token_task) {
+                                                if (token_task.isSuccessful()) {
+                                                    FirebaseService.this.OTPValidator.onSuccess(token_task.getResult().getToken());
+                                                }
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d("FragmentCreate","Token failed from main thread single " + e.toString());
+                                            }
+                                        });
                             }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d("FragmentCreate","Token failed from main thread single " + e.toString());
+                        } else {
+                            // Sign in failed, display a message and update the UI
+                            Log.w("Error verificate code", "signInWithCredential:failure", task.getException());
+                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                // The verification code entered was invalid
+                                FirebaseService.this.OTPValidator.onValidateError();
                             }
-                        });
+                        }
                     }
-                } else {
-                    // Sign in failed, display a message and update the UI
-                    Log.w("Error verificate code", "signInWithCredential:failure", task.getException());
-                    if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                        // The verification code entered was invalid
-                        FirebaseService.this.OTPValidator.onValidateError();
-                    }
-                }
-            }
-        });
+                });
     }
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {

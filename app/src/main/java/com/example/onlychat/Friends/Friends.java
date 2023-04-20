@@ -56,7 +56,6 @@ public class Friends extends Fragment {
     ViewPager viewPager;
     ImageView addBtn;
 
-
     static TextView quatity;
 
     static AllFriends allFriends = new AllFriends();

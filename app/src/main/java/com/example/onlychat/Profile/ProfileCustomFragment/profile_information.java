@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,11 +80,14 @@ public class profile_information extends Fragment {
 
     }
 
+    CustomIconLabelAdapter _adapter ;
+
     public void setData(UserModel userModel) {
         contents[0] = userModel.getName();
         contents[1] = userModel.getPhone();
         contents[2] = userModel.getEmail();
         contents[3] = userModel.getUniversity();
+        _adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -93,11 +97,9 @@ public class profile_information extends Fragment {
         LinearLayout layout_profile1 = (LinearLayout) inflater.inflate(R.layout.fragment_profile_information, null);
         ListView listView = (ListView) layout_profile1.findViewById(R.id.list);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-                R.layout.info_item, contents);
 
-        adapter = new CustomIconLabelAdapter(context, R.layout.info_item, contents, thumbnails);
-        listView.setAdapter(adapter);
+        _adapter = new CustomIconLabelAdapter(context, R.layout.info_item, contents, thumbnails);
+        listView.setAdapter(_adapter);
         listView.setSelection(0);
         listView.smoothScrollToPosition(0);
         return layout_profile1;

@@ -22,6 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/backButton"
                 android:layout_width="35dp"
@@ -31,19 +35,24 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 android:paddingTop="10dp"
+                android:layout_alignParentStart="true"
                 app:srcCompat="@drawable/global_chat_back" />
 
-<!--            <ImageView-->
-<!--                android:id="@+id/avatar"-->
-<!--                android:layout_width="140dp"-->
-<!--                android:layout_height="140dp"-->
-<!--                android:layout_centerHorizontal="true"-->
-<!--                android:layout_marginTop="40dp"-->
-<!--                android:layout_marginBottom="10dp"-->
-<!--                app:shapeAppearanceOverlay="@style/roundedImagesStyle"-->
-<!--                android:adjustViewBounds="true"-->
-<!--                android:scaleType="fitXY"-->
-<!--                />-->
+            <TextView
+                android:id="@+id/sign_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="Sign out"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:paddingTop="6dp"
+                android:textSize="16sp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/white"
+                />
+            </RelativeLayout>
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/avatar"
                 android:layout_width="140dp"

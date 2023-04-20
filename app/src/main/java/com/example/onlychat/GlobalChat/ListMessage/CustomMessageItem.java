@@ -160,21 +160,21 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
             message = (TextView) row.findViewById(R.id.chatContent);
             name = (TextView) row.findViewById(R.id.name);
 
-            if (!messageItem.hasAvatar() && !messageItem.hasBitmapAvatar()){
-                Boolean flag = false;
-                for (Member mem : members){
-                    if (mem.getUser_id().equals(messageItem.getUserId())){
-                        messageItem.setAvatar(mem.getAvatar());
-                        messageItem.setNickName(mem.getNickname());
-                        flag = true;
-                        break;
-                    }
-                }
-                if (!flag){
-                    messageItem.setAvatar("avatar/bot.png");
-                    messageItem.setNickName("Bot");
-                }
-            }
+//            if (!messageItem.hasAvatar() && !messageItem.hasBitmapAvatar()){
+//                Boolean flag = false;
+//                for (Member mem : members){
+//                    if (mem.getUser_id().equals(messageItem.getUserId())){
+//                        messageItem.setAvatar(mem.getAvatar());
+//                        messageItem.setNickName(mem.getNickname());
+//                        flag = true;
+//                        break;
+//                    }
+//                }
+//                if (!flag){
+//                    messageItem.setAvatar("avatar/bot.png");
+//                    messageItem.setNickName("Bot");
+//                }
+//            }
 
             // set image
 //            Log.i("Custom message user", messageModels.get(position).getAvatar());

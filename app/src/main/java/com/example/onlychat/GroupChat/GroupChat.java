@@ -29,12 +29,16 @@ import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.Interfaces.ProfileReceiver;
 import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
+import com.example.onlychat.Model.UserModel;
+import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
 import com.google.gson.Gson;
 
@@ -128,6 +132,32 @@ public class GroupChat extends Fragment {
                 intent.putExtra("channel", "group_chat");
                 startActivityForResult(intent, 0);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
+            }
+        });
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserModel userInfo = pref.getUserModel();
+
+                Bundle myBundle = new Bundle();
+                myBundle.putInt("index", 0);
+                myBundle.putString("user_id", userInfo.get_id());
+
+                Intent intentToProfile = new Intent (getContext(), Profile.class);
+                intentToProfile.putExtras(myBundle);
+                startActivity(intentToProfile);
+
+                SocketManager.waitFinishEditProfile(new ProfileReceiver() {
+                    @Override
+                    public void onSuccess(String avt) {
+                        UserModel user = new GlobalPreferenceManager(getContext()).getUserModel();
+                        user.setAvatar(avt);
+
+                        new GlobalPreferenceManager(getContext()).saveUser(user);
+                        new HttpManager.GetImageFromServer(profile).execute(user.getAvatar());
+                    }
+                });
             }
         });
 

@@ -112,6 +112,8 @@ public class GlobalChat extends Fragment {
         listChat = (ListView) globalChat.findViewById(R.id.listChat);
         pref = new GlobalPreferenceManager(getContext());
 
+        addChat.setVisibility(View.GONE);
+
         new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAnonymous_avatar());
 
         pref = new GlobalPreferenceManager(getContext());

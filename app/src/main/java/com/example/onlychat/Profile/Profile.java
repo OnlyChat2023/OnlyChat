@@ -8,7 +8,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -29,6 +32,7 @@ import com.example.onlychat.Friends.Friends;
 import com.example.onlychat.Friends.Invite.Invite;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.MainActivity;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
@@ -75,6 +79,8 @@ public class Profile extends AppCompatActivity {
 
     Integer isFriend;
 
+    TextView sign_out;
+
     static UserModel myInfo;
     GlobalPreferenceManager pref;
 
@@ -92,6 +98,7 @@ public class Profile extends AppCompatActivity {
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.view_pager);
 
+
         pref = new GlobalPreferenceManager(this);
         myInfo = pref.getUserModel();
         System.out.println("myInfo" + myInfo.getName());
@@ -105,6 +112,8 @@ public class Profile extends AppCompatActivity {
 
         userName = (TextView) findViewById(R.id.username);
         avatar = (ImageView) findViewById(R.id.avatar);
+        sign_out = (TextView) findViewById(R.id.sign_out);
+        if(!user_id.equals(myInfo.get_id())) sign_out.setVisibility(View.INVISIBLE);
 
         // Handle Button
         addFriendBtn = (Button) findViewById(R.id.add_friend_btn);
@@ -129,11 +138,11 @@ public class Profile extends AppCompatActivity {
                 user = new Gson().fromJson(profile.toString(), UserModel.class);
 //                viewPagerAdapter.getItem(0);
 
-                // refresh Fragment
-                final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.detach(profileInformation);
-                ft.attach(profileInformation);
-                ft.commit();
+//                // refresh Fragment
+//                final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//                ft.detach(profileInformation);
+//                ft.attach(profileInformation);
+//                ft.commit();
 
                 profileInformation.setData(user);
                 profileSocial.setData(user);
@@ -203,6 +212,19 @@ public class Profile extends AppCompatActivity {
             }
         });
 
+        sign_out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pref.SignOut();
+                Intent intent = new Intent(Profile.this, MainScreen.class);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isLogin", false);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+
         // add, remove, confirm
         addFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,6 +261,7 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
+
 
     public void setButtonUI(){
         // not me

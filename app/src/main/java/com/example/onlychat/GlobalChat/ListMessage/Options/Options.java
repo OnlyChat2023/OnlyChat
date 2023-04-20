@@ -91,8 +91,13 @@ public class Options extends AppCompatActivity {
         block = (RelativeLayout) findViewById(R.id.global_block);
         report = (RelativeLayout) findViewById(R.id.global_report);
         addMember = (Button) findViewById(R.id.add_member_btn);
+
         if (typeChat.equals("globalChat")){
             addMember.setVisibility(View.GONE);
+            leave.setVisibility(View.GONE);
+            delete.setVisibility(View.GONE);
+            addMember.setVisibility(View.GONE);
+
         }
         block.setVisibility(View.GONE);
 
@@ -112,7 +117,6 @@ public class Options extends AppCompatActivity {
             notify_icon.setImageResource(R.drawable.dm_option_icon_off_notifycation);
         }
 
-
         backButton = (ImageView) findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,9 +127,7 @@ public class Options extends AppCompatActivity {
         });
 
         share = (RelativeLayout) findViewById(R.id.share);
-        if (typeChat.equals("groupChat")){
-            share.setVisibility(View.GONE);
-        }
+        share.setVisibility(View.GONE);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,6 +91,8 @@ public class profile_social extends Fragment {
     public void setData(UserModel userModel) {
         links[0] = userModel.getFacebook();
         links[1] = userModel.getInstagram();
+        Log.i("Link", links[0]);
+
     }
 
     @Override
@@ -105,6 +108,7 @@ public class profile_social extends Fragment {
         listView.setAdapter(adapter);
         listView.setSelection(0);
         listView.smoothScrollToPosition(0);
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

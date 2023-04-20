@@ -148,19 +148,6 @@ public class DirectMessage extends Fragment {
                 Bundle myBundle = new Bundle();
                 myBundle.putInt("index", 0);
                 myBundle.putString("user_id", userInfo.get_id());
-//                System.out.println("DM: " + userInfo.getId());
-//                myBundle.putString("name", userInfo.getName());
-//                myBundle.putString("avatar", userInfo.getAvatar());
-//                myBundle.putString("nickName", userInfo.getNickName());
-//                myBundle.putString("phoneNumber", userInfo.getPhone());
-//                myBundle.putString("university", userInfo.getUniversity());
-//                myBundle.putString("email", userInfo.getEmail());
-//                myBundle.putString("description", userInfo.getDescription());
-//                myBundle.putString("facebook", userInfo.getFacebook());
-//                myBundle.putString("instagram", userInfo.getInstagram());
-
-//                System.out.println("userInfo: " + userInfo.getDescription());
-//                System.out.println("FB: " + userInfo.getEmail());
 
                 Intent intentToProfile = new Intent (getContext(), Profile.class);
                 intentToProfile.putExtras(myBundle);
