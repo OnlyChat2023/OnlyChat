@@ -15,6 +15,10 @@ import botChatRouter from './routes/botChatRoutes.js'
 import messageRoutes from "./routes/messageRoutes.js"
 
 import authRouter from './routes/authRoutes.js';
+import notifyRouter from './routes/notifyRoutes.js';
+import catchAsync from './utils/catchAsync.js';
+import authController from './controllers/authController.js';
+import User from './models/userModel.js';
 
 const limiter = rateLimit({
   // limiter is now become a middleware function
@@ -43,6 +47,7 @@ app.use('/api/onlychat/v1/globalChat', globalChatRouter);
 app.use('/api/onlychat/v1/directMessage', directMessageRouter);
 app.use('/api/onlychat/v1/metadata', metaDataRouter);
 app.use('/api/onlychat/v1/botChat', botChatRouter);
+app.use('/api/onlychat/v1/notify', notifyRouter);
 
 app.use(globalErrorhandler);
 

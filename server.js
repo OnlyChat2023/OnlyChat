@@ -2,6 +2,7 @@ import mongoose, { ObjectId } from 'mongoose';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import fs from 'fs';
+import firebase from './firebase/firebase.js';
 import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcryptjs';
 
@@ -27,8 +28,10 @@ mongoose
     });
 
 const server = app.listen(port, async () => {
-    console.log(await bcrypt.hash('paimon01', 12));
-    console.log(await bcrypt.hash('yaemiko01', 12));
+    // console.log(await bcrypt.hash('yaemiko01', 12));
+    // console.log(await bcrypt.hash('kleebunbara01', 12));
+    // console.log(await bcrypt.hash('paimon01', 12));
+    // console.log(await bcrypt.hash('raidenshogun01', 12));
     console.log(`App is running on port ${port}...`);
 });
 
@@ -232,6 +235,36 @@ io.on('connection', (socket) => {
             }
 
             const GlobalChannel = await globalChat.findOne({ _id: socket.room });
+
+            for (const member of GlobalChannel.members) { 
+
+                if (member.user_id === send_user._id) continue;
+                
+                const getMessage = firebase.messaging();
+
+                const user = await User.findById(member.user_id);
+
+                if (user.notify) {
+                    const messages = {
+                        data: {
+                          name: send_user.nickname,
+                          message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
+                        },
+                        token: user.notify
+                    };
+    
+                    getMessage.send(messages).then((response) => {
+                        // Response is a message ID string.
+                        console.log('Successfully sent message:', response);
+                      })
+                      .catch((error) => {
+                        console.log('Error sending message:', error);
+                      });
+                }
+
+                socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
+            }
+
             GlobalChannel.chats.push(messageModal);
             await GlobalChannel.save();
         }
@@ -245,6 +278,36 @@ io.on('connection', (socket) => {
             }
 
             const DirectMessage = await directChat.findOne({ _id: socket.room });
+
+            for (const member of DirectMessage.members) { 
+
+                if (member.user_id === send_user._id) continue;
+                
+                const getMessage = firebase.messaging();
+
+                const user = await User.findOne({ _id: member.user_id });
+
+                if (user.notify) {
+                    const messages = {
+                        data: {
+                          name: send_user.nickname,
+                          message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
+                        },
+                        token: user.notify
+                    };
+    
+                    getMessage.send(messages).then((response) => {
+                        // Response is a message ID string.
+                        console.log('Successfully sent message:', response);
+                      })
+                      .catch((error) => {
+                        console.log('Error sending message:', error);
+                      });
+                }
+
+                socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
+            }
+
             DirectMessage.chats.push(messageModal);
             await DirectMessage.save();
         }
@@ -258,8 +321,38 @@ io.on('connection', (socket) => {
                 send_user: [],
                 time: new Date()
             }
-
+            
             const GroupChat = await groupChat.findOne({ _id: socket.room });
+            
+            for (const member of GroupChat.members) {
+
+                if (member.user_id === send_user._id) continue;
+                
+                const getMessage = firebase.messaging();
+
+                const user = await User.findOne({ _id: member.user_id });
+
+                if (user.notify) {
+                    const messages = {
+                        data: {
+                          name: send_user.nickname,
+                          message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
+                        },
+                        token: user.notify
+                    };
+    
+                    getMessage.send(messages).then((response) => {
+                        // Response is a message ID string.
+                        console.log('Successfully sent message:', response);
+                      })
+                      .catch((error) => {
+                        console.log('Error sending message:', error);
+                      });
+                }
+                
+                socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
+            }
+
             GroupChat.chats.push(messageModal);
             await GroupChat.save();
         }
@@ -278,6 +371,8 @@ io.on('connection', (socket) => {
             BotChat.chats.push(messageModal);
             await BotChat.save();
         }
+
+
 
         io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
@@ -309,6 +404,36 @@ io.on('connection', (socket) => {
             }
 
             const GlobalChannel = await globalChat.findOne({ _id: socket.room });
+
+            for (const member of GlobalChannel.members) { 
+                
+                if (member.user_id === send_user._id) continue;
+                
+                const getMessage = firebase.messaging();
+
+                const user = await User.findOne({ _id: member.user_id });
+
+                if (user.notify) {
+                    const messages = {
+                        data: {
+                          name: send_user.nickname,
+                          message: send_user.nickname + ': Đã gửi hình ảnh'
+                        },
+                        token: user.notify
+                    };
+    
+                    getMessage.send(messages).then((response) => {
+                        // Response is a message ID string.
+                        console.log('Successfully sent message:', response);
+                      })
+                      .catch((error) => {
+                        console.log('Error sending message:', error);
+                      });
+                }
+
+                socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
+            }
+
             GlobalChannel.chats.push(messageModal);
             await GlobalChannel.save();
         }
@@ -322,6 +447,36 @@ io.on('connection', (socket) => {
             }
 
             const DirectMessage = await directChat.findOne({ _id: socket.room });
+
+            for (const member of DirectMessage.members) { 
+
+                if (member.user_id === send_user._id) continue;
+                
+                const getMessage = firebase.messaging();
+
+                const user = await User.findOne({ _id: member.user_id });
+
+                if (user.notify) {
+                    const messages = {
+                        data: {
+                          name: send_user.nickname,
+                          message: send_user.nickname + ': Đã gửi hình ảnh'
+                        },
+                        token: user.notify
+                    };
+    
+                    getMessage.send(messages).then((response) => {
+                        // Response is a message ID string.
+                        console.log('Successfully sent message:', response);
+                      })
+                      .catch((error) => {
+                        console.log('Error sending message:', error);
+                      });
+                }
+
+                socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
+            }
+
             DirectMessage.chats.push(messageModal);
             await DirectMessage.save();
         }
@@ -337,6 +492,36 @@ io.on('connection', (socket) => {
             }
 
             const GroupChat = await groupChat.findOne({ _id: socket.room });
+
+            for (const member of GroupChat.members) { 
+
+                if (member.user_id === send_user._id) continue;
+                
+                const getMessage = firebase.messaging();
+
+                const user = await User.findOne({ _id: member.user_id });
+
+                if (user.notify) {
+                    const messages = {
+                        data: {
+                          name: send_user.nickname,
+                          message: send_user.nickname + ': Đã gửi hình ảnh'
+                        },
+                        token: user.notify
+                    };
+    
+                    getMessage.send(messages).then((response) => {
+                        // Response is a message ID string.
+                        console.log('Successfully sent message:', response);
+                      })
+                      .catch((error) => {
+                        console.log('Error sending message:', error);
+                      });
+                }
+
+                socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
+            }
+
             GroupChat.chats.push(messageModal);
             await GroupChat.save();
         }
@@ -361,7 +546,7 @@ io.on('connection', (socket) => {
                 const start = newMessageList.chats.findIndex((item) => item._id.toString() === lastMessageID);
                 // console.log(newMessageList.chats[start]);
                 
-                console.log(lastMessageID);
+                // console.log(lastMessageID);
 
                 for (let i = start + 1; i < newMessageList.chats.length; i++) {
                     socket.emit('messageListener', newMessageList.chats[i], -2, { token: '' });
@@ -449,7 +634,7 @@ io.on('connection', (socket) => {
     socket.on("addNewAvatarToServer", async (avtImage, user) => {
         // const userInfo = JSON.parse(user);
 
-        console.log(avtImage, user);
+        // console.log(avtImage, user);
 
         const new_filename = await saveBase64Image(avtImage, `assets/avatar/users/${user}`);
 
@@ -463,6 +648,22 @@ io.on('connection', (socket) => {
     socket.on('register_notification', (user) => {
         const _user = JSON.parse(user);
         notification_list[_user._id] = socket.id;
+    });
+    socket.on('updateRoom', async (roomID, Channel) => {
+        if (Channel === 'group_chat') {
+            const GroupChat = await groupChat.findOne({ _id: roomID });
+
+            for (const member of GroupChat.members) { 
+                socket.to(basket[member.user_id]).emit('roomListener', roomID, Channel);
+            }
+        }
+        if (Channel === 'global_chat') {
+            const GlobalChat = await globalChat.findOne({ _id: roomID });
+
+            for (const member of GlobalChat.members) { 
+                socket.to(basket[member.user_id]).emit('roomListener', roomID, Channel);
+            }
+        }
     });
 });
 

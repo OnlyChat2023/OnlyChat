@@ -25,10 +25,12 @@ const getUserInformation = catchAsync(async (req, res) => {
 
     directChat.push(newDM);
   }
+  console.log(directChat)
   // console.log(JSON.stringify(directChat, null, 2));
 
   const groupChat = []
   for (let i of user.groupchat_channel) {
+    console.log(i)
     const dmList = await GroupChat.findOne({ _id: i });
     // console.log(i)
     for (let i of dmList.chats) {
@@ -42,7 +44,8 @@ const getUserInformation = catchAsync(async (req, res) => {
         i.nickname = _u.name
       }
     }
-    // console.log(groupChat);
+    console.log("2")
+
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
 
     const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
@@ -52,6 +55,8 @@ const getUserInformation = catchAsync(async (req, res) => {
 
     groupChat.push(newDM);
   }
+  console.log(groupChat);
+
   // console.log(JSON.stringify(groupChat.members, null, 2));
 
   const globalChat = []
@@ -107,7 +112,7 @@ const getListFriend = catchAsync(async (req, res, next) => {
 });
 
 const getUserById = catchAsync(async (req, res, nex) => {
-  const _user = await User.findOne({ _id: req.body._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -anonymous_avatar -nickname').lean()
+  const _user = await User.findOne({ _id: req.body._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel').lean()
   let status = 0
   // friend
   if (req.user.friend.includes(_user._id)) status = 1;
@@ -151,6 +156,39 @@ const getUserByPhone = catchAsync(async (req, res, nex) => {
   }
 })
 
+const setAnonymousInformation = catchAsync(async (req, res, next) => {
+  // console.log(req.body.nickname)
+  // console.log(req.body.anonymous_avatar)
+
+  let _user = await User.findById(req.user.id)
+  // console.log(_user)
+  _user.nickname = req.body.nickname
+  _user.anonymous_avatar = req.body.anonymous_avatar
+  // console.log(req.user)
+  await _user.save()
+
+  const globalChat = []
+  for (let i of _user.globalchat_channel) {
+    const dmList = await GlobalChat.findOne({ _id: i });
+    dmList.options = dmList.options.filter(el => el.user_id == _user._id.toString());
+
+    const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
+    newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
+    newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
+    newDM.options = [{ ...newDM.options[0], _id: newDM.options[0]._id.toString() }];
+
+    globalChat.push(newDM);
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      anonymous_avatar: _user.anonymous_avatar,
+      globalChat: globalChat
+    }
+  });
+})
+
 
 
 const filterObj = (obj, ...allowedFields) => {
@@ -176,4 +214,4 @@ const updateProfile = catchAsync(async (req, res, next) => {
   console.log(req.body.avatar);
 })
 
-export { getUserInformation, updateProfile, getUserById, getListFriend, getUserByPhone }
+export { getUserInformation, updateProfile, getUserById, getListFriend, getUserByPhone, setAnonymousInformation }

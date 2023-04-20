@@ -5,6 +5,7 @@ import REGEX from '../constants/regex.js';
 import User from '../models/userModel.js';
 import firebase from '../firebase/firebase.js';
 import jwt from 'jsonwebtoken';
+import globalChatChannel from '../models/globalChatModel.js'
 import { promisify } from 'util';
 
 const signToken = function (id) {
@@ -135,9 +136,25 @@ const register = catchAsync(async (req, res, next) => {
     const min = 1, max = 25;
 
     const numberAvt = Math.floor(Math.random() * (max - min + 1) + min);
+    const numberAnonymousAvt = Math.floor(Math.random() * (max - min + 1) + min);
 
-    const user = await User.create({ username, phone: phonenumber, password, avatar: `avatar/${numberAvt}.png` });
+    const user = await User.create({ username, name: username, phone: phonenumber, password, avatar: `avatar/${numberAvt}.png`, anonymous_avatar: `avatar/${numberAnonymousAvt}.png`, nickname: 'Anonymous', globalchat_channel: ['643241367023a1826db347a7'] });
 
+    // console.log(user)
+    // const Group = await globalChatChannel.findById('643241367023a1826db347a7')
+    const Group = await globalChatChannel.find()
+    Group[0].members.push({
+        "user_id": user._id.toString(),
+        "nickname": user.name,
+        "avatar": user.anonymous_avatar
+    });
+
+    Group[0].options.push({
+        "user_id": user._id.toString(),
+        "notify": false,
+        "block": false
+    })
+    Group[0].save()
     return res.status(200).json({
         status: 'success',
         message: 'Register successful',
