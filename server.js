@@ -201,7 +201,7 @@ io.on('connection', (socket) => {
         if (socket.channel) {
             socket.channel = null;
         }
-        
+
         const [roomId, channel] = roomInfo.split('::');
         socket.room = roomId;
         socket.channel = channel;
@@ -210,7 +210,7 @@ io.on('connection', (socket) => {
         socket.join(roomId);
     });
 
-    socket.on('leaveRoom', () => { 
+    socket.on('leaveRoom', () => {
         // socket.room = null;
         socket.leave(socket.room);
         socket.channel = null;
@@ -236,10 +236,10 @@ io.on('connection', (socket) => {
 
             const GlobalChannel = await globalChat.findOne({ _id: socket.room });
 
-            for (const member of GlobalChannel.members) { 
+            for (const member of GlobalChannel.members) {
 
                 if (member.user_id === send_user._id) continue;
-                
+
                 const getMessage = firebase.messaging();
 
                 const user = await User.findById(member.user_id);
@@ -247,19 +247,19 @@ io.on('connection', (socket) => {
                 if (user.notify) {
                     const messages = {
                         data: {
-                          name: send_user.nickname,
-                          message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
+                            name: send_user.nickname,
+                            message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
                         },
                         token: user.notify
                     };
-    
+
                     getMessage.send(messages).then((response) => {
                         // Response is a message ID string.
                         console.log('Successfully sent message:', response);
-                      })
-                      .catch((error) => {
-                        console.log('Error sending message:', error);
-                      });
+                    })
+                        .catch((error) => {
+                            console.log('Error sending message:', error);
+                        });
                 }
 
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
@@ -279,10 +279,10 @@ io.on('connection', (socket) => {
 
             const DirectMessage = await directChat.findOne({ _id: socket.room });
 
-            for (const member of DirectMessage.members) { 
+            for (const member of DirectMessage.members) {
 
                 if (member.user_id === send_user._id) continue;
-                
+
                 const getMessage = firebase.messaging();
 
                 const user = await User.findOne({ _id: member.user_id });
@@ -290,19 +290,19 @@ io.on('connection', (socket) => {
                 if (user.notify) {
                     const messages = {
                         data: {
-                          name: send_user.nickname,
-                          message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
+                            name: send_user.nickname,
+                            message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
                         },
                         token: user.notify
                     };
-    
+
                     getMessage.send(messages).then((response) => {
                         // Response is a message ID string.
                         console.log('Successfully sent message:', response);
-                      })
-                      .catch((error) => {
-                        console.log('Error sending message:', error);
-                      });
+                    })
+                        .catch((error) => {
+                            console.log('Error sending message:', error);
+                        });
                 }
 
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
@@ -321,13 +321,13 @@ io.on('connection', (socket) => {
                 send_user: [],
                 time: new Date()
             }
-            
+
             const GroupChat = await groupChat.findOne({ _id: socket.room });
-            
+
             for (const member of GroupChat.members) {
 
                 if (member.user_id === send_user._id) continue;
-                
+
                 const getMessage = firebase.messaging();
 
                 const user = await User.findOne({ _id: member.user_id });
@@ -335,21 +335,21 @@ io.on('connection', (socket) => {
                 if (user.notify) {
                     const messages = {
                         data: {
-                          name: send_user.nickname,
-                          message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
+                            name: send_user.nickname,
+                            message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
                         },
                         token: user.notify
                     };
-    
+
                     getMessage.send(messages).then((response) => {
                         // Response is a message ID string.
                         console.log('Successfully sent message:', response);
-                      })
-                      .catch((error) => {
-                        console.log('Error sending message:', error);
-                      });
+                    })
+                        .catch((error) => {
+                            console.log('Error sending message:', error);
+                        });
                 }
-                
+
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
             }
 
@@ -367,7 +367,7 @@ io.on('connection', (socket) => {
                 time: new Date()
             }
 
-            const BotChat = await botChat.findOne({ _id: socket.room});
+            const BotChat = await botChat.findOne({ _id: socket.room });
             BotChat.chats.push(messageModal);
             await BotChat.save();
         }
@@ -405,10 +405,10 @@ io.on('connection', (socket) => {
 
             const GlobalChannel = await globalChat.findOne({ _id: socket.room });
 
-            for (const member of GlobalChannel.members) { 
-                
+            for (const member of GlobalChannel.members) {
+
                 if (member.user_id === send_user._id) continue;
-                
+
                 const getMessage = firebase.messaging();
 
                 const user = await User.findOne({ _id: member.user_id });
@@ -416,19 +416,19 @@ io.on('connection', (socket) => {
                 if (user.notify) {
                     const messages = {
                         data: {
-                          name: send_user.nickname,
-                          message: send_user.nickname + ': Đã gửi hình ảnh'
+                            name: send_user.nickname,
+                            message: send_user.nickname + ': Đã gửi hình ảnh'
                         },
                         token: user.notify
                     };
-    
+
                     getMessage.send(messages).then((response) => {
                         // Response is a message ID string.
                         console.log('Successfully sent message:', response);
-                      })
-                      .catch((error) => {
-                        console.log('Error sending message:', error);
-                      });
+                    })
+                        .catch((error) => {
+                            console.log('Error sending message:', error);
+                        });
                 }
 
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
@@ -448,10 +448,10 @@ io.on('connection', (socket) => {
 
             const DirectMessage = await directChat.findOne({ _id: socket.room });
 
-            for (const member of DirectMessage.members) { 
+            for (const member of DirectMessage.members) {
 
                 if (member.user_id === send_user._id) continue;
-                
+
                 const getMessage = firebase.messaging();
 
                 const user = await User.findOne({ _id: member.user_id });
@@ -459,19 +459,19 @@ io.on('connection', (socket) => {
                 if (user.notify) {
                     const messages = {
                         data: {
-                          name: send_user.nickname,
-                          message: send_user.nickname + ': Đã gửi hình ảnh'
+                            name: send_user.nickname,
+                            message: send_user.nickname + ': Đã gửi hình ảnh'
                         },
                         token: user.notify
                     };
-    
+
                     getMessage.send(messages).then((response) => {
                         // Response is a message ID string.
                         console.log('Successfully sent message:', response);
-                      })
-                      .catch((error) => {
-                        console.log('Error sending message:', error);
-                      });
+                    })
+                        .catch((error) => {
+                            console.log('Error sending message:', error);
+                        });
                 }
 
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
@@ -493,10 +493,10 @@ io.on('connection', (socket) => {
 
             const GroupChat = await groupChat.findOne({ _id: socket.room });
 
-            for (const member of GroupChat.members) { 
+            for (const member of GroupChat.members) {
 
                 if (member.user_id === send_user._id) continue;
-                
+
                 const getMessage = firebase.messaging();
 
                 const user = await User.findOne({ _id: member.user_id });
@@ -504,19 +504,19 @@ io.on('connection', (socket) => {
                 if (user.notify) {
                     const messages = {
                         data: {
-                          name: send_user.nickname,
-                          message: send_user.nickname + ': Đã gửi hình ảnh'
+                            name: send_user.nickname,
+                            message: send_user.nickname + ': Đã gửi hình ảnh'
                         },
                         token: user.notify
                     };
-    
+
                     getMessage.send(messages).then((response) => {
                         // Response is a message ID string.
                         console.log('Successfully sent message:', response);
-                      })
-                      .catch((error) => {
-                        console.log('Error sending message:', error);
-                      });
+                    })
+                        .catch((error) => {
+                            console.log('Error sending message:', error);
+                        });
                 }
 
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
@@ -541,11 +541,11 @@ io.on('connection', (socket) => {
 
             if (socket.channel === 'group_chat')
                 newMessageList = await groupChat.findOne({ _id: socket.room, 'chats._id': { $gt: new mongoose.Types.ObjectId(lastMessageID) } });
-            
+
             if (newMessageList) {
                 const start = newMessageList.chats.findIndex((item) => item._id.toString() === lastMessageID);
                 // console.log(newMessageList.chats[start]);
-                
+
                 // console.log(lastMessageID);
 
                 for (let i = start + 1; i < newMessageList.chats.length; i++) {
@@ -572,6 +572,8 @@ io.on('connection', (socket) => {
     });
 
     socket.on('acceptRequestAddFriend', async (id, user) => {
+        // console.log("acceptRequestAddFriend")
+        // console.log(User.)
         const _user = JSON.parse(user)
         let u = await User.findOne({ _id: _user._id })
         u.friend.push(id)
@@ -580,11 +582,58 @@ io.on('connection', (socket) => {
         let f = await User.findOne({ _id: id })
         f.friend.push(_user._id)
 
+        // ////////////////////////
+        // for (let dm of u.directmessage_channel) {
+        //     const DirectMessage = await directChat.findOne({ _id: dm })
+
+        //     for (let i of DirectMessage.members) {
+        //         if (i.user_id == f._id) {
+        //             res.status(200).json({ status: 'success', data: {} });
+        //             return;
+        //         }
+        //     }
+        // }
+        // console.log("3")
+
+        // const newChat = {
+        //     avatar: "",
+        //     name: "",
+        //     chats: [],
+        //     members: [
+        //         {
+        //             user_id: u._id,
+        //             avatar: u.avatar,
+        //             name: u.name,
+        //             nickname: u.nickname,
+        //         },
+        //         {
+        //             user_id: f._id,
+        //             avatar: f.avatar,
+        //             name: f.name,
+        //             nickname: f.nickname,
+        //         }
+        //     ],
+        //     options: [
+        //         {
+        //             user_id: u._id,
+        //             notify: false,
+        //             block: false
+        //         },
+        //         {
+        //             user_id: f._id,
+        //             notify: false,
+        //             block: false
+        //         }
+        //     ],
+        //     update_time: Date
+        // }
+        // console.log("4")
+
         const list_friends = await User.find({ _id: { $in: u.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
-        io.sockets.emit('acceptRequestListener', list_friends);
+        io.sockets.emit('acceptRequestListener', list_friends, newChat);
 
         const f_list_friends = await User.find({ _id: { $in: f.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
-        io.to(basket[id]).emit("waitAcceptFriend", f_list_friends);
+        io.to(basket[id]).emit("waitAcceptFriend", f_list_friends, newChat);
 
         await u.save()
         await f.save()
@@ -653,14 +702,14 @@ io.on('connection', (socket) => {
         if (Channel === 'group_chat') {
             const GroupChat = await groupChat.findOne({ _id: roomID });
 
-            for (const member of GroupChat.members) { 
+            for (const member of GroupChat.members) {
                 socket.to(basket[member.user_id]).emit('roomListener', roomID, Channel);
             }
         }
         if (Channel === 'global_chat') {
             const GlobalChat = await globalChat.findOne({ _id: roomID });
 
-            for (const member of GlobalChat.members) { 
+            for (const member of GlobalChat.members) {
                 socket.to(basket[member.user_id]).emit('roomListener', roomID, Channel);
             }
         }
