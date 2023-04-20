@@ -42,7 +42,7 @@ const getUserInformation = catchAsync(async (req, res) => {
         i.nickname = _u.name
       }
     }
-    console.log(groupChat);
+    // console.log(groupChat);
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
 
     const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
@@ -76,7 +76,7 @@ const getUserInformation = catchAsync(async (req, res) => {
     botChat.push(dmList);
   }
   // console.log("Bot", botChat)
-  
+
   res.status(200).json({
     status: 'success',
     data: {
@@ -117,7 +117,7 @@ const getUserById = catchAsync(async (req, res, nex) => {
   if (_user.friend_request.includes(req.user.id)) status = 3;
 
   const newUser = { ..._user, isFriend: status };
-  console.log(_user);
+  // console.log(_user);
   res.status(200).json({
     status: 'success',
     data: newUser
