@@ -8,12 +8,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/avatar"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="6dp"
-        android:layout_alignTop="@id/chatLayout" />
+        android:layout_alignTop="@id/chatLayout"
+        app:shapeAppearanceOverlay="@style/roundedImagesStyle"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        />
+
 
     <TextView
         android:id="@+id/timeMessage"

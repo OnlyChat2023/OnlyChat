@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.example.onlychat.Friends.AllFriends.AllFriends;
 import com.example.onlychat.Friends.Invite.Invite;
 import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.RoomModel;
@@ -215,8 +216,8 @@ public class Friends extends Fragment {
             SocketManager.getSocket().on("waitAcceptFriend", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    JSONArray friends = (JSONArray) args[0];
 
+                    JSONArray friends = (JSONArray) args[0];
 
                     ArrayList<UserModel> friend_list = new ArrayList<>();
                     Log.i("Friends socket",Integer.toString(friends.length()));
@@ -231,6 +232,10 @@ public class Friends extends Fragment {
                         public void run() {
                             quatity.setText(finalFriend_list.size()+" available");
                             allFriends.setFriend_list(finalFriend_list);
+                            MainScreen.getDirectChatFragment().updateListRoom();
+
+//                            MainScreen.getD
+//                            directChatFragment.updateListRoom();
                         }
                     });
                 }
@@ -287,6 +292,7 @@ public class Friends extends Fragment {
                         public void run() {
                                     quatity.setText(finalFriend_list.size()+" available");
                                     allFriends.setFriend_list(finalFriend_list);
+                                    MainScreen.getDirectChatFragment().updateListRoom();
                         }
                     });
                 }

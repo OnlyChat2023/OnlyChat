@@ -251,19 +251,6 @@ public class Profile extends AppCompatActivity {
                 else if(isFriend == 2){
                     Invite.addFriend(user_id);
                     isFriend = 1;
-                    new HttpManager(addFriendBtn.getContext()).addDirectMessage(myInfo.get_id(), user_id, new HttpResponse() {
-                        @Override
-                        public void onSuccess(JSONObject response) throws JSONException, InterruptedException, ParseException {
-//                            SocketManager.getInstance();
-//                            SocketManager.notifyUpdateRoom();
-                            Log.i("Add Direct Message", "Success");
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            Log.i("Add Direct Message Error", error);
-                        }
-                    });
                     setButtonUI();
                     Log.i("Profile", "3");
                 }

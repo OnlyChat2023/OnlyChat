@@ -76,13 +76,16 @@ public class MainScreen extends AppCompatActivity {
     private ArrayList<UserModel> invite_list = new ArrayList<>();
 
     GlobalChat globalChatFragment = new GlobalChat();
-    DirectMessage directChatFragment = new DirectMessage();
+    static DirectMessage directChatFragment = new DirectMessage();
     GroupChat groupChatFragment = new GroupChat();
     ChatBot botChatFragment = new ChatBot();
     Friends friendsFragment = new Friends();
     GlobalPreferenceManager pref;
     static UserModel myInfo;
 
+    public static DirectMessage getDirectChatFragment() {
+        return directChatFragment;
+    }
 
     public void getMetaData() {
         HttpManager httpManager = new HttpManager(this);
@@ -196,6 +199,8 @@ public class MainScreen extends AppCompatActivity {
 //                    }
                 }
             });
+
+
 
             getMetaData();
             setContentView(R.layout.main_screen);

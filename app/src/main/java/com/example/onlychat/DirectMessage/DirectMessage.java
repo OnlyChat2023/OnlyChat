@@ -288,6 +288,7 @@ public class DirectMessage extends Fragment {
     }
 
     public void updateListRoom() {
+        Log.i("Direct message", "updateListRoom");
         HttpManager httpRequest = new HttpManager(getContext());
         httpRequest.getDirectMetaData(new HttpResponse() {
             @Override

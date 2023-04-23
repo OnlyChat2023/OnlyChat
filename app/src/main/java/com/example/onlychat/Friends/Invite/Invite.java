@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.example.onlychat.Friends.AllFriends.CustomFriendItem;
 import com.example.onlychat.Friends.Friends;
 import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
