@@ -1,5 +1,6 @@
 package com.example.onlychat.GlobalChat;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -36,6 +37,7 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
         this.context = context;
         this.listRooms = listRooms;
     }
+    @SuppressLint("ViewHolder")
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         View row;
