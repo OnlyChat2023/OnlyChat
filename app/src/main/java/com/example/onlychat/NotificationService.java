@@ -81,19 +81,17 @@ public class NotificationService extends FirebaseMessagingService {
                             .setAutoCancel(true)
                             .setSound(defaultSoundUri)
                             .setDefaults(Notification.DEFAULT_ALL)
-                            .setPriority(NotificationManager.IMPORTANCE_HIGH);
+                            .setPriority(NotificationCompat.PRIORITY_HIGH);
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
             // Since android Oreo notification channel is needed.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel channel = new NotificationChannel(
-                        channelId,
-                        "Channel human readable title",
-                        NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Tất cả các channel",
+                    NotificationManager.IMPORTANCE_HIGH);
 
-                notificationManager.createNotificationChannel(channel);
-            }
+            notificationManager.createNotificationChannel(channel);
 
             notificationManager.notify(notificationId, notificationBuilder.build());
         } catch (Exception e) {

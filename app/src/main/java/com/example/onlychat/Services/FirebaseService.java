@@ -139,8 +139,8 @@ public class FirebaseService {
     public void sendOTPRequest(String phoneNumber) {
         if (auth == null || TextUtils.isEmpty(phoneNumber)) return;
 
-        FirebaseAuthSettings firebaseAuthSettings = auth.getFirebaseAuthSettings();
-        firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(phoneNumber, "123123");
+//        FirebaseAuthSettings firebaseAuthSettings = auth.getFirebaseAuthSettings();
+//        firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(phoneNumber, "123123");
 
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(auth)
                 .setPhoneNumber(phoneNumber)       // Phone number to verify
