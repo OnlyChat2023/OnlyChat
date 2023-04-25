@@ -47,7 +47,11 @@ public class Invite extends Fragment {
             this.invite_list.add(i);
         }
         customInviteItem.notifyDataSetChanged();
-//        Log.i("Invite", Integer.toString(invite_list.size()));
+    }
+
+    public static void addInvite(UserModel userModel){
+        invite_list.add(userModel);
+        customInviteItem.notifyDataSetChanged();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,8 +85,28 @@ public class Invite extends Fragment {
                 startActivity(intentToProfile);
             }
         });
-
+        waitRequestAddFriend();
         return invite;
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static void waitRequestAddFriend(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket()!=null){
+            SocketManager.getSocket().on("waitRequestAddFriend", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    JSONObject requests = (JSONObject) args[0];
+                    Log.i("Invite", requests.toString());
+                    UserModel userModel = new Gson().fromJson(String.valueOf(requests),UserModel.class);
+                    listInvites.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            addInvite(userModel);
+                        }
+                    });
+                }
+            });
+        }
     }
 
 
@@ -114,12 +138,7 @@ public class Invite extends Fragment {
     }
 
     public static void removeItem(int i){
-
         invite_list.remove(i);
         customInviteItem.notifyDataSetChanged();
-
-        Friends.updateUI();
     }
-
-
 }

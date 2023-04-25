@@ -117,8 +117,12 @@ public class HttpManager {
         queue.add(jsonObjReq);
     }
 
-    public void getListChat(HttpResponse responseReceiver) {
-        createRequest("http://" + ip + ":5000/api/onlychat/v1/user/userInformation", Request.Method.GET, "userprofile", null, responseReceiver);
+    public void getDirectMessage(HttpResponse responseReceiver) {
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/getListMessage", Request.Method.GET, "userprofile", null, responseReceiver);
+    }
+
+    public void getGroupChat(HttpResponse responseReceiver) {
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/getListMessage", Request.Method.GET, "userprofile", null, responseReceiver);
     }
 
     public void getListFriends(HttpResponse responseReceiver) {

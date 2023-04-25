@@ -238,6 +238,7 @@ public class OptionActivity extends AppCompatActivity {
                 Intent intentToProfile = new Intent (btn_profile.getContext(), Profile.class);
                 intentToProfile.putExtras(myBundle);
                 startActivity(intentToProfile);
+                overridePendingTransition(R.anim.fixed, R.anim.left_to_right);
             }
         });
 

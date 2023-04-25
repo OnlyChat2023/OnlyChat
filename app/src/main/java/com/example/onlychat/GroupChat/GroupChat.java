@@ -74,13 +74,6 @@ public class GroupChat extends Fragment {
         return roomModels;
     }
 
-    public void setRoomModels(ArrayList<RoomModel> roomModels) {
-        this.roomModels.clear();
-
-        this.roomModels.addAll(roomModels);
-        customChatItem.notifyDataSetChanged();
-    }
-
     public GroupChat(){}
 
     public GroupChat(ArrayList<RoomModel> roomModels){
@@ -103,9 +96,36 @@ public class GroupChat extends Fragment {
 
         new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAvatar());
         pref = new GlobalPreferenceManager(getContext());
+
+        // set list messages
+        HttpManager httpManager = new HttpManager(getContext());
+        httpManager.getGroupChat(
+                new HttpResponse(){
+                    @Override
+                    public void onSuccess(JSONObject Response) {
+                        try{
+                            JSONArray chats = Response.getJSONObject("data").getJSONArray("groupChat");
+                            Log.i("Group chat", Integer.toString(chats.length()));
+                            if(chats.length()>0){
+                                roomModels.addAll(MainScreen.getListRoom(chats));
+                                customChatItem.notifyDataSetChanged();
+                            }
+                        }
+                        catch (Exception e){
+                            Log.i("HTTP Success 11111 Error",e.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.i("HTTP Error",error);
+                    }
+                }
+        );
+
+
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
-        Log.i("Group chat", Integer.toString(roomModels.size()));
         customChatItem = new CustomChatItem(groupChat.getContext(),roomModels );
         listChat.setAdapter(customChatItem);
 
@@ -147,6 +167,7 @@ public class GroupChat extends Fragment {
                 Intent intentToProfile = new Intent (getContext(), Profile.class);
                 intentToProfile.putExtras(myBundle);
                 startActivity(intentToProfile);
+                getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
 
                 SocketManager.waitFinishEditProfile(new ProfileReceiver() {
                     @Override

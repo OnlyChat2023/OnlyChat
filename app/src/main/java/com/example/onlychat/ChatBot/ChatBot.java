@@ -78,18 +78,16 @@ public class ChatBot extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RelativeLayout botChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
+        RelativeLayout botChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content_bot, null);
 
         // set value for widget
         chatTitle=(TextView) botChat.findViewById(R.id.header_title);
         chatIcon = (ImageView) botChat.findViewById(R.id.chatIcon);
-        profile=(ImageView) botChat.findViewById(R.id.profile);
         addChat = (ImageView) botChat.findViewById(R.id.addChat);
         listChat = (ListView) botChat.findViewById(R.id.listChat);
 
         Log.i("<<<<<<Bot chat>>>>>>>>>", Integer.toString(roomModels.size()));
 
-        profile.setVisibility(View.GONE);
         pref = new GlobalPreferenceManager(getContext());
 
 
@@ -124,13 +122,6 @@ public class ChatBot extends Fragment {
                 MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
                 return true;
-            }
-        });
-
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
 
@@ -196,40 +187,5 @@ public class ChatBot extends Fragment {
             }
         });
         return botChat;
-    }
-
-    public class ImageAdapterGridView extends BaseAdapter {
-        private Context mContext;
-
-        public ImageAdapterGridView(Context c) {
-            mContext = c;
-        }
-
-        public int getCount() {
-            return avatarsImage.length;
-        }
-
-        public Object getItem(int position) {
-            return null;
-        }
-
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ImageView mImageView;
-
-            if (convertView == null) {
-                mImageView = new ImageView(mContext);
-                mImageView.setLayoutParams(new GridView.LayoutParams(160, 160));
-                mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                mImageView.setPadding(16, 16, 16, 16);
-            } else {
-                mImageView = (ImageView) convertView;
-            }
-            mImageView.setImageResource(avatarsImage[position]);
-            return mImageView;
-        }
     }
 }

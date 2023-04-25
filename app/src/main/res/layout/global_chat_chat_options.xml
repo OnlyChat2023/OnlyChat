@@ -18,13 +18,16 @@
             android:layout_height="28dp"
             app:srcCompat="@drawable/global_chat_back" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/avatar"
             android:layout_marginTop="15dp"
             android:layout_width="115dp"
             android:layout_height="115dp"
             android:layout_centerHorizontal="true"
-            app:srcCompat="@drawable/global_chat_avatar1" />
+            app:shapeAppearanceOverlay="@style/roundedImagesStyle"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            />
 
         <TextView
             android:id="@+id/group_name"

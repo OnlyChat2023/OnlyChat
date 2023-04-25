@@ -18,9 +18,11 @@ import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 
 import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
+import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
@@ -30,24 +32,35 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
+import io.socket.emitter.Emitter;
+
 public class AllFriends extends Fragment {
-    ListView listFriends;
+    static ListView listFriends;
     static CustomFriendItem customFriendItem;
     static ArrayList<UserModel> friend_list = new ArrayList<>();
     static FriendBottomDialogFragment friendBottomDialogFragment;
+
+    public ArrayList<UserModel> getFriend_list() {
+        return friend_list;
+    }
 
     GlobalPreferenceManager pref;
     static UserModel myInfo;
 
     public void setFriend_list(ArrayList<UserModel> friend_list){
-        this.friend_list.clear();
+        AllFriends.friend_list.clear();
         for(UserModel i:friend_list){
-            this.friend_list.add(i);
+            AllFriends.friend_list.add(i);
         }
         customFriendItem.notifyDataSetChanged();
-//        Log.i("All friends", Integer.toString(friend_list.size()));
+    }
+
+    public static void addFriend(UserModel newFriend){
+        friend_list.add(newFriend);
+        customFriendItem.notifyDataSetChanged();
     }
 
     @Override
@@ -96,7 +109,69 @@ public class AllFriends extends Fragment {
             }
         });
 
+        waitAcceptFriend();
+        waitDeleteFriend();
+
         return allFriends;
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void waitAcceptFriend(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitAcceptFriend", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+
+                    JSONObject new_friend = (JSONObject) args[0];
+                    UserModel friend = new Gson().fromJson(String.valueOf(new_friend), UserModel.class);
+
+                    JSONObject new_room;
+                    RoomModel room = null;
+                    if(args.length>1){
+                        new_room = (JSONObject) args[1];
+                        try {
+                            room = MainScreen.getRoom(new_room);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    RoomModel finalRoom = room;
+                    Friends.getQuatity().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            addFriend(friend);
+                            Friends.getQuatity().setText(friend_list.size()+" available");
+                            if(args.length>1){
+                                MainScreen.getDirectChatFragment().addRoom(finalRoom);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    public static void waitDeleteFriend(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitDeleteFriend", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    listFriends.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(int i=0;i<friend_list.size();i++){
+                                if(friend_list.get(i).get_id().equals(args[0]))removeFriendUpdateUI(i);
+                            }
+                        }
+                    });
+                }
+            });
+        }
     }
 
     public static void removeFriend(String id){

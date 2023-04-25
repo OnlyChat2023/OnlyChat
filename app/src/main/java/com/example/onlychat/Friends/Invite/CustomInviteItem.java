@@ -32,23 +32,6 @@ public class CustomInviteItem extends ArrayAdapter<UserModel> {
     Button addFriendBtn;
     Button removeBtn;
 
-
-    public Button getAddFriendBtn() {
-        return addFriendBtn;
-    }
-
-    public void setAddFriendBtn(Button addFriendBtn) {
-        this.addFriendBtn = addFriendBtn;
-    }
-
-    public Button getRemoveBtn() {
-        return removeBtn;
-    }
-
-    public void setRemoveBtn(Button removeBtn) {
-        this.removeBtn = removeBtn;
-    }
-    GlobalPreferenceManager pref;
     ArrayList<UserModel> listInvite;
 
     public CustomInviteItem(@NonNull Context context, ArrayList<UserModel> list_invite) {

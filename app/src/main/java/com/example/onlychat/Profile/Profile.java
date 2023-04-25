@@ -137,13 +137,6 @@ public class Profile extends AppCompatActivity {
                 Log.i("all friends click item", profile.toString());
 
                 user = new Gson().fromJson(profile.toString(), UserModel.class);
-//                viewPagerAdapter.getItem(0);
-
-//                // refresh Fragment
-//                final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//                ft.detach(profileInformation);
-//                ft.attach(profileInformation);
-//                ft.commit();
 
                 profileInformation.setData(user);
                 profileSocial.setData(user);

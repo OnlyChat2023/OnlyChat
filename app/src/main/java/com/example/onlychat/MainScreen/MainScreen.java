@@ -72,14 +72,11 @@ public class MainScreen extends AppCompatActivity {
     private ArrayList<RoomModel> direct_list= new ArrayList<>();
     private ArrayList<RoomModel> chatbot_list= new ArrayList<>();
 
-    private ArrayList<UserModel> friend_list = new ArrayList<>();
-    private ArrayList<UserModel> invite_list = new ArrayList<>();
-
-    GlobalChat globalChatFragment = new GlobalChat();
+    static GlobalChat globalChatFragment = new GlobalChat();
     static DirectMessage directChatFragment = new DirectMessage();
-    GroupChat groupChatFragment = new GroupChat();
-    ChatBot botChatFragment = new ChatBot();
-    Friends friendsFragment = new Friends();
+    static GroupChat groupChatFragment = new GroupChat();
+    static ChatBot botChatFragment = new ChatBot();
+    static Friends friendsFragment = new Friends();
     GlobalPreferenceManager pref;
     static UserModel myInfo;
 
@@ -87,72 +84,51 @@ public class MainScreen extends AppCompatActivity {
         return directChatFragment;
     }
 
-    public void getMetaData() {
-        HttpManager httpManager = new HttpManager(this);
-        httpManager.getListChat(
-            new HttpResponse(){
-                @Override
-                public void onSuccess(JSONObject Response) {
-                    try{
-                        JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
-                        JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
-                        JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
-                        JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
-
-
-                        
-                        if(directChat.length()>0){
-                            direct_list = getListRoom(directChat);
-                            directChatFragment.setRoomModels(direct_list);
-                        }
-
-                        if(groupChat.length()>0){
-                            group_list = getListRoom(groupChat);
-                            groupChatFragment.setRoomModels(group_list);
-                        }
-
-                        if(globalChat.length()>0){
-                            global_list = getListRoom(globalChat);
-                            globalChatFragment.setRoomModels(global_list);
-                        }
-
-                        if(botChat.length()>0){
-                            chatbot_list = getListRoom(botChat);
-                            botChatFragment.setRoomModels(chatbot_list);
-                        }
-                    }
-                    catch (Exception e){
-                        Log.i("HTTP Success 11111 Error",e.toString());
-                    }
-                }
-
-                @Override
-                public void onError(String error) {
-                    Log.i("HTTP Error",error);
-                }
-            }
-        );
-
-        httpManager.getListFriends(
-                new HttpResponse() {
-                    @Override
-                    public void onSuccess(JSONObject response) throws JSONException {
-                        JSONArray friends = response.getJSONObject("data").getJSONArray("friends");
-                        JSONArray friend_request = response.getJSONObject("data").getJSONArray("friend_requests");
-
-                        friend_list = getListFriends(friends);
-                        invite_list = getListInvite(friend_request);
-
-                        friendsFragment.setFriend(friend_list,invite_list);
-                    }
-
-                    @Override
-                    public void onError(String error) {
-
-                    }
-                }
-        );
-    }
+//    public void getMetaData() {
+//        HttpManager httpManager = new HttpManager(this);
+//        httpManager.getListChat(
+//            new HttpResponse(){
+//                @Override
+//                public void onSuccess(JSONObject Response) {
+//                    try{
+//                        JSONArray directChat = Response.getJSONObject("data").getJSONArray("directChat");
+//                        JSONArray groupChat = Response.getJSONObject("data").getJSONArray("groupChat");
+//                        JSONArray globalChat = Response.getJSONObject("data").getJSONArray("globalChat");
+//                        JSONArray botChat = Response.getJSONObject("data").getJSONArray("botChat");
+//
+//
+//                        if(directChat.length()>0){
+//                            direct_list = getListRoom(directChat);
+//                            directChatFragment.setRoomModels(direct_list);
+//                        }
+//
+//                        if(groupChat.length()>0){
+//                            group_list = getListRoom(groupChat);
+//                            groupChatFragment.setRoomModels(group_list);
+//                        }
+//
+//                        if(globalChat.length()>0){
+//                            global_list = getListRoom(globalChat);
+//                            globalChatFragment.setRoomModels(global_list);
+//                        }
+//
+//                        if(botChat.length()>0){
+//                            chatbot_list = getListRoom(botChat);
+//                            botChatFragment.setRoomModels(chatbot_list);
+//                        }
+//                    }
+//                    catch (Exception e){
+//                        Log.i("HTTP Success 11111 Error",e.toString());
+//                    }
+//                }
+//
+//                @Override
+//                public void onError(String error) {
+//                    Log.i("HTTP Error",error);
+//                }
+//            }
+//        );
+//    }
 
     @Override
     protected void onResume() {
@@ -178,7 +154,6 @@ public class MainScreen extends AppCompatActivity {
             SocketManager.getInstance();
             SocketManager.register(myInfo);
             SocketManager.waitRoomChange(new RoomListener(){
-
                 @Override
                 public void onLoaded(String roomId, String channel) {
                     if (channel.equals("group_chat")) {
@@ -202,7 +177,7 @@ public class MainScreen extends AppCompatActivity {
 
 
 
-            getMetaData();
+//            getMetaData();
             setContentView(R.layout.main_screen);
 
             viewPager = (ViewPager) findViewById(R.id.viewPaper);
@@ -232,28 +207,6 @@ public class MainScreen extends AppCompatActivity {
                             View tabView = tab.getCustomView();
                             ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
                             tab_icon.setBackgroundColor(Color.parseColor("#352159"));
-
-                            if(tab.getPosition()==4){
-                            HttpManager httpManager = new HttpManager(tabLayout.getContext());
-                            httpManager.getListFriends(
-                                    new HttpResponse() {
-                                        @Override
-                                        public void onSuccess(JSONObject response) throws JSONException {
-                                            JSONArray friend_request = response.getJSONObject("data").getJSONArray("friend_requests");
-//                                            Log.i("Da vao day", Integer.toString(friend_request.length()));
-                                            invite_list = getListInvite(friend_request);
-
-                                            friendsFragment.getInvite().setInvite_list(invite_list);
-                                        }
-
-                                        @Override
-                                        public void onError(String error) {
-
-                                        }
-                                    }
-                            );
-                            }
-
                         }
 
                         @Override
@@ -321,110 +274,70 @@ public class MainScreen extends AppCompatActivity {
         }
     }
 
-    public ArrayList<UserModel> getListFriends(JSONArray friends) throws JSONException {
-        ArrayList<UserModel> listFriends = new ArrayList<>();
-        for(int i=0;i<friends.length();i++){
-            JSONObject messageJson = (JSONObject) friends.getJSONObject(i);
-            UserModel friend = new Gson().fromJson(String.valueOf(messageJson),UserModel.class);
-            listFriends.add(friend);
-        }
-        return  listFriends;
-    }
-
-    public ArrayList<UserModel> getListInvite(JSONArray invite) throws JSONException {
-        ArrayList<UserModel> listInvite= new ArrayList<>();
-        for(int i=0;i<invite.length();i++){
-            JSONObject messageJson = (JSONObject) invite.getJSONObject(i);
-            UserModel friend = new Gson().fromJson(String.valueOf(messageJson),UserModel.class);
-            listInvite.add(friend);
-        }
-        return  listInvite;
-    }
-
-
     public static ArrayList<RoomModel> getListRoom(JSONArray channel) throws JSONException, ParseException {
         // create list room
         ArrayList<RoomModel> listRoom = new ArrayList<>();
 
         // set item for list room
         for(int i=0;i<channel.length();i++){
-            //create room
-            RoomModel roomModel = new RoomModel();
-            //set id, avatar, name for room
-            roomModel.setId(channel.getJSONObject(i).getString("_id"));
-            roomModel.setAvatar(channel.getJSONObject(i).getString("avatar"));
-            roomModel.setName(channel.getJSONObject(i).getString("name"));
-
-            // create list message
-            ArrayList<MessageModel> listMessage = new ArrayList<>();
-            // set information for message
-            for(int j=0;j<channel.getJSONObject(i).getJSONArray("chats").length();j++){
-                JSONObject messageJson = (JSONObject) channel.getJSONObject(i).getJSONArray("chats").get(j);
-
-                // set information type String for message
-                MessageModel messageModel = new Gson().fromJson(String.valueOf(messageJson), MessageModel.class);
-
-                // set time message send
-                String dtStart = messageJson.getString("time");
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                format.setTimeZone(TimeZone.getTimeZone("GMT"));
-                try {
-                    java.util.Date date = format.parse(dtStart);
-                    messageModel.setTime(date);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                // add message to list message
-                listMessage.add(messageModel);
-            }
-
-            // set options
-            RoomOptions roomOptions = new RoomOptions();
-            if(channel.getJSONObject(i).getJSONArray("options").length()>0){
-                roomOptions = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("options").get(0)),RoomOptions.class);
-
-                //set members
-                ArrayList<Member> members = new ArrayList<>();
-//                Log.i("================= main screen group =================", roomModel.getName());
-
-                for(int l=0;l<channel.getJSONObject(i).getJSONArray("members").length();l++){
-                    Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
-//                    Log.i("main screen", member.getUser_id());
-//                    Log.i("main screen", member.getName());
-//                    Log.i("main screen", member.getNickname());
-//                    Log.i("main screen", member.getAvatar());
-//                    Log.i("main screen >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>","");
-                    members.add(member);
-                }
-                roomOptions.setMembers(members);
-            } else if (channel.getJSONObject(i).getJSONArray("members").length() > 0){ //Chat bot case
-                Log.i (">>>>><<<<<<<<<<<", "Chat bot ======");
-                ArrayList<Member> members = new ArrayList<>();
-                for(int l=0;l<channel.getJSONObject(i).getJSONArray("members").length();l++){
-                    Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
-                    Log.i("main screen", member.getUser_id());
-                    Log.i("main screen", member.getName());
-                    Log.i("main screen", member.getNickname());
-                    Log.i("main screen", member.getAvatar());
-                    Log.i("main screen >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>","");
-                    members.add(member);
-                }
-                roomOptions.setMembers(members);
-            }
-            //set time of last message
-            String abc = channel.getJSONObject(i).getString("update_time");
-            java.util.Date date1=  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(abc);
-
-            // set update_time, options, messages to room
-            roomModel.setUpdate_time(date1);
-            roomModel.setOptions(roomOptions);
-            roomModel.setMessages(listMessage);
-
             // add room to list room
-            listRoom.add(roomModel);
+            listRoom.add(getRoom(channel.getJSONObject(i)));
+        }
+        return listRoom;
+    }
+
+    public static RoomModel getRoom(JSONObject room) throws JSONException, ParseException {
+        RoomModel roomModel = new RoomModel();
+        //set id, avatar, name for room
+        roomModel.setId(room.getString("_id"));
+        roomModel.setAvatar(room.getString("avatar"));
+        roomModel.setName(room.getString("name"));
+
+        // create list message
+        ArrayList<MessageModel> listMessage = new ArrayList<>();
+        // set information for message
+        for(int j=0;j<room.getJSONArray("chats").length();j++){
+            JSONObject messageJson = (JSONObject) room.getJSONArray("chats").get(j);
+
+            // set information type String for message
+            MessageModel messageModel = new Gson().fromJson(String.valueOf(messageJson), MessageModel.class);
+
+            // set time message send
+            String dtStart = messageJson.getString("time");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            format.setTimeZone(TimeZone.getTimeZone("GMT"));
+            try {
+                java.util.Date date = format.parse(dtStart);
+                messageModel.setTime(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            // add message to list message
+            listMessage.add(messageModel);
         }
 
-        return listRoom;
+        // set options
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions = new Gson().fromJson(String.valueOf(room.getJSONObject("options")),RoomOptions.class);
+
+        //set members
+        ArrayList<Member> members = new ArrayList<>();
+        for(int l=0;l<room.getJSONArray("members").length();l++){
+            Member member = new Gson().fromJson(String.valueOf(room.getJSONArray("members").get(l)),Member.class);
+            members.add(member);
+        }
+        roomOptions.setMembers(members);
+
+        //set time of last message
+        String abc = room.getString("update_time");
+        java.util.Date date1=  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(abc);
+
+        // set update_time, options, messages to room
+        roomModel.setUpdate_time(date1);
+        roomModel.setOptions(roomOptions);
+        roomModel.setMessages(listMessage);
+
+        return roomModel;
     }
 }
