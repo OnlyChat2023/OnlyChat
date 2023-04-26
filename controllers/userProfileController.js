@@ -21,16 +21,16 @@ const getUserInformation = catchAsync(async (req, res) => {
     const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
     newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
     newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
-    newDM.options = [{ ...newDM.options[0], _id: newDM.options[0]._id.toString() }];
+    newDM.options = { ...newDM.options[0], _id: newDM.options[0]._id.toString() };
 
     directChat.push(newDM);
   }
-  console.log(directChat)
+  // console.log(directChat)
   // console.log(JSON.stringify(directChat, null, 2));
 
   const groupChat = []
   for (let i of user.groupchat_channel) {
-    console.log(i)
+    // console.log(i)
     const dmList = await GroupChat.findOne({ _id: i });
     // console.log(i)
     for (let i of dmList.chats) {
@@ -44,18 +44,18 @@ const getUserInformation = catchAsync(async (req, res) => {
         i.nickname = _u.name
       }
     }
-    console.log("2")
+    // console.log("2")
 
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
 
     const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
     newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
     newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
-    newDM.options = [{ ...newDM.options[0], _id: newDM.options[0]._id.toString() }];
+    newDM.options = { ...newDM.options[0], _id: newDM.options[0]._id.toString() };
 
     groupChat.push(newDM);
   }
-  console.log(groupChat);
+  // console.log(groupChat);
 
   // console.log(JSON.stringify(groupChat.members, null, 2));
 
@@ -67,7 +67,7 @@ const getUserInformation = catchAsync(async (req, res) => {
     const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
     newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
     newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
-    newDM.options = [{ ...newDM.options[0], _id: newDM.options[0]._id.toString() }];
+    newDM.options = { ...newDM.options[0], _id: newDM.options[0]._id.toString() };
 
     globalChat.push(newDM);
   }
@@ -112,21 +112,35 @@ const getListFriend = catchAsync(async (req, res, next) => {
 });
 
 const getUserById = catchAsync(async (req, res, nex) => {
-  const _user = await User.findOne({ _id: req.body._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel').lean()
-  let status = 0
-  // friend
-  if (req.user.friend.includes(_user._id)) status = 1;
-  // invite to me
-  if (req.user.friend_request.includes(_user._id)) status = 2;
-  // send invite
-  if (_user.friend_request.includes(req.user.id)) status = 3;
+  let _user
+  const regex = /^\d+$/
+  if (regex.exec(req.body._id)) _user = await User.findOne({ phone: req.body._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel').lean()
+  else _user = await User.findOne({ _id: req.body._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel').lean()
+  if (_user != null) {
+    let status = 0
+    // friend
+    if (req.user.friend.includes(_user._id)) status = 1;
+    // invite to me
+    if (req.user.friend_request.includes(_user._id)) status = 2;
+    // send invite
+    if (_user.friend_request.includes(req.user.id)) status = 3;
 
-  const newUser = { ..._user, isFriend: status };
-  // console.log(_user);
-  res.status(200).json({
-    status: 'success',
-    data: newUser
-  });
+    let block = 0;
+    if (_user.block.includes(req.user.id)) block = 1
+    if (req.user.block.includes(_user._id)) block = 2
+
+    const newUser = { ..._user, isFriend: status, isBlock: block };
+    // console.log(_user);
+    res.status(200).json({
+      status: 'success',
+      data: newUser
+    });
+  }
+  else {
+    res.status(200).json({
+      status: 'not found',
+    });
+  }
 })
 
 const getUserByPhone = catchAsync(async (req, res, nex) => {
@@ -175,7 +189,7 @@ const setAnonymousInformation = catchAsync(async (req, res, next) => {
     const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
     newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
     newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
-    newDM.options = [{ ...newDM.options[0], _id: newDM.options[0]._id.toString() }];
+    newDM.options = { ...newDM.options[0], _id: newDM.options[0]._id.toString() };
 
     globalChat.push(newDM);
   }
@@ -188,16 +202,6 @@ const setAnonymousInformation = catchAsync(async (req, res, next) => {
     }
   });
 })
-
-
-
-const filterObj = (obj, ...allowedFields) => {
-  const newObj = {};
-  Object.keys(obj).forEach((el) => {
-    if (allowedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
-};
 
 const updateProfile = catchAsync(async (req, res, next) => {
   const _user = await User.findOne({ _id: req.user._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend_request -anonymous_avatar -nickname')

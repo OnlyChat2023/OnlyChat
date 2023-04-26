@@ -262,7 +262,7 @@ io.on('connection', (socket) => {
                         });
                 }
 
-                socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
+                socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'global_chat');
             }
 
             GlobalChannel.chats.push(messageModal);
@@ -305,7 +305,7 @@ io.on('connection', (socket) => {
                         });
                 }
 
-                socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
+                socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'direct_message');
             }
 
             DirectMessage.chats.push(messageModal);
@@ -350,7 +350,7 @@ io.on('connection', (socket) => {
                         });
                 }
 
-                socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
+                socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'group_chat');
             }
 
             GroupChat.chats.push(messageModal);
@@ -431,7 +431,7 @@ io.on('connection', (socket) => {
                         });
                 }
 
-                socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
+                socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'global_chat');
             }
 
             GlobalChannel.chats.push(messageModal);
@@ -474,7 +474,7 @@ io.on('connection', (socket) => {
                         });
                 }
 
-                socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
+                socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'direct_message');
             }
 
             DirectMessage.chats.push(messageModal);
@@ -519,7 +519,7 @@ io.on('connection', (socket) => {
                         });
                 }
 
-                socket.to(basket[member.user_id]).emit('roomListener', socket.room, socket.channel);
+                socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'group_chat');
             }
 
             GroupChat.chats.push(messageModal);
@@ -571,69 +571,121 @@ io.on('connection', (socket) => {
 
     });
 
+    socket.on('changeNickname', async (id_1, nickname_1, id_2, nickname_2, chat_id) => {
+        console.log(id_1)
+        console.log(nickname_1)
+        console.log(id_2)
+        console.log(nickname_2)
+        console.log(chat_id)
+
+        let dm = await directChat.findById(chat_id)
+        dm.members.filter(el => el.user_id == id_1)[0].nickname = nickname_1
+        dm.members.filter(el => el.user_id == id_2)[0].nickname = nickname_2
+
+
+        io.to(basket[id_1]).emit("waitSetNickname", nickname_1, nickname_2, chat_id);
+        io.to(basket[id_2]).emit("waitSetNickname", nickname_2, nickname_1, chat_id);
+
+        await dm.save()
+    })
+
     socket.on('acceptRequestAddFriend', async (id, user) => {
         // console.log("acceptRequestAddFriend")
         // console.log(User.)
+
         const _user = JSON.parse(user)
         let u = await User.findOne({ _id: _user._id })
+        let f = await User.findOne({ _id: id })
+
+
         u.friend.push(id)
         u.friend_request.splice(u.friend_request.indexOf(id), 1)
 
-        let f = await User.findOne({ _id: id })
         f.friend.push(_user._id)
 
-        // ////////////////////////
-        // for (let dm of u.directmessage_channel) {
-        //     const DirectMessage = await directChat.findOne({ _id: dm })
-
-        //     for (let i of DirectMessage.members) {
-        //         if (i.user_id == f._id) {
-        //             res.status(200).json({ status: 'success', data: {} });
-        //             return;
-        //         }
-        //     }
-        // }
+        const new_friends = await User.findOne({ _id: f._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
+        // console.log("2")
+        const f_new_friends = await User.findOne({ _id: u._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
         // console.log("3")
+        for (let i of u.directmessage_channel) {
+            if (f.directmessage_channel.indexOf(i) >= 0) {
+                io.to(basket[_user._id]).emit('waitAcceptFriend', new_friends);
+                io.to(basket[id]).emit("waitAcceptFriend", f_new_friends);
 
-        // const newChat = {
-        //     avatar: "",
-        //     name: "",
-        //     chats: [],
-        //     members: [
-        //         {
-        //             user_id: u._id,
-        //             avatar: u.avatar,
-        //             name: u.name,
-        //             nickname: u.nickname,
-        //         },
-        //         {
-        //             user_id: f._id,
-        //             avatar: f.avatar,
-        //             name: f.name,
-        //             nickname: f.nickname,
-        //         }
-        //     ],
-        //     options: [
-        //         {
-        //             user_id: u._id,
-        //             notify: false,
-        //             block: false
-        //         },
-        //         {
-        //             user_id: f._id,
-        //             notify: false,
-        //             block: false
-        //         }
-        //     ],
-        //     update_time: Date
-        // }
+                await u.save()
+                await f.save()
+                return
+            }
+        }
         // console.log("4")
 
-        const list_friends = await User.find({ _id: { $in: u.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
-        io.sockets.emit('acceptRequestListener', list_friends);
+        const new_room = {
+            chats: [],
+            members: [
+                {
+                    user_id: u._id,
+                    nickname: u.name,
+                },
+                {
+                    user_id: f._id,
+                    nickname: f.name,
+                }
+            ],
+            options: [
+                {
+                    user_id: u._id,
+                    notify: false,
+                    block: false
+                },
+                {
+                    user_id: f._id,
+                    notify: false,
+                    block: false
+                }
+            ],
+            update_time: new Date
+        }
 
-        const f_list_friends = await User.find({ _id: { $in: f.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
-        io.to(basket[id]).emit("waitAcceptFriend", f_list_friends);
+        const direct_message = await directChat.create(new_room);
+
+        u.directmessage_channel.push(direct_message._id.toString())
+        f.directmessage_channel.push(direct_message._id.toString())
+
+        for (let j of new_room.members) {
+            if (j.user_id === u._id) {
+                j.avatar = u.avatar
+                j.name = u.name
+            }
+            else {
+                j.avatar = f.avatar
+                j.name = f.name
+            }
+        }
+
+        new_room._id = direct_message._id.toString()
+        const u_new_room = new_room
+        const f_new_room = new_room
+
+        u_new_room.name = u_new_room.members.filter(el => el.user_id == id)[0].nickname
+        u_new_room.avatar = u_new_room.members.filter(el => el.user_id == id)[0].avatar
+        u_new_room.options = {
+            user_id: u._id,
+            notify: false,
+            block: false
+        }
+        // console.log(u_new_room.options)
+
+        io.to(basket[_user._id]).emit('waitAcceptFriend', new_friends, u_new_room);
+
+        f_new_room.name = f_new_room.members.filter(el => el.user_id != id)[0].nickname
+        f_new_room.avatar = f_new_room.members.filter(el => el.user_id != id)[0].avatar
+        f_new_room.options = {
+            user_id: f._id,
+            notify: false,
+            block: false
+        }
+
+        io.to(basket[id]).emit("waitAcceptFriend", f_new_friends, f_new_room);
 
         await u.save()
         await f.save()
@@ -645,9 +697,9 @@ io.on('connection', (socket) => {
         let f = await User.findOne({ _id: id })
         f.friend_request.push(_user._id)
 
-        const list_friend_requests = await User.find({ _id: { $in: f.friend_request } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description -phone')
+        const friend_requests = await User.findOne({ _id: _user._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description -phone')
 
-        io.to(basket[id]).emit("waitRequestAddFriend", list_friend_requests);
+        io.to(basket[id]).emit("waitRequestAddFriend", friend_requests);
         await f.save()
     })
 
@@ -665,8 +717,7 @@ io.on('connection', (socket) => {
         let f = await User.findOne({ _id: id })
         f.friend.splice(f.friend.indexOf(_user._id), 1)
 
-        const f_list_friends = await User.find({ _id: { $in: f.friend } }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
-        io.to(basket[id]).emit("waitDeleteFriend", f_list_friends);
+        io.to(basket[id]).emit("waitDeleteFriend", _user._id);
 
         await u.save()
         await f.save()
@@ -676,7 +727,25 @@ io.on('connection', (socket) => {
         const _user = JSON.parse(user)
         let u = await User.findOne({ _id: _user._id })
         u.friend.splice(u.friend.indexOf(id), 1)
+        let f = await User.findOne({ _id: id })
+        f.friend.splice(f.friend.indexOf(_user._id), 1)
+
+        io.to(basket[id]).emit("waitDeleteFriend", _user._id);
+
         u.block.push(id)
+
+        await u.save()
+        await f.save()
+    })
+
+    socket.on('unblockFriend', async (id, user) => {
+        const _user = JSON.parse(user)
+        let u = await User.findOne({ _id: _user._id })
+
+        // io.to(basket[id]).emit("waitUnblock", _user._id);
+
+        u.block.splice(u.block.indexOf(id), 1)
+
         await u.save()
     })
 
@@ -703,14 +772,14 @@ io.on('connection', (socket) => {
             const GroupChat = await groupChat.findOne({ _id: roomID });
 
             for (const member of GroupChat.members) {
-                socket.to(basket[member.user_id]).emit('roomListener', roomID, Channel);
+                socket.to(basket[member.user_id]).emit('roomListener', roomID, 'group_chat');
             }
         }
         if (Channel === 'global_chat') {
             const GlobalChat = await globalChat.findOne({ _id: roomID });
 
             for (const member of GlobalChat.members) {
-                socket.to(basket[member.user_id]).emit('roomListener', roomID, Channel);
+                socket.to(basket[member.user_id]).emit('roomListener', roomID, 'global_chat');
             }
         }
     });

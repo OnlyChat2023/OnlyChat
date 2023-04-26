@@ -159,7 +159,6 @@ const getMetaData = catchAsync(async (req, res, next) => {
   const groupChats = []
   for (let i of user.groupchat_channel) {
     const dmList = await groupChat.findOne({ _id: i });
-    // console.log(i)
     for (let i of dmList.chats) {
       if (dmList.members.filter(el => el.user_id == i.user_id).length != 0) {
         i.avatar = dmList.members.filter(el => el.user_id == i.user_id)[0].avatar
@@ -177,7 +176,7 @@ const getMetaData = catchAsync(async (req, res, next) => {
     const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
     newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
     newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
-    newDM.options = [{ ...newDM.options[0], _id: newDM.options[0]._id.toString() }];
+    newDM.options = { ...newDM.options[0], _id: newDM.options[0]._id.toString() };
 
     groupChats.push(newDM);
   }
