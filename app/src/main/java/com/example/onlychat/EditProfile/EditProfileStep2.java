@@ -28,6 +28,7 @@ public class EditProfileStep2 extends AppCompatActivity {
     EditText et_description;
     Button finishBtn;
     ImageView backBtn;
+    GlobalPreferenceManager pref;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class EditProfileStep2 extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle myBundle = intent.getExtras();
 
+        pref = new GlobalPreferenceManager(this);
         et_facebook = (EditText) findViewById(R.id.et_facebook);
         et_instagram = (EditText) findViewById(R.id.et_instagram);
         et_twitter = (EditText) findViewById(R.id.et_twitter);
@@ -74,11 +76,16 @@ public class EditProfileStep2 extends AppCompatActivity {
 
                 new GlobalPreferenceManager(EditProfileStep2.this).saveUser(user);
                 finish();
+                UserModel userInfo = pref.getUserModel();
 
-//                System.out.println("HERE: " + myBundle.getString("user_id"));
-//                Intent intentToProfile = new Intent (finishBtn.getContext(), Profile.class);
-//                intentToProfile.putExtras(myBundle);
-//                startActivity(intentToProfile);
+                Bundle myBundle = new Bundle();
+                myBundle.putInt("index", 0);
+                myBundle.putString("user_id", userInfo.get_id());
+
+                Intent intentToProfile = new Intent (EditProfileStep2.this, Profile.class);
+                intentToProfile.putExtras(myBundle);
+                startActivity(intentToProfile);
+                overridePendingTransition(R.anim.fixed, R.anim.left_to_right);
             }
         });
 
@@ -86,6 +93,7 @@ public class EditProfileStep2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                overridePendingTransition(R.anim.fixed, R.anim.left_to_right);
             }
         });
     }

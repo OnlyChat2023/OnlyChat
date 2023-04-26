@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -70,6 +71,8 @@ public class DirectMessage extends Fragment {
     ImageView profile;
     ImageView addChat;
     ListView listChat;
+    private ProgressBar progressBar;
+    private TextView loading;
     CustomChatItem customChatItem;
     static ArrayList<RoomModel> roomModels = new ArrayList<>();
     GlobalPreferenceManager pref;
@@ -77,17 +80,12 @@ public class DirectMessage extends Fragment {
         return roomModels;
     }
 
-    public void setRoomModels(ArrayList<RoomModel> roomModels) {
-        this.roomModels.clear();
-//        this.roomModels = roomModels;
-        this.roomModels.addAll(roomModels);
+    public void addRoom(RoomModel roomModel){
+        roomModels.add(roomModel);
         customChatItem.notifyDataSetChanged();
-//        Log.i("SET - Direct", roomModels.get(0).getName());
     }
-    GridView androidGridView;
 
     public DirectMessage(){}
-
     static UserModel myInfo;
     RelativeLayout globalChat;
     @Override
@@ -101,12 +99,42 @@ public class DirectMessage extends Fragment {
         addChat.setVisibility(View.GONE);
         listChat = (ListView) globalChat.findViewById(R.id.listChat);
 
+        progressBar = (ProgressBar) globalChat.findViewById(R.id.progressBar);
+        loading  = (TextView) globalChat.findViewById(R.id.loading);
+
         pref = new GlobalPreferenceManager(getContext());
         new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAvatar());
 
-        pref = new GlobalPreferenceManager(getContext());
         myInfo = pref.getUserModel();
-        Log.i("Direct chat", Integer.toString(roomModels.size()));
+
+        // set list messages
+        HttpManager httpManager = new HttpManager(getContext());
+        httpManager.getDirectMessage(
+            new HttpResponse(){
+                @Override
+                public void onSuccess(JSONObject Response) {
+                    loading.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                    try{
+                        JSONArray chats = Response.getJSONObject("data").getJSONArray("directChat");
+                        Log.i("Direct chat", Integer.toString(chats.length()));
+                        if(chats.length()>0){
+                            roomModels.addAll(MainScreen.getListRoom(chats));
+                            customChatItem.notifyDataSetChanged();
+                        }
+                    }
+                    catch (Exception e){
+                        Log.i("HTTP Success 11111 Error",e.toString());
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.i("HTTP Error",error);
+                }
+            }
+        );
+
 
         chatTitle.setText("direct message channel");
         chatIcon.setImageResource(R.drawable.direct_message_icon);
@@ -132,13 +160,8 @@ public class DirectMessage extends Fragment {
         listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//                MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
-//                messageBottomDialogFragment.leave.setVisibility(View.GONE);
-//                messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
 
-                MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
-//                messageBottomDialogFragment.setActivity(this);
+                DirectMessageBottomDialog messageBottomDialogFragment = new DirectMessageBottomDialog();
                 messageBottomDialogFragment.setId(roomModels.get(i).getId());
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
 
@@ -158,6 +181,8 @@ public class DirectMessage extends Fragment {
                 Intent intentToProfile = new Intent (getContext(), Profile.class);
                 intentToProfile.putExtras(myBundle);
                 startActivity(intentToProfile);
+                getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
+
 
                 SocketManager.waitFinishEditProfile(new ProfileReceiver() {
                     @Override
@@ -201,6 +226,7 @@ public class DirectMessage extends Fragment {
         waitSetNickname();
         return globalChat;
     }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void waitSetNickname(){
         SocketManager.getInstance();
@@ -299,7 +325,7 @@ public class DirectMessage extends Fragment {
                     ArrayList<String> founded = new ArrayList<String>();
 
                     if(globalChat.length()>0){
-                        ArrayList<RoomModel> rooms = getListRoom(globalChat);
+                        ArrayList<RoomModel> rooms = MainScreen.getListRoom(globalChat);
 
                         for (RoomModel old_room : roomModels) {
                             boolean found = false;
@@ -340,111 +366,4 @@ public class DirectMessage extends Fragment {
         });
     }
 
-    public ArrayList<RoomModel> getListRoom(JSONArray channel) throws JSONException, ParseException {
-        // create list room
-        ArrayList<RoomModel> listRoom = new ArrayList<>();
-
-        // set item for list room
-        for(int i=0;i<channel.length();i++){
-            //create room
-            RoomModel roomModel = new RoomModel();
-            //set id, avatar, name for room
-            roomModel.setId(channel.getJSONObject(i).getString("_id"));
-            roomModel.setAvatar(channel.getJSONObject(i).getString("avatar"));
-            roomModel.setName(channel.getJSONObject(i).getString("name"));
-
-            // create list message
-            ArrayList<MessageModel> listMessage = new ArrayList<>();
-            // set information for message
-            for(int j=0;j<channel.getJSONObject(i).getJSONArray("chats").length();j++){
-                JSONObject messageJson = (JSONObject) channel.getJSONObject(i).getJSONArray("chats").get(j);
-
-                // set information type String for message
-                MessageModel messageModel = new Gson().fromJson(String.valueOf(messageJson), MessageModel.class);
-
-                // set time message send
-                String dtStart = messageJson.getString("time");
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                format.setTimeZone(TimeZone.getTimeZone("GMT"));
-                try {
-                    java.util.Date date = format.parse(dtStart);
-                    messageModel.setTime(date);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                // add message to list message
-                listMessage.add(messageModel);
-            }
-
-            // set options
-            RoomOptions roomOptions = null;
-            if(channel.getJSONObject(i).getJSONArray("options").length()>0){
-                roomOptions = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("options").get(0)),RoomOptions.class);
-
-                //set members
-                ArrayList<Member> members = new ArrayList<>();
-                Log.i("================= main screen group =================", roomModel.getName());
-
-                for(int l=0;l<channel.getJSONObject(i).getJSONArray("members").length();l++){
-                    Member member = new Gson().fromJson(String.valueOf(channel.getJSONObject(i).getJSONArray("members").get(l)),Member.class);
-                    Log.i("main screen", member.getUser_id());
-                    Log.i("main screen", member.getName());
-                    Log.i("main screen", member.getNickname());
-                    Log.i("main screen", member.getAvatar());
-                    Log.i("main screen >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>","");
-                    members.add(member);
-                }
-                roomOptions.setMembers(members);
-            }
-            //set time of last message
-            String abc = channel.getJSONObject(i).getString("update_time");
-            java.util.Date date1=  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(abc);
-
-            // set update_time, options, messages to room
-            roomModel.setUpdate_time(date1);
-            roomModel.setOptions(roomOptions);
-            roomModel.setMessages(listMessage);
-
-            // add room to list room
-            listRoom.add(roomModel);
-        }
-
-        return listRoom;
-    }
-
-    public class ImageAdapterGridView extends BaseAdapter {
-        private Context mContext;
-
-        public ImageAdapterGridView(Context c) {
-            mContext = c;
-        }
-
-        public int getCount() {
-            return roomModels.size();
-        }
-
-        public Object getItem(int position) {
-            return null;
-        }
-
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ImageView mImageView;
-
-            if (convertView == null) {
-                mImageView = new ImageView(mContext);
-                mImageView.setLayoutParams(new GridView.LayoutParams(160, 160));
-                mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                mImageView.setPadding(16, 16, 16, 16);
-            } else {
-                mImageView = (ImageView) convertView;
-            }
-//            mImageView.setImageResource(roomChat.get(position).getAvatar());
-            return mImageView;
-        }
-    }
 }

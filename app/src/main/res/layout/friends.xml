@@ -34,7 +34,7 @@
         android:id="@+id/quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="100 available"
+        android:text="0 available"
         android:textColor="#CACACA"
         android:layout_marginTop="5dp"
         android:fontFamily="@font/montserrat_light"

@@ -23,9 +23,11 @@ import android.widget.ImageView;
 import com.example.onlychat.Async.ConvertImage;
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.Interfaces.ConvertListener;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.ImageModel;
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
 import com.example.onlychat.ViewLargerImageMessage.ViewLargerImageMessage;
@@ -50,6 +52,7 @@ public class EditProfile extends AppCompatActivity {
     ImageView backBtn;
     String img_in_phone;
     private String user_id;
+    GlobalPreferenceManager pref;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -58,6 +61,7 @@ public class EditProfile extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         editProfileActivity = this;
+        pref = new GlobalPreferenceManager(this);
         nextBtn = (Button) findViewById(R.id.nextBtn);
         avatar = (ImageView) findViewById(R.id.avatar);
         upImgBtn = (ImageButton) findViewById(R.id.up_image_btn);
@@ -83,6 +87,16 @@ public class EditProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                UserModel userInfo = pref.getUserModel();
+
+                Bundle myBundle = new Bundle();
+                myBundle.putInt("index", 0);
+                myBundle.putString("user_id", userInfo.get_id());
+
+                Intent intentToProfile = new Intent (EditProfile.this, Profile.class);
+                intentToProfile.putExtras(myBundle);
+                startActivity(intentToProfile);
+                overridePendingTransition(R.anim.fixed, R.anim.left_to_right);
             }
         });
 
