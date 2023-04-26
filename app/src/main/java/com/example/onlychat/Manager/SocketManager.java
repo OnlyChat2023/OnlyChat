@@ -109,6 +109,12 @@ public class SocketManager {
         }
     }
 
+    public static void unblockFriend(String id,UserModel user){
+        if(socket != null){
+            socket.emit("unblockFriend",id,new Gson().toJson(user));
+        }
+    }
+
     public static void sendImageMessage(Context ctx, ArrayList<String> arrayList, int position, UserModel user) {
         if (socket != null) {
             socket.emit("sendImageMessage", new Gson().toJson(arrayList), position, new Gson().toJson(user));

@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -70,6 +71,8 @@ public class DirectMessage extends Fragment {
     ImageView profile;
     ImageView addChat;
     ListView listChat;
+    private ProgressBar progressBar;
+    private TextView loading;
     CustomChatItem customChatItem;
     static ArrayList<RoomModel> roomModels = new ArrayList<>();
     GlobalPreferenceManager pref;
@@ -96,6 +99,9 @@ public class DirectMessage extends Fragment {
         addChat.setVisibility(View.GONE);
         listChat = (ListView) globalChat.findViewById(R.id.listChat);
 
+        progressBar = (ProgressBar) globalChat.findViewById(R.id.progressBar);
+        loading  = (TextView) globalChat.findViewById(R.id.loading);
+
         pref = new GlobalPreferenceManager(getContext());
         new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAvatar());
 
@@ -107,6 +113,8 @@ public class DirectMessage extends Fragment {
             new HttpResponse(){
                 @Override
                 public void onSuccess(JSONObject Response) {
+                    loading.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
                     try{
                         JSONArray chats = Response.getJSONObject("data").getJSONArray("directChat");
                         Log.i("Direct chat", Integer.toString(chats.length()));
@@ -153,7 +161,7 @@ public class DirectMessage extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                MessageBottomDialogFragment messageBottomDialogFragment = new MessageBottomDialogFragment();
+                DirectMessageBottomDialog messageBottomDialogFragment = new DirectMessageBottomDialog();
                 messageBottomDialogFragment.setId(roomModels.get(i).getId());
                 messageBottomDialogFragment.show(getChildFragmentManager(), messageBottomDialogFragment.getTag());
 

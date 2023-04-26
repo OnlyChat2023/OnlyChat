@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.onlychat.DirectMessage.ChattingActivity;
@@ -66,6 +67,10 @@ public class Profile extends AppCompatActivity {
     private Button editBtn;
     private Button addFriendBtn;
     private Button sendChatBtn;
+    private TextView noResult;
+    private LinearLayout information;
+    private ProgressBar progressBar;
+    private TextView loading;
     private String user_id;
     UserModel user;
     private ImageView backBtn;
@@ -79,6 +84,7 @@ public class Profile extends AppCompatActivity {
     profile_description profileDescription = new profile_description();
 
     Integer isFriend;
+    Integer isBlock;
 
     TextView sign_out;
 
@@ -111,6 +117,9 @@ public class Profile extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        loading  = (TextView) findViewById(R.id.loading);
+
         userName = (TextView) findViewById(R.id.username);
         avatar = (ImageView) findViewById(R.id.avatar);
         sign_out = (TextView) findViewById(R.id.sign_out);
@@ -121,6 +130,9 @@ public class Profile extends AppCompatActivity {
         editBtn = (Button) findViewById(R.id.edit_btn);
         sendChatBtn = (Button) findViewById(R.id.send_chat_btn);
         backBtn = (ImageView) findViewById(R.id.backButton);
+        information = (LinearLayout) findViewById(R.id.information);
+        noResult = (TextView) findViewById(R.id.no_result);
+
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,26 +145,43 @@ public class Profile extends AppCompatActivity {
         httpManager.getUserById(user_id, new HttpResponse() {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
-                JSONObject profile = response.getJSONObject("data");
-                Log.i("all friends click item", profile.toString());
+                loading.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
+                if(response.getString("status").equals("success")){
+                    JSONObject profile = response.getJSONObject("data");
+                    Log.i("all friends click item", profile.toString());
+                    isBlock =profile.getInt("isBlock");
+                    isFriend = profile.getInt("isFriend");
+                    user = new Gson().fromJson(profile.toString(), UserModel.class);
 
-                user = new Gson().fromJson(profile.toString(), UserModel.class);
-
-                profileInformation.setData(user);
-                profileSocial.setData(user);
-                profileDescription.setData(user);
-
-
-                isFriend = profile.getInt("isFriend");
-                Log.i("Profile",isFriend.toString());
-
-
-                userName.setText(user.getName());
-                new HttpManager.GetImageFromServer(avatar).execute(user.getAvatar());
-                addFriendBtn.setVisibility(View.VISIBLE);
-                editBtn.setVisibility(View.VISIBLE);
-                sendChatBtn.setVisibility(View.VISIBLE);
-                setButtonUI();
+                    profileInformation.setData(user);
+                    profileSocial.setData(user);
+                    profileDescription.setData(user);
+                    if(isBlock==0){
+                        userName.setVisibility(View.VISIBLE);
+                        userName.setText(user.getName());
+                        avatar.setVisibility(View.VISIBLE);
+                        new HttpManager.GetImageFromServer(avatar).execute(user.getAvatar());
+                        addFriendBtn.setVisibility(View.VISIBLE);
+                        editBtn.setVisibility(View.VISIBLE);
+                        sendChatBtn.setVisibility(View.VISIBLE);
+                        information.setVisibility(View.VISIBLE);
+                        setButtonUI();
+                    }else if(isBlock==1){
+                        noResult.setVisibility(View.VISIBLE);
+                    }
+                    else if(isBlock==2){
+                        userName.setVisibility(View.VISIBLE);
+                        userName.setText(user.getName());
+                        avatar.setVisibility(View.VISIBLE);
+                        addFriendBtn.setVisibility(View.VISIBLE);
+                        new HttpManager.GetImageFromServer(avatar).execute(user.getAvatar());
+                        setButtonUI();
+                    }
+                }
+                else{
+                    noResult.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -226,14 +255,14 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // unfriend
-                if (isFriend == 1){
+                if (isFriend == 1 && isBlock==0){
                     AllFriends.removeFriend(user_id);
                     isFriend = 0;
                     setButtonUI();
                     Log.i("Profile", "1");
                 }
                 // add friend
-                else if(isFriend == 0) {
+                else if(isFriend == 0 && isBlock==0) {
                     SocketManager.getInstance();
                     SocketManager.sendRequestAddFriend(user_id,myInfo);
                     isFriend = 3;
@@ -241,18 +270,26 @@ public class Profile extends AppCompatActivity {
                     Log.i("Profile", "2");
                 }
                 // accept
-                else if(isFriend == 2){
+                else if(isFriend == 2 && isBlock==0){
                     Invite.addFriend(user_id);
                     isFriend = 1;
                     setButtonUI();
                     Log.i("Profile", "3");
                 }
                 // send invite click == unfriend
-                else{
+                else if(isFriend == 3 && isBlock ==0){
                     Invite.removeSent(user_id);
                     isFriend = 0;
                     setButtonUI();
                     Log.i("Profile", "4");
+                }
+                else{
+                    SocketManager.getInstance();
+                    SocketManager.unblockFriend(user.get_id(),myInfo);
+                    isFriend = 0;
+                    isBlock = 0;
+                    information.setVisibility(View.VISIBLE);
+                    setButtonUI();
                 }
             }
         });
@@ -272,26 +309,30 @@ public class Profile extends AppCompatActivity {
         }
 
         // friend
-        if (isFriend==1){
+        if (isFriend==1 && isBlock==0){
             Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_white_trash);
             addFriendBtn.setText("Remove");
             addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
             sendChatBtn.setVisibility(View.VISIBLE);
         }
         // invite to me
-        else if(isFriend == 2){
+        else if(isFriend == 2 && isBlock==0){
             Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_check);
             addFriendBtn.setText("Confirm");
             addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
         }
-        else if(isFriend == 0){
+        else if(isFriend == 0 && isBlock==0){
             Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_add_friend);
             addFriendBtn.setText("Add friend");
             addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
         }
-        else {
+        else if(isFriend == 3 && isBlock==0) {
 //            Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_add_friend);
             addFriendBtn.setText("Sent");
+            addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        }
+        else{
+            addFriendBtn.setText("Unblock");
             addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
 

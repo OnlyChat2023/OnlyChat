@@ -123,38 +123,14 @@ public class Friends extends Fragment {
                 searchBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        HttpManager httpManager = new HttpManager(friends.getContext());
-                        httpManager.getUserByPhone(phoneNumber.getText().toString(), new HttpResponse() {
-                            @Override
-                            public void onSuccess(JSONObject response) throws JSONException {
-                                String status = response.getString("status");
-                                if(status.length()>0){
-                                    Log.i("Status", "onSuccess: ");
-                                    Bundle myBundle = new Bundle();
-                                    myBundle.putInt("index",0);
-                                    myBundle.putString("user_id",response.getJSONObject("data").getString("_id"));
+                        Bundle myBundle = new Bundle();
+                        myBundle.putInt("index",0);
+                        myBundle.putString("user_id",phoneNumber.getText().toString());
 
-                                    Intent intentToProfile = new Intent (friends.getContext(), Profile.class);
-                                    intentToProfile.putExtras(myBundle);
-                                    startActivity(intentToProfile);
-                                    getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
-
-                                }
-                                else{
-                                    Intent intentToProfile = new Intent (friends.getContext(), ProfileNotFound.class);
-                                    startActivity(intentToProfile);
-                                    Log.i("Status", "errorrrrrrrr");
-
-                                }
-                            }
-
-                            @Override
-                            public void onError(String error) {
-                                Log.i("popup click error", error);
-                            }
-                        });
-
-//
+                        Intent intentToProfile = new Intent (friends.getContext(), Profile.class);
+                        intentToProfile.putExtras(myBundle);
+                        startActivity(intentToProfile);
+                        getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
 
                     }
                 });

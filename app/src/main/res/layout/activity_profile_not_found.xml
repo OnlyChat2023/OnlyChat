@@ -40,7 +40,6 @@
             android:fontFamily="@font/montserrat_semibold"
             android:textAlignment="center"
             android:layout_height="wrap_content">
-
         </TextView>
         </RelativeLayout>
     </ScrollView>

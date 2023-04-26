@@ -7,8 +7,7 @@
     android:paddingBottom="30dp"
     android:paddingTop="45dp"
     android:background="@drawable/global_chat_popup_above"
-    android:paddingHorizontal="50dp"
-    android:gravity="center_horizontal"
+    android:paddingHorizontal="90dp"
     tools:context=".GlobalChat.MessageBottomDialogFragment">
 
     <ImageView
@@ -20,8 +19,9 @@
 
     <ImageView
         android:id="@+id/imageView10"
-        android:layout_width="50dp"
+        android:layout_width="56dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_alignParentEnd="true"
         app:srcCompat="@drawable/direct_message_pin" />
 </RelativeLayout>
