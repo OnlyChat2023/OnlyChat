@@ -373,4 +373,18 @@ public class HttpManager {
                 }
             });
         }
+        public void validateForgotAccount(String phoneNumber, HttpResponse responseReceiver) {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("phonenumber", phoneNumber);
+
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/auth/forgot", Request.Method.POST, "forgot-validate", params, responseReceiver);
+        }
+        public void ResetPassword(String password, String passwordConfirm, String token, HttpResponse responseReceiver) {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("password", password);
+            params.put("passwordConfirm", passwordConfirm);
+            params.put("firebaseToken", token);
+
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/auth/reset", Request.Method.PATCH, "reset-validate", params, responseReceiver);
+        }
     }
