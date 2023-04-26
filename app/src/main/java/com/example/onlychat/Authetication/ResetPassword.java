@@ -113,7 +113,7 @@ public class ResetPassword extends AppCompatActivity {
                             enableReset(true);
 
                             Log.e("VALIDATE", error);
-                            passwordInput.setError("This phone has already been used");
+                            passwordInput.setError("Change password error");
                         }
                     });
                 }
