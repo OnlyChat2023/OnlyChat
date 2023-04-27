@@ -218,7 +218,8 @@ io.on('connection', (socket) => {
     });
 
     socket.on('sendStringMessage', async (message, position, user) => {
-        const send_user = JSON.parse(user);
+        const _user = JSON.parse(user);
+        const send_user = await User.findById(_user._id)
 
         // console.log(send_user);
 
@@ -572,11 +573,11 @@ io.on('connection', (socket) => {
     });
 
     socket.on('changeNickname', async (id_1, nickname_1, id_2, nickname_2, chat_id) => {
-        console.log(id_1)
-        console.log(nickname_1)
-        console.log(id_2)
-        console.log(nickname_2)
-        console.log(chat_id)
+        // console.log(id_1)
+        // console.log(nickname_1)
+        // console.log(id_2)
+        // console.log(nickname_2)
+        // console.log(chat_id)
 
         let dm = await directChat.findById(chat_id)
         dm.members.filter(el => el.user_id == id_1)[0].nickname = nickname_1
