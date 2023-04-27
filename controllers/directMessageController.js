@@ -58,7 +58,7 @@ const addDirectMessage = catchAsync(async (req, res, next) => {
                 block: false
             }
         ],
-        update_time: Date
+        update_time: new Date()
     }
 
     const addDM = await directChat.insertMany(newChat, { ordered: true, rawResult: true }, async function (err, result) {

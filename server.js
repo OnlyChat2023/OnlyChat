@@ -240,27 +240,27 @@ io.on('connection', (socket) => {
 
                 if (member.user_id === send_user._id) continue;
 
-                const getMessage = firebase.messaging();
+                // const getMessage = firebase.messaging();
 
-                const user = await User.findById(member.user_id);
+                // const user = await User.findById(member.user_id);
 
-                if (user.notify) {
-                    const messages = {
-                        data: {
-                            name: send_user.nickname,
-                            message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
-                        },
-                        token: user.notify
-                    };
+                // if (user.notify) {
+                //     const messages = {
+                //         data: {
+                //             name: send_user.nickname,
+                //             message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
+                //         },
+                //         token: user.notify
+                //     };
 
-                    getMessage.send(messages).then((response) => {
-                        // Response is a message ID string.
-                        console.log('Successfully sent message:', response);
-                    })
-                        .catch((error) => {
-                            console.log('Error sending message:', error);
-                        });
-                }
+                //     getMessage.send(messages).then((response) => {
+                //         // Response is a message ID string.
+                //         console.log('Successfully sent message:', response);
+                //     })
+                //         .catch((error) => {
+                //             console.log('Error sending message:', error);
+                //         });
+                // }
 
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'global_chat');
             }
@@ -283,26 +283,30 @@ io.on('connection', (socket) => {
 
                 if (member.user_id === send_user._id) continue;
 
-                const getMessage = firebase.messaging();
+                const memberOptions = DirectMessage.options.find(option => option.user_id === member.user_id);
+                if (memberOptions.notify === true) {
 
-                const user = await User.findOne({ _id: member.user_id });
+                    const getMessage = firebase.messaging();
 
-                if (user.notify) {
-                    const messages = {
-                        data: {
-                            name: send_user.nickname,
-                            message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
-                        },
-                        token: user.notify
-                    };
+                    const user = await User.findOne({ _id: member.user_id });
 
-                    getMessage.send(messages).then((response) => {
-                        // Response is a message ID string.
-                        console.log('Successfully sent message:', response);
-                    })
+                    if (user.notify.length > 0) {
+                        const messages = {
+                            data: {
+                                name: send_user.nickname,
+                                message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
+                            },
+                            tokens: user.notify
+                        };
+
+                        getMessage.sendMulticast(messages).then((response) => {
+                            // Response is a message ID string.
+                            // console.log('Successfully sent message:', response);
+                        })
                         .catch((error) => {
-                            console.log('Error sending message:', error);
+                            // console.log('Error sending message:', error);
                         });
+                    }
                 }
 
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'direct_message');
@@ -328,26 +332,29 @@ io.on('connection', (socket) => {
 
                 if (member.user_id === send_user._id) continue;
 
-                const getMessage = firebase.messaging();
+                const memberOptions = GroupChat.options.find(option => option.user_id === member.user_id);
+                if (memberOptions.notify === true) {
+                    const getMessage = firebase.messaging();
 
-                const user = await User.findOne({ _id: member.user_id });
+                    const user = await User.findOne({ _id: member.user_id });
 
-                if (user.notify) {
-                    const messages = {
-                        data: {
-                            name: send_user.nickname,
-                            message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
-                        },
-                        token: user.notify
-                    };
+                    if (user.notify.length > 0) {
+                        const messages = {
+                            data: {
+                                name: send_user.nickname,
+                                message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
+                            },
+                            tokens: user.notify
+                        };
 
-                    getMessage.send(messages).then((response) => {
-                        // Response is a message ID string.
-                        console.log('Successfully sent message:', response);
-                    })
-                        .catch((error) => {
-                            console.log('Error sending message:', error);
-                        });
+                        getMessage.sendMulticast(messages).then((response) => {
+                            // Response is a message ID string.
+                            console.log('Successfully sent message:', response);
+                        })
+                            .catch((error) => {
+                                console.log('Error sending message:', error);
+                            });
+                    }
                 }
 
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'group_chat');
@@ -409,27 +416,27 @@ io.on('connection', (socket) => {
 
                 if (member.user_id === send_user._id) continue;
 
-                const getMessage = firebase.messaging();
+                // const getMessage = firebase.messaging();
 
-                const user = await User.findOne({ _id: member.user_id });
+                // const user = await User.findOne({ _id: member.user_id });
 
-                if (user.notify) {
-                    const messages = {
-                        data: {
-                            name: send_user.nickname,
-                            message: send_user.nickname + ': Đã gửi hình ảnh'
-                        },
-                        token: user.notify
-                    };
+                // if (user.notify) {
+                //     const messages = {
+                //         data: {
+                //             name: send_user.nickname,
+                //             message: send_user.nickname + ': Đã gửi hình ảnh'
+                //         },
+                //         token: user.notify
+                //     };
 
-                    getMessage.send(messages).then((response) => {
-                        // Response is a message ID string.
-                        console.log('Successfully sent message:', response);
-                    })
-                        .catch((error) => {
-                            console.log('Error sending message:', error);
-                        });
-                }
+                //     getMessage.send(messages).then((response) => {
+                //         // Response is a message ID string.
+                //         console.log('Successfully sent message:', response);
+                //     })
+                //         .catch((error) => {
+                //             console.log('Error sending message:', error);
+                //         });
+                // }
 
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'global_chat');
             }
@@ -452,26 +459,29 @@ io.on('connection', (socket) => {
 
                 if (member.user_id === send_user._id) continue;
 
-                const getMessage = firebase.messaging();
+                const memberOptions = DirectMessage.options.find(option => option.user_id === member.user_id);
+                if (memberOptions.notify === true) {
+                    const getMessage = firebase.messaging();
 
-                const user = await User.findOne({ _id: member.user_id });
+                    const user = await User.findOne({ _id: member.user_id });
+                    
+                    if (user.notify.length > 0) {
+                        const messages = {
+                            data: {
+                                name: send_user.nickname,
+                                message: send_user.nickname + ': Đã gửi hình ảnh'
+                            },
+                            tokens: user.notify
+                        };
 
-                if (user.notify) {
-                    const messages = {
-                        data: {
-                            name: send_user.nickname,
-                            message: send_user.nickname + ': Đã gửi hình ảnh'
-                        },
-                        token: user.notify
-                    };
-
-                    getMessage.send(messages).then((response) => {
-                        // Response is a message ID string.
-                        console.log('Successfully sent message:', response);
-                    })
+                        getMessage.sendMulticast(messages).then((response) => {
+                            // Response is a message ID string.
+                            console.log('Successfully sent message:', response);
+                        })
                         .catch((error) => {
                             console.log('Error sending message:', error);
                         });
+                    }
                 }
 
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'direct_message');
@@ -497,26 +507,29 @@ io.on('connection', (socket) => {
 
                 if (member.user_id === send_user._id) continue;
 
-                const getMessage = firebase.messaging();
+                const memberOptions = GroupChat.options.find(option => option.user_id === member.user_id);
+                if (memberOptions.notify === true) {
+                    const getMessage = firebase.messaging();
 
-                const user = await User.findOne({ _id: member.user_id });
+                    const user = await User.findOne({ _id: member.user_id });
 
-                if (user.notify) {
-                    const messages = {
-                        data: {
-                            name: send_user.nickname,
-                            message: send_user.nickname + ': Đã gửi hình ảnh'
-                        },
-                        token: user.notify
-                    };
+                    if (user.notify.length > 0) {
+                        const messages = {
+                            data: {
+                                name: send_user.nickname,
+                                message: send_user.nickname + ': Đã gửi hình ảnh'
+                            },
+                            tokens: user.notify
+                        };
 
-                    getMessage.send(messages).then((response) => {
-                        // Response is a message ID string.
-                        console.log('Successfully sent message:', response);
-                    })
-                        .catch((error) => {
-                            console.log('Error sending message:', error);
-                        });
+                        getMessage.sendMulticast(messages).then((response) => {
+                            // Response is a message ID string.
+                            console.log('Successfully sent message:', response);
+                        })
+                            .catch((error) => {
+                                console.log('Error sending message:', error);
+                            });
+                    }
                 }
 
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'group_chat');

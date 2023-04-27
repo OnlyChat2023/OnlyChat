@@ -29,7 +29,9 @@ const userSchema = new mongoose.Schema({
   friend: [{ type: String }],
   friend_request: [{ type: String }],
   block: [{ type: String, default: "" }],
-  notify: { type: String, default: '' }
+  notify: [{
+    type: String,
+  }]
 });
 
 userSchema.pre('save', async function (next) {

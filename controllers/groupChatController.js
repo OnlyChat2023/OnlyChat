@@ -28,7 +28,7 @@ const addGroup = catchAsync(async (req, res, next) => {
       notify: false,
       block: false,
     }],
-    update_time: req.body.update_time
+    update_time: new Date()
   };
 
   const addGroupChat = await groupChat.insertMany(filterBody, { ordered: true, rawResult: true }, async function (err, result) {
