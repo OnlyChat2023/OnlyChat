@@ -130,7 +130,7 @@ const register = catchAsync(async (req, res, next) => {
     const decodedFirebase = await firebase.auth().verifyIdToken(firebaseToken);
 
     if (phonenumber.substring(1) !== decodedFirebase?.phone_number.substring(3)) {
-        return next(new Error('Phone number is invalid with the phone varification', 401));
+        return next(new Error('Phone number is invalid with the phone verification', 401));
     }
 
     const min = 1, max = 25;
@@ -163,17 +163,64 @@ const register = catchAsync(async (req, res, next) => {
 
 /// > FORGOT PASSWORD
 const forgot = catchAsync(async (req, res, next) => {
-    res.status(200).json({
+
+    if (!Validator.isValidRequestBody(req.body, ['phonenumber'])) return next(new AppError('Bad request', 400));
+    
+    // Validate phonenumber, password and password confirm
+    const { phonenumber } = req.body;
+    
+    if (Validator.isEmptyString(phonenumber))
+    return next(new AppError('Please provide phonenumber, password and password confirm', 400));
+    else if (isNaN(+phonenumber) || !Validator.isMatching(phonenumber, REGEX.PHONE_NUMBER))
+    return next(new AppError('Please provide a valid phonenumber', 400));
+    
+    const founded_user = await User.findOne({ phone: phonenumber });
+
+    if (!founded_user) return next(new AppError('This phonenumber does not exists', 400));
+
+    return res.status(200).json({
         status: 'success',
-        message: 'Forgot successful',
     });
 });
 
 /// > RESET PASSWORD
 const reset = catchAsync(async (req, res, next) => {
-    res.status(200).json({
+    if (
+        !Validator.isValidRequestBody(req.body, [
+            'password',
+            'passwordConfirm',
+            'firebaseToken',
+        ])
+    )
+        return next(new AppError('Bad request', 400));
+
+    // Validate phonenumber, password and password confirm
+    const { password, passwordConfirm, firebaseToken } = req.body;
+
+    if (
+        Validator.isEmptyString(password) ||
+        Validator.isEmptyString(passwordConfirm) ||
+        Validator.isEmptyString(firebaseToken)
+    )
+        return next(new AppError('Please provide password and password confirm', 400));
+    else if (password !== passwordConfirm) 
+        return next(new AppError('Password and password confirm do not match', 400));
+
+    const decodedFirebase = await firebase.auth().verifyIdToken(firebaseToken);
+    const firebase_phonenumber = decodedFirebase.phone_number;
+    const phonenumber = `0${firebase_phonenumber.substring(3)}`;
+
+    const founded_user = await User.findOne({ phone: phonenumber });
+
+    if (!founded_user) return next(new AppError('This phonenumber does not exists', 400));
+
+    founded_user.password = password;
+
+    await founded_user.save();
+
+    return res.status(200).json({
         status: 'success',
-        message: 'Reset successful',
+        phonenumber: firebase_phonenumber,
     });
 });
 
