@@ -81,9 +81,9 @@
             android:textSize="16dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/montserrat_semibold" />
-
         <RelativeLayout
-            android:id="@+id/share"
+            android:id="@+id/edit"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="18dp"
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:fontFamily="@font/montserrat_medium"
-                android:text="Share"
+                android:text="Edit information"
                 android:layout_centerVertical="true"
                 android:textColor="#ffffff"
                 android:textSize="18dp" />
@@ -106,8 +106,9 @@
                 android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                app:srcCompat="@drawable/global_chat_share" />
+                app:srcCompat="@drawable/dm_option_icon_nickname" />
         </RelativeLayout>
+
 
         <RelativeLayout
             android:id="@+id/global_notify"

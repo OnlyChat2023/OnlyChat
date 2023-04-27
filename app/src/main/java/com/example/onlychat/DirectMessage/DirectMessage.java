@@ -6,13 +6,17 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,6 +75,9 @@ public class DirectMessage extends Fragment {
     ImageView profile;
     ImageView addChat;
     ListView listChat;
+    EditText main_content_searchbox;
+
+    ImageView delete;
     private ProgressBar progressBar;
     private TextView loading;
     CustomChatItem customChatItem;
@@ -91,6 +98,7 @@ public class DirectMessage extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         globalChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
+        roomModels.clear();
         // set value for widget
         chatTitle=(TextView) globalChat.findViewById(R.id.header_title);
         chatIcon = (ImageView) globalChat.findViewById(R.id.chatIcon);
@@ -99,8 +107,14 @@ public class DirectMessage extends Fragment {
         addChat.setVisibility(View.GONE);
         listChat = (ListView) globalChat.findViewById(R.id.listChat);
 
+
         progressBar = (ProgressBar) globalChat.findViewById(R.id.progressBar);
         loading  = (TextView) globalChat.findViewById(R.id.loading);
+
+        main_content_searchbox= (EditText)globalChat.findViewById(R.id.main_content_searchbox);
+        delete = (ImageView) globalChat.findViewById(R.id.delete);
+
+
 
         pref = new GlobalPreferenceManager(getContext());
         new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAvatar());
@@ -223,6 +237,38 @@ public class DirectMessage extends Fragment {
                         overlayWindow.dismiss();
                     }
                 });
+            }
+        });
+
+        main_content_searchbox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.length()>0) delete.setVisibility(View.VISIBLE);
+                else delete.setVisibility(View.GONE);
+                for(int i=0;i<roomModels.size();i++){
+                    if(roomModels.get(i).getName().toLowerCase().contains(editable.toString().toLowerCase())){
+                        if(listChat.getChildAt(i).getVisibility() == View.GONE) {
+                            listChat.getChildAt(i).setVisibility(View.VISIBLE);
+                            listChat.getChildAt(i).setLayoutParams(new AbsListView.LayoutParams(-1,-2));
+                        }
+                    }
+                    else {
+                        listChat.getChildAt(i).setVisibility(View.GONE);
+                        listChat.getChildAt(i).setLayoutParams(new AbsListView.LayoutParams(-1,1));
+                    }
+                }
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main_content_searchbox.setText("");
             }
         });
         waitSetNickname();

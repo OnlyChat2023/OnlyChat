@@ -4,14 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DialogFragment;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -25,11 +31,14 @@ import com.example.onlychat.GroupChat.AddMember;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
+import com.example.onlychat.MainScreen.MainScreen;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,13 +52,13 @@ import io.socket.emitter.Emitter;
 
 public class Options extends AppCompatActivity {
 
-    RelativeLayout share;
     RelativeLayout members;
     RelativeLayout notify;
     RelativeLayout delete;
     RelativeLayout leave;
     RelativeLayout block;
     RelativeLayout report;
+    RelativeLayout edit;
     ListView listMembers;
     ImageView backButton;
 
@@ -65,8 +74,20 @@ public class Options extends AppCompatActivity {
     int FINISH = -5;
     int UPDATEOPTION = -6;
     int ADDMEMBER = -7;
+    GlobalPreferenceManager pref;
+    static UserModel myInfo;
 
     TextView memberQuantity;
+
+    Integer avatarsImage[] = {
+            R.raw.a_1, R.raw.a_2, R.raw.a_3, R.raw.a_4, R.raw.a_5,
+            R.raw.a_6, R.raw.a_7, R.raw.a_8, R.raw.a_9, R.raw.a_10,
+            R.raw.a_11, R.raw.a_12, R.raw.a_13, R.raw.a_14, R.raw.a_15,
+            R.raw.a_16,R.raw.a_17, R.raw.a_18, R.raw.a_19, R.raw.a_20,
+            R.raw.a_21, R.raw.a_22, R.raw.a_23, R.raw.a_24, R.raw.a_25,
+    };
+
+    GridView androidGridView;
 
 
     @SuppressLint("MissingInflatedId")
@@ -91,12 +112,15 @@ public class Options extends AppCompatActivity {
         block = (RelativeLayout) findViewById(R.id.global_block);
         report = (RelativeLayout) findViewById(R.id.global_report);
         addMember = (Button) findViewById(R.id.add_member_btn);
+        edit = (RelativeLayout) findViewById(R.id.edit);
 
         if (typeChat.equals("globalChat")){
             addMember.setVisibility(View.GONE);
             leave.setVisibility(View.GONE);
             delete.setVisibility(View.GONE);
             addMember.setVisibility(View.GONE);
+            notify.setVisibility(View.GONE);
+            edit.setVisibility(View.VISIBLE);
 
         }
         block.setVisibility(View.GONE);
@@ -126,9 +150,10 @@ public class Options extends AppCompatActivity {
             }
         });
 
-        share = (RelativeLayout) findViewById(R.id.share);
-        share.setVisibility(View.GONE);
-        share.setOnClickListener(new View.OnClickListener() {
+        pref = new GlobalPreferenceManager(this);
+        myInfo = pref.getUserModel();
+
+        edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -141,10 +166,86 @@ public class Options extends AppCompatActivity {
                 overlayWindow.showAtLocation(view, Gravity.TOP, 0, 0);
 
                 // Popup
-                View popupView = inflater.inflate(R.layout.global_chat_popup_share, null);
+                View popupView = inflater.inflate(R.layout.global_chat_popup, null);
+                EditText nickname = popupView.findViewById(R.id.nickname);
+
+
+//                Log.i("anonymous avatar", myInfo.getAnonymous_avatar());
+
+
+//                Log.i("anonymous avatar",part2[0]);
+                final int[] avatarIndex = {1};
+
+                HttpManager httpManager= new HttpManager(edit.getContext());
+                httpManager.getUserById(myInfo.get_id(), new HttpResponse() {
+                    @Override
+                    public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
+                        JSONObject profile = response.getJSONObject("data");
+
+                        UserModel user = new Gson().fromJson(profile.toString(), UserModel.class);
+                        nickname.setText(user.getNickName());
+                        String[] part1 =user.getAnonymous_avatar().split("/");
+                        String[] part2= part1[1].split("\\.");
+                        avatarIndex[0] = Integer.parseInt(part2[0]);
+                    }
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+
+
+
+                Button okBtn = popupView.findViewById(R.id.okBtn);
+
+                BaseAdapter baseAdapter = new ImageAdapterGridView(popupView.getContext());
+
+                androidGridView = (GridView) popupView.findViewById(R.id.gridview_android_example);
+                androidGridView.setAdapter(baseAdapter);
+                Log.i("TAG=======", Integer.toString(androidGridView.getChildCount()));;
+
+//                Log.i("TAG=======", androidGridView.getChildAt(Integer.parseInt(part2[0])-1).toString());;
+                for(int i=0;i<androidGridView.getChildCount();i++){
+                    androidGridView.getChildAt(i).setBackgroundColor(Color.BLACK);
+                }
+                androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                        for(int i=0;i<androidGridView.getChildCount();i++){
+                            androidGridView.getChildAt(i).setBackgroundColor(0);
+                        }
+                        avatarIndex[0] = position+1;
+                        v.setBackgroundColor(Color.parseColor("#adb5bd"));
+
+                    }
+                });
                 boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView,LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,focusable);
-                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+                final PopupWindow popupWindow = new PopupWindow(popupView,900,1360,focusable);
+                okBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        HttpManager httpManager = new HttpManager(edit.getContext());
+                        httpManager.setAnonymousInformation(nickname.getText().toString(),"avatar/"+avatarIndex[0]+".png", new HttpResponse() {
+                            @Override
+                            public void onSuccess(JSONObject response) throws JSONException, ParseException {
+                                popupWindow.dismiss();
+//                                new HttpManager.GetImageFromServer(edit).execute(response.getJSONObject("data").getString("anonymous_avatar"));
+//                                JSONArray globalChat = response.getJSONObject("data").getJSONArray("globalChat");
+////                                Log.i("OK BUTTON", Integer.toString(globalChat.length()));
+//                                if(globalChat.length()>0){
+////                                   setRoomModels(MainScreen.getListRoom(globalChat));
+//                                }
+
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                Log.i("popup click error", error);
+                            }
+                        });
+                    }
+
+                });
 
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
@@ -152,6 +253,8 @@ public class Options extends AppCompatActivity {
                         overlayWindow.dismiss();
                     }
                 });
+
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
             }
         });
 
@@ -375,9 +478,6 @@ public class Options extends AppCompatActivity {
         });
     }
 
-
-
-
     public void LeaveGroup(BasicDialog basicDialog){
         HttpManager httpManager = new HttpManager(Options.this);
 
@@ -398,4 +498,39 @@ public class Options extends AppCompatActivity {
             }
         });
     }
+
+    public class ImageAdapterGridView extends BaseAdapter {
+        private Context mContext;
+
+        public ImageAdapterGridView(Context c) {
+            mContext = c;
+        }
+
+        public int getCount() {
+            return avatarsImage.length;
+        }
+
+        public ImageView getItem(int position) {
+            return null;
+        }
+
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ImageView mImageView;
+            if (convertView == null) {
+                mImageView = new ImageView(mContext);
+                mImageView.setLayoutParams(new GridView.LayoutParams(160, 160));
+                mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                mImageView.setPadding(16, 16, 16, 16);
+            } else {
+                mImageView = (ImageView) convertView;
+            }
+            mImageView.setImageResource(avatarsImage[position]);
+            return mImageView;
+        }
+    }
+
 }

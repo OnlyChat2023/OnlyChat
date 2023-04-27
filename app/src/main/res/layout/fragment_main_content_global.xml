@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/frost"
+    android:background="@color/background_dark">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/headerLayout"
+        android:indeterminate="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:indeterminateTint="@color/white" />
+    <TextView
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="Loading..."
+        android:textAlignment="center"
+        android:paddingLeft="15dp"
+        android:textSize="18sp"
+        android:layout_below="@+id/progressBar"
+        />
+
+    <RelativeLayout
+        android:id="@+id/headerLayout"
+        android:layout_marginTop="18dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="chat title"
+            android:textAllCaps="true"
+            android:layout_alignParentStart="true"
+            android:textColor="#D8D8D8"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/chatIcon"
+            android:layout_width="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_height="25dp"
+            android:src="@drawable/global_chat_icon" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/main_layout"
+        android:layout_below="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:visibility="invisible"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_marginTop="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:srcCompat="@drawable/anonymous" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView2"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:fontFamily="@font/montserrat_bold"
+            android:layout_marginBottom="12dp"
+            android:text="You are anonymous" />
+        <TextView
+            android:id="@+id/text1"
+            android:layout_below="@id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_medium"
+            android:paddingLeft="100dp"
+            android:text="⦿ Anonymity"
+            android:layout_marginBottom="5dp"
+            />
+        <TextView
+            android:id="@+id/text2"
+            android:layout_below="@id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_medium"
+            android:paddingLeft="100dp"
+            android:layout_marginBottom="5dp"
+            android:text="⦿ No personal information required"
+            />
+        <TextView
+            android:id="@+id/text3"
+            android:layout_below="@id/text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_medium"
+            android:paddingLeft="100dp"
+            android:layout_marginBottom="5dp"
+            android:text="⦿ No sharing of personal information"
+            />
+        <TextView
+            android:id="@+id/text4"
+            android:layout_below="@id/text3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_medium"
+            android:paddingLeft="100dp"
+            android:layout_marginBottom="5dp"
+            android:text="⦿ Respect for others"
+            />
+        <TextView
+            android:id="@+id/text5"
+            android:layout_below="@id/text4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_medium"
+            android:paddingLeft="100dp"
+            android:layout_marginBottom="5dp"
+            android:text="⦿ No violation of laws"
+            />
+        <Button
+            android:id="@+id/enterBtn"
+            android:layout_width="110dp"
+            android:layout_height="36dp"
+            android:layout_below="@id/text5"
+            android:layout_centerHorizontal="true"
+            android:text="Join in"
+            android:layout_marginTop="30dp"
+            android:textAllCaps="false"
+            android:fontFamily="@font/montserrat_bold"
+            android:background="@drawable/yes_button_background" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

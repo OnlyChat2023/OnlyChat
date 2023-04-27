@@ -125,6 +125,10 @@ public class HttpManager {
         createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/getListMessage", Request.Method.GET, "userprofile", null, responseReceiver);
     }
 
+    public void getGlobalChat(HttpResponse responseReceiver) {
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/globalChat/getListMessage", Request.Method.GET, "userprofile", null, responseReceiver);
+    }
+
     public void getListFriends(HttpResponse responseReceiver) {
         createRequest("http://" + ip + ":5000/api/onlychat/v1/user/friends", Request.Method.GET, "friends", null, responseReceiver);
     }

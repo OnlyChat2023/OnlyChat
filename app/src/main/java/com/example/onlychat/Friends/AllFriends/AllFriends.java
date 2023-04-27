@@ -5,11 +5,16 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -42,12 +47,10 @@ public class AllFriends extends Fragment {
     static CustomFriendItem customFriendItem;
     static ArrayList<UserModel> friend_list = new ArrayList<>();
     static FriendBottomDialogFragment friendBottomDialogFragment;
-
-    public ArrayList<UserModel> getFriend_list() {
-        return friend_list;
-    }
+    ImageView delete;
 
     GlobalPreferenceManager pref;
+    EditText search;
     static UserModel myInfo;
 
     public void setFriend_list(ArrayList<UserModel> friend_list){
@@ -66,12 +69,47 @@ public class AllFriends extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout allFriends = (LinearLayout) inflater.inflate(R.layout.friends_fragment_all_friends, null);
-
+        friend_list.clear();
         Log.i("all friends", "onCreateView");
-
 
         pref = new GlobalPreferenceManager(getContext());
         myInfo = pref.getUserModel();
+
+        search = (EditText) allFriends.findViewById(R.id.search_bar);
+        delete = (ImageView) allFriends.findViewById(R.id.delete);
+
+
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.length()>0) delete.setVisibility(View.VISIBLE);
+                else delete.setVisibility(View.GONE);
+                for(int i=0;i<friend_list.size();i++){
+                    if(friend_list.get(i).getName().toLowerCase().contains(editable.toString().toLowerCase()) || friend_list.get(i).getPhone().contains(editable.toString())){
+                        if(listFriends.getChildAt(i).getVisibility() == View.GONE) {
+                            listFriends.getChildAt(i).setVisibility(View.VISIBLE);
+                            listFriends.getChildAt(i).setLayoutParams(new AbsListView.LayoutParams(-1,-2));
+                        }
+                    }
+                    else {
+                        listFriends.getChildAt(i).setVisibility(View.GONE);
+                        listFriends.getChildAt(i).setLayoutParams(new AbsListView.LayoutParams(-1,1));
+                    }
+                }
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search.setText("");
+            }
+        });
 
         listFriends = (ListView) allFriends.findViewById(R.id.listFriends);
 
