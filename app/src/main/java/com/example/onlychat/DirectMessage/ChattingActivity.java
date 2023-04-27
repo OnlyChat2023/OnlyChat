@@ -530,6 +530,18 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
 
                         if (position != -2) {
                             if (message.getUserId().equals(myInfo.getId())) {
+
+                                if (position > userInf.getMessages().size() - 1) {
+                                    MessageModel newMessageModel = new MessageModel(message.getId(), myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getName(), message.getMessage(), message.getTime(), new ArrayList<String>());
+
+                                    userInf.pushMessage(newMessageModel);
+                                    adapter.notifyDataSetChanged();
+                                }
+                                else {
+                                    userInf.getMessages().get(position).setId(message.getId());
+                                    userInf.getMessages().get(position).setTime(message.getTime());
+                                }
+
                                 userInf.getMessages().get(position).setId(message.getId());
                                 userInf.getMessages().get(position).setTime(message.getTime());
                             } else {

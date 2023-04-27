@@ -67,7 +67,7 @@ public class GlobalPreferenceManager {
         pref.edit().remove(LOGIN_USERNAME).apply();
         pref.edit().remove(LOGIN_TOKEN).apply();
         pref.edit().remove(LOGIN_USERMODEL).apply();
-        pref.edit().remove(LOGIN_USERMODEL).apply();
+        pref.edit().remove(LOGIN_REMEMBER).apply();
         pref.edit().remove(IS_LOGIN).apply();
     }
 

@@ -385,4 +385,20 @@ public class HttpManager {
 
             createRequest("http://" + ip + ":5000/api/onlychat/v1/auth/reset", Request.Method.PATCH, "reset-validate", params, responseReceiver);
         }
+        public void removeNotify(String notifyToken) {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("token", notifyToken);
+
+            createRequest("http://" + ip + ":5000/api/onlychat/v1/notify/remove", Request.Method.PATCH, "remove-notify", params, new HttpResponse() {
+                @Override
+                public void onSuccess(JSONObject response) throws JSONException, InterruptedException, ParseException {
+
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
+        }
     }

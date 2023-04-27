@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
+import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.Profile;
 
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SocketManager.disconnect();
 
         pref = new GlobalPreferenceManager(this);
         pref.ValidateRemember();
@@ -37,6 +40,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtras(bundle);
 
         startActivity(intent);
-//        finish();
+        finish();
     }
 }

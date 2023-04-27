@@ -107,6 +107,8 @@ public class DirectMessage extends Fragment {
 
         myInfo = pref.getUserModel();
 
+        roomModels.clear();
+
         // set list messages
         HttpManager httpManager = new HttpManager(getContext());
         httpManager.getDirectMessage(

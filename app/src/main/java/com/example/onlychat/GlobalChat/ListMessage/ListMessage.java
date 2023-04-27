@@ -444,8 +444,18 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 
                         if (position != -2) {
                             if (message.getUserId().equals(myInfo.getId())) {
-                                roomModel.getMessages().get(position).setId(message.getId());
-                                roomModel.getMessages().get(position).setTime(message.getTime());
+                                if (position > roomModel.getMessages().size() - 1) {
+                                    MessageModel newMessageModel = (channel.equals("group_chat"))
+                                            ? new MessageModel(message.getId(), myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getName(), message.getMessage(), message.getTime(), new ArrayList<String>())
+                                            : new MessageModel(message.getId(), myInfo.getId(), myInfo.getAvatar(), myInfo.getName(), myInfo.getNickName(), message.getMessage(), message.getTime(), new ArrayList<String>());
+
+                                    roomModel.pushMessage(newMessageModel);
+                                    customMessageItem.notifyDataSetChanged();
+                                }
+                                else {
+                                    roomModel.getMessages().get(position).setId(message.getId());
+                                    roomModel.getMessages().get(position).setTime(message.getTime());
+                                }
                             } else {
                                 roomModel.pushMessage(message);
                                 customMessageItem.notifyDataSetChanged();

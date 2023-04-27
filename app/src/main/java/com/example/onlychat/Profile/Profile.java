@@ -238,12 +238,10 @@ public class Profile extends AppCompatActivity {
         sign_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                httpManager.removeNotify(pref.getNotify());
                 pref.SignOut();
                 SocketManager.disconnect();
-                Intent intent = new Intent(Profile.this, MainScreen.class);
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("isLogin", false);
-                intent.putExtras(bundle);
+                Intent intent = new Intent(Profile.this, MainActivity.class);
                 startActivity(intent);
                 finishAffinity();
             }

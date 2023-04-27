@@ -98,6 +98,8 @@ public class GroupChat extends Fragment {
 //        chatIcon.setImageResource(R.drawable.global_chat_icon);
         chatIcon.setImageResource(R.drawable.ic_groupchat);
 
+        roomModels.clear();
+
         progressBar = (ProgressBar) groupChat.findViewById(R.id.progressBar);
         loading  = (TextView) groupChat.findViewById(R.id.loading);
 
