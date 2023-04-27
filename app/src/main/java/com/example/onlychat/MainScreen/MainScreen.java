@@ -338,10 +338,18 @@ public class MainScreen extends AppCompatActivity {
 
         //set time of last message
         String abc = room.getString("update_time");
-        java.util.Date date1=  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(abc);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        format.setTimeZone(TimeZone.getTimeZone("GMT"));
+        try {
+            java.util.Date date = format.parse(abc);
+            roomModel.setUpdate_time(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+//        java.util.Date date1=  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(abc);
 
         // set update_time, options, messages to room
-        roomModel.setUpdate_time(date1);
+//        roomModel.setUpdate_time(date1);
         roomModel.setOptions(roomOptions);
         roomModel.setMessages(listMessage);
 
