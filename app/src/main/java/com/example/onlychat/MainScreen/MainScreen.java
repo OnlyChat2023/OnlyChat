@@ -161,8 +161,8 @@ public class MainScreen extends AppCompatActivity {
                         groupChatFragment.pushFirst(roomId);
                     }
                     if (channel.equals("global_chat")) {
-                        globalChatFragment.updateListRoom();
-                        globalChatFragment.pushFirst(roomId);
+//                        globalChatFragment.updateListRoom();
+//                        globalChatFragment.pushFirst(roomId);
                     }
                     if (channel.equals("direct_message")) {
                         directChatFragment.updateListRoom();

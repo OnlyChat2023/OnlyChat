@@ -8,11 +8,14 @@ import androidx.fragment.app.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,6 +67,9 @@ public class GroupChat extends Fragment {
     EditText newGroupName;
     Button okBtn;
     CustomChatItem customChatItem;
+    EditText main_content_searchbox;
+    ImageView delete;
+
 
     private ProgressBar progressBar;
     private TextView loading;
@@ -88,6 +94,7 @@ public class GroupChat extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         groupChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content, null);
+        roomModels.clear();
         // set value for widget
         chatTitle = (TextView) groupChat.findViewById(R.id.header_title);
         chatTitle.setText("group chat channel");
@@ -97,9 +104,43 @@ public class GroupChat extends Fragment {
         listChat = (ListView) groupChat.findViewById(R.id.listChat);
 //        chatIcon.setImageResource(R.drawable.global_chat_icon);
         chatIcon.setImageResource(R.drawable.ic_groupchat);
+        delete = (ImageView) groupChat.findViewById(R.id.delete);
 
         progressBar = (ProgressBar) groupChat.findViewById(R.id.progressBar);
         loading  = (TextView) groupChat.findViewById(R.id.loading);
+
+        main_content_searchbox= (EditText)groupChat.findViewById(R.id.main_content_searchbox);
+        main_content_searchbox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.length()>0) delete.setVisibility(View.VISIBLE);
+                else delete.setVisibility(View.GONE);
+                for(int i=0;i<roomModels.size();i++){
+                    if(roomModels.get(i).getName().toLowerCase().contains(editable.toString().toLowerCase())){
+                        if(listChat.getChildAt(i).getVisibility() == View.GONE) {
+                            listChat.getChildAt(i).setVisibility(View.VISIBLE);
+                            listChat.getChildAt(i).setLayoutParams(new AbsListView.LayoutParams(-1,-2));
+                        }
+                    }
+                    else {
+                        listChat.getChildAt(i).setVisibility(View.GONE);
+                        listChat.getChildAt(i).setLayoutParams(new AbsListView.LayoutParams(-1,1));
+                    }
+                }
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                main_content_searchbox.setText("");
+            }
+        });
 
         new HttpManager.GetImageFromServer(profile).execute(new GlobalPreferenceManager(getContext()).getUserModel().getAvatar());
         pref = new GlobalPreferenceManager(getContext());

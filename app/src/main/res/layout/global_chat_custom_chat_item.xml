@@ -6,7 +6,7 @@
     android:background="@drawable/global_chat_chat_item_background"
     android:layout_height="wrap_content"
     android:paddingHorizontal="10dp"
-    android:paddingVertical="8dp"
+    android:paddingVertical="13dp"
     >
 
 

@@ -256,7 +256,7 @@ public class Profile extends AppCompatActivity {
             public void onClick(View view) {
                 // unfriend
                 if (isFriend == 1 && isBlock==0){
-                    AllFriends.removeFriend(user_id);
+                    AllFriends.removeFriend(user.get_id());
                     isFriend = 0;
                     setButtonUI();
                     Log.i("Profile", "1");
@@ -264,21 +264,21 @@ public class Profile extends AppCompatActivity {
                 // add friend
                 else if(isFriend == 0 && isBlock==0) {
                     SocketManager.getInstance();
-                    SocketManager.sendRequestAddFriend(user_id,myInfo);
+                    SocketManager.sendRequestAddFriend(user.get_id(),myInfo);
                     isFriend = 3;
                     setButtonUI();
                     Log.i("Profile", "2");
                 }
                 // accept
                 else if(isFriend == 2 && isBlock==0){
-                    Invite.addFriend(user_id);
+                    Invite.addFriend(user.get_id());
                     isFriend = 1;
                     setButtonUI();
                     Log.i("Profile", "3");
                 }
                 // send invite click == unfriend
                 else if(isFriend == 3 && isBlock ==0){
-                    Invite.removeSent(user_id);
+                    Invite.removeSent(user.get_id());
                     isFriend = 0;
                     setButtonUI();
                     Log.i("Profile", "4");
