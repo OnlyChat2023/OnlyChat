@@ -331,7 +331,7 @@ public class GroupChat extends Fragment {
         httpManager.LeaveGroupChat(typeChat, pref.getUserModel().get_id(), id, new HttpResponse() {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
-                Reload();
+//                Reload();
                 current.dismiss();
             }
 

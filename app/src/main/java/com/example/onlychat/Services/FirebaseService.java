@@ -139,6 +139,7 @@ public class FirebaseService {
     public void sendOTPRequest(String phoneNumber) {
         if (auth == null || TextUtils.isEmpty(phoneNumber)) return;
 
+        auth.signOut();
 //        FirebaseAuthSettings firebaseAuthSettings = auth.getFirebaseAuthSettings();
 //        firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(phoneNumber, "123123");
 

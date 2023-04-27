@@ -44,13 +44,11 @@ public class OTP extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
 
-        Bundle bundle = getIntent().getExtras();
-        phoneNumber = bundle.getString("phone");
-        username = bundle.getString("username");
-        password = bundle.getString("password");
-        confirmPassword = bundle.getString("confirmPassword");
-
         setContentView(R.layout.otp_form);
+
+        Bundle bundle = getIntent().getExtras();
+        boolean reset = bundle.getBoolean("reset", false);
+        phoneNumber = bundle.getString("phone");
 
         inputOTP1 = (EditText) findViewById(R.id.inputOTP1);
         inputOTP2 = (EditText) findViewById(R.id.inputOTP2);
@@ -67,51 +65,15 @@ public class OTP extends AppCompatActivity {
         httpRequest = new HttpManager(OTP.this);
 
         EditText[] otpEt = new EditText[] {
-            inputOTP1, inputOTP2, inputOTP3, inputOTP4, inputOTP5, inputOTP6
+                inputOTP1, inputOTP2, inputOTP3, inputOTP4, inputOTP5, inputOTP6
         };
 
         setOtpEditTextHandler(otpEt);
-        OTPService = new FirebaseService(this, new AuthOTP() {
-            @Override
-            public void autoFill(String sms_otp_code) {
-                Log.d("ETST", sms_otp_code);
-                for (int i = 0; i < sms_otp_code.length(); i++) {
-                    otpEt[i].setText(String.valueOf(sms_otp_code.charAt(i)));
-                }
-            }
 
-            @Override
-            public void onSuccess(String token) {
-                Log.d("FragmentCreate","Token found from thread1 after expiry " + token);
-                httpRequest.Register(username, phoneNumber, password, confirmPassword, token, new HttpResponse() {
-                    @Override
-                    public void onSuccess(JSONObject response) {
-                        enableRegister(true);
-                        Toast.makeText(OTP.this, "Congratulations! Your account has been successfully created.", Toast.LENGTH_SHORT).show();
-
-                        Intent LoginActivityIntent = new Intent(OTP.this, LoginActivity.class);
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("phonenumber", "0" + phoneNumber.substring(3));
-                        LoginActivityIntent.putExtras(bundle);
-
-                        startActivity(LoginActivityIntent);
-
-                        finishAffinity();
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        enableRegister(true);
-                    }
-                });
-            }
-
-            @Override
-            public void onValidateError() {
-                errorMessage.setText("Invalid OTP entered. Please try again.");
-            }
-        });
+        if (!reset)
+            initOTPRegister(bundle, otpEt);
+        else
+            initOTPReset(otpEt);
 
         OTPService.sendOTPRequest(phoneNumber);
 
@@ -210,5 +172,80 @@ public class OTP extends AppCompatActivity {
         super.onStop();
 
         FirebaseAuth.getInstance().signOut();
+    }
+
+    public void initOTPRegister(Bundle bundle, EditText[] otpEt) {
+        username = bundle.getString("username");
+        password = bundle.getString("password");
+        confirmPassword = bundle.getString("confirmPassword");
+
+        OTPService = new FirebaseService(this, new AuthOTP() {
+            @Override
+            public void autoFill(String sms_otp_code) {
+                Log.d("ETST", sms_otp_code);
+                for (int i = 0; i < sms_otp_code.length(); i++) {
+                    otpEt[i].setText(String.valueOf(sms_otp_code.charAt(i)));
+                }
+            }
+
+            @Override
+            public void onSuccess(String token) {
+                Log.d("FragmentCreate","Token found from thread1 after expiry " + token);
+                httpRequest.Register(username, phoneNumber, password, confirmPassword, token, new HttpResponse() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+                        enableRegister(true);
+                        Toast.makeText(OTP.this, "Congratulations! Your account has been successfully created.", Toast.LENGTH_SHORT).show();
+
+                        Intent LoginActivityIntent = new Intent(OTP.this, LoginActivity.class);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("phonenumber", "0" + phoneNumber.substring(3));
+                        LoginActivityIntent.putExtras(bundle);
+
+                        startActivity(LoginActivityIntent);
+                        finishAffinity();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        enableRegister(true);
+                    }
+                });
+            }
+
+            @Override
+            public void onValidateError() {
+                errorMessage.setText("Invalid OTP entered. Please try again.");
+            }
+        });
+    }
+
+    public void initOTPReset(EditText[] otpEt) {
+        OTPService = new FirebaseService(this, new AuthOTP() {
+            @Override
+            public void autoFill(String sms_otp_code) {
+                for (int i = 0; i < sms_otp_code.length(); i++) {
+                    otpEt[i].setText(String.valueOf(sms_otp_code.charAt(i)));
+                }
+            }
+
+            @Override
+            public void onSuccess(String token) {
+                Intent ResetActivity = new Intent(OTP.this, ResetPassword.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("token", token);
+
+                ResetActivity.putExtras(bundle);
+                startActivity(ResetActivity);
+
+                finishAffinity();
+            }
+
+            @Override
+            public void onValidateError() {
+                errorMessage.setText("Invalid OTP entered. Please try again.");
+            }
+        });
     }
 }
