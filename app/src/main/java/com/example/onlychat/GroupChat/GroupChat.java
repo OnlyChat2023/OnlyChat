@@ -58,6 +58,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.TimeZone;
 
+import io.socket.emitter.Emitter;
+
 public class GroupChat extends Fragment {
     TextView chatTitle;
     ImageView chatIcon;
@@ -99,7 +101,7 @@ public class GroupChat extends Fragment {
         chatTitle = (TextView) groupChat.findViewById(R.id.header_title);
         chatTitle.setText("group chat channel");
         chatIcon = (ImageView) groupChat.findViewById(R.id.chatIcon);
-        profile=(ImageView) groupChat.findViewById(R.id.profile);
+        profile = (ImageView) groupChat.findViewById(R.id.profile);
         addChat = (ImageView) groupChat.findViewById(R.id.addChat);
         listChat = (ListView) groupChat.findViewById(R.id.listChat);
 //        chatIcon.setImageResource(R.drawable.global_chat_icon);
@@ -109,29 +111,31 @@ public class GroupChat extends Fragment {
         roomModels.clear();
 
         progressBar = (ProgressBar) groupChat.findViewById(R.id.progressBar);
-        loading  = (TextView) groupChat.findViewById(R.id.loading);
+        loading = (TextView) groupChat.findViewById(R.id.loading);
 
-        main_content_searchbox= (EditText)groupChat.findViewById(R.id.main_content_searchbox);
+        main_content_searchbox = (EditText) groupChat.findViewById(R.id.main_content_searchbox);
         main_content_searchbox.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editable.length()>0) delete.setVisibility(View.VISIBLE);
+                if (editable.length() > 0) delete.setVisibility(View.VISIBLE);
                 else delete.setVisibility(View.GONE);
-                for(int i=0;i<roomModels.size();i++){
-                    if(roomModels.get(i).getName().toLowerCase().contains(editable.toString().toLowerCase())){
-                        if(listChat.getChildAt(i).getVisibility() == View.GONE) {
+                for (int i = 0; i < roomModels.size(); i++) {
+                    if (roomModels.get(i).getName().toLowerCase().contains(editable.toString().toLowerCase())) {
+                        if (listChat.getChildAt(i).getVisibility() == View.GONE) {
                             listChat.getChildAt(i).setVisibility(View.VISIBLE);
-                            listChat.getChildAt(i).setLayoutParams(new AbsListView.LayoutParams(-1,-2));
+                            listChat.getChildAt(i).setLayoutParams(new AbsListView.LayoutParams(-1, -2));
                         }
-                    }
-                    else {
+                    } else {
                         listChat.getChildAt(i).setVisibility(View.GONE);
-                        listChat.getChildAt(i).setLayoutParams(new AbsListView.LayoutParams(-1,1));
+                        listChat.getChildAt(i).setLayoutParams(new AbsListView.LayoutParams(-1, 1));
                     }
                 }
             }
@@ -150,27 +154,26 @@ public class GroupChat extends Fragment {
         // set list messages
         HttpManager httpManager = new HttpManager(getContext());
         httpManager.getGroupChat(
-                new HttpResponse(){
+                new HttpResponse() {
                     @Override
                     public void onSuccess(JSONObject Response) {
                         loading.setVisibility(View.INVISIBLE);
                         progressBar.setVisibility(View.GONE);
-                        try{
+                        try {
                             JSONArray chats = Response.getJSONObject("data").getJSONArray("groupChat");
                             Log.i("Group chat", Integer.toString(chats.length()));
-                            if(chats.length()>0){
+                            if (chats.length() > 0) {
                                 roomModels.addAll(MainScreen.getListRoom(chats));
                                 customChatItem.notifyDataSetChanged();
                             }
-                        }
-                        catch (Exception e){
-                            Log.i("HTTP Success 11111 Error",e.toString());
+                        } catch (Exception e) {
+                            Log.i("HTTP Success 11111 Error", e.toString());
                         }
                     }
 
                     @Override
                     public void onError(String error) {
-                        Log.i("HTTP Error",error);
+                        Log.i("HTTP Error", error);
                     }
                 }
         );
@@ -178,7 +181,7 @@ public class GroupChat extends Fragment {
 
         listChat.setSelection(0);
         listChat.smoothScrollToPosition(0);
-        customChatItem = new CustomChatItem(groupChat.getContext(),roomModels );
+        customChatItem = new CustomChatItem(groupChat.getContext(), roomModels);
         listChat.setAdapter(customChatItem);
 
         listChat.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -200,7 +203,7 @@ public class GroupChat extends Fragment {
                 Intent intent = new Intent(listChat.getContext(), ListMessage.class);
                 intent.putExtra("typeChat", typeChat);
                 roomModels.get(i).setBitmapAvatar(null);
-                intent.putExtra("Data",roomModels.get(i));
+                intent.putExtra("Data", roomModels.get(i));
                 intent.putExtra("channel", "group_chat");
                 startActivityForResult(intent, 0);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
@@ -216,7 +219,7 @@ public class GroupChat extends Fragment {
                 myBundle.putInt("index", 0);
                 myBundle.putString("user_id", userInfo.get_id());
 
-                Intent intentToProfile = new Intent (getContext(), Profile.class);
+                Intent intentToProfile = new Intent(getContext(), Profile.class);
                 intentToProfile.putExtras(myBundle);
                 startActivity(intentToProfile);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
@@ -243,13 +246,13 @@ public class GroupChat extends Fragment {
 //                boolean focusable = true; // lets taps outside the popup also dismiss it
                 int width = LinearLayout.LayoutParams.MATCH_PARENT;
                 int height = LinearLayout.LayoutParams.MATCH_PARENT;
-                final PopupWindow overlayWindow = new PopupWindow(overlayView,width,height,true);
+                final PopupWindow overlayWindow = new PopupWindow(overlayView, width, height, true);
                 overlayWindow.showAtLocation(view, Gravity.TOP, 0, 0);
 
                 // Popup
                 View popupView = inflater.inflate(R.layout.global_chat_popup_new_group, null);
                 boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT,focusable);
+                final PopupWindow popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, focusable);
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
 
@@ -261,7 +264,7 @@ public class GroupChat extends Fragment {
                     public void onClick(View view) {
 
                         String newName = newGroupName.getText().toString();
-                        if (!newName.equals("")){
+                        if (!newName.equals("")) {
                             HttpManager httpManager = new HttpManager(getContext());
                             httpManager.AddGroupChat(typeChat, newName, pref.getUserModel().get_id(), new HttpResponse() {
                                 @Override
@@ -275,11 +278,10 @@ public class GroupChat extends Fragment {
 
                                 @Override
                                 public void onError(String error) {
-                                    Log.i("HTTP Error",error);
+                                    Log.i("HTTP Error", error);
                                 }
                             });
-                        }
-                        else {
+                        } else {
                             overlayWindow.dismiss();
                             popupWindow.dismiss();
                         }
@@ -298,7 +300,6 @@ public class GroupChat extends Fragment {
         });
         return groupChat;
     }
-
 
     public void Reload() {
         HttpManager httpManager = new HttpManager(getContext());

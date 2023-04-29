@@ -185,6 +185,19 @@ public class SocketManager {
         }
     }
 
+    public static void waitFinishSettingGroupName(ProfileReceiver listener) {
+        if (socket != null) {
+            socket.on("waitSetGroupName", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    String newGroupName = (String) args[0];
+                    listener.onSuccess(newGroupName);
+//                    System.out.printf("Socket run here");
+                }
+            });
+        }
+    }
+
     public static void getMetaData(UserModel user) {
         if (socket != null) {
             socket.emit("getMetaData", new Gson().toJson(user));

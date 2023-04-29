@@ -446,9 +446,6 @@ public class Options extends AppCompatActivity {
             }
         });
 
-        // waitSetGroupName
-        waitSetGroupName();
-
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -519,26 +516,25 @@ public class Options extends AppCompatActivity {
     public void setGroupName(ChangeGroupNameDialog current, String newGroupName){
         SocketManager.getInstance();
         SocketManager.changeGroupName(GroupID, newGroupName);
-//        name.setText(newGroupName);
+
+        name.setText(newGroupName);
         current.dismiss();
     }
 
-    public static void waitSetGroupName(){
-        SocketManager.getInstance();
-        if(SocketManager.getSocket() !=null){
-            SocketManager.getSocket().on("waitSetGroupName", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    String newGroupName = (String) args[0];
-//                    String friendNickname = (String) args[1];
-
-//                    Log.i("Option activity", myNickname);
-                    Log.i("vvvvvvvvvvvvvvvvvvv", newGroupName);
-                    name.setText(newGroupName);
-                }
-            });
-        }
-    }
+//    public static void waitSetGroupName(){
+//        SocketManager.getInstance();
+//        if(SocketManager.getSocket() !=null){
+//            SocketManager.getSocket().on("waitSetGroupName", new Emitter.Listener() {
+//                @Override
+//                public void call(Object... args) {
+//                    String newGroupName = (String) args[0];
+//
+//                    Log.i("vvvvvvvvvvvvvvvvvvv", newGroupName);
+//                    name.setText(newGroupName);
+//                }
+//            });
+//        }
+//    }
 
     public class ImageAdapterGridView extends BaseAdapter {
         private Context mContext;
