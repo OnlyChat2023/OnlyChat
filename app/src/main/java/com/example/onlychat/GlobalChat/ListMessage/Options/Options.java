@@ -7,7 +7,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,6 +28,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.onlychat.DiaLog.BasicDialog;
+import com.example.onlychat.DiaLog.ChangeGroupNameDialog;
+import com.example.onlychat.DiaLog.ChangeNickNameDialog;
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GroupChat.AddMember;
 import com.example.onlychat.Interfaces.HttpResponse;
@@ -51,7 +55,6 @@ import java.util.List;
 import io.socket.emitter.Emitter;
 
 public class Options extends AppCompatActivity {
-
     RelativeLayout members;
     RelativeLayout notify;
     RelativeLayout delete;
@@ -59,13 +62,15 @@ public class Options extends AppCompatActivity {
     RelativeLayout block;
     RelativeLayout report;
     RelativeLayout edit;
+    RelativeLayout group_name;
     ListView listMembers;
     ImageView backButton;
 
-    TextView name;
+    static TextView name;
     TextView memberNumbers;
     ImageView avatar;
     ImageView notify_icon;
+    ImageView pencil_icon;
     TextView notify_txt;
     RoomOptions options;
     String typeChat;
@@ -107,6 +112,8 @@ public class Options extends AppCompatActivity {
         notify = (RelativeLayout) findViewById(R.id.global_notify);
         notify_txt = (TextView) findViewById(R.id.notify_txt);
         notify_icon = (ImageView) findViewById(R.id.imageView14);
+        pencil_icon = (ImageView) findViewById(R.id.pencil_ic);
+        group_name = (RelativeLayout) findViewById(R.id.group_name_layout);
         delete = (RelativeLayout) findViewById(R.id.global_delete);
         leave = (RelativeLayout) findViewById(R.id.global_leave);
         block = (RelativeLayout) findViewById(R.id.global_block);
@@ -439,6 +446,9 @@ public class Options extends AppCompatActivity {
             }
         });
 
+        // waitSetGroupName
+        waitSetGroupName();
+
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -476,6 +486,13 @@ public class Options extends AppCompatActivity {
                 }
             }
         });
+        group_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChangeGroupNameDialog dialog = new ChangeGroupNameDialog().newInstance(Options.this);
+                dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
+            }
+        });
     }
 
     public void LeaveGroup(BasicDialog basicDialog){
@@ -497,6 +514,30 @@ public class Options extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    public void setGroupName(ChangeGroupNameDialog current, String newGroupName){
+        SocketManager.getInstance();
+        SocketManager.changeGroupName(GroupID, newGroupName);
+//        name.setText(newGroupName);
+        current.dismiss();
+    }
+
+    public static void waitSetGroupName(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitSetGroupName", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    String newGroupName = (String) args[0];
+//                    String friendNickname = (String) args[1];
+
+//                    Log.i("Option activity", myNickname);
+                    Log.i("vvvvvvvvvvvvvvvvvvv", newGroupName);
+                    name.setText(newGroupName);
+                }
+            });
+        }
     }
 
     public class ImageAdapterGridView extends BaseAdapter {

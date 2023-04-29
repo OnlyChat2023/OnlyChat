@@ -97,6 +97,12 @@ public class SocketManager {
         }
     }
 
+    public static void changeGroupName(String chat_id, String newGroupName){
+        if(socket != null){
+            socket.emit("changeGroupName", chat_id, newGroupName);
+        }
+    }
+
     public static void deleteFriend(String id, UserModel user){
         if(socket != null){
             socket.emit("deleteFriend",id,new Gson().toJson(user));

@@ -13,11 +13,14 @@ import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 
+import com.example.onlychat.DirectMessage.Option.OptionActivity;
+import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
 import com.example.onlychat.R;
 
 public class ChangeGroupNameDialog extends DialogFragment  {
     String group_name;
-    public OnInputListener mOnInputListener;
+
+    Options optionActivity;
     public ChangeGroupNameDialog(){
 
     }
@@ -26,26 +29,33 @@ public class ChangeGroupNameDialog extends DialogFragment  {
         void sendInput(String input);
     }
     private static final String TAG = "DialogFragment";
-    @Override
-    public void onAttach(Context context)
-    {
-        super.onAttach(context);
-        try {
-            mOnInputListener
-                    = (OnInputListener)getActivity();
-        }
-        catch (ClassCastException e) {
-            Log.e(TAG, "onAttach: ClassCastException: "
-                    + e.getMessage());
-        }
+
+    public ChangeGroupNameDialog(Options optionActivity){
+        this.optionActivity = optionActivity;
     }
 
-    public static ChangeGroupNameDialog newInstance(String group_name){
-        ChangeGroupNameDialog f = new ChangeGroupNameDialog();
+//    @Override
+//    public void onAttach(Context context)
+//    {
+//        super.onAttach(context);
+//        try {
+//            mOnInputListener
+//                    = (OnInputListener)getActivity();
+//        }
+//        catch (ClassCastException e) {
+//            Log.e(TAG, "onAttach: ClassCastException: "
+//                    + e.getMessage());
+//        }
+//    }
+
+    public static ChangeGroupNameDialog newInstance(Options activity){
+        ChangeGroupNameDialog f = new ChangeGroupNameDialog(activity);
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putString("group_name", group_name);
+//        args.putString("frName", name_fr);
+//        args.putString("frNN", nn_fr);
+//        args.putString("userNN", nn_user);
         f.setArguments(args);
 
         return f;
@@ -69,8 +79,8 @@ public class ChangeGroupNameDialog extends DialogFragment  {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String input = et_group_name.getText().toString();
-                mOnInputListener.sendInput(input);
+//                Log.i("GROUP: ", et_group_name.getText().toString());
+                optionActivity.setGroupName(ChangeGroupNameDialog.this, et_group_name.getText().toString());
                 dismiss();
             }
         });

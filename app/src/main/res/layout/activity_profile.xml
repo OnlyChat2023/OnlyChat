@@ -185,13 +185,12 @@
                     style="@style/ProfileCustomTabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
                     android:background="#181828"
                     android:fontFamily="@font/montserrat_bold"
                     app:tabIndicatorColor="@color/white"
                     app:tabSelectedTextColor="@color/white"
                     app:tabTextAppearance="@style/TabBar.TitleText"
-                    app:tabTextColor="#FFFFFF" />
+                    app:tabTextColor="#565656" />
 
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/view_pager"
