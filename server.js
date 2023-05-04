@@ -241,27 +241,6 @@ io.on('connection', (socket) => {
 
                 if (member.user_id === send_user._id) continue;
 
-                // const getMessage = firebase.messaging();
-
-                // const user = await User.findById(member.user_id);
-
-                // if (user.notify) {
-                //     const messages = {
-                //         data: {
-                //             name: send_user.nickname,
-                //             message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
-                //         },
-                //         token: user.notify
-                //     };
-
-                //     getMessage.send(messages).then((response) => {
-                //         // Response is a message ID string.
-                //         console.log('Successfully sent message:', response);
-                //     })
-                //         .catch((error) => {
-                //             console.log('Error sending message:', error);
-                //         });
-                // }
 
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'global_chat');
             }
@@ -281,12 +260,10 @@ io.on('connection', (socket) => {
             const DirectMessage = await directChat.findOne({ _id: socket.room });
 
             for (const member of DirectMessage.members) {
-
-                if (member.user_id === send_user._id) continue;
+                if (member.user_id.toString() === send_user._id.toString()) continue;
 
                 const memberOptions = DirectMessage.options.find(option => option.user_id === member.user_id);
                 if (memberOptions.notify === true) {
-
                     const getMessage = firebase.messaging();
 
                     const user = await User.findOne({ _id: member.user_id });
@@ -299,14 +276,13 @@ io.on('connection', (socket) => {
                             },
                             tokens: user.notify
                         };
-
                         getMessage.sendMulticast(messages).then((response) => {
                             // Response is a message ID string.
                             // console.log('Successfully sent message:', response);
                         })
-                        .catch((error) => {
-                            // console.log('Error sending message:', error);
-                        });
+                            .catch((error) => {
+                                console.log('Error sending message:', error);
+                            });
                     }
                 }
 
@@ -465,7 +441,7 @@ io.on('connection', (socket) => {
                     const getMessage = firebase.messaging();
 
                     const user = await User.findOne({ _id: member.user_id });
-                    
+
                     if (user.notify.length > 0) {
                         const messages = {
                             data: {
@@ -479,9 +455,9 @@ io.on('connection', (socket) => {
                             // Response is a message ID string.
                             console.log('Successfully sent message:', response);
                         })
-                        .catch((error) => {
-                            console.log('Error sending message:', error);
-                        });
+                            .catch((error) => {
+                                console.log('Error sending message:', error);
+                            });
                     }
                 }
 
@@ -622,7 +598,7 @@ io.on('connection', (socket) => {
         const f_new_friends = await User.findOne({ _id: u._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description')
         // console.log("3")
         for (let i of u.directmessage_channel) {
-            if (f.directmessage_channel.indexOf(i) >= 0) {
+            if (f.directmessage_channel.filter(el => el.message_id === i.message_id).length > 0) {
                 io.to(basket[_user._id]).emit('waitAcceptFriend', new_friends);
                 io.to(basket[id]).emit("waitAcceptFriend", f_new_friends);
 
@@ -648,12 +624,12 @@ io.on('connection', (socket) => {
             options: [
                 {
                     user_id: u._id,
-                    notify: false,
+                    notify: true,
                     block: false
                 },
                 {
                     user_id: f._id,
-                    notify: false,
+                    notify: true,
                     block: false
                 }
             ],
@@ -662,8 +638,14 @@ io.on('connection', (socket) => {
 
         const direct_message = await directChat.create(new_room);
 
-        u.directmessage_channel.push(direct_message._id.toString())
-        f.directmessage_channel.push(direct_message._id.toString())
+        u.directmessage_channel.push({
+            show: true,
+            message_id: direct_message._id.toString()
+        })
+        f.directmessage_channel.push({
+            show: true,
+            message_id: direct_message._id.toString()
+        })
 
         for (let j of new_room.members) {
             if (j.user_id === u._id) {

@@ -11,66 +11,6 @@ const filterObj = (obj, ...allowedFields) => {
     return newObj;
 };
 
-const addDirectMessage = catchAsync(async (req, res, next) => {
-    const user1 = await User.findOne({ _id: req.body.id_1 });
-    const user2 = await User.findOne({ _id: req.body.id_2 });
-    var isHasDirect = false;
-
-    for (let dm of user1.directmessage_channel) {
-        const DirectMessage = await directChat.findOne({ _id: dm })
-
-        for (let i of DirectMessage.members) {
-            if (i.user_id == user2._id) {
-                isHasDirect = true;
-                res.status(200).json({ status: 'success', data: {} });
-                return;
-            }
-        }
-    }
-
-    const newChat = {
-        avatar: "",
-        name: "",
-        chats: [],
-        members: [
-            {
-                user_id: user1._id,
-                avatar: user1.avatar,
-                name: user1.name,
-                nickname: user1.nickname,
-            },
-            {
-                user_id: user2._id,
-                avatar: user2.avatar,
-                name: user2.name,
-                nickname: user2.nickname,
-            }
-        ],
-        options: [
-            {
-                user_id: user1._id,
-                notify: false,
-                block: false
-            },
-            {
-                user_id: user2._id,
-                notify: false,
-                block: false
-            }
-        ],
-        update_time: new Date()
-    }
-
-    const addDM = await directChat.insertMany(newChat, { ordered: true, rawResult: true }, async function (err, result) {
-        user1.directmessage_channel.push(String(result.insertedIds[0]));
-        user2.directmessage_channel.push(String(result.insertedIds[0]));
-        await user1.save();
-        await user2.save();
-
-        res.status(200).json({ status: 'success', data: {} });
-    });
-});
-
 const changeOptions = catchAsync(async (req, res, next) => {
     const filterBody = filterObj(req.body, 'user_id', 'notify', 'block');
     filterBody.notify = (req.body.notify === 'true');
@@ -106,29 +46,31 @@ const getMetaData = catchAsync(async (req, res, next) => {
 
     const directChats = []
     for (let i of user.directmessage_channel) {
-        const dmList = await directChat.findOne({ _id: i });
-        for (let j of dmList.members) {
-            if (j.user_id === user._id.toString()) {
-                j.avatar = user.avatar
-                j.name = user.name
+        if (i.show) {
+            const dmList = await directChat.findOne({ _id: i.message_id });
+            for (let j of dmList.members) {
+                if (j.user_id === user._id.toString()) {
+                    j.avatar = user.avatar
+                    j.name = user.name
+                }
+                else {
+                    const not_me = await User.findOne({ _id: j.user_id })
+                    j.avatar = not_me.avatar
+                    j.name = not_me.name
+                }
             }
-            else {
-                const not_me = await User.findOne({ _id: j.user_id })
-                j.avatar = not_me.avatar
-                j.name = not_me.name
-            }
+
+            dmList.avatar = dmList.members.filter(el => el.user_id != user._id.toString())[0].avatar
+            dmList.name = dmList.members.filter(el => el.user_id != user._id.toString())[0].nickname
+            dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+
+            const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
+            newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
+            newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
+            newDM.options = { ...newDM.options[0], _id: newDM.options[0]._id.toString() };
+
+            directChats.push(newDM);
         }
-
-        dmList.avatar = dmList.members.filter(el => el.user_id != user._id.toString())[0].avatar
-        dmList.name = dmList.members.filter(el => el.user_id != user._id.toString())[0].nickname
-        dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
-
-        const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
-        newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
-        newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
-        newDM.options = { ...newDM.options[0], _id: newDM.options[0]._id.toString() };
-
-        directChats.push(newDM);
     }
 
     res.status(200).json({
@@ -140,5 +82,14 @@ const getMetaData = catchAsync(async (req, res, next) => {
     })
 });
 
+const deleteRoom = catchAsync(async (req, res) => {
+    const user = await User.findOne({ _id: req.user.id })
+    user.directmessage_channel.filter(el => el.message_id === req.body.message_id)[0].show = false
+    user.save()
+    res.status(200).json({
+        status: 'success',
+    })
+})
 
-export { addDirectMessage, changeOptions, getBlock, changeNickname, getMetaData }
+
+export { changeOptions, getBlock, changeNickname, getMetaData, deleteRoom }

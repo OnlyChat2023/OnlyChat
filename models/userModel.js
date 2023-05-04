@@ -18,7 +18,8 @@ const userSchema = new mongoose.Schema({
     type: String
   }],
   directmessage_channel: [{
-    type: String
+    show: { type: Boolean },
+    message_id: { type: String }
   }],
   globalchat_channel: [{
     type: String
