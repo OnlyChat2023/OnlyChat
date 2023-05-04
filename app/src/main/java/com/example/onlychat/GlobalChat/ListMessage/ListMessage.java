@@ -194,12 +194,12 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                 overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
 
                 // Update groupchat name (chatName) if it is changed in Options class
-                SocketManager.waitFinishSettingGroupName(new ProfileReceiver() {
-                    @Override
-                    public void onSuccess(String newGroupName) {
-                        chatName.setText(newGroupName);
-                    }
-                });
+//                SocketManager.waitFinishSettingGroupName(new ProfileReceiver() {
+//                    @Override
+//                    public void onSuccess(String newGroupName) {
+//                        chatName.setText(newGroupName);
+//                    }
+//                });
             }
         });
 
