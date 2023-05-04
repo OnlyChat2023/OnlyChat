@@ -579,6 +579,16 @@ io.on('connection', (socket) => {
         await dm.save()
     })
 
+    socket.on('changeGroupName', async (chat_id, newGroupName) => {
+        let groupchat = await groupChat.findById(chat_id)
+        groupchat.name = newGroupName;
+
+        // io.to(basket[chat_id]).emit("waitSetGroupName", newGroupName, chat_id);
+       
+        socket.emit("waitSetGroupName", newGroupName);
+        await groupchat.save()
+    })
+
     socket.on('acceptRequestAddFriend', async (id, user) => {
         // console.log("acceptRequestAddFriend")
         // console.log(User.)
