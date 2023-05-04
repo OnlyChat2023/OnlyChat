@@ -80,7 +80,7 @@ public class DirectMessage extends Fragment {
     ImageView delete;
     private ProgressBar progressBar;
     private TextView loading;
-    CustomChatItem customChatItem;
+    static CustomChatItem customChatItem;
     static ArrayList<RoomModel> roomModels = new ArrayList<>();
     GlobalPreferenceManager pref;
     public static ArrayList<RoomModel> getRoomModels() {
@@ -90,6 +90,28 @@ public class DirectMessage extends Fragment {
     public void addRoom(RoomModel roomModel){
         roomModels.add(roomModel);
         customChatItem.notifyDataSetChanged();
+    }
+
+    public static void removeRoom(String id){
+        HttpManager httpManager = new HttpManager(customChatItem.getContext());
+        httpManager.deleteRoom(id, new HttpResponse() {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException, InterruptedException, ParseException {
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+        for(int i=0;i<roomModels.size();i++){
+            if(roomModels.get(i).getId().equals(id)) {
+                roomModels.remove(i);
+                customChatItem.notifyDataSetChanged();
+                break;
+            }
+        }
     }
 
     public DirectMessage(){}

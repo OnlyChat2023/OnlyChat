@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="300dp"
-    android:layout_height="700dp"
+    android:layout_height="match_parent"
     android:background="@drawable/global_chat_popup_layout"
     android:orientation="vertical"
     android:padding="16dp">
@@ -36,16 +36,17 @@
         android:textSize="16sp" />
 
     <GridView
-        android:layout_marginTop="15dp"
         android:id="@+id/gridview_android_example"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="15dp"
         android:columnWidth="140dp"
         android:gravity="center"
         android:minHeight="140dp"
         android:numColumns="5"
         android:stretchMode="columnWidth" />
+
     <Button
         android:id="@+id/okBtn"
         android:layout_marginTop="25dp"
@@ -57,5 +58,4 @@
         android:textColor="@color/white"
         android:background="@drawable/auth_button"
         />
-
 </LinearLayout>

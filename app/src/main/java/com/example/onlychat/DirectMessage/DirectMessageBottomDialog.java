@@ -55,6 +55,14 @@ public class DirectMessageBottomDialog extends BottomSheetDialogFragment {
         delete = (ImageView) layout.findViewById(R.id.imageView7);
         lock = (ImageView) layout.findViewById(R.id.imageView10);
 
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DirectMessage.removeRoom(id);
+                dismiss();
+            }
+        });
+
         return layout;
     }
 
