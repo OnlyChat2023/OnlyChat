@@ -584,9 +584,9 @@ io.on('connection', (socket) => {
         let groupchat = await groupChat.findById(chat_id)
         groupchat.name = newGroupName;
 
-        // io.to(basket[chat_id]).emit("waitSetGroupName", newGroupName, chat_id);
+        // console.log(chat_id);
 
-        socket.emit("waitSetGroupName", newGroupName);
+        socket.emit("waitSetGroupName", newGroupName, chat_id);
         await groupchat.save()
     })
 
