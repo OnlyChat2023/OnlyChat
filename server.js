@@ -5,6 +5,7 @@ import fs from 'fs';
 import firebase from './firebase/firebase.js';
 import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcryptjs';
+import { Configuration, OpenAIApi } from 'openai';
 
 
 const port = process.env.PORT || 5000;
@@ -26,6 +27,12 @@ mongoose
     .then(() => {
         console.log('Connected to DB successfully');
     });
+
+const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+
+const openai = new OpenAIApi(configuration);
 
 const server = app.listen(port, async () => {
     // console.log(await bcrypt.hash('yaemiko01', 12));
@@ -53,138 +60,6 @@ const saveBase64Image = async (dataString, filename) => {
 }
 
 const io = new Server(server);
-
-io.of('/group_message').on('connection', (socket) => {
-
-    socket.on('create_room', (room) => {
-        socket.room = room;
-        socket.join(room);
-    });
-
-    socket.on('add_member', (member) => {
-        socket.broadcast.to(socket.room).emit('add_member', member);
-    });
-
-    socket.on('remove_member', (member) => {
-        socket.broadcast.to(socket.room).emit('remove_member', member);
-    });
-
-    socket.on('delete_chat', (room) => {
-        // cập nhật csdl
-        socket.broadcast.to(room).emit('delete_chat');
-    });
-
-    socket.on('seen_message', (room) => {
-        socket.room = room;
-        socket.broadcast.to(room).emit('seen_message', socket.user);
-    });
-
-    socket.on('send_message', (message) => {
-        // broadcast toàn bộ client trong room này
-        socket.broadcast.to(socket.room).emit('receive_message', {
-            message: message,
-            user: socket.user,
-            time: new Date().getTime()
-        });
-    });
-
-    socket.on('change_nickname', (user) => {
-        // cập nhật csdl
-        socket.broadcast.to(socket.room).emit('change_nickname', user);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
-    });
-});
-
-io.of('/group_message').on('connection', (socket) => {
-
-    socket.on('create_room', (room) => {
-        socket.room = room;
-        socket.join(room);
-    });
-
-    socket.on('add_member', (member) => {
-        socket.broadcast.to(socket.room).emit('add_member', member);
-    });
-
-    socket.on('remove_member', (member) => {
-        socket.broadcast.to(socket.room).emit('remove_member', member);
-    });
-
-    socket.on('delete_chat', (room) => {
-        // cập nhật csdl
-        socket.broadcast.to(room).emit('delete_chat');
-    });
-
-    socket.on('seen_message', (room) => {
-        socket.room = room;
-        socket.broadcast.to(room).emit('seen_message', socket.user);
-    });
-
-    socket.on('send_message', (message) => {
-        // broadcast toàn bộ client trong room này
-        socket.broadcast.to(socket.room).emit('receive_message', {
-            message: message,
-            user: socket.user,
-            time: new Date().getTime()
-        });
-    });
-
-    socket.on('change_nickname', (user) => {
-        // cập nhật csdl
-        socket.broadcast.to(socket.room).emit('change_nickname', user);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
-    });
-});
-
-io.of('/global_message').on('connection', (socket) => {
-
-    socket.on('create_room', (room) => {
-        socket.room = room;
-        socket.join(room);
-    });
-
-    socket.on('add_member', (member) => {
-        socket.broadcast.to(socket.room).emit('add_member', member);
-    });
-
-    socket.on('remove_member', (member) => {
-        socket.broadcast.to(socket.room).emit('remove_member', member);
-    });
-
-    socket.on('delete_chat', (room) => {
-        // cập nhật csdl
-        socket.broadcast.to(room).emit('delete_chat');
-    });
-
-    socket.on('seen_message', (room) => {
-        socket.room = room;
-        socket.broadcast.to(room).emit('seen_message', socket.user);
-    });
-
-    socket.on('send_message', (message) => {
-        // broadcast toàn bộ client trong room này
-        socket.broadcast.to(socket.room).emit('receive_message', {
-            message: message,
-            user: socket.user,
-            time: new Date().getTime()
-        });
-    });
-
-    socket.on('set_nickname', (user) => {
-        // cập nhật csdl
-        socket.emit('set_nickname', user);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
-    });
-});
 
 io.on('connection', (socket) => {
 
@@ -346,19 +221,42 @@ io.on('connection', (socket) => {
             messageModal = {
                 message: Buffer.from(message, 'utf-8').toString(),
                 user_id: send_user._id,
-                imges: [],
-                avatar: "",
-                nickname: "",
-                send_user: [],
                 time: new Date()
             }
 
-            const BotChat = await botChat.findOne({ _id: socket.room });
+            const botID = socket.room;
+
+            const BotChatNew = await botChat.findOne({ _id: botID }).lean();
+
+            const BotChat = await botChat.findOne({ _id: botID });
             BotChat.chats.push(messageModal);
+
+            const BotChatNewest = BotChatNew.chats.sort(function (a, b) {
+                return new Date(a.time) - new Date(b.time);
+            }).splice(0, Math.min(100, BotChatNew.chats.length));
+
+            const listMessage = BotChatNewest.map(el => ({
+                role: (el.user_id === send_user._id) ? 'user' : 'assistant',
+                content: el.message
+            }));
+
+            const completion = await openai.createChatCompletion({
+                model: "gpt-3.5-turbo",
+                messages: [...listMessage, { role: "user", content: Buffer.from(message, 'utf-8').toString() }]
+            });
+
+            const BotmessageModal = {
+                message: completion.data.choices[0].message.content,
+                user_id: botID,
+                time: new Date()
+            }
+
+            BotChat.chats.push(BotmessageModal);
+
             await BotChat.save();
+
+            io.sockets.in(botID).emit('messageListener', BotmessageModal, position + 1, { });
         }
-
-
 
         io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
@@ -790,6 +688,13 @@ io.on('connection', (socket) => {
             }
         }
     });
+    socket.on('botchat', async (message, position, user) => {
+        const completion = await openai.createChatCompletion({
+            model: "gpt-3.5-turbo",
+            messages: [{role: "user", content: "Hello world"}],
+        });
+        console.log(completion.data.choices[0].message);
+    })
 });
 
 
