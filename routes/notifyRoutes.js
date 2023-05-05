@@ -9,10 +9,12 @@ router.patch('/update', authController.protect, catchAsync(async (req, res, next
 
     const user = await User.findById(req.user.id);
 
-    if (!user.notify.includes(req.body.token))
+    if (user) {
+      if (!user.notify.includes(req.body.token))
       user.notify.push(req.body.token);
 
-    await user.save();
+      await user.save();
+    }
   
     res.status(200).json({
       status: 'success',
@@ -26,9 +28,11 @@ router.patch('/remove', catchAsync(async (req, res, next) => {
 
   const user = await User.findOne({ notify: { $in: [req.body.token] } });
 
-  user.notify = user.notify.filter(el => el != req.body.token);
+  if (user) {
+    user.notify = user.notify.filter(el => el != req.body.token);
 
-  await user.save();
+    await user.save();
+  }
 
   res.status(200).json({
     status: 'success',
