@@ -1,11 +1,13 @@
 package com.example.onlychat.ChatBot;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,15 +32,19 @@ import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.Interfaces.HttpResponse;
+import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ChatBot extends Fragment {
     TextView chatTitle;
@@ -48,6 +55,11 @@ public class ChatBot extends Fragment {
     CustomChatItem customChatItem;
     String typeChat = "botChat";
     GlobalPreferenceManager pref;
+
+    private ProgressBar progressBar;
+    private TextView loading;
+
+    private RelativeLayout botChat;
 
     ArrayList<RoomModel> roomModels = new ArrayList<>();
 
@@ -78,7 +90,7 @@ public class ChatBot extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RelativeLayout botChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content_bot, null);
+        botChat = (RelativeLayout) inflater.inflate(R.layout.fragment_main_content_bot, null);
 
         // set value for widget
         chatTitle=(TextView) botChat.findViewById(R.id.header_title);
@@ -86,10 +98,42 @@ public class ChatBot extends Fragment {
         addChat = (ImageView) botChat.findViewById(R.id.addChat);
         listChat = (ListView) botChat.findViewById(R.id.listChat);
 
+        progressBar = (ProgressBar) botChat.findViewById(R.id.progressBar);
+        loading  = (TextView) botChat.findViewById(R.id.loading);
+
         Log.i("<<<<<<Bot chat>>>>>>>>>", Integer.toString(roomModels.size()));
 
         pref = new GlobalPreferenceManager(getContext());
 
+        roomModels.clear();
+
+        // set list messages
+        HttpManager httpManager = new HttpManager(getContext());
+        httpManager.getBotChat(
+                new HttpResponse(){
+                    @Override
+                    public void onSuccess(JSONObject Response) {
+                        loading.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.GONE);
+                        try{
+                            JSONArray chats = Response.getJSONObject("data").getJSONArray("botChat");
+//                            Log.i("Direct chat", Integer.toString(chats.length()));
+                            if(chats.length()>0){
+                                roomModels.addAll(MainScreen.getListRoom(chats));
+                                customChatItem.notifyDataSetChanged();
+                            }
+                        }
+                        catch (Exception e){
+                            Log.e("HTTP Success 11111 Error",e.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.i("HTTP Error",error);
+                    }
+                }
+        );
 
         chatTitle.setText("Bot Chat Channel");
 
@@ -110,7 +154,7 @@ public class ChatBot extends Fragment {
                 intent.putExtra("typeChat", typeChat);
                 intent.putExtra("Position", i);
                 intent.putExtra("channel", "bot_chat");
-                startActivityForResult(intent, 5);
+                startActivityForResult(intent, 0);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
@@ -153,7 +197,7 @@ public class ChatBot extends Fragment {
                     public void onClick(View view) {
 
                         String newName = newGroupName.getText().toString();
-                        if (!newName.equals("")){
+                        if (!newName.equals("") && !TextUtils.isEmpty(newName)) {
                             HttpManager httpManager = new HttpManager(getContext());
                             httpManager.addBotChat(newName, pref.getUserModel().get_id(), new HttpResponse() {
                                 @Override
@@ -187,5 +231,104 @@ public class ChatBot extends Fragment {
             }
         });
         return botChat;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
+            String roomID = data.getStringExtra("RoomModelID");
+            String lastMess = data.getStringExtra("LastMessage");
+            Date lastTime = (Date) data.getSerializableExtra("LastTime");
+            boolean update = data.getBooleanExtra("Update", true);
+            boolean change = data.getBooleanExtra("Change", false);
+
+            if (update) {
+                if (roomID != null && lastMess != null) {
+                    for (RoomModel model : roomModels)
+                        if (model.getId().equals(roomID)) {
+                            if (change) {
+                                roomModels.remove(model);
+                                model.getMessages().add(new MessageModel("tmp", "", "", "", "", lastMess, lastTime, null));
+                                roomModels.add(0, model);
+                                customChatItem.notifyDataSetChanged();
+                            }
+                            break;
+                        }
+                }
+                updateListRoom();
+            }
+        }
+    }
+
+    public void pushFirst(String roomID) {
+        botChat.post(new Runnable() {
+            @Override
+            public void run() {
+                for (RoomModel room : roomModels)
+                    if (room.getId().equals(roomID)) {
+                        roomModels.remove(room);
+                        roomModels.add(0, room);
+                        customChatItem.notifyDataSetChanged();
+                        return;
+                    }
+            }
+        });
+    }
+
+    public void updateListRoom() {
+        HttpManager httpRequest = new HttpManager(getContext());
+        httpRequest.getBotChat(new HttpResponse() {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
+                try{
+                    JSONArray globalChat = response.getJSONObject("data").getJSONArray("botChat");
+
+                    ArrayList<String> founded = new ArrayList<String>();
+
+                    if(globalChat.length()>0){
+                        ArrayList<RoomModel> rooms = MainScreen.getListRoom(globalChat);
+
+                        for (RoomModel old_room : roomModels) {
+                            boolean found = false;
+                            for (RoomModel new_room : rooms) {
+                                if (old_room.getId().equals(new_room.getId())) {
+                                    old_room.setMessages(new_room.getMessages());
+                                    old_room.setAvatar(new_room.getAvatar());
+                                    old_room.setName(new_room.getName());
+                                    old_room.setOptions(new_room.getOptions());
+
+                                    found = true;
+                                    founded.add(new_room.getId());
+                                    break;
+                                }
+                            }
+                            if (!found) {
+                                roomModels.remove(old_room);
+                            }
+                        }
+                        for (RoomModel new_room : rooms) {
+                            if (!founded.contains(new_room.getId())) {
+                                roomModels.add(0, new_room);
+                            }
+                        }
+                        customChatItem.notifyDataSetChanged();
+                        customChatItem.notifyDataSetInvalidated();
+                    }
+                    else {
+                        roomModels.clear();
+                        customChatItem.notifyDataSetChanged();
+                    }
+                }
+                catch (Exception e){
+                    Log.i("HTTP Success 11111 Error",e.toString());
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 }
