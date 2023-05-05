@@ -285,7 +285,9 @@ io.on('connection', (socket) => {
                             });
                     }
                 }
-
+                const user_ = await User.findOne({ _id: member.user_id })
+                user_.directmessage_channel.filter(el => el.message_id === socket.room)[0].show = true
+                user_.save()
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'direct_message');
             }
 
@@ -460,7 +462,6 @@ io.on('connection', (socket) => {
                             });
                     }
                 }
-
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'direct_message');
             }
 
@@ -584,7 +585,7 @@ io.on('connection', (socket) => {
         groupchat.name = newGroupName;
 
         // io.to(basket[chat_id]).emit("waitSetGroupName", newGroupName, chat_id);
-       
+
         socket.emit("waitSetGroupName", newGroupName);
         await groupchat.save()
     })
