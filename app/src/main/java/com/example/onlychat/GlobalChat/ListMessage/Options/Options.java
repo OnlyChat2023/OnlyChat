@@ -112,7 +112,7 @@ public class Options extends AppCompatActivity {
         notify = (RelativeLayout) findViewById(R.id.global_notify);
         notify_txt = (TextView) findViewById(R.id.notify_txt);
         notify_icon = (ImageView) findViewById(R.id.imageView14);
-        pencil_icon = (ImageView) findViewById(R.id.pencil_ic);
+//        pencil_icon = (ImageView) findViewById(R.id.pencil_ic);
         group_name = (RelativeLayout) findViewById(R.id.group_name_layout);
         delete = (RelativeLayout) findViewById(R.id.global_delete);
         leave = (RelativeLayout) findViewById(R.id.global_leave);

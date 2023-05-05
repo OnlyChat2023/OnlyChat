@@ -70,6 +70,7 @@ import java.util.List;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
+import io.socket.emitter.Emitter;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -85,7 +86,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     Button optionButton;
     Button backButton;
     ImageView chatImage;
-    TextView chatName;
+    static TextView chatName;
     TextView memberNumber;
     GlobalPreferenceManager pref;
     UserModel myInfo;
@@ -197,6 +198,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 //                SocketManager.waitFinishSettingGroupName(new ProfileReceiver() {
 //                    @Override
 //                    public void onSuccess(String newGroupName) {
+////                        System.out.println("vvvvvvvvvvv: " + newGroupName);
 //                        chatName.setText(newGroupName);
 //                    }
 //                });
@@ -343,7 +345,27 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
             }
         });
 
+        waitSetGroupName();
         initSocket();
+    }
+
+    public static void waitSetGroupName(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitSetGroupName", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    String newGroupName = (String) args[0];
+//                    Log.i("TAG", "----------------" + newGroupName);
+                    chatName.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            chatName.setText(newGroupName);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     private void imagePicker(){
