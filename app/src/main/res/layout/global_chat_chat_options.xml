@@ -49,15 +49,15 @@
                 android:textSize="28dp"
                 />
 
-            <ImageView
-                android:id="@+id/pencil_ic"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:layout_marginStart="5dp"
-                android:layout_toRightOf="@id/group_name"
-                android:layout_centerVertical="true"
-                app:srcCompat="@drawable/ic_pencil" />
+<!--            <ImageView-->
+<!--                android:id="@+id/pencil_ic"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingTop="10dp"-->
+<!--                android:layout_marginStart="5dp"-->
+<!--                android:layout_toRightOf="@id/group_name"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                app:srcCompat="@drawable/ic_pencil" />-->
         </RelativeLayout>
     </RelativeLayout>
 
