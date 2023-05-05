@@ -97,6 +97,12 @@ public class SocketManager {
         }
     }
 
+    public static void changeGroupName(String chat_id, String newGroupName){
+        if(socket != null){
+            socket.emit("changeGroupName", chat_id, newGroupName);
+        }
+    }
+
     public static void deleteFriend(String id, UserModel user){
         if(socket != null){
             socket.emit("deleteFriend",id,new Gson().toJson(user));
@@ -174,6 +180,19 @@ public class SocketManager {
                 public void call(Object... args) {
                     String new_filename = (String) args[0];
                     listener.onSuccess(new_filename);
+                }
+            });
+        }
+    }
+
+    public static void waitFinishSettingGroupName(ProfileReceiver listener) {
+        if (socket != null) {
+            socket.on("waitSetGroupName", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    String newGroupName = (String) args[0];
+                    listener.onSuccess(newGroupName);
+//                    System.out.printf("Socket run here");
                 }
             });
         }

@@ -24,8 +24,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.onlychat.DiaLog.ChangeNickNameDialog;
+import com.example.onlychat.DiaLog.SignOutDialog;
 import com.example.onlychat.DirectMessage.ChattingActivity;
 import com.example.onlychat.DirectMessage.DirectMessage;
+import com.example.onlychat.DirectMessage.Option.OptionActivity;
 import com.example.onlychat.EditProfile.EditProfile;
 import com.example.onlychat.EditProfile.EditProfileStep2;
 import com.example.onlychat.Friends.AllFriends.AllFriends;
@@ -238,12 +241,14 @@ public class Profile extends AppCompatActivity {
         sign_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                httpManager.removeNotify(pref.getNotify());
-                pref.SignOut();
-                SocketManager.disconnect();
-                Intent intent = new Intent(Profile.this, MainActivity.class);
-                startActivity(intent);
-                finishAffinity();
+                SignOutDialog dialog = new SignOutDialog().newInstance("Sign Out");
+                dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
+//                httpManager.removeNotify(pref.getNotify());
+//                pref.SignOut();
+//                SocketManager.disconnect();
+//                Intent intent = new Intent(Profile.this, MainActivity.class);
+//                startActivity(intent);
+//                finishAffinity();
             }
         });
 

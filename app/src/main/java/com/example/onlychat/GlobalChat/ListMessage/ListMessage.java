@@ -43,6 +43,7 @@ import com.example.onlychat.GroupChat.ListMessage.MainAdp;
 import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.MessageListener;
+import com.example.onlychat.Interfaces.ProfileReceiver;
 import com.example.onlychat.Interfaces.RoomOptions;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
@@ -191,6 +192,14 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                 intent.putExtra("Data",roomModel.getOptions());
                 startActivityForResult(intent, 1);
                 overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
+
+                // Update groupchat name (chatName) if it is changed in Options class
+                SocketManager.waitFinishSettingGroupName(new ProfileReceiver() {
+                    @Override
+                    public void onSuccess(String newGroupName) {
+                        chatName.setText(newGroupName);
+                    }
+                });
             }
         });
 
