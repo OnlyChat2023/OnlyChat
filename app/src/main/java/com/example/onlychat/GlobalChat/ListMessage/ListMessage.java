@@ -272,33 +272,33 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                     SocketManager.sendMessage(chatTXT, roomModel.getMessages().size() - 1, myInfo);
                     chatText.setText("");
 
-                    if (typeChat.equals("botChat")){
-                        new HttpManager(sendBtn.getContext()).SendBotChat(chatTXT, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                try {
-                                    JSONArray choicesArray = response.getJSONArray("choices");
-                                    JSONObject choiceObject = choicesArray.getJSONObject(0);
-                                    String text = choiceObject.getString("text");
-                                    text = text.substring(2);
-
-                                    UserModel bot = new UserModel();
-                                    bot.set_id(roomModel.getId());
-                                    SocketManager.sendMessage(text, roomModel.getMessages().size() - 1, bot);
-
-                                } catch (JSONException e) {
-                                    Log.i("<<<<<<<<<<>>>>>>>>>>", "dachayquaday2");
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.i("<<<<<<<<<<>>>>>>>>>>", "dachayquaday3");
-                                Log.e("API Error", error.toString());
-                            }
-                        });
-                    }
+//                    if (typeChat.equals("botChat")){
+//                        new HttpManager(sendBtn.getContext()).SendBotChat(chatTXT, new Response.Listener<JSONObject>() {
+//                            @Override
+//                            public void onResponse(JSONObject response) {
+//                                try {
+//                                    JSONArray choicesArray = response.getJSONArray("choices");
+//                                    JSONObject choiceObject = choicesArray.getJSONObject(0);
+//                                    String text = choiceObject.getString("text");
+//                                    text = text.substring(2);
+//
+//                                    UserModel bot = new UserModel();
+//                                    bot.set_id(roomModel.getId());
+//                                    SocketManager.sendMessage(text, roomModel.getMessages().size() - 1, bot);
+//
+//                                } catch (JSONException e) {
+//                                    Log.i("<<<<<<<<<<>>>>>>>>>>", "dachayquaday2");
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        }, new Response.ErrorListener() {
+//                            @Override
+//                            public void onErrorResponse(VolleyError error) {
+//                                Log.i("<<<<<<<<<<>>>>>>>>>>", "dachayquaday3");
+//                                Log.e("API Error", error.toString());
+//                            }
+//                        });
+//                    }
                 }
 
                 if (myModel != null && myModel.getImagesBM() != null && !arrayList.isEmpty()) {
@@ -537,7 +537,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 
             MessageModel lastMessage = mess.get(mess.size() - 1);
 
-            String message = lastMessage.getNickName() + ": ";
+            String message = (typeChat.equals("botChat")) ? "" : lastMessage.getNickName() + ": ";
             message += (lastMessage.hasImagesStr()) ? "Đã gửi hình ảnh" : lastMessage.getMessage();
 
             output.putExtra("LastMessage", message);

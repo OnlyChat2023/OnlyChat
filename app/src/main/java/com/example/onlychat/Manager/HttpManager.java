@@ -118,15 +118,19 @@ public class HttpManager {
     }
 
     public void getDirectMessage(HttpResponse responseReceiver) {
-        createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/getListMessage", Request.Method.GET, "userprofile", null, responseReceiver);
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/getListMessage", Request.Method.GET, "getDM", null, responseReceiver);
     }
 
     public void getGroupChat(HttpResponse responseReceiver) {
-        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/getListMessage", Request.Method.GET, "userprofile", null, responseReceiver);
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/getListMessage", Request.Method.GET, "getGC", null, responseReceiver);
     }
 
     public void getGlobalChat(HttpResponse responseReceiver) {
-        createRequest("http://" + ip + ":5000/api/onlychat/v1/globalChat/getListMessage", Request.Method.GET, "userprofile", null, responseReceiver);
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/globalChat/getListMessage", Request.Method.GET, "getGlC", null, responseReceiver);
+    }
+
+    public void getBotChat(HttpResponse responseReceiver) {
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/botChat/getListMessage", Request.Method.GET, "getBC", null, responseReceiver);
     }
 
     public void getListFriends(HttpResponse responseReceiver) {
