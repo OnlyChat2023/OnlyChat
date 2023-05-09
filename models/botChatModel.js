@@ -14,8 +14,13 @@ const messageSchema = new mongoose.Schema({
       ]
     }
   ],
-  members: [{}],
-  options: [{}],
+  members: [{
+    user_id: String,
+    avatar: { type: String, default: '' },
+    name: { type: String, default: '' },
+    nickname: { type: String, default: '' },
+  }],
+  options: [],
   update_time: Date
 });
 
