@@ -220,6 +220,7 @@ io.on('connection', (socket) => {
     socket.on('sendStringMessage', async (message, position, user) => {
         const _user = JSON.parse(user);
         const send_user = await User.findById(_user._id)
+        const room_id = socket.room
 
         // console.log(send_user);
 
@@ -286,7 +287,7 @@ io.on('connection', (socket) => {
                     }
                 }
                 const user_ = await User.findOne({ _id: member.user_id })
-                user_.directmessage_channel.filter(el => el.message_id === socket.room)[0].show = true
+                user_.directmessage_channel.filter(el => el.message_id === room_id)[0].show = true
                 user_.save()
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'direct_message');
             }
