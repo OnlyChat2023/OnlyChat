@@ -3,47 +3,47 @@ import User from "../models/userModel.js";
 import catchAsync from "../utils/catchAsync.js";
 
 const filterObj = (obj, ...allowedFields) => {
-    const newObj = {};
-    Object.keys(obj).forEach((el) => {
-      if (allowedFields.includes(el)) newObj[el] = obj[el];
-    });
-    return newObj;
+  const newObj = {};
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
+
+const addGroup = catchAsync(async (req, res, next) => {
+  const userInf = await User.findOne({ _id: req.body._id });
+  const filterBody = {
+    // _id: null, 
+    chats: [],
+    members: [{
+      user_id: userInf._id,
+      name: userInf.name,
+      nickname: userInf.nickname,
+      avatar: userInf.avatar
+    }],
+    name: req.body.name,
+    avatar: "avatar/bot.png",
+    options: [],
+    update_time: req.body.update_time
   };
 
-const addGroup = catchAsync(async (req, res, next) =>{
-    const userInf = await User.findOne({_id: req.body._id});
-    const filterBody = {
-      // _id: null, 
-      chats: [], 
-      members: [{
-        user_id: userInf._id,
-        name: userInf.name,
-        nickname: userInf.nickname,
-        avatar: userInf.avatar
-      }],
-      name: req.body.name,
-      avatar: "avatar/bot.png",
-      options:[],
-      update_time: req.body.update_time
-    };
+  const addBotChat = await botChat.insertMany(filterBody, { ordered: true, rawResult: true }, async function (err, result) {
+    userInf.chatbot_channel.push(String(result.insertedIds[0]));
+    await userInf.save();
 
-    const addBotChat = await botChat.insertMany(filterBody, {ordered: true, rawResult: true}, async function(err, result){
-      userInf.chatbot_channel.push(String(result.insertedIds[0]));
-      await userInf.save();
-      
-      const newBotChat = await botChat.findById(result.insertedIds[0]);
-      
-      newBotChat.members.push({
-        user_id: result.insertedIds[0].toString(),
-        name: newBotChat.name,
-        nickname: newBotChat.name,
-        avatar: newBotChat.avatar    
-      });
+    const newBotChat = await botChat.findById(result.insertedIds[0]);
 
-      newBotChat.save();
+    newBotChat.members.push({
+      user_id: result.insertedIds[0].toString(),
+      name: newBotChat.name,
+      nickname: newBotChat.name,
+      avatar: newBotChat.avatar
     });
 
-    res.status(200).json({ status: 'success', data: {} });
+    newBotChat.save();
+  });
+
+  res.status(200).json({ status: 'success', data: {} });
 });
 
 const getMetaData = catchAsync(async (req, res, next) => {
@@ -69,7 +69,7 @@ const getMetaData = catchAsync(async (req, res, next) => {
 
     newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
     newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
-    newDM.options = { };
+    newDM.options = {};
 
     botChats.push(newDM);
   }
@@ -83,4 +83,4 @@ const getMetaData = catchAsync(async (req, res, next) => {
   })
 });
 
-export {addGroup, getMetaData}
+export { addGroup, getMetaData }

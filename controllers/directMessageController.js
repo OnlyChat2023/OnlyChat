@@ -40,6 +40,46 @@ const changeNickname = catchAsync(async (req, res, next) => {
     res.status(200).json({ status: 'success', data: {} });
 });
 
+const getMessageById = catchAsync(async (req, res, next) => {
+    const user = await User.findOne({ _id: req.user.id })
+    const friend = await User.findOne({ _id: req.body._id })
+    // console.log(req.user.id)
+    for (let i of user.directmessage_channel) {
+        const a = friend.directmessage_channel.filter(val => val.message_id === i.message_id)
+        if (a.length > 0) {
+            i.show = true
+            user.save()
+            const dmList = await directChat.findById(a[0].message_id);
+            for (let j of dmList.members) {
+                if (j.user_id === user._id.toString()) {
+                    j.avatar = user.avatar
+                    j.name = user.name
+                }
+                else {
+                    j.avatar = friend.avatar
+                    j.name = friend.name
+                }
+            }
+
+            dmList.avatar = dmList.members.filter(el => el.user_id != user._id.toString())[0].avatar
+            dmList.name = dmList.members.filter(el => el.user_id != user._id.toString())[0].nickname
+            dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+
+            const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
+            newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
+            newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
+            newDM.options = { ...newDM.options[0], _id: newDM.options[0]._id.toString() };
+
+            res.status(200).json({
+                status: 'success',
+                data: newDM
+            })
+            break
+        }
+    }
+
+})
+
 const getMetaData = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ _id: req.user.id })
     // console.log(req.user.id)
@@ -92,4 +132,4 @@ const deleteRoom = catchAsync(async (req, res) => {
 })
 
 
-export { changeOptions, getBlock, changeNickname, getMetaData, deleteRoom }
+export { changeOptions, getBlock, changeNickname, getMetaData, deleteRoom, getMessageById }
