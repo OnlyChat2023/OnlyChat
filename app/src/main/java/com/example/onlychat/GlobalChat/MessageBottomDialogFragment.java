@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -70,6 +71,14 @@ public class MessageBottomDialogFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
                 activity.LeaveGroup(MessageBottomDialogFragment.this, id);
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GroupChat.removeRoom(id);
+                dismiss();
             }
         });
         return layout;

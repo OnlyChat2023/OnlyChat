@@ -68,7 +68,7 @@ public class GroupChat extends Fragment {
     ListView listChat;
     EditText newGroupName;
     Button okBtn;
-    CustomChatItem customChatItem;
+    static CustomChatItem customChatItem;
     EditText main_content_searchbox;
     ImageView delete;
 
@@ -77,7 +77,7 @@ public class GroupChat extends Fragment {
     private TextView loading;
 
     RelativeLayout groupChat;
-    ArrayList<RoomModel> roomModels = new ArrayList<>();
+    static ArrayList<RoomModel> roomModels = new ArrayList<>();
     GlobalPreferenceManager pref;
     Boolean isCreate = true;
     String typeChat = "groupChat";
@@ -92,6 +92,27 @@ public class GroupChat extends Fragment {
         this.roomModels = roomModels;
     }
 
+    public static void removeRoom(String id){
+        HttpManager httpManager = new HttpManager(customChatItem.getContext());
+        httpManager.deleteGroupChat(id, new HttpResponse() {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException, InterruptedException, ParseException {
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+        for(int i=0;i<roomModels.size();i++){
+            if(roomModels.get(i).getId().equals(id)) {
+                roomModels.remove(i);
+                customChatItem.notifyDataSetChanged();
+                break;
+            }
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

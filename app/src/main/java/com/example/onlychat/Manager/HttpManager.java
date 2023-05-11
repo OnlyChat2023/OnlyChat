@@ -167,6 +167,14 @@ public class HttpManager {
                 ,response);
     }
 
+    public void deleteGroupChat(String room_id,HttpResponse response){
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/deleteRoom", Request.Method.POST, "userprofile",
+                new HashMap<String, String>() {{
+                    put("room_id", room_id);
+                }}
+                ,response);
+    }
+
     public void setAnonymousInformation(String nickname, String avatar,HttpResponse response){
         createRequest("http://" + ip + ":5000/api/onlychat/v1/user/setAnonymousInformation", Request.Method.PATCH, "userprofile",
                 new HashMap<String, String>() {{
