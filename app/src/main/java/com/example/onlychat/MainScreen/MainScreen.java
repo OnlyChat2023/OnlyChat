@@ -299,6 +299,7 @@ public class MainScreen extends AppCompatActivity {
         roomModel.setId(room.getString("_id"));
         roomModel.setAvatar(room.getString("avatar"));
         roomModel.setName(room.getString("name"));
+//        roomModel.setShow(room.getBoolean("isShow"));
 
         // create list message
         ArrayList<MessageModel> listMessage = new ArrayList<>();

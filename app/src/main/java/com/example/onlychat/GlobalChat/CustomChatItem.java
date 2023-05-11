@@ -42,12 +42,14 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
     public View getView(int position, View convertView, ViewGroup parent){
         View row;
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+
         row = inflater.inflate(R.layout.global_chat_custom_chat_item,null);
         messageName = (TextView) row.findViewById(R.id.messageName);
         messageContent = (TextView) row.findViewById(R.id.messageContent);
         messageTime = (TextView) row.findViewById(R.id.messageTime);
 
         RoomModel roomModel = listRooms.get(position);
+//        if(!roomModel.getShow()) row.setVisibility(View.GONE);
 
 //        new HttpManager.GetImageFromServer(messageAvatar).execute(listRooms.get(position).getAvatar());
         if (roomModel.hasBitmapAvatar()) {

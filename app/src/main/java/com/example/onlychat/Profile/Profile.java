@@ -12,6 +12,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -22,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.onlychat.DiaLog.ChangeNickNameDialog;
@@ -59,22 +62,28 @@ import org.w3c.dom.Text;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import io.socket.emitter.Emitter;
 import okhttp3.Response;
 
 public class Profile extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private TextView userName;
+    private static TextView userName;
     private ImageView avatar;
     private TextView editText;
-    private Button editBtn;
-    private Button addFriendBtn;
-    private Button sendChatBtn;
+    private static Button editBtn;
+    private static Button addFriendBtn;
+    private static Button sendChatBtn;
     private TextView noResult;
     private LinearLayout information;
     private ProgressBar progressBar;
+    private static ProgressBar add_friend_loading;
+    private static ProgressBar add_friend_loading_send_chat;
     private TextView loading;
-    private String user_id;
+    private static String user_id;
+
+    private static RelativeLayout btnGroup;
+    private static RelativeLayout btnGroupSendChat;
     UserModel user;
     private ImageView backBtn;
 
@@ -86,12 +95,12 @@ public class Profile extends AppCompatActivity {
     profile_social profileSocial = new profile_social();
     profile_description profileDescription = new profile_description();
 
-    Integer isFriend;
-    Integer isBlock;
+    static Integer isFriend;
+    static Integer isBlock;
 
     TextView sign_out;
 
-    static UserModel myInfo;
+    UserModel myInfo;
     GlobalPreferenceManager pref;
 
 
@@ -129,9 +138,15 @@ public class Profile extends AppCompatActivity {
         if(!user_id.equals(myInfo.get_id())) sign_out.setVisibility(View.INVISIBLE);
 
         // Handle Button
+        btnGroup = (RelativeLayout) findViewById(R.id.btnGroup);
         addFriendBtn = (Button) findViewById(R.id.add_friend_btn);
-        editBtn = (Button) findViewById(R.id.edit_btn);
+        add_friend_loading = (ProgressBar) findViewById(R.id.add_friend_loading);
+
+        btnGroupSendChat=(RelativeLayout) findViewById(R.id.btnGroupSendChat);
+        add_friend_loading_send_chat = (ProgressBar) findViewById(R.id.add_friend_loading_send_chat);
         sendChatBtn = (Button) findViewById(R.id.send_chat_btn);
+
+        editBtn = (Button) findViewById(R.id.edit_btn);
         backBtn = (ImageView) findViewById(R.id.backButton);
         information = (LinearLayout) findViewById(R.id.information);
         noResult = (TextView) findViewById(R.id.no_result);
@@ -152,7 +167,7 @@ public class Profile extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 if(response.getString("status").equals("success")){
                     JSONObject profile = response.getJSONObject("data");
-                    Log.i("all friends click item", profile.toString());
+//                    Log.i("all friends click item", profile.toString());
                     isBlock =profile.getInt("isBlock");
                     isFriend = profile.getInt("isFriend");
                     user = new Gson().fromJson(profile.toString(), UserModel.class);
@@ -165,9 +180,9 @@ public class Profile extends AppCompatActivity {
                         userName.setText(user.getName());
                         avatar.setVisibility(View.VISIBLE);
                         new HttpManager.GetImageFromServer(avatar).execute(user.getAvatar());
-                        addFriendBtn.setVisibility(View.VISIBLE);
+                        btnGroup.setVisibility(View.VISIBLE);
                         editBtn.setVisibility(View.VISIBLE);
-                        sendChatBtn.setVisibility(View.VISIBLE);
+                        btnGroupSendChat.setVisibility(View.VISIBLE);
                         information.setVisibility(View.VISIBLE);
                         setButtonUI();
                     }else if(isBlock==1){
@@ -177,7 +192,7 @@ public class Profile extends AppCompatActivity {
                         userName.setVisibility(View.VISIBLE);
                         userName.setText(user.getName());
                         avatar.setVisibility(View.VISIBLE);
-                        addFriendBtn.setVisibility(View.VISIBLE);
+                        btnGroup.setVisibility(View.VISIBLE);
                         new HttpManager.GetImageFromServer(avatar).execute(user.getAvatar());
                         setButtonUI();
                     }
@@ -223,18 +238,47 @@ public class Profile extends AppCompatActivity {
         sendChatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                sendChatBtn.setVisibility(View.GONE);
+                add_friend_loading_send_chat.setVisibility(View.VISIBLE);
                 ArrayList<RoomModel> direct_list= DirectMessage.getRoomModels();
+                boolean hasMessage = false;
                 for (RoomModel e : direct_list){
                     for (Member m : e.getOptions().getMembers()){
                         if (m.getUser_id().equals(user_id)){
+                            hasMessage=true;
                             Intent intent = new Intent(Profile.this, ChattingActivity.class);
                             e.setBitmapAvatar(null);
                             intent.putExtra("roomChat", e);
                             Log.i("e", e.getId());
                             startActivity(intent);
+                            sendChatBtn.setVisibility(View.VISIBLE);
+                            add_friend_loading_send_chat.setVisibility(View.GONE);
                         }
                     }
                 }
+                if(!hasMessage){
+                    HttpManager httpManager = new HttpManager(Profile.this);
+                    httpManager.getDirectMessageById(user_id, new HttpResponse() {
+                        @Override
+                        public void onSuccess(JSONObject response) throws JSONException, ParseException {
+                            JSONObject room = response.getJSONObject("data");
+                            RoomModel _room=MainScreen.getRoom(room);
+                            DirectMessage.addRoom(_room);
+                            Intent intent = new Intent(Profile.this, ChattingActivity.class);
+                            _room.setBitmapAvatar(null);
+                            intent.putExtra("roomChat", _room);
+                            startActivity(intent);
+                            sendChatBtn.setVisibility(View.VISIBLE);
+                            add_friend_loading_send_chat.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+
+                        }
+                    });
+                }
+
             }
         });
 
@@ -243,14 +287,10 @@ public class Profile extends AppCompatActivity {
             public void onClick(View view) {
                 SignOutDialog dialog = new SignOutDialog().newInstance("Sign Out");
                 dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
-//                httpManager.removeNotify(pref.getNotify());
-//                pref.SignOut();
-//                SocketManager.disconnect();
-//                Intent intent = new Intent(Profile.this, MainActivity.class);
-//                startActivity(intent);
-//                finishAffinity();
             }
         });
+
+        waitAcceptFriend();
 
 
         // add, remove, confirm
@@ -276,7 +316,9 @@ public class Profile extends AppCompatActivity {
                 else if(isFriend == 2 && isBlock==0){
                     Invite.addFriend(user.get_id());
                     isFriend = 1;
-                    setButtonUI();
+                    addFriendBtn.setVisibility(View.GONE);
+                    add_friend_loading.setVisibility(View.VISIBLE);
+
                     Log.i("Profile", "3");
                 }
                 // send invite click == unfriend
@@ -298,17 +340,36 @@ public class Profile extends AppCompatActivity {
         });
     }
 
+    public static void waitAcceptFriend(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitAcceptFriend", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    userName.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            addFriendBtn.setVisibility(View.VISIBLE);
+                            add_friend_loading.setVisibility(View.GONE);
+                            setButtonUI();
+                        }
+                    });
+                }
+            });
+        }
+    }
 
-    public void setButtonUI(){
+
+    public static void setButtonUI(){
         // not me
-        if (!user_id.equals(new GlobalPreferenceManager(Profile.this).getUserModel().get_id())){
+        if (!user_id.equals(new GlobalPreferenceManager(addFriendBtn.getContext()).getUserModel().get_id())){
             editBtn.setVisibility(View.GONE);
-            sendChatBtn.setVisibility(View.GONE);
+            btnGroupSendChat.setVisibility(View.GONE);
         }
         // me
         else {
-            addFriendBtn.setVisibility(View.GONE);
-            sendChatBtn.setVisibility(View.GONE);
+            btnGroup.setVisibility(View.GONE);
+            btnGroupSendChat.setVisibility(View.GONE);
         }
 
         // friend
@@ -316,7 +377,7 @@ public class Profile extends AppCompatActivity {
             Drawable img = addFriendBtn.getContext().getResources().getDrawable(R.drawable.ic_white_trash);
             addFriendBtn.setText("Remove");
             addFriendBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
-            sendChatBtn.setVisibility(View.VISIBLE);
+            btnGroupSendChat.setVisibility(View.VISIBLE);
         }
         // invite to me
         else if(isFriend == 2 && isBlock==0){

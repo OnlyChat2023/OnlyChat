@@ -87,7 +87,7 @@ public class DirectMessage extends Fragment {
         return roomModels;
     }
 
-    public void addRoom(RoomModel roomModel){
+    public static void addRoom(RoomModel roomModel){
         roomModels.add(roomModel);
         customChatItem.notifyDataSetChanged();
     }
@@ -405,7 +405,6 @@ public class DirectMessage extends Fragment {
                                     old_room.setAvatar(new_room.getAvatar());
                                     old_room.setName(new_room.getName());
                                     old_room.setOptions(new_room.getOptions());
-
                                     found = true;
                                     founded.add(new_room.getId());
                                     break;

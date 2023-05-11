@@ -121,6 +121,14 @@ public class HttpManager {
         createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/getListMessage", Request.Method.GET, "getDM", null, responseReceiver);
     }
 
+    public void getDirectMessageById(String _id,HttpResponse responseReceiver){
+        createRequest("http://" + ip + ":5000/api/onlychat/v1/directMessage/getMessageById", Request.Method.PATCH, "getDMBI",
+                new HashMap<String, String>() {{
+                    put("_id", _id);
+                }}
+                , responseReceiver);
+    }
+
     public void getGroupChat(HttpResponse responseReceiver) {
         createRequest("http://" + ip + ":5000/api/onlychat/v1/groupChat/getListMessage", Request.Method.GET, "getGC", null, responseReceiver);
     }

@@ -160,32 +160,15 @@ public class AllFriends extends Fragment {
             SocketManager.getSocket().on("waitAcceptFriend", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-
                     JSONObject new_friend = (JSONObject) args[0];
                     UserModel friend = new Gson().fromJson(String.valueOf(new_friend), UserModel.class);
 
-                    JSONObject new_room;
-                    RoomModel room = null;
-                    if(args.length>1){
-                        new_room = (JSONObject) args[1];
-                        try {
-                            room = MainScreen.getRoom(new_room);
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-                    RoomModel finalRoom = room;
                     Friends.getQuatity().post(new Runnable() {
                         @Override
                         public void run() {
+
                             addFriend(friend);
                             Friends.getQuatity().setText(friend_list.size()+" available");
-                            if(args.length>1){
-                                MainScreen.getDirectChatFragment().addRoom(finalRoom);
-                            }
                         }
                     });
                 }

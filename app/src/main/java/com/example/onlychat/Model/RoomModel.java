@@ -17,8 +17,25 @@ public class RoomModel implements Serializable {
     RoomOptions options;
     Date update_time;
     Bitmap bitmapAvatar;
+//    Boolean isShow;
 
     public RoomModel() {}
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+//    public Boolean getShow() {
+//        return isShow;
+//    }
+//
+//    public void setShow(Boolean show) {
+//        isShow = show;
+//    }
 
     public Date getUpdate_time() {
         return update_time;
