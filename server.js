@@ -256,7 +256,7 @@ io.on('connection', (socket) => {
 
             await BotChat.save();
 
-            io.sockets.in(botID).emit('messageListener', BotmessageModal, position + 1, { });
+            io.sockets.in(botID).emit('messageListener', BotmessageModal, position + 1, {});
         }
 
         io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
@@ -568,30 +568,8 @@ io.on('connection', (socket) => {
             }
         }
 
-        new_room._id = direct_message._id.toString()
-        const u_new_room = new_room
-        const f_new_room = new_room
-
-        u_new_room.name = u_new_room.members.filter(el => el.user_id == id)[0].nickname
-        u_new_room.avatar = u_new_room.members.filter(el => el.user_id == id)[0].avatar
-        u_new_room.options = {
-            user_id: u._id,
-            notify: false,
-            block: false
-        }
-        // console.log(u_new_room.options)
-
-        io.to(basket[_user._id]).emit('waitAcceptFriend', new_friends, u_new_room);
-
-        f_new_room.name = f_new_room.members.filter(el => el.user_id != id)[0].nickname
-        f_new_room.avatar = f_new_room.members.filter(el => el.user_id != id)[0].avatar
-        f_new_room.options = {
-            user_id: f._id,
-            notify: false,
-            block: false
-        }
-
-        io.to(basket[id]).emit("waitAcceptFriend", f_new_friends, f_new_room);
+        io.to(basket[_user._id]).emit('waitAcceptFriend', new_friends);
+        io.to(basket[id]).emit("waitAcceptFriend", f_new_friends);
 
         await u.save()
         await f.save()
@@ -600,19 +578,21 @@ io.on('connection', (socket) => {
     socket.on('sendRequestAddFriend', async (id, user) => {
         const _user = JSON.parse(user)
 
-        let f = await User.findOne({ _id: id })
-        f.friend_request.push(_user._id)
-
-        const friend_requests = await User.findOne({ _id: _user._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description -phone')
-
-        io.to(basket[id]).emit("waitRequestAddFriend", friend_requests);
-        await f.save()
+        let me = await User.findById(_user._id)
+        if (!me.friend_request.includes(id)) {
+            let f = await User.findOne({ _id: id })
+            f.friend_request.push(_user._id)
+            const friend_requests = await User.findOne({ _id: _user._id }).select('-password -username -chatbot_channel -directmessage_channel -globalchat_channel -groupchat_channel -friend -friend_request -anonymous_avatar -email -facebook -instagram -university -nickname -description -phone')
+            io.to(basket[id]).emit("waitRequestAddFriend", friend_requests);
+            await f.save()
+        }
     })
 
     socket.on('removeRequestAddFriend', async (id, user) => {
         const _user = JSON.parse(user)
         let u = await User.findOne({ _id: _user._id })
         u.friend_request.splice(u.friend_request.indexOf(id), 1)
+        io.to(basket[_user._id]).emit('removeRequestAddFriend', id)
         await u.save()
     })
 
@@ -692,7 +672,7 @@ io.on('connection', (socket) => {
     socket.on('botchat', async (message, position, user) => {
         const completion = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
-            messages: [{role: "user", content: "Hello world"}],
+            messages: [{ role: "user", content: "Hello world" }],
         });
         console.log(completion.data.choices[0].message);
     })
