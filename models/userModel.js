@@ -25,7 +25,8 @@ const userSchema = new mongoose.Schema({
     type: String
   }],
   groupchat_channel: [{
-    type: String
+    show: { type: Boolean },
+    message_id: { type: String }
   }],
   friend: [{ type: String }],
   friend_request: [{ type: String }],

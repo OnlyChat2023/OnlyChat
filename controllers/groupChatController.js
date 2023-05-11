@@ -32,7 +32,7 @@ const addGroup = catchAsync(async (req, res, next) => {
   };
 
   const addGroupChat = await groupChat.insertMany(filterBody, { ordered: true, rawResult: true }, async function (err, result) {
-    userInf.groupchat_channel.push(String(result.insertedIds[0]));
+    userInf.groupchat_channel.push({ message_id: String(result.insertedIds[0]), show: true });
     await userInf.save();
 
     res.status(200).json({ status: 'success', data: { id: String(result.insertedIds[0]) } });
@@ -44,7 +44,7 @@ const getListGroupChat = catchAsync(async (req, res, next) => {
 
   const GroupChat = []
   for (let i of user.groupchat_channel) {
-    const dmList = await groupChat.findOne({ _id: i });
+    const dmList = await groupChat.findOne({ _id: i.message_id });
     dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
     GroupChat.push(dmList);
   }
@@ -56,7 +56,7 @@ const leaveGroupChat = catchAsync(async (req, res, next) => {
   //disconnect user to GroupChat
   const user = await User.findOne({ _id: req.body._id });
   for (let i of user.groupchat_channel) {
-    if (i == req.body.grc_id) {
+    if (i.message_id == req.body.grc_id) {
       user.groupchat_channel.pull(i);
       user.save();
       break;
@@ -128,21 +128,20 @@ const getFriends2AddMember = catchAsync(async (req, res, next) => {
 });
 
 
-
 const addMember = catchAsync(async (req, res, next) => {
   const Group = await groupChat.findOne({ _id: req.body.grc_id });
   const user = await User.findOne({ _id: req.body.user_id });
 
-  user.groupchat_channel.push(req.body.grc_id);
+  user.groupchat_channel.push({ message_id: req.body.grc_id, show: true });
   Group.members.push({
-    "user_id": req.body.user_id,
-    "name": req.body.name,
-    "nickname": req.body.nickname,
-    "avatar": req.body.avatar
+    "user_id": user._id,
+    "name": user.name,
+    "nickname": user.nickname,
+    "avatar": user.avatar
   });
 
   Group.options.push({
-    "user_id": req.body.user_id,
+    "user_id": user._id,
     "notify": false,
     "block": false
   })
@@ -158,27 +157,29 @@ const getMetaData = catchAsync(async (req, res, next) => {
 
   const groupChats = []
   for (let i of user.groupchat_channel) {
-    const dmList = await groupChat.findOne({ _id: i });
-    for (let i of dmList.chats) {
-      if (dmList.members.filter(el => el.user_id == i.user_id).length != 0) {
-        i.avatar = dmList.members.filter(el => el.user_id == i.user_id)[0].avatar
-        i.nickname = dmList.members.filter(el => el.user_id == i.user_id)[0].nickname
+    if (i.show) {
+      const dmList = await groupChat.findOne({ _id: i.message_id });
+      for (let i of dmList.chats) {
+        if (dmList.members.filter(el => el.user_id == i.user_id).length != 0) {
+          i.avatar = dmList.members.filter(el => el.user_id == i.user_id)[0].avatar
+          i.nickname = dmList.members.filter(el => el.user_id == i.user_id)[0].nickname
+        }
+        else {
+          let _u = await User.findOne({ _id: i.user_id })
+          i.avatar = _u.avatar
+          i.nickname = _u.name
+        }
       }
-      else {
-        let _u = await User.findOne({ _id: i.user_id })
-        i.avatar = _u.avatar
-        i.nickname = _u.name
-      }
+
+      dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
+
+      const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
+      newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
+      newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
+      newDM.options = { ...newDM.options[0], _id: newDM.options[0]._id.toString() };
+
+      groupChats.push(newDM);
     }
-
-    dmList.options = dmList.options.filter(el => el.user_id == user._id.toString());
-
-    const newDM = { ...(dmList.toObject()), _id: dmList._id.toString() };
-    newDM.chats = newDM.chats.map(el => ({ ...el, _id: el._id.toString() }));
-    newDM.members = newDM.members.map(el => ({ ...el, _id: el._id.toString() }));
-    newDM.options = { ...newDM.options[0], _id: newDM.options[0]._id.toString() };
-
-    groupChats.push(newDM);
   }
 
   res.status(200).json({
@@ -190,4 +191,13 @@ const getMetaData = catchAsync(async (req, res, next) => {
   })
 });
 
-export { addGroup, getListGroupChat, leaveGroupChat, updateOption, getFriends2AddMember, addMember, getMetaData }
+const deleteRoom = catchAsync(async (req, res) => {
+  const user = await User.findOne({ _id: req.user.id })
+  user.groupchat_channel.filter(el => el.message_id === req.body.room_id)[0].show = false
+  user.save()
+  res.status(200).json({
+    status: 'success',
+  })
+})
+
+export { addGroup, getListGroupChat, leaveGroupChat, updateOption, getFriends2AddMember, addMember, getMetaData, deleteRoom }

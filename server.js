@@ -211,7 +211,9 @@ io.on('connection', (socket) => {
                             });
                     }
                 }
-
+                const user_ = await User.findOne({ _id: member.user_id })
+                user_.groupchat_channel.filter(el => el.message_id === room_id)[0].show = true
+                user_.save()
                 socket.to(basket[member.user_id]).emit('roomListener', socket.room, 'group_chat');
             }
 
