@@ -20,6 +20,7 @@
         app:shapeAppearanceOverlay="@style/roundedImagesStyle"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
+        app:strokeColor="@null"
         />
 
     <LinearLayout

@@ -38,6 +38,7 @@ import com.example.onlychat.R;
 import com.example.onlychat.ViewLargerImageMessage.ViewLargerImageMessage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class CustomMessageItem extends ArrayAdapter<MessageModel> {
 
@@ -62,7 +63,6 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
 
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final int viewType = this.getItemViewType(position);
         final MessageModel messageItem = messageModels.get(position);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -104,8 +104,6 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
                 }));
             }
             else if (messageItem.hasImagesStr()) {
-//                new LoadImage(imageLayout).execute(messageItem.getTempImages());
-
                 new DownloadImage(messageItem.getImagesStr(), new ConvertListener(){
                     @Override
                     public void onSuccess(ImageModel result) {
@@ -117,7 +115,7 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
                         row.post(new Runnable() {
                             @Override
                             public void run() {
-                                System.out.println("RUN FUN");
+//                                System.out.println("RUN FUN");
                                 messageItem.setImages(res);
 
                                 imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);
@@ -160,58 +158,34 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
             message = (TextView) row.findViewById(R.id.chatContent);
             name = (TextView) row.findViewById(R.id.name);
 
-//            if (!messageItem.hasAvatar() && !messageItem.hasBitmapAvatar()){
-//                Boolean flag = false;
             if (!messageItem.hasAvatar() && !messageItem.hasBitmapAvatar()){
-                Boolean flag = false;
-//                for (Member mem : members){
-//                    if (mem.getUser_id().equals(messageItem.getUserId())){
-//                        messageItem.setAvatar(mem.getAvatar());
-//                        messageItem.setNickName(mem.getNickname());
-//                        flag = true;
-//                        break;
-//                    }
-//                }
-//                if (!flag){
-//                    messageItem.setAvatar("avatar/bot.png");
-//                    messageItem.setNickName("Bot");
-//                }
-//            }
-                if (!flag){
-                    messageItem.setAvatar("avatar/bot.png");
-                    messageItem.setNickName("Bot");
-                }
+                messageItem.setAvatar("avatar/bot.png");
+                messageItem.setNickName("Bot");
             }
-
-            // set image
-//            Log.i("Custom message user", messageModels.get(position).getAvatar());
 
             if (messageItem.hasBitmapAvatar()) {
                 imageView = (ImageView) row.findViewById(R.id.avatar);
                 imageView.setImageBitmap(messageItem.getBitmapAvatar());
             }
-            else if (messageItem.hasAvatar()){
-                ArrayList<String> userAvt = new ArrayList<String>();
-                userAvt.add(messageItem.getAvatar());
-                new DownloadImage(userAvt, new ConvertListener() {
-                    @Override
-                    public void onSuccess(ImageModel result) {
-
-                    }
-
-                    @Override
-                    public void onDownloadSuccess(ArrayList<Bitmap> result) {
-                        for (int i = 0; i < result.size(); ++i) {
-                            messageItem.setBitmapAvatar(result.get(i));
-                            imageView = (ImageView) row.findViewById(R.id.avatar);
-                            imageView.setImageBitmap(result.get(i));
-                        }
-                    }
-                }).execute();
-            }
-
-//            new HttpManager.GetImageFromServer(imageView).execute(messageModels.get(position).getAvatar());
-//            imageView.setImageResource(messageModels.get(position).getAvatar());
+//            else if (messageItem.hasAvatar()){
+//                ArrayList<String> userAvt = new ArrayList<String>();
+//                userAvt.add(messageItem.getAvatar());
+//                new DownloadImage(userAvt, new ConvertListener() {
+//                    @Override
+//                    public void onSuccess(ImageModel result) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onDownloadSuccess(ArrayList<Bitmap> result) {
+//                        for (int i = 0; i < result.size(); ++i) {
+//                            messageItem.setBitmapAvatar(result.get(i));
+//                            imageView = (ImageView) row.findViewById(R.id.avatar);
+//                            imageView.setImageBitmap(result.get(i));
+//                        }
+//                    }
+//                }).execute();
+//            }
 
             if (messageItem.hasImages()) {
                 imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);
@@ -264,29 +238,35 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
             message.setText(messageModels.get(position).getMessage());
             name.setText(messageModels.get(position).getNickName());
         }
-//        if(position== names.length-1) row.setPadding(0,0,0,120);
+
         return row;
     }
 
-    public void setMembers(ArrayList<Member> members) {
+    public void setMembers(ArrayList<Member> members, CustomMessageItem customMessageItem) {
+        for (int i = 0; i < members.size(); i++) {
+            Member member = members.get(i);
+            new DownloadImage(new ArrayList<>(Collections.singleton(member.getAvatar())), new ConvertListener() {
+                @Override
+                public void onSuccess(ImageModel result) {
+
+                }
+
+                @Override
+                public void onDownloadSuccess(ArrayList<Bitmap> result) {
+                    for (int i = 0; i < result.size(); ++i) {
+                        member.setAvatarBitmap(result.get(i));
+                        for (MessageModel messageItem : messageModels) {
+                            if (messageItem.getUserId().equals(member.getUser_id())) {
+                                Log.i("setMembers: ", "123");
+                                messageItem.setBitmapAvatar(member.getAvatarBitmap());
+                            }
+                        }
+                    }
+                    customMessageItem.notifyDataSetChanged();
+                }
+            }).execute();
+        }
+
         this.members = members;
     }
-
-    //     private class ViewHolder {
-//         public RecyclerView imageLayout;
-//         public TextView name;
-//         public TextView message;
-
-//         public ViewHolder(View convertView, boolean isMe) {
-//             if (isMe) {
-//                 message = convertView.findViewById(R.id.message);
-//                 imageLayout = convertView.findViewById(R.id.imagesLayout);
-//                 imageLayout.setLayoutManager(new GridLayoutManager(context, 2));
-//             } else {
-//                 message = convertView.findViewById(R.id.chatContent);
-//                 name = convertView.findViewById(R.id.name);
-// //                imageLayout = convertView.findViewById(R.id.imagesLayout);
-//             }
-//         }
-//     }
 }

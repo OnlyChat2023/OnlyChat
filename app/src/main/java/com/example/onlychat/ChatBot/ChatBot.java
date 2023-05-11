@@ -205,6 +205,7 @@ public class ChatBot extends Fragment {
 //                                    Reload();
                                     overlayWindow.dismiss();
                                     popupWindow.dismiss();
+                                    updateListRoom();
                                 }
 
                                 @Override

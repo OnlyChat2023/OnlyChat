@@ -409,7 +409,7 @@ public class GroupChat extends Fragment {
                             break;
                         }
                 }
-                updateListRoom();
+//                updateListRoom();
             }
         }
     }
@@ -447,12 +447,11 @@ public class GroupChat extends Fragment {
                             boolean found = false;
                             for (RoomModel new_room : rooms) {
                                 if (old_room.getId().equals(new_room.getId())) {
-                                    old_room.setMessages(new_room.getMessages());
-                                    old_room.setAvatar(new_room.getAvatar());
-                                    old_room.setName(new_room.getName());
-                                    old_room.setOptions(new_room.getOptions());
-                                    customChatItem.notifyDataSetChanged();
-                                    customChatItem.notifyDataSetInvalidated();
+//                                    old_room.setMessages(new_room.getMessages());
+//                                    old_room.setAvatar(new_room.getAvatar());
+//                                    old_room.setName(new_room.getName());
+//                                    old_room.setOptions(new_room.getOptions());
+
                                     found = true;
                                     founded.add(new_room.getId());
                                     break;
@@ -460,22 +459,18 @@ public class GroupChat extends Fragment {
                             }
                             if (!found) {
                                 roomModels.remove(old_room);
-                                customChatItem.notifyDataSetChanged();
-                                customChatItem.notifyDataSetInvalidated();
                             }
                         }
                         for (RoomModel new_room : rooms) {
                             if (!founded.contains(new_room.getId())) {
                                 roomModels.add(0, new_room);
-                                customChatItem.notifyDataSetChanged();
-                                customChatItem.notifyDataSetInvalidated();
                             }
                         }
                     }
                     else {
                         roomModels.clear();
-                        customChatItem.notifyDataSetChanged();
                     }
+                    customChatItem.notifyDataSetChanged();
                 } catch (Exception e) {
                     Log.i("HTTP Success 11111 Error", e.toString());
                 }

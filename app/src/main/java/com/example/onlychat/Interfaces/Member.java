@@ -1,9 +1,12 @@
 package com.example.onlychat.Interfaces;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 public class Member implements Serializable {
     String user_id, name, nickname,avatar,anonymous_avatar;
+    Bitmap AvatarBitmap;
 
     public Member(String id, String name, String nickname, String avatar) {
         this.user_id = id;
@@ -56,5 +59,13 @@ public class Member implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public void setAvatarBitmap(Bitmap bitmap) {
+        AvatarBitmap = bitmap;
+    }
+
+    public Bitmap getAvatarBitmap() {
+        return AvatarBitmap;
     }
 }

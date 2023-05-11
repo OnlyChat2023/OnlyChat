@@ -72,6 +72,8 @@ public class RoomModel implements Serializable {
     }
 
     public RoomOptions getOptions() {
+        options.clearMembersBitmap();
+
         return options;
     }
 

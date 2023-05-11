@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
+import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.MessageListener;
 import com.example.onlychat.MainScreen.MainScreen;
@@ -82,7 +83,6 @@ public class GlobalChat extends Fragment {
         this.roomModels.clear();
 
         this.roomModels.addAll(roomModels);
-        customChatItem.notifyDataSetChanged();
     }
 
     public GlobalChat(){}
@@ -134,7 +134,6 @@ public class GlobalChat extends Fragment {
                             Log.i("Group chat", Integer.toString(chats.length()));
                             if(chats.length()>0){
                                 roomModels.addAll(MainScreen.getListRoom(chats));
-                                customChatItem.notifyDataSetChanged();
                             }
                         }
                         catch (Exception e){

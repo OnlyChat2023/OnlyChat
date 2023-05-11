@@ -402,7 +402,7 @@ public class DirectMessage extends Fragment {
                             for (RoomModel new_room : rooms) {
                                 if (old_room.getId().equals(new_room.getId())) {
                                     old_room.setMessages(new_room.getMessages());
-                                    old_room.setAvatar(new_room.getAvatar());
+//                                    old_room.setAvatar(new_room.getAvatar());
                                     old_room.setName(new_room.getName());
                                     old_room.setOptions(new_room.getOptions());
 

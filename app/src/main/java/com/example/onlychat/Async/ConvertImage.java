@@ -89,7 +89,7 @@ public class ConvertImage extends AsyncTask<String, Void, ImageModel> {
                 imageListBitmap.add(bitmap);
 
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
 
                 try {
                     outputStream.flush();

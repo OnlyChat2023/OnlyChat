@@ -45,6 +45,12 @@ public class RoomOptions implements Serializable{
         return members;
     }
 
+    public void clearMembersBitmap() {
+        for (Member member : members) {
+            member.setAvatarBitmap(null);
+        }
+    }
+
     public void setMembers(ArrayList<Member> members) {
         this.members = members;
     }

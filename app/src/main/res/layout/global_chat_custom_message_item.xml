@@ -9,13 +9,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/avatar"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="6dp"
         android:layout_alignTop="@id/chatLayout"
+        app:strokeColor="@null"
         app:shapeAppearanceOverlay="@style/roundedImagesStyle"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
@@ -51,11 +51,6 @@
             android:text=""
             android:textColor="@color/white"
             android:textSize="14sp" />
-
-        <ImageView
-            android:id="@+id/chatImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/imagesLayout"

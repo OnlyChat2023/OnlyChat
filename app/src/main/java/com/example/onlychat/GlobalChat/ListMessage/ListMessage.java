@@ -141,20 +141,20 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
 
         listView=(ListView) findViewById(R.id.listMessages);
         customMessageItem = new CustomMessageItem(this, roomModel.getMessages());
-        if (typeChat.equals("groupChat")){
-            customMessageItem.setMembers(roomModel.getOptions().getMembers());
-        }
+
+        customMessageItem.setMembers(roomModel.getOptions().getMembers(), customMessageItem);
+
         if (typeChat.equals("botChat")){
-            customMessageItem.setMembers(roomModel.getOptions().getMembers());
+            customMessageItem.setMembers(roomModel.getOptions().getMembers(), customMessageItem);
             optionButton.setVisibility(View.INVISIBLE);
             enclose.setVisibility(View.GONE);
             image.setVisibility(View.GONE);
             icon.setVisibility(View.GONE);
         }
 
-        loadAvatar();
+//        loadAvatar();
 
-        listView.setScrollingCacheEnabled(false);
+        listView.setScrollingCacheEnabled(true);
         listView.setAdapter(customMessageItem);
         listView.setSelection(customMessageItem.getCount() - 1);
         listView.smoothScrollToPosition(customMessageItem.getCount() - 1);
