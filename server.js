@@ -107,6 +107,10 @@ io.on('connection', (socket) => {
         basket[_user._id] = socket.id;
     });
 
+    socket.on('seenMessage', (roomID, channel, user_id) => {
+        updateSeenMessage(socket, channel, roomID, user_id);
+    });
+
     socket.on('joinRoom', (roomInfo, user) => {
         if (socket.room) {
             socket.leave(socket.room);
