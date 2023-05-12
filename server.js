@@ -681,28 +681,52 @@ io.on('connection', (socket) => {
         await f.save()
     })
 
-    socket.on('blockFriend', async (id, user) => {
-        const _user = JSON.parse(user)
-        let u = await User.findOne({ _id: _user._id })
+    socket.on('blockFriend', async (id, user_id) => {
+        let u = await User.findOne({ _id: user_id })
         u.friend.splice(u.friend.indexOf(id), 1)
         let f = await User.findOne({ _id: id })
-        f.friend.splice(f.friend.indexOf(_user._id), 1)
+        f.friend.splice(f.friend.indexOf(user_id), 1)
 
-        io.to(basket[id]).emit("waitDeleteFriend", _user._id);
+
+        // io.to(basket[user_id]).emit("waitMeBlockFriend", id);
 
         u.block.push(id)
+
+        for (let i of u.directmessage_channel) {
+            let dmId = f.directmessage_channel.filter(val => val.message_id === i.message_id)
+            if (dmId.length > 0) {
+                let dmRoom = await directChat.findById(dmId[0].message_id)
+                dmRoom.options.filter(val => val.user_id !== user_id)[0].block = true
+                await dmRoom.save()
+                break
+            }
+        }
+        io.to(basket[id]).emit("waitDeleteFriend", user_id);
+        io.to(basket[id]).emit("waitBlock", user_id);
+        io.to(basket[user_id]).emit("waitBlock", user_id);
 
         await u.save()
         await f.save()
     })
 
-    socket.on('unblockFriend', async (id, user) => {
-        const _user = JSON.parse(user)
-        let u = await User.findOne({ _id: _user._id })
+    socket.on('unblockFriend', async (id, user_id) => {
+        let u = await User.findOne({ _id: user_id })
+        let f = await User.findOne({ _id: id })
 
-        // io.to(basket[id]).emit("waitUnblock", _user._id);
+        io.to(basket[id]).emit("waitUnblock", user_id);
+        io.to(basket[user_id]).emit("waitUnblock", user_id);
 
         u.block.splice(u.block.indexOf(id), 1)
+
+        for (let i of u.directmessage_channel) {
+            let dmId = f.directmessage_channel.filter(val => val.message_id === i.message_id)
+            if (dmId.length > 0) {
+                let dmRoom = await directChat.findById(dmId[0].message_id)
+                dmRoom.options.filter(val => val.user_id !== user_id)[0].block = false
+                await dmRoom.save()
+                break
+            }
+        }
 
         await u.save()
     })
