@@ -167,25 +167,25 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
                 imageView = (ImageView) row.findViewById(R.id.avatar);
                 imageView.setImageBitmap(messageItem.getBitmapAvatar());
             }
-//            else if (messageItem.hasAvatar()){
-//                ArrayList<String> userAvt = new ArrayList<String>();
-//                userAvt.add(messageItem.getAvatar());
-//                new DownloadImage(userAvt, new ConvertListener() {
-//                    @Override
-//                    public void onSuccess(ImageModel result) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onDownloadSuccess(ArrayList<Bitmap> result) {
-//                        for (int i = 0; i < result.size(); ++i) {
-//                            messageItem.setBitmapAvatar(result.get(i));
-//                            imageView = (ImageView) row.findViewById(R.id.avatar);
-//                            imageView.setImageBitmap(result.get(i));
-//                        }
-//                    }
-//                }).execute();
-//            }
+            else if (messageItem.hasAvatar()){
+                ArrayList<String> userAvt = new ArrayList<String>();
+                userAvt.add(messageItem.getAvatar());
+                new DownloadImage(userAvt, new ConvertListener() {
+                    @Override
+                    public void onSuccess(ImageModel result) {
+
+                    }
+
+                    @Override
+                    public void onDownloadSuccess(ArrayList<Bitmap> result) {
+                        for (int i = 0; i < result.size(); ++i) {
+                            messageItem.setBitmapAvatar(result.get(i));
+                            imageView = (ImageView) row.findViewById(R.id.avatar);
+                            imageView.setImageBitmap(result.get(i));
+                        }
+                    }
+                }).execute();
+            }
 
             if (messageItem.hasImages()) {
                 imageLayout = (RecyclerView)row.findViewById(R.id.imagesLayout);

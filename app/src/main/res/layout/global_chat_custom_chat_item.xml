@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:paddingHorizontal="10dp"
     android:paddingVertical="13dp"
+    android:windowSoftInputMode="adjustResize"
     >
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -28,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/messageAvatar"
         android:orientation="vertical"
-        android:descendantFocusability="blocksDescendants">
+        android:descendantFocusability="blocksDescendants"
+        android:windowSoftInputMode="adjustResize">
 
         <TextView
             android:id="@+id/messageTime"
