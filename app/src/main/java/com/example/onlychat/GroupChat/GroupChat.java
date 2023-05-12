@@ -192,6 +192,7 @@ public class GroupChat extends Fragment {
                                 roomModels.addAll(MainScreen.getListRoom(chats));
                                 for (RoomModel room : roomModels) {
                                     final ArrayList<MessageModel> messages = room.getMessages();
+                                    if (messages.size() <= 0) continue;
                                     final MessageModel lastMessage = messages.get(messages.size() - 1);
 
                                     if (lastMessage.getUserId().equals(pref.getUserModel().getId())) {
@@ -384,6 +385,7 @@ public class GroupChat extends Fragment {
                 for (RoomModel room : roomModels) {
                     if (room.get_id().equals(RoomID)) {
                         final ArrayList<MessageModel> messages = room.getMessages();
+                        if (messages.size() <= 0) continue;
                         final MessageModel lastMessage = messages.get(messages.size() - 1);
 
                         if (lastMessage.getUserId().equals(pref.getUserModel().getId())) {
@@ -592,6 +594,37 @@ public class GroupChat extends Fragment {
                             if (!lastMessage.getUserId().equals(pref.getUserModel().getId())) {
                                 room.setSeenUser(null);
                                 customChatItem.notifyDataSetChanged();
+                            }
+                            else {
+                                ArrayList<String> anothersSeen = new ArrayList<>();
+
+                                for (String user_id : lastMessage.getSeenUser())
+                                    if (user_id.equals(pref.getUserModel().getId())) continue;
+                                    else {
+                                        anothersSeen.add(user_id);
+                                    };
+
+                                final ArrayList<Member> members = room.getOptions().getMembers();
+                                final ArrayList<String> seenAvatar = new ArrayList<>();
+                                for (Member member : members) {
+                                    if (anothersSeen.contains(member.getUser_id())) {
+                                        seenAvatar.add(member.getAvatar());
+                                    }
+                                }
+
+                                new DownloadImage(seenAvatar, new ConvertListener() {
+
+                                    @Override
+                                    public void onSuccess(ImageModel result) {
+
+                                    }
+
+                                    @Override
+                                    public void onDownloadSuccess(ArrayList<Bitmap> result) {
+                                        room.setSeenUser(result);
+                                        customChatItem.notifyDataSetChanged();
+                                    }
+                                }).execute();
                             }
                         }
                     }
