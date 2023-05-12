@@ -99,6 +99,10 @@ const updateOption = catchAsync(async (req, res, next) => {
 
 const getFriends2AddMember = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ _id: req.body.user_id });
+
+  const alreadyInGroup = await groupChat.findOne({ 'members.user_id': req.body.user_id });
+  if (alreadyInGroup) return res.status(200).json({ status: 'success', data: [] });
+
   const Group = await groupChat.findOne({ _id: req.body.grc_id });
   const addList = [];
 
@@ -130,6 +134,10 @@ const getFriends2AddMember = catchAsync(async (req, res, next) => {
 
 const addMember = catchAsync(async (req, res, next) => {
   const Group = await groupChat.findOne({ _id: req.body.grc_id });
+
+  const alreadyInGroup = await groupChat.findOne({ 'members.user_id': req.body.user_id });
+  if (alreadyInGroup) return res.status(200).json({ status: 'success', data: {} });
+
   const user = await User.findOne({ _id: req.body.user_id });
 
   user.groupchat_channel.push({ message_id: req.body.grc_id, show: true });
