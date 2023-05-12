@@ -56,6 +56,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.SocketHandler;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
@@ -545,12 +546,13 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                                 userInf.getMessages().get(position).setId(message.getId());
                                 userInf.getMessages().get(position).setTime(message.getTime());
                             } else {
+                                SocketManager.seenMessage(userInf.getId(), "direct_message", pref.getUserModel().getId());
+
                                 userInf.pushMessage(message);
                                 adapter.notifyDataSetChanged();
 
                                 chatContent.setSelection(adapter.getCount() - 1);
                                 chatContent.smoothScrollToPosition(adapter.getCount() - 1);
-
                             }
                             change = true;
                         }

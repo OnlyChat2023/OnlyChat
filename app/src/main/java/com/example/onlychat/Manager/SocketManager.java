@@ -255,4 +255,10 @@ public class SocketManager {
             });
         }
     }
+
+    public static void seenMessage(String roomID, String channel, String user_id) {
+        if (socket != null) {
+            socket.emit("seenMessage", roomID, channel, user_id);
+        }
+    }
 }

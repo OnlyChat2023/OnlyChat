@@ -488,6 +488,10 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
                                     roomModel.getMessages().get(position).setTime(message.getTime());
                                 }
                             } else {
+                                if (channel.equals("group_chat")) {
+                                    SocketManager.seenMessage(roomModel.getId(), "direct_message", myInfo.getId());
+                                }
+
                                 roomModel.pushMessage(message);
                                 customMessageItem.notifyDataSetChanged();
 
