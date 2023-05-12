@@ -29,9 +29,9 @@ router.patch('/remove', catchAsync(async (req, res, next) => {
   const user = await User.findOne({ notify: { $in: [req.body.token] } });
 
   if (user) {
-    user.notify = user.notify.filter(el => el != req.body.token);
+    const notifies = user.notify.filter(el => el != req.body.token);
 
-    await user.save();
+    await user.updateOne({ notify: notifies });
   }
 
   res.status(200).json({

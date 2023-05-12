@@ -158,7 +158,7 @@ const getMetaData = catchAsync(async (req, res, next) => {
   const groupChats = []
   for (let i of user.groupchat_channel) {
     if (i.show) {
-      const dmList = await groupChat.findOne({ _id: i.message_id });
+      const dmList = await groupChat.findOne({ _id: i.message_id }).sort({ update_time: -1 });
       for (let i of dmList.chats) {
         if (dmList.members.filter(el => el.user_id == i.user_id).length != 0) {
           i.avatar = dmList.members.filter(el => el.user_id == i.user_id)[0].avatar

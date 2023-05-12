@@ -52,7 +52,7 @@ const getMetaData = catchAsync(async (req, res, next) => {
 
   const botChats = []
   for (let i of user.chatbot_channel) {
-    const dmList = await botChat.findOne({ _id: i });
+    const dmList = await botChat.findOne({ _id: i }).sort({ update_time: -1 });
     for (let i of dmList.chats) {
       if (dmList.members.filter(el => el.user_id == i.user_id).length != 0) {
         i.avatar = dmList.members.filter(el => el.user_id == i.user_id)[0].avatar

@@ -59,6 +59,45 @@ const saveBase64Image = async (dataString, filename) => {
     return `${filename}.${response.type}`;
 }
 
+const updateSeenMessage = async (socket, channel, roomId, userID) => {
+    if (channel === 'direct_message') {        
+        const DirectMess = await directChat.findOne({ _id: roomId });
+
+        if (DirectMess && DirectMess.chats && DirectMess.chats.length > 0) {
+            const lastIndex = DirectMess.chats.length - 1;
+            const seenedUser = DirectMess.chats[lastIndex].seen_user.indexOf(userID);
+            
+            if (seenedUser < 0) {
+                DirectMess.chats[lastIndex].seen_user.push(userID);
+               
+                const members = DirectMess.members;
+                for (const member of members)
+                    socket.to(basket[member.user_id]).emit('seenMessageListener', roomId, DirectMess.chats[lastIndex].seen_user);
+                
+                await DirectMess.save();
+            }
+        }
+    }
+    else if (channel === 'group_chat') {
+        const GroupChat = await groupChat.findOne({ _id: roomId });
+
+        if (GroupChat && GroupChat.chats && GroupChat.chats.length > 0) {
+            const lastIndex = GroupChat.chats.length - 1;
+            const seenedUser = GroupChat.chats[lastIndex].seen_user.indexOf(userID);
+            
+            if (seenedUser < 0) {
+                GroupChat.chats[lastIndex].seen_user.push(userID);
+               
+                const members = GroupChat.members;
+                for (const member of members)
+                    socket.to(basket[member.user_id]).emit('seenMessageListener', roomId, GroupChat.chats[lastIndex].seen_user);
+                
+                await GroupChat.save();
+            }
+        }
+    }
+}
+
 const io = new Server(server);
 
 io.on('connection', (socket) => {
@@ -78,11 +117,14 @@ io.on('connection', (socket) => {
         }
 
         const [roomId, channel] = roomInfo.split('::');
+
         socket.room = roomId;
         socket.channel = channel;
 
         socket.user = JSON.parse(user);
         socket.join(roomId);
+
+        updateSeenMessage(socket, channel, roomId, socket.user._id.toString());
     });
 
     socket.on('leaveRoom', () => {
@@ -93,9 +135,10 @@ io.on('connection', (socket) => {
     });
 
     socket.on('sendStringMessage', async (message, position, user) => {
+        const room_id = socket.room
+
         const _user = JSON.parse(user);
         const send_user = await User.findById(_user._id)
-        const room_id = socket.room
 
         // console.log(send_user);
 
@@ -110,6 +153,7 @@ io.on('connection', (socket) => {
                 nickname: send_user.nickname,
                 time: new Date()
             }
+            io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
 
             const GlobalChannel = await globalChat.findOne({ _id: socket.room });
 
@@ -129,9 +173,10 @@ io.on('connection', (socket) => {
                 message: Buffer.from(message, 'utf-8').toString(),
                 user_id: send_user._id,
                 imges: [],
-                send_user: [],
+                seen_user: [send_user._id],
                 time: new Date()
             }
+            io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
 
             const DirectMessage = await directChat.findOne({ _id: socket.room });
 
@@ -177,9 +222,10 @@ io.on('connection', (socket) => {
                 imges: [],
                 avatar: send_user.avatar,
                 nickname: send_user.nickname,
-                send_user: [],
+                seen_user: [send_user._id],
                 time: new Date()
             }
+            io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
 
             const GroupChat = await groupChat.findOne({ _id: socket.room });
 
@@ -259,9 +305,8 @@ io.on('connection', (socket) => {
             await BotChat.save();
 
             io.sockets.in(botID).emit('messageListener', BotmessageModal, position + 1, {});
+            io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
         }
-
-        io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
 
     socket.on('sendImageMessage', async (images, position, user) => {
@@ -289,6 +334,7 @@ io.on('connection', (socket) => {
                 nickname: send_user.nickname,
                 time: new Date()
             }
+            io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
 
             const GlobalChannel = await globalChat.findOne({ _id: socket.room });
 
@@ -332,6 +378,7 @@ io.on('connection', (socket) => {
                 send_user: [],
                 time: new Date()
             }
+            io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
 
             const DirectMessage = await directChat.findOne({ _id: socket.room });
 
@@ -379,6 +426,7 @@ io.on('connection', (socket) => {
                 send_user: [],
                 time: new Date()
             }
+            io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
 
             const GroupChat = await groupChat.findOne({ _id: socket.room });
 
@@ -417,8 +465,6 @@ io.on('connection', (socket) => {
             GroupChat.chats.push(messageModal);
             await GroupChat.save();
         }
-
-        io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
     });
 
     socket.on("notifyUpdateMessage", async (lastMessageID) => {

@@ -41,6 +41,11 @@ const messageSchema = new mongoose.Schema({
   update_time: Date
 });
 
+messageSchema.pre('save', function(next) {
+  this.update_time = new Date();
+  next();
+});
+
 const globalChat = mongoose.model('globalchats', messageSchema);
 
 export default globalChat;

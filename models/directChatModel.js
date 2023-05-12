@@ -38,6 +38,11 @@ const messageSchema = new mongoose.Schema({
   update_time: Date
 });
 
+messageSchema.pre('save', function(next) {
+  this.update_time = new Date();
+  next();
+});
+
 const directChat = mongoose.model('directmessages', messageSchema);
 
 export default directChat;

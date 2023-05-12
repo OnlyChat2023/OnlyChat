@@ -117,7 +117,7 @@ const getMetaData = catchAsync(async (req, res, next) => {
         status: 'success',
         data: {
             user: user,
-            directChat: directChats
+            directChat: directChats.sort((a, b) => { return b.update_time - a.update_time })
         },
     })
 });
