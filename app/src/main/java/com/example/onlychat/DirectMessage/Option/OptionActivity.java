@@ -39,15 +39,21 @@ public class OptionActivity extends AppCompatActivity {
     ChattingActivity preChat;
     ImageView avatar, notify_icon;
     Button btn_back, btn_nickname, btn_profile, btn_notify;
-    TextView txtName, txtBlock;
-    RelativeLayout nick_name, notify, profile, delete, block, report;
+    TextView txtName;
+    static TextView txtBlock;
+    RelativeLayout nick_name;
+    RelativeLayout notify;
+    RelativeLayout profile;
+    RelativeLayout delete;
+    static RelativeLayout block;
+    RelativeLayout report;
     RoomOptions options;
     static Member meInf;
     static Member friendInf;
     Boolean valueBlock;
     String DM_id;
     Integer CHANGENOTIFY = -7;
-    Integer CHANGEBLOCK = -8;
+    static Integer CHANGEBLOCK = -8;
     Integer CHANGEFRNN = 5;
     Integer CHANGEMENN = 6;
 
@@ -257,6 +263,8 @@ public class OptionActivity extends AppCompatActivity {
 
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
     public void setNickname(ChangeNickNameDialog current, String frNN, String meNN){
         SocketManager.getInstance();
         SocketManager.changeNickname(meInf.getUser_id(),meNN,friendInf.getUser_id(),frNN,DM_id);
@@ -284,22 +292,16 @@ public class OptionActivity extends AppCompatActivity {
 
     public void Block(BasicDialog current){
         valueBlock = (valueBlock) ? false : true;
-        new HttpManager(block.getContext()).changeOptionDM(friendInf.getUser_id(), DM_id, options.getNotify(), valueBlock, new HttpResponse() {
-            @Override
-            public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
-                if (valueBlock){
-                    txtBlock.setText("Unblock");
-                }else{
-                    txtBlock.setText("Block");
-                }
-                setResult(CHANGEBLOCK, new Intent(block.getContext(), ChattingActivity.class).putExtra("data", valueBlock));
-                current.dismiss();
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.i("Block DM Error", error);
-            }
-        });
+        if (valueBlock){
+            txtBlock.setText("Unblock");
+            SocketManager.getInstance();
+            SocketManager.blockFriend(friendInf.getUser_id(),meInf.getUser_id());
+        }else{
+            txtBlock.setText("Block");
+            SocketManager.getInstance();
+            SocketManager.unblockFriend(friendInf.getUser_id(),meInf.getUser_id());
+        }
+//        setResult(CHANGEBLOCK, new Intent(block.getContext(), ChattingActivity.class).putExtra("data", valueBlock));
+        if(current != null) current.dismiss();
     }
 }

@@ -67,7 +67,7 @@ public class NotificationService extends FirebaseMessagingService {
             String mess = (String) data.get("message");
             int notificationId = new Random().nextInt();
 
-            String title = "Only Chat - " + name + "has sent a message.";
+            String title = "Only Chat - " + name + " has sent a message.";
             String message = mess;
 
             String channelId = getString(R.string.project_id);

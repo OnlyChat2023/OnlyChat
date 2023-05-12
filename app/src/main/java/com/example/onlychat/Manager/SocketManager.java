@@ -110,15 +110,15 @@ public class SocketManager {
         }
     }
 
-    public static void blockFriend(String id, UserModel user){
+    public static void blockFriend(String id, String user_id){
         if(socket != null){
-            socket.emit("blockFriend",id,new Gson().toJson(user));
+            socket.emit("blockFriend",id,user_id);
         }
     }
 
-    public static void unblockFriend(String id,UserModel user){
+    public static void unblockFriend(String id,String user_id){
         if(socket != null){
-            socket.emit("unblockFriend",id,new Gson().toJson(user));
+            socket.emit("unblockFriend",id,user_id);
         }
     }
 

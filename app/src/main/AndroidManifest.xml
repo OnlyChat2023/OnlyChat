@@ -49,6 +49,7 @@
             android:exported="false" />
         <activity
             android:name=".MainScreen.MainScreen"
+            android:windowSoftInputMode="adjustPan|adjustResize"
             android:exported="false" />
         <activity
             android:name=".EditProfile.EditProfileStep2"
