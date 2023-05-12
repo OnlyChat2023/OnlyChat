@@ -202,6 +202,21 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
 //                new LoadImage(imageLayout).execute(messageItem.getTempImages());
                 ImageChat myImageChat = new ImageChat(messageItem.getImages());
                 imageLayout.setAdapter(myImageChat);
+
+                imageLayout.addOnItemTouchListener(new RecyclerItemClickListener(context, imageLayout, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(context, ViewLargerImageMessage.class);
+                        intent.putExtra("data", messageItem.getImages().get(position));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        view.getContext().startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+                }));
             }
             else if (messageItem.hasImagesStr()) {
 //                new LoadImage(imageLayout).execute(messageItem.getTempImages());
@@ -230,6 +245,21 @@ public class CustomMessageItem extends ArrayAdapter<MessageModel> {
                                     }
                                 });
                                 imageLayout.setAdapter(new ImageChat(res));
+                                imageLayout.addOnItemTouchListener(new RecyclerItemClickListener(context, imageLayout, new RecyclerItemClickListener.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View view, int position) {
+                                        System.out.println("HERE1");
+                                        Intent intent = new Intent(context, ViewLargerImageMessage.class);
+                                        intent.putExtra("data", messageItem.getImages().get(position));
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        view.getContext().startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onLongItemClick(View view, int position) {
+
+                                    }
+                                }));
                             }
                         });
                     }

@@ -2,6 +2,7 @@ package com.example.onlychat.DirectMessage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.onlychat.Adapter.ImageChat;
 import com.example.onlychat.Async.DownloadImage;
+import com.example.onlychat.GlobalChat.ListMessage.RecyclerItemClickListener;
 import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
@@ -24,6 +26,7 @@ import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
+import com.example.onlychat.ViewLargerImageMessage.ViewLargerImageMessage;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,6 +78,21 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
 //                new LoadImage(imageLayout).execute(messageItem.getTempImages());
                 ImageChat myImageChat = new ImageChat(messageItem.getImages());
                 imageLayout.setAdapter(myImageChat);
+
+                imageLayout.addOnItemTouchListener(new RecyclerItemClickListener(context, imageLayout, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(context, ViewLargerImageMessage.class);
+                        intent.putExtra("data", messageItem.getImages().get(position));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        view.getContext().startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+                }));
             }
             else if (messageItem.hasImagesStr()) {
 //                new LoadImage(imageLayout).execute(messageItem.getTempImages());
@@ -104,6 +122,22 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
                                     }
                                 });
                                 imageLayout.setAdapter(new ImageChat(res));
+
+                                imageLayout.addOnItemTouchListener(new RecyclerItemClickListener(context, imageLayout, new RecyclerItemClickListener.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View view, int position) {
+                                        System.out.println("HERE1");
+                                        Intent intent = new Intent(context, ViewLargerImageMessage.class);
+                                        intent.putExtra("data", messageItem.getImages().get(position));
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        view.getContext().startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onLongItemClick(View view, int position) {
+
+                                    }
+                                }));
                             }
                         });
                     }
@@ -165,6 +199,20 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
 //                new LoadImage(imageLayout).execute(messageItem.getTempImages());
                 ImageChat myImageChat = new ImageChat(messageItem.getImages());
                 imageLayout.setAdapter(myImageChat);
+                imageLayout.addOnItemTouchListener(new RecyclerItemClickListener(context, imageLayout, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(context, ViewLargerImageMessage.class);
+                        intent.putExtra("data", messageItem.getImages().get(position));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        view.getContext().startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+                }));
             }
             else if (messageItem.hasImagesStr()) {
 //                new LoadImage(imageLayout).execute(messageItem.getTempImages());
@@ -193,6 +241,21 @@ public class MessageReceive extends ArrayAdapter<MessageModel> {
                                     }
                                 });
                                 imageLayout.setAdapter(new ImageChat(res));
+                                imageLayout.addOnItemTouchListener(new RecyclerItemClickListener(context, imageLayout, new RecyclerItemClickListener.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View view, int position) {
+                                        System.out.println("HERE1");
+                                        Intent intent = new Intent(context, ViewLargerImageMessage.class);
+                                        intent.putExtra("data", messageItem.getImages().get(position));
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        view.getContext().startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onLongItemClick(View view, int position) {
+
+                                    }
+                                }));
                             }
                         });
                     }
