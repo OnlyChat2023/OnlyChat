@@ -71,8 +71,12 @@ public class GlobalPreferenceManager {
         pref.edit().remove(IS_LOGIN).apply();
     }
 
-    public void ValidateRemember() {
-        if (!pref.getBoolean(LOGIN_REMEMBER, false))
+    public void ValidateRemember(Context ctx) {
+        if (!pref.getBoolean(LOGIN_REMEMBER, false)) {
+            HttpManager httpRequest = new HttpManager(ctx);
+            httpRequest.removeNotify(this.getNotify());
+
             SignOut();
+        }
     }
 }

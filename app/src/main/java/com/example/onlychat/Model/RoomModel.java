@@ -1,8 +1,12 @@
 package com.example.onlychat.Model;
 
 import android.graphics.Bitmap;
+import android.widget.ImageView;
 
+import com.example.onlychat.Async.DownloadImage;
+import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.RoomOptions;
+import com.example.onlychat.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,8 +21,26 @@ public class RoomModel implements Serializable {
     RoomOptions options;
     Date update_time;
     Bitmap bitmapAvatar;
+    ArrayList<Bitmap> seenUser = null;
+//    Boolean isShow;
 
     public RoomModel() {}
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+//    public Boolean getShow() {
+//        return isShow;
+//    }
+//
+//    public void setShow(Boolean show) {
+//        isShow = show;
+//    }
 
     public Date getUpdate_time() {
         return update_time;
@@ -96,4 +118,7 @@ public class RoomModel implements Serializable {
     public boolean hasAvatar() {
         return this.avatar != null;
     }
+    public ArrayList<Bitmap> getSeenUser() { return this.seenUser; }
+    public void setSeenUser(ArrayList<Bitmap> bmp) { this.seenUser = bmp; }
+    public boolean hasSeenUser() { return this.seenUser != null && seenUser.size() > 0; }
 }

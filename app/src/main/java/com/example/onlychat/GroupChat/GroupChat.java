@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,18 +28,22 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.onlychat.Async.DownloadImage;
 import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
+import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.ProfileReceiver;
 import com.example.onlychat.Interfaces.RoomOptions;
+import com.example.onlychat.Interfaces.SeenMessageListener;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
+import com.example.onlychat.Model.ImageModel;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
@@ -68,7 +73,7 @@ public class GroupChat extends Fragment {
     ListView listChat;
     EditText newGroupName;
     Button okBtn;
-    CustomChatItem customChatItem;
+    static CustomChatItem customChatItem;
     EditText main_content_searchbox;
     ImageView delete;
 
@@ -77,7 +82,7 @@ public class GroupChat extends Fragment {
     private TextView loading;
 
     RelativeLayout groupChat;
-    ArrayList<RoomModel> roomModels = new ArrayList<>();
+    static ArrayList<RoomModel> roomModels = new ArrayList<>();
     GlobalPreferenceManager pref;
     Boolean isCreate = true;
     String typeChat = "groupChat";
@@ -92,6 +97,27 @@ public class GroupChat extends Fragment {
         this.roomModels = roomModels;
     }
 
+    public static void removeRoom(String id){
+        HttpManager httpManager = new HttpManager(customChatItem.getContext());
+        httpManager.deleteGroupChat(id, new HttpResponse() {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException, InterruptedException, ParseException {
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+        for(int i=0;i<roomModels.size();i++){
+            if(roomModels.get(i).getId().equals(id)) {
+                roomModels.remove(i);
+                customChatItem.notifyDataSetChanged();
+                break;
+            }
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -164,6 +190,43 @@ public class GroupChat extends Fragment {
                             Log.i("Group chat", Integer.toString(chats.length()));
                             if (chats.length() > 0) {
                                 roomModels.addAll(MainScreen.getListRoom(chats));
+                                for (RoomModel room : roomModels) {
+                                    final ArrayList<MessageModel> messages = room.getMessages();
+                                    final MessageModel lastMessage = messages.get(messages.size() - 1);
+
+                                    if (lastMessage.getUserId().equals(pref.getUserModel().getId())) {
+                                        ArrayList<String> anothersSeen = new ArrayList<>();
+
+                                        for (String user_id : lastMessage.getSeenUser())
+                                            if (user_id.equals(pref.getUserModel().getId())) continue;
+                                            else {
+                                                anothersSeen.add(user_id);
+                                            };
+
+                                        final ArrayList<Member> members = room.getOptions().getMembers();
+                                        final ArrayList<String> seenAvatar = new ArrayList<>();
+                                        for (Member member : members) {
+                                            if (anothersSeen.contains(member.getUser_id())) {
+                                                seenAvatar.add(member.getAvatar());
+                                            }
+                                        }
+
+                                        new DownloadImage(seenAvatar, new ConvertListener() {
+
+                                            @Override
+                                            public void onSuccess(ImageModel result) {
+
+                                            }
+
+                                            @Override
+                                            public void onDownloadSuccess(ArrayList<Bitmap> result) {
+                                                room.setSeenUser(result);
+                                                customChatItem.notifyDataSetChanged();
+                                            }
+                                        }).execute();
+                                    }
+                                }
+
                                 customChatItem.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
@@ -200,12 +263,23 @@ public class GroupChat extends Fragment {
         listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bitmap backupAvt = roomModels.get(i).getBitmapAvatar();
+                ArrayList<Bitmap> backupSeen = roomModels.get(i).getSeenUser();
+
                 Intent intent = new Intent(listChat.getContext(), ListMessage.class);
                 intent.putExtra("typeChat", typeChat);
+
                 roomModels.get(i).setBitmapAvatar(null);
+                roomModels.get(i).setSeenUser(null);
+
                 intent.putExtra("Data", roomModels.get(i));
+
                 intent.putExtra("channel", "group_chat");
                 startActivityForResult(intent, 0);
+
+                roomModels.get(i).setBitmapAvatar(backupAvt);
+                roomModels.get(i).setSeenUser(backupSeen);
+
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
@@ -299,6 +373,49 @@ public class GroupChat extends Fragment {
             }
         });
         waitSetGroupName();
+
+        SocketManager.getInstance();
+        SocketManager.seenMessageListener(new SeenMessageListener() {
+            @Override
+            public void onSeen(String RoomID, ArrayList<String> SeenUsers) {
+
+                Log.i( "onSeen: ", RoomID);
+//                Log.i( "onSeen2: ", UserID);
+                for (RoomModel room : roomModels) {
+                    if (room.get_id().equals(RoomID)) {
+                        final ArrayList<MessageModel> messages = room.getMessages();
+                        final MessageModel lastMessage = messages.get(messages.size() - 1);
+
+                        if (lastMessage.getUserId().equals(pref.getUserModel().getId())) {
+
+                            ArrayList<String> seenAvt = new ArrayList<>();
+
+                            for (Member member : room.getOptions().getMembers()) {
+                                if (member.getUser_id().equals(pref.getUserModel().getId())) continue;
+                                if (SeenUsers.contains(member.getId()))
+                                    seenAvt.add(member.getAvatar());
+                            }
+
+                            new DownloadImage(seenAvt, new ConvertListener() {
+
+                                @Override
+                                public void onSuccess(ImageModel result) {
+
+                                }
+
+                                @Override
+                                public void onDownloadSuccess(ArrayList<Bitmap> result) {
+                                    room.setSeenUser(result);
+                                    customChatItem.notifyDataSetChanged();
+                                }
+                            }).execute();
+                        }
+                        break;
+                    }
+                }
+            }
+        });
+
         return groupChat;
     }
 
@@ -409,7 +526,7 @@ public class GroupChat extends Fragment {
                             break;
                         }
                 }
-//                updateListRoom();
+                updateListRoom();
             }
         }
     }
@@ -445,12 +562,13 @@ public class GroupChat extends Fragment {
 
                         for (RoomModel old_room : roomModels) {
                             boolean found = false;
+                            Log.i("UPDATE TIME", old_room.getUpdate_time().toString());
                             for (RoomModel new_room : rooms) {
                                 if (old_room.getId().equals(new_room.getId())) {
-//                                    old_room.setMessages(new_room.getMessages());
-//                                    old_room.setAvatar(new_room.getAvatar());
-//                                    old_room.setName(new_room.getName());
-//                                    old_room.setOptions(new_room.getOptions());
+                                    old_room.setMessages(new_room.getMessages());
+                                    old_room.setAvatar(new_room.getAvatar());
+                                    old_room.setName(new_room.getName());
+                                    old_room.setOptions(new_room.getOptions());
 
                                     found = true;
                                     founded.add(new_room.getId());
@@ -464,6 +582,16 @@ public class GroupChat extends Fragment {
                         for (RoomModel new_room : rooms) {
                             if (!founded.contains(new_room.getId())) {
                                 roomModels.add(0, new_room);
+                            }
+                        }
+                        for (RoomModel room : roomModels) {
+                            final ArrayList<MessageModel> messages = room.getMessages();
+                            if (room.getMessages().size() == 0) continue;
+                            final MessageModel lastMessage = messages.get(messages.size() - 1);
+
+                            if (!lastMessage.getUserId().equals(pref.getUserModel().getId())) {
+                                room.setSeenUser(null);
+                                customChatItem.notifyDataSetChanged();
                             }
                         }
                     }

@@ -227,6 +227,7 @@ public class MainScreen extends AppCompatActivity {
         }
         else {
             pref = new GlobalPreferenceManager(this);
+
             if (!TextUtils.isEmpty(pref.getNotify())) {
                 HttpManager httpRequest = new HttpManager(this);
                 httpRequest.removeNotify(pref.getNotify());
@@ -299,6 +300,7 @@ public class MainScreen extends AppCompatActivity {
         roomModel.setId(room.getString("_id"));
         roomModel.setAvatar(room.getString("avatar"));
         roomModel.setName(room.getString("name"));
+//        roomModel.setShow(room.getBoolean("isShow"));
 
         // create list message
         ArrayList<MessageModel> listMessage = new ArrayList<>();
@@ -309,7 +311,17 @@ public class MainScreen extends AppCompatActivity {
             // set information type String for message
             MessageModel messageModel = new Gson().fromJson(String.valueOf(messageJson), MessageModel.class);
 
-            // set time message send
+            if (messageJson.has("seen_user")) {
+                final JSONArray jsonArray = messageJson.getJSONArray("seen_user");
+
+                ArrayList<String> seenUsers = new ArrayList<>();
+                for (int k = 0; k < jsonArray.length(); k++) {
+                    seenUsers.add(jsonArray.getString(k));
+                }
+                messageModel.setSeenUser(seenUsers);
+            }
+
+        // set time message send
             String dtStart = messageJson.getString("time");
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             format.setTimeZone(TimeZone.getTimeZone("GMT"));

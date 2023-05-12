@@ -11,6 +11,7 @@ import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.MessageListener;
 import com.example.onlychat.Interfaces.ProfileReceiver;
 import com.example.onlychat.Interfaces.RoomListener;
+import com.example.onlychat.Interfaces.SeenMessageListener;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.utils.Utils;
@@ -228,6 +229,30 @@ public class SocketManager {
     public static void notifyUpdateRoom(String room_id, String channel) {
         if (socket != null) {
             socket.emit("updateRoom", room_id, channel);
+        }
+    }
+
+    public static void seenMessageListener(SeenMessageListener listener) {
+        if (socket != null) {
+            socket.on("seenMessageListener", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    String RoomID = (String) args[0];
+                    JSONArray SeenUser = (JSONArray) args[1];
+
+                    ArrayList<String> UserList = new ArrayList<String>();
+                    try {
+                        for (int i = 0; i < SeenUser.length(); i++) {
+                            UserList.add(SeenUser.getString(i));
+                        }
+                    } catch (JSONException e) {
+//                        throw new RuntimeException(e);
+                        e.printStackTrace();
+                    }
+
+                    listener.onSeen(RoomID, UserList);
+                }
+            });
         }
     }
 }

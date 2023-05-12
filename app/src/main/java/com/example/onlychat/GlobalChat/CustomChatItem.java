@@ -12,13 +12,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.onlychat.Adapter.ImageChat;
+import com.example.onlychat.Adapter.SeenUser;
 import com.example.onlychat.Async.DownloadImage;
 import com.example.onlychat.Interfaces.ConvertListener;
+import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Model.ImageModel;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Model.RoomModel;
+import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.R;
+import com.google.android.material.imageview.ShapeableImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,7 +38,9 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
     TextView messageName;
     TextView messageContent;
     TextView messageTime;
+    ShapeableImageView seenAvt;
     ArrayList<RoomModel> listRooms;
+    RecyclerView seenUser;
 
     public CustomChatItem(Context context, ArrayList<RoomModel> listRooms){
         super(context,R.layout.global_chat_custom_chat_item,listRooms);
@@ -42,14 +52,62 @@ public class CustomChatItem extends ArrayAdapter<RoomModel> {
     public View getView(int position, View convertView, ViewGroup parent){
         View row;
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+
         row = inflater.inflate(R.layout.global_chat_custom_chat_item,null);
         messageName = (TextView) row.findViewById(R.id.messageName);
         messageContent = (TextView) row.findViewById(R.id.messageContent);
         messageTime = (TextView) row.findViewById(R.id.messageTime);
 
         RoomModel roomModel = listRooms.get(position);
+//        if(!roomModel.getShow()) row.setVisibility(View.GONE);
 
 //        new HttpManager.GetImageFromServer(messageAvatar).execute(listRooms.get(position).getAvatar());
+        if (roomModel.hasSeenUser()) {
+            seenUser = (RecyclerView)row.findViewById(R.id.seenUser);
+//            seenAvt = (ShapeableImageView) row.findViewById(R.id.seenAvatar);
+            seenUser.setItemAnimator(null);
+
+            int num_col = Math.max(1, roomModel.getSeenUser().size());
+
+            seenUser.setLayoutManager(new GridLayoutManager(context, num_col) {
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            });
+//                new LoadImage(imageLayout).execute(messageItem.getTempImages());
+            SeenUser myImageChat = new SeenUser(roomModel.getSeenUser());
+            seenUser.setAdapter(myImageChat);
+//            seenAvt.setImageBitmap(roomModel.getSeenUser());
+        }
+        else {
+            GlobalPreferenceManager pref = new GlobalPreferenceManager(context);
+            UserModel myInfo = pref.getUserModel();
+            if (listRooms.get(position).getMessages().size() > 0) {
+                if (listRooms.get(position).getMessages().get(listRooms.get(position).getMessages().size() - 1).getUserId().equals(myInfo.getId())) {
+                    seenAvt = (ShapeableImageView) row.findViewById(R.id.seenAvatar);
+                    seenAvt.setImageResource(R.drawable.alsend_icon);
+                }
+                else {
+                    seenUser = (RecyclerView)row.findViewById(R.id.seenUser);
+    //            seenAvt = (ShapeableImageView) row.findViewById(R.id.seenAvatar);
+                    seenUser.setItemAnimator(null);
+    
+                    int num_col = 1;
+    
+                    seenUser.setLayoutManager(new GridLayoutManager(context, num_col) {
+                        @Override
+                        public boolean canScrollVertically() {
+                            return false;
+                        }
+                    });
+    //                new LoadImage(imageLayout).execute(messageItem.getTempImages());
+                    SeenUser myImageChat = new SeenUser(new ArrayList<>());
+                    seenUser.setAdapter(myImageChat);
+                }
+            }
+        }
+
         if (roomModel.hasBitmapAvatar()) {
             messageAvatar = (ImageView) row.findViewById(R.id.messageAvatar);
             messageAvatar.setImageBitmap(roomModel.getBitmapAvatar());

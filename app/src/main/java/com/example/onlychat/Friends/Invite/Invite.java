@@ -86,6 +86,7 @@ public class Invite extends Fragment {
             }
         });
         waitRequestAddFriend();
+        waitRemoveRequestAddFriend();
         return invite;
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +103,25 @@ public class Invite extends Fragment {
                         @Override
                         public void run() {
                             addInvite(userModel);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    public static void waitRemoveRequestAddFriend(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket()!=null){
+            SocketManager.getSocket().on("removeRequestAddFriend", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    listInvites.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(int i=0;i<invite_list.size();i++){
+                                if(invite_list.get(i).get_id().equals(args[0]))removeItem(i);
+                            }
                         }
                     });
                 }

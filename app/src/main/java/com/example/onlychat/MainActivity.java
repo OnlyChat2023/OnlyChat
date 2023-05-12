@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         SocketManager.disconnect();
 
         pref = new GlobalPreferenceManager(this);
-        pref.ValidateRemember();
+        pref.ValidateRemember(this);
 
 //        pref.SignOut();
 

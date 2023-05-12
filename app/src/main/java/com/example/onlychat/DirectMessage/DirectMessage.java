@@ -3,8 +3,8 @@ package com.example.onlychat.DirectMessage;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,9 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,31 +25,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
+import com.example.onlychat.Async.DownloadImage;
 import com.example.onlychat.GlobalChat.CustomChatItem;
-import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
-import com.example.onlychat.GroupChat.GroupChat;
+import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.Member;
+import com.example.onlychat.Interfaces.SeenMessageListener;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Interfaces.HttpResponse;
-import com.example.onlychat.Interfaces.Member;
-import com.example.onlychat.Interfaces.RoomOptions;
-import com.example.onlychat.Manager.GlobalPreferenceManager;
-import com.example.onlychat.Manager.HttpManager;
+import com.example.onlychat.Model.ImageModel;
 import com.example.onlychat.Model.MessageModel;
 import com.example.onlychat.Interfaces.ProfileReceiver;
-import com.example.onlychat.MainActivity;
-import com.example.onlychat.Manager.GlobalPreferenceManager;
-import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
 import com.example.onlychat.Model.RoomModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,13 +50,9 @@ import org.json.JSONException;
 import java.text.ParseException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
-import java.util.TimeZone;
 
 import io.socket.emitter.Emitter;
 
@@ -87,7 +74,7 @@ public class DirectMessage extends Fragment {
         return roomModels;
     }
 
-    public void addRoom(RoomModel roomModel){
+    public static void addRoom(RoomModel roomModel){
         roomModels.add(roomModel);
         customChatItem.notifyDataSetChanged();
     }
@@ -158,6 +145,44 @@ public class DirectMessage extends Fragment {
                         Log.i("Direct chat", Integer.toString(chats.length()));
                         if(chats.length()>0){
                             roomModels.addAll(MainScreen.getListRoom(chats));
+
+                            for (RoomModel room : roomModels) {
+                                final ArrayList<MessageModel> messages = room.getMessages();
+                                final MessageModel lastMessage = messages.get(messages.size() - 1);
+
+                                if (lastMessage.getUserId().equals(myInfo.getId())) {
+                                    ArrayList<String> anothersSeen = new ArrayList<>();
+
+                                    for (String user_id : lastMessage.getSeenUser())
+                                        if (user_id.equals(myInfo.getId())) continue;
+                                        else {
+                                            anothersSeen.add(user_id);
+                                        };
+
+                                    final ArrayList<Member> members = room.getOptions().getMembers();
+                                    final ArrayList<String> seenAvatar = new ArrayList<>();
+                                    for (Member member : members) {
+                                        if (anothersSeen.contains(member.getUser_id())) {
+                                            seenAvatar.add(member.getAvatar());
+                                        }
+                                    }
+
+                                    new DownloadImage(seenAvatar, new ConvertListener() {
+
+                                        @Override
+                                        public void onSuccess(ImageModel result) {
+
+                                        }
+
+                                        @Override
+                                        public void onDownloadSuccess(ArrayList<Bitmap> result) {
+                                            room.setSeenUser(result);
+                                            customChatItem.notifyDataSetChanged();
+                                        }
+                                    }).execute();
+                                }
+                            }
+
                             customChatItem.notifyDataSetChanged();
                         }
                     }
@@ -186,11 +211,20 @@ public class DirectMessage extends Fragment {
         listChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bitmap backupAvt = roomModels.get(i).getBitmapAvatar();
+                ArrayList<Bitmap> backupSeen = roomModels.get(i).getSeenUser();
+
                 Intent intent = new Intent(listChat.getContext(), ChattingActivity.class);
+//                intent.putParcelableArrayListExtra("RoomAvatar", new ArrayList<>(Collections.singleton(roomModels.get(i).getBitmapAvatar())));
+
                 roomModels.get(i).setBitmapAvatar(null);
+                roomModels.get(i).setSeenUser(null);
                 intent.putExtra("roomChat", roomModels.get(i));
 
                 startActivityForResult(intent, 0);
+
+                roomModels.get(i).setBitmapAvatar(backupAvt);
+                roomModels.get(i).setSeenUser(backupSeen);
                 getActivity().overridePendingTransition(R.anim.right_to_left, R.anim.fixed);
             }
         });
@@ -294,6 +328,49 @@ public class DirectMessage extends Fragment {
             }
         });
         waitSetNickname();
+
+        SocketManager.getInstance();
+        SocketManager.seenMessageListener(new SeenMessageListener() {
+            @Override
+            public void onSeen(String RoomID, ArrayList<String> SeenUsers) {
+
+                Log.i( "onSeen: ", RoomID);
+//                Log.i( "onSeen2: ", UserID);
+                for (RoomModel room : roomModels) {
+                    if (room.get_id().equals(RoomID)) {
+                        final ArrayList<MessageModel> messages = room.getMessages();
+                        final MessageModel lastMessage = messages.get(messages.size() - 1);
+
+                        if (lastMessage.getUserId().equals(myInfo.getId())) {
+
+                            ArrayList<String> seenAvt = new ArrayList<>();
+
+                            for (Member member : room.getOptions().getMembers()) {
+                                if (member.getUser_id().equals(myInfo.getId())) continue;
+                                if (SeenUsers.contains(member.getId()))
+                                    seenAvt.add(member.getAvatar());
+                            }
+
+                            new DownloadImage(seenAvt, new ConvertListener() {
+
+                                @Override
+                                public void onSuccess(ImageModel result) {
+
+                                }
+
+                                @Override
+                                public void onDownloadSuccess(ArrayList<Bitmap> result) {
+                                    room.setSeenUser(result);
+                                    customChatItem.notifyDataSetChanged();
+                                }
+                            }).execute();
+                        }
+                        break;
+                    }
+                }
+            }
+        });
+
         return globalChat;
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -347,7 +424,7 @@ public class DirectMessage extends Fragment {
             String roomID = data.getStringExtra("RoomModelID");
             String lastMess = data.getStringExtra("LastMessage");
             Date lastTime = (Date) data.getSerializableExtra("LastTime");
-            boolean update = data.getBooleanExtra("Update", false);
+            boolean update = data.getBooleanExtra("Update", true);
             boolean change = data.getBooleanExtra("Change", false);
 
             if (update) {
@@ -402,10 +479,10 @@ public class DirectMessage extends Fragment {
                             for (RoomModel new_room : rooms) {
                                 if (old_room.getId().equals(new_room.getId())) {
                                     old_room.setMessages(new_room.getMessages());
-//                                    old_room.setAvatar(new_room.getAvatar());
+                                    old_room.setAvatar(new_room.getAvatar());
                                     old_room.setName(new_room.getName());
                                     old_room.setOptions(new_room.getOptions());
-
+//                                    old_room.setSeenUser(new_room.getSeenUser());
                                     found = true;
                                     founded.add(new_room.getId());
                                     break;
@@ -420,8 +497,19 @@ public class DirectMessage extends Fragment {
                                 roomModels.add(0, new_room);
                             }
                         }
+
+                        for (RoomModel room : roomModels) {
+                            final ArrayList<MessageModel> messages = room.getMessages();
+                            if (room.getMessages().size() == 0) continue;
+                            final MessageModel lastMessage = messages.get(messages.size() - 1);
+
+                            if (!lastMessage.getUserId().equals(myInfo.getId())) {
+                                room.setSeenUser(null);
+                                customChatItem.notifyDataSetChanged();
+                            }
+                        }
+
                         customChatItem.notifyDataSetChanged();
-                        customChatItem.notifyDataSetInvalidated();
                     }
                     else {
                         roomModels.clear();
