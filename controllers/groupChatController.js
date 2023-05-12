@@ -18,7 +18,7 @@ const addGroup = catchAsync(async (req, res, next) => {
     members: [{
       user_id: userInf._id,
       name: userInf.name,
-      nickname: userInf.nickname,
+      nickname: userInf.name,
       avatar: userInf.avatar
     }],
     name: req.body.name,
@@ -136,7 +136,7 @@ const addMember = catchAsync(async (req, res, next) => {
   Group.members.push({
     "user_id": user._id,
     "name": user.name,
-    "nickname": user.nickname,
+    "nickname": user.name,
     "avatar": user.avatar
   });
 
