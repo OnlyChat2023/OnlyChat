@@ -20,10 +20,12 @@ import android.widget.TextView;
 import com.example.onlychat.DiaLog.BasicDialog;
 import com.example.onlychat.DiaLog.ChangeNickNameDialog;
 import com.example.onlychat.DirectMessage.ChattingActivity;
+import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.GlobalChat.ListMessage.Options.Options;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
+import com.example.onlychat.MainActivity;
 import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
@@ -49,7 +51,7 @@ public class OptionActivity extends AppCompatActivity {
     Integer CHANGENOTIFY = -7;
     Integer CHANGEBLOCK = -8;
     Integer CHANGEFRNN = 5;
-    Integer CHANGEMENN = 6;
+    Integer CHANGEMENN = 6, DELETEDM = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,6 +230,16 @@ public class OptionActivity extends AppCompatActivity {
             }
         });
 
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String ms = "Do you still want to delete this chat?";
+                BasicDialog dialog = new BasicDialog().newInstance(ms);
+                dialog.setActivity("DELETEDM");
+                dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
+            }
+        });
+
         btn_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -301,5 +313,12 @@ public class OptionActivity extends AppCompatActivity {
                 Log.i("Block DM Error", error);
             }
         });
+    }
+
+    public void Delete(BasicDialog current){
+        DirectMessage.removeRoom(DM_id);
+        setResult(DELETEDM, new Intent(block.getContext(), ChattingActivity.class));
+        current.dismiss();
+        finish();
     }
 }

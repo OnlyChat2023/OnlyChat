@@ -30,8 +30,11 @@ import android.widget.TextView;
 import com.example.onlychat.DiaLog.BasicDialog;
 import com.example.onlychat.DiaLog.ChangeGroupNameDialog;
 import com.example.onlychat.DiaLog.ChangeNickNameDialog;
+import com.example.onlychat.DirectMessage.ChattingActivity;
+import com.example.onlychat.DirectMessage.DirectMessage;
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GroupChat.AddMember;
+import com.example.onlychat.GroupChat.GroupChat;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
@@ -78,7 +81,7 @@ public class Options extends AppCompatActivity {
     Button addMember;
     int FINISH = -5;
     int UPDATEOPTION = -6;
-    int ADDMEMBER = -7;
+    int ADDMEMBER = -7, DELETEGR = 7;
     GlobalPreferenceManager pref;
     static UserModel myInfo;
 
@@ -483,6 +486,17 @@ public class Options extends AppCompatActivity {
                 }
             }
         });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String ms = "Do you still want to delete this chat?";
+                BasicDialog dialog = new BasicDialog().newInstance(ms);
+                dialog.setActivity("DELETEGR");
+                dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
+            }
+        });
+
         group_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -519,6 +533,13 @@ public class Options extends AppCompatActivity {
 
         name.setText(newGroupName);
         current.dismiss();
+    }
+
+    public void Delete(BasicDialog current){
+        GroupChat.removeRoom(GroupID);
+        setResult(DELETEGR, new Intent(block.getContext(), ListMessage.class));
+        current.dismiss();
+        finish();
     }
 
 //    public static void waitSetGroupName(){

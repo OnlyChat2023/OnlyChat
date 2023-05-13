@@ -66,6 +66,12 @@ public class BasicDialog extends DialogFragment {
                 if (activity == "BLOCKDM"){
                     ((OptionActivity) getActivity()).Block(BasicDialog.this);
                 }
+                if (activity == "DELETEDM") {
+                    ((OptionActivity) getActivity()).Delete(BasicDialog.this);
+                }
+                if (activity == "DELETEGR") {
+                    ((Options) getActivity()).Delete(BasicDialog.this);
+                }
                 dismiss();
             }
         });
