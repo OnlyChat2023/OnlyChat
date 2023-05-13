@@ -74,7 +74,7 @@ public class Options extends AppCompatActivity {
     TextView notify_txt;
     RoomOptions options;
     String typeChat;
-    String GroupID;
+    static String GroupID;
     Button addMember;
     int FINISH = -5;
     int UPDATEOPTION = -6;
@@ -490,6 +490,8 @@ public class Options extends AppCompatActivity {
                 dialog.show(getSupportFragmentManager().beginTransaction(), dialog.getTag());
             }
         });
+
+        waitSetGroupName();
     }
 
     public void LeaveGroup(BasicDialog basicDialog){
@@ -517,24 +519,28 @@ public class Options extends AppCompatActivity {
         SocketManager.getInstance();
         SocketManager.changeGroupName(GroupID, newGroupName);
 
-        name.setText(newGroupName);
+//        name.setText(newGroupName);
         current.dismiss();
     }
 
-//    public static void waitSetGroupName(){
-//        SocketManager.getInstance();
-//        if(SocketManager.getSocket() !=null){
-//            SocketManager.getSocket().on("waitSetGroupName", new Emitter.Listener() {
-//                @Override
-//                public void call(Object... args) {
-//                    String newGroupName = (String) args[0];
-//
-//                    Log.i("vvvvvvvvvvvvvvvvvvv", newGroupName);
-//                    name.setText(newGroupName);
-//                }
-//            });
-//        }
-//    }
+    public static void waitSetGroupName(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitSetGroupName", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    if(GroupID.equals(args[1])){
+                        name.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                name.setText((String) args[0]);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
 
     public class ImageAdapterGridView extends BaseAdapter {
         private Context mContext;
