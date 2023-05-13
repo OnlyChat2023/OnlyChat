@@ -582,7 +582,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     public void initSocket() {
         SocketManager.getInstance();
         SocketManager.joinRoom(userInf.getId() + "::" + "direct_message", myInfo);
-        
+
         SocketManager.waitMessage(new MessageListener() {
             @Override
             public void onMessage(MessageModel message, int position) {

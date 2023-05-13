@@ -5,6 +5,7 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -373,10 +374,64 @@ public class DirectMessage extends Fragment {
                 }
             }
         });
-
+        waitBlock();
+        waitUnblock();
         return globalChat;
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void waitBlock(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitBlock", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    if(!myInfo.get_id().equals(args[0])){
+                        //Log.i("Sao khong block", "call========= " + me_id.equals(args[0]));
+                        profile.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                for(RoomModel roomMode: roomModels){
+                                    if(roomMode.getId().equals(args[1])){// bi block
+                                        roomMode.getOptions().setBlock(true);
+                                    }
+
+                                }
+                                customChatItem.notifyDataSetChanged();
+                            }
+                        });
+                    }
+
+                }
+            });
+        }
+    }
+    public void waitUnblock(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitUnblock", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    if(!myInfo.get_id().equals(args[0])){
+                        //Log.i("Sao khong block", "call========= " + me_id.equals(args[0]));
+                        profile.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                for(RoomModel roomMode: roomModels){
+                                    if(roomMode.getId().equals(args[1])){// bi block
+                                        roomMode.getOptions().setBlock(false);
+                                    }
+
+                                }
+                                customChatItem.notifyDataSetChanged();
+                            }
+                        });
+                    }
+
+                }
+            });
+        }
+    }
 
     public void waitSetNickname(){
         SocketManager.getInstance();

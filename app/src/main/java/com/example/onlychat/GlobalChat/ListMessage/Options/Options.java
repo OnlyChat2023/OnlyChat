@@ -86,7 +86,7 @@ public class Options extends AppCompatActivity {
     TextView notify_txt;
     RoomOptions options;
     String typeChat;
-    String GroupID;
+    static String GroupID;
     Button addMember;
     int FINISH = -5;
     int UPDATEOPTION = -6;
@@ -523,6 +523,7 @@ public class Options extends AppCompatActivity {
                 startActivityForResult(iGallery, 1000);
             }
         });
+        waitSetGroupName();
     }
 
     public void LeaveGroup(BasicDialog basicDialog){
@@ -550,10 +551,28 @@ public class Options extends AppCompatActivity {
         SocketManager.getInstance();
         SocketManager.changeGroupName(GroupID, newGroupName);
 
-        name.setText(newGroupName);
+//        name.setText(newGroupName);
         current.dismiss();
     }
 
+    public static void waitSetGroupName(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitSetGroupName", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    if(GroupID.equals(args[1])){
+                        name.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                name.setText((String) args[0]);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
     public void Delete(BasicDialog current){
         GroupChat.removeRoom(GroupID);
         setResult(DELETEGR, new Intent(block.getContext(), ListMessage.class));

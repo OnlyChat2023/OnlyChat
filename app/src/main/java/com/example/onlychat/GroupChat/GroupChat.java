@@ -430,7 +430,6 @@ public class GroupChat extends Fragment {
                 public void call(Object... args) {
                     String newGroupName = (String) args[0];
                     String chat_id = (String) args[1];
-                    Log.i("TAG", "------------" + chat_id);
                     profile.post(new Runnable() {
                         @Override
                         public void run() {
@@ -440,14 +439,14 @@ public class GroupChat extends Fragment {
                                 }
                             }
                             customChatItem.notifyDataSetChanged();
+                            customChatItem.notifyDataSetInvalidated();
+
                         }
                     });
                 }
             });
         }
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////
 
     public void Reload() {
         HttpManager httpManager = new HttpManager(getContext());
