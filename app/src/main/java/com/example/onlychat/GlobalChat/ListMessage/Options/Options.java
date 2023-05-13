@@ -537,7 +537,6 @@ public class Options extends AppCompatActivity {
         current.dismiss();
     }
 
-<<<<<<< HEAD
     public static void waitSetGroupName(){
         SocketManager.getInstance();
         if(SocketManager.getSocket() !=null){
@@ -556,7 +555,6 @@ public class Options extends AppCompatActivity {
             });
         }
     }
-=======
     public void Delete(BasicDialog current){
         GroupChat.removeRoom(GroupID);
         setResult(DELETEGR, new Intent(block.getContext(), ListMessage.class));
@@ -564,21 +562,6 @@ public class Options extends AppCompatActivity {
         finish();
     }
 
-//    public static void waitSetGroupName(){
-//        SocketManager.getInstance();
-//        if(SocketManager.getSocket() !=null){
-//            SocketManager.getSocket().on("waitSetGroupName", new Emitter.Listener() {
-//                @Override
-//                public void call(Object... args) {
-//                    String newGroupName = (String) args[0];
-//
-//                    Log.i("vvvvvvvvvvvvvvvvvvv", newGroupName);
-//                    name.setText(newGroupName);
-//                }
-//            });
-//        }
-//    }
->>>>>>> 134a924d50328886a8eb4d8bc3e02d819cc30fb4
 
     public class ImageAdapterGridView extends BaseAdapter {
         private Context mContext;
