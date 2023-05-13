@@ -53,7 +53,7 @@ public class OptionActivity extends AppCompatActivity {
     static Member meInf;
     static Member friendInf;
     Boolean valueBlock;
-    String DM_id;
+    static String DM_id;
     Integer CHANGENOTIFY = -7;
     static Integer CHANGEBLOCK = -8;
     Integer CHANGEFRNN = 5;
@@ -290,13 +290,13 @@ public class OptionActivity extends AppCompatActivity {
             SocketManager.getSocket().on("waitSetNickname", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    String myNickname = (String) args[0];
-                    String friendNickname = (String) args[1];
+                    if(DM_id.equals(args[2])){
+                        String myNickname = (String) args[0];
+                        String friendNickname = (String) args[1];
 
-                    Log.i("Option activity", myNickname);
-                    Log.i("Option activity", friendNickname);
-                    meInf.setNickname(myNickname);
-                    friendInf.setNickname(friendNickname);
+                        meInf.setNickname(myNickname);
+                        friendInf.setNickname(friendNickname);
+                    }
                 }
             });
         }

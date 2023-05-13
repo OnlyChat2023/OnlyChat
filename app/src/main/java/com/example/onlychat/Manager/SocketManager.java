@@ -104,6 +104,12 @@ public class SocketManager {
         }
     }
 
+    public static void deleteMessage(String chat_id,String message_id){
+        if(socket != null){
+            socket.emit("deleteMessage",chat_id,message_id);
+        }
+    }
+
     public static void deleteFriend(String id, UserModel user){
         if(socket != null){
             socket.emit("deleteFriend",id,new Gson().toJson(user));

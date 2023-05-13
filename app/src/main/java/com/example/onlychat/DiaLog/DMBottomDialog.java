@@ -1,6 +1,7 @@
 package com.example.onlychat.DiaLog;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.onlychat.DirectMessage.ChattingActivity;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
 import com.example.onlychat.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -45,6 +47,8 @@ public class DMBottomDialog extends BottomSheetDialogFragment {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ChattingActivity.deleteChat(id);
+                Log.i("DM bottom dialog", Integer.toString(id));
                 dismiss();
             }
         });

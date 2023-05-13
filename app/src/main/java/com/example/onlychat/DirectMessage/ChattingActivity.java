@@ -75,10 +75,10 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     EditText chatMessage;
     ListView chatContent;
     static RelativeLayout chatLayout;
-    RoomModel userInf;
+    static RoomModel userInf;
     GlobalPreferenceManager pref;
     UserModel myInfo;
-    MessageReceive adapter;
+    static MessageReceive adapter;
     ArrayList<Uri> arrayList = new ArrayList<>();
     RecyclerView recyclerView;
     MainAdp mainAdapter;
@@ -363,9 +363,37 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
         waitSetNickname();
         waitBlock();
         waitUnblock();
+        waitDeleteMessage();
     }
 
+    public static void waitDeleteMessage(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitDeleteMessage", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    chatLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(userInf.get_id().equals(args[0])){
+                                for(int i=0;i<userInf.getMessages().size();i++){
+                                    if(userInf.getMessages().get(i).getId().equals(args[1])){
+                                        userInf.getMessages().remove(i);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    }
 
+    public static void deleteChat(int i){
+        SocketManager.getInstance();
+        SocketManager.deleteMessage(userInf.get_id(),userInf.getMessages().get(i).getId());
+    }
 
     public static void waitBlock(){
         SocketManager.getInstance();
@@ -374,7 +402,6 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                 @Override
                 public void call(Object... args) {
                     if(!me_id.equals(args[0])){
-                        Log.i("Sao khong block", "call========= " + me_id.equals(args[0]));
                         chatLayout.post(new Runnable() {
                         @Override
                         public void run() {
@@ -386,7 +413,6 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                         });
                     }
                     else{
-                        Log.i("Sao khong block", "call========= " + me_id.equals(args[0]));
                         chatLayout.post(new Runnable() {
                             @Override
                             public void run() {
@@ -408,7 +434,6 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
             SocketManager.getSocket().on("waitUnblock", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    Log.i("Sao khong unblockkkkkkkkkkkkkkkkkkkkkkk", "call========= ");
                     chatLayout.post(new Runnable() {
                         @Override
                         public void run() {
@@ -442,11 +467,10 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
             SocketManager.getSocket().on("waitSetNickname", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
+                    if(userInf.getId().equals(args[2])){
                     String myNickname = (String) args[0];
                     String friendNickname = (String) args[1];
 
-                    Log.i("chatting activity", myNickname);
-                    Log.i("chatting activity", friendNickname);
                     txtName.post(new Runnable() {
                         @Override
                         public void run() {
@@ -455,6 +479,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                             my_nick_name = myNickname;
                         }
                     });
+                    }
                 }
             });
         }
@@ -602,13 +627,21 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                                     userInf.getMessages().get(position).setId(message.getId());
                                     userInf.getMessages().get(position).setTime(message.getTime());
                                 }
-
                                 userInf.getMessages().get(position).setId(message.getId());
                                 userInf.getMessages().get(position).setTime(message.getTime());
                             } else {
+                                if (position > userInf.getMessages().size() - 1) {
 
-                                userInf.pushMessage(message);
-                                adapter.notifyDataSetChanged();
+                                    userInf.pushMessage(message);
+                                    adapter.notifyDataSetChanged();
+                                }
+                                else {
+                                    userInf.getMessages().get(position).setId(message.getId());
+                                    userInf.getMessages().get(position).setTime(message.getTime());
+                                }
+
+//                                userInf.pushMessage(message);
+//                                adapter.notifyDataSetChanged();
 
                                 chatContent.setSelection(adapter.getCount() - 1);
                                 chatContent.smoothScrollToPosition(adapter.getCount() - 1);

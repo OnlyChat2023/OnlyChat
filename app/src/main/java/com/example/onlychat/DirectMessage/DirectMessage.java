@@ -65,7 +65,7 @@ public class DirectMessage extends Fragment {
     ListView listChat;
     EditText main_content_searchbox;
 
-    ImageView delete;
+    static ImageView delete;
     private ProgressBar progressBar;
     private TextView loading;
     static CustomChatItem customChatItem;
@@ -376,9 +376,41 @@ public class DirectMessage extends Fragment {
         });
         waitBlock();
         waitUnblock();
+        waitDeleteMessage();
         return globalChat;
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void waitDeleteMessage(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitDeleteMessage", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    delete.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(RoomModel rm:roomModels){
+                                boolean fl = false;
+                                if(rm.getId().equals(args[0])){
+                                    for(int i=0;i<rm.getMessages().size();i++){
+                                        if(rm.getMessages().get(i).getId().equals(args[1])){
+                                            rm.getMessages().remove(i);
+                                            fl= true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if(fl) break;
+                            }
+                            customChatItem.notifyDataSetChanged();
+                        }
+                    });
+
+                }
+            });
+        }
+    }
 
     public void waitBlock(){
         SocketManager.getInstance();
