@@ -223,6 +223,9 @@ io.on('connection', (socket) => {
 
             DirectMessage.chats.push(messageModal);
             await DirectMessage.save();
+            let dmRoom = await directChat.findById(room_id)
+            let lastChat = dmRoom.chats[dmRoom.chats.length - 1]
+            io.sockets.in(socket.room).emit('messageListener', lastChat, position, { ...send_user, token: '' });
         }
         else if (socket.channel === 'group_chat') {
             messageModal = {
@@ -660,6 +663,7 @@ io.on('connection', (socket) => {
         }
     })
 
+
     socket.on('removeRequestAddFriend', async (id, user) => {
         const _user = JSON.parse(user)
         let u = await User.findOne({ _id: _user._id })
@@ -733,6 +737,18 @@ io.on('connection', (socket) => {
         io.to(basket[user_id]).emit("waitUnblock", user_id, dmRoom.id);
 
         await u.save()
+    })
+
+    socket.on('deleteMessage', async (chat_id, message_id) => {
+        console.log(chat_id)
+        console.log(message_id)
+        const dmRoom = await directChat.findById(chat_id)
+        dmRoom.chats.splice(dmRoom.chats.findIndex(val => val._id.toString() === message_id), 1)
+
+        for (let i of dmRoom.members) {
+            io.to(basket[i.user_id]).emit("waitDeleteMessage", chat_id, message_id);
+        }
+        dmRoom.save()
     })
 
     socket.on("addNewAvatarToServer", async (avtImage, user) => {
