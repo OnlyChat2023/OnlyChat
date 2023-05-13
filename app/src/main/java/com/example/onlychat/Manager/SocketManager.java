@@ -261,4 +261,22 @@ public class SocketManager {
             socket.emit("seenMessage", roomID, channel, user_id);
         }
     }
+
+    public static void uploadAvatarChat(String channel, String avt, String groupID) {
+        if (socket != null) {
+            socket.emit("uploadChatAvatar", channel, "data:image/png;base64," + avt, groupID);
+        }
+    }
+
+    public static void uploadDoneChatAvatar(ProfileReceiver listener) {
+        if (socket != null) {
+            socket.on("uploadDoneChatAvatar", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    String new_filename = (String) args[0];
+                    listener.onSuccess(new_filename);
+                }
+            });
+        }
+    }
 }

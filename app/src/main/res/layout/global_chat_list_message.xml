@@ -44,11 +44,10 @@
                 android:layout_centerInParent="true"
                 android:layout_marginRight="12dp"
                 android:layout_toRightOf="@id/backButton"
-                app:shapeAppearanceOverlay="@style/roundedImagesStyle"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                app:strokeColor="@null"
-                />
+                app:shapeAppearanceOverlay="@style/roundedImagesStyle"
+                app:strokeColor="@null" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

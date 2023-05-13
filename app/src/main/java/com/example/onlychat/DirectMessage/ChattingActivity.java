@@ -39,6 +39,7 @@ import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.MessageListener;
+import com.example.onlychat.Interfaces.ProfileReceiver;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
@@ -581,7 +582,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     public void initSocket() {
         SocketManager.getInstance();
         SocketManager.joinRoom(userInf.getId() + "::" + "direct_message", myInfo);
-
+        
         SocketManager.waitMessage(new MessageListener() {
             @Override
             public void onMessage(MessageModel message, int position) {

@@ -481,11 +481,14 @@ public class DirectMessage extends Fragment {
                             boolean found = false;
                             for (RoomModel new_room : rooms) {
                                 if (old_room.getId().equals(new_room.getId())) {
-                                    old_room.setMessages(new_room.getMessages());
-                                    old_room.setAvatar(new_room.getAvatar());
-                                    old_room.setName(new_room.getName());
-                                    old_room.setOptions(new_room.getOptions());
-//                                    old_room.setSeenUser(new_room.getSeenUser());
+                                    if (old_room.getUpdate_time() != new_room.getUpdate_time()) {
+                                        old_room.setMessages(new_room.getMessages());
+                                        old_room.setAvatar(new_room.getAvatar());
+                                        old_room.setBitmapAvatar(null);
+                                        old_room.setName(new_room.getName());
+                                        old_room.setOptions(new_room.getOptions());
+//                                        old_room.setSeenUser(new_room.getSeenUser());
+                                    }
                                     found = true;
                                     founded.add(new_room.getId());
                                     break;

@@ -468,7 +468,12 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     public void initSocket() {
         SocketManager.getInstance();
         SocketManager.joinRoom(roomModel.getId() + "::" + channel, myInfo);
-
+        SocketManager.uploadDoneChatAvatar(new ProfileReceiver() {
+            @Override
+            public void onSuccess(String avt) {
+                new HttpManager.GetImageFromServer(chatImage).execute(avt);
+            }
+        });
         SocketManager.waitMessage(new MessageListener() {
             @Override
             public void onMessage(MessageModel message, int position) {
