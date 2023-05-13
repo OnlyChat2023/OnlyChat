@@ -330,7 +330,7 @@ public class Profile extends AppCompatActivity {
                 }
                 else{
                     SocketManager.getInstance();
-                    SocketManager.unblockFriend(user.get_id(),myInfo);
+                    SocketManager.unblockFriend(user.get_id(),myInfo.get_id());
                     isFriend = 0;
                     isBlock = 0;
                     information.setVisibility(View.VISIBLE);

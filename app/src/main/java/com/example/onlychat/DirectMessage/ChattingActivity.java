@@ -10,6 +10,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -66,14 +67,14 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class ChattingActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
     ImageView imgAvatar, btnFile, btnImage, btnIcon, btnSend;
-    String me_id;
+    static String me_id;
     View gap;
     Button btnBack, btnSetting;
     static TextView txtName;
     TextView txtOnline;
     EditText chatMessage;
     ListView chatContent;
-    RelativeLayout chatLayout;
+    static RelativeLayout chatLayout;
     RoomModel userInf;
     GlobalPreferenceManager pref;
     UserModel myInfo;
@@ -84,8 +85,8 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     int position;
     boolean change = false;
     ImageModel myModel;
-    RelativeLayout blockLayout;
-    TextView txtBlockLayout;
+    static RelativeLayout blockLayout;
+    static TextView txtBlockLayout;
     int OPTION = 1;
     Integer CHANGENOTIFY = -7;
     Integer CHANGEBLOCK = -8;
@@ -95,6 +96,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     static String friend_nick_name="";
     static String my_nick_name="";
     boolean update = true;
+    static Member friendssss;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,20 +145,20 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
         txtOnline.setText("Online");
         txtOnline.setTextColor(getResources().getColor(R.color.online_green));
 
+
         //Set block
         if (userInf.getOptions().getBlock()){
             chatLayout.setVisibility(View.INVISIBLE);
             blockLayout.setVisibility(View.VISIBLE);
             txtBlockLayout.setText("Your chatting feature is blocked");
         }else{
-            Member friendssss = new Member("", "", "", "");
+            friendssss = new Member("", "", "", "");
             for (Member mem : userInf.getOptions().getMembers()){
                 if (!mem.getUser_id().equals(me_id)){
                     friendssss = mem;
                     break;
                 }
             }
-
             new HttpManager(blockLayout.getContext()).getBlockDM(friendssss.getUser_id(), userInf.getId(), new HttpResponse() {
                 @Override
                 public void onSuccess(JSONObject response) throws JSONException, InterruptedException {
@@ -359,18 +361,69 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
 
         initSocket();
         waitSetNickname();
+        waitBlock();
+        waitUnblock();
+    }
+
+
+
+    public static void waitBlock(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitBlock", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    if(!me_id.equals(args[0])){
+                        Log.i("Sao khong block", "call========= " + me_id.equals(args[0]));
+                        chatLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                                chatLayout.setVisibility(View.INVISIBLE);
+                                blockLayout.setVisibility(View.VISIBLE);
+                                txtBlockLayout.setText("Your chatting feature is blocked");
+                                txtBlockLayout.setTextColor(Color.parseColor("#B10000"));
+                            }
+                        });
+                    }
+                    else{
+                        Log.i("Sao khong block", "call========= " + me_id.equals(args[0]));
+                        chatLayout.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                chatLayout.setVisibility(View.INVISIBLE);
+                                blockLayout.setVisibility(View.VISIBLE);
+                                txtBlockLayout.setText("You blocked chatting feature");
+                                txtBlockLayout.setTextColor(Color.parseColor("#8DF054"));
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    public static void waitUnblock(){
+        SocketManager.getInstance();
+        if(SocketManager.getSocket() !=null){
+            SocketManager.getSocket().on("waitUnblock", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Log.i("Sao khong unblockkkkkkkkkkkkkkkkkkkkkkk", "call========= ");
+                    chatLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            chatLayout.setVisibility(View.VISIBLE);
+                            blockLayout.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-//        for (Member mem : this.userInf.getOptions().getMembers()) {
-//            if (!mem.getId().equals(me_id)) {
-//                txtName.setText(mem.getNickname());
-//                break;
-//            }
-//        }
     }
 
     public void setNickname(String frNN, String meNN) {

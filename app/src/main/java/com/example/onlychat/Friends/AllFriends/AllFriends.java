@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.onlychat.DirectMessage.Option.OptionActivity;
 import com.example.onlychat.Friends.Friends;
 import com.example.onlychat.GlobalChat.CustomChatItem;
 import com.example.onlychat.GlobalChat.MessageBottomDialogFragment;
@@ -218,7 +219,7 @@ public class AllFriends extends Fragment {
 
     public static void blockFriend(int i){
         SocketManager.getInstance();
-        SocketManager.blockFriend(friend_list.get(i).get_id(),myInfo);
+        SocketManager.blockFriend(friend_list.get(i).get_id(),myInfo.get_id());
 
         friendBottomDialogFragment.dismiss();
         friend_list.remove(i);
