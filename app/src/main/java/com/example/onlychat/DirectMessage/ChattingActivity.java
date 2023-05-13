@@ -91,10 +91,11 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
     Integer CHANGENOTIFY = -7;
     Integer CHANGEBLOCK = -8;
     Integer CHANGEFRNN = 5;
-    Integer CHANGEMENN = 6;
+    Integer CHANGEMENN = 6, DELETEDM = 7;
 
     static String friend_nick_name="";
     static String my_nick_name="";
+    boolean update = true;
     static Member friendssss;
 
     @Override
@@ -515,6 +516,12 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
                 }
             }
         }
+
+        if (resultCode == DELETEDM && data != null){
+            update = false;
+            finish();
+        }
+
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == FilePickerConst.REQUEST_CODE_PHOTO) {
                 ArrayList<Uri> images = data.getParcelableArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA);
@@ -668,7 +675,7 @@ public class ChattingActivity extends AppCompatActivity implements EasyPermissio
             output.putExtra("LastMessage", message);
             output.putExtra("LastTime", lastMessage.getTime());
         }
-        output.putExtra("Update", true);
+        output.putExtra("Update", update);
 
         setResult(RESULT_OK, output);
 

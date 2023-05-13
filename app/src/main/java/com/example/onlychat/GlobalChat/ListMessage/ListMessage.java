@@ -101,9 +101,10 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
     String typeChat;
     int FINISH = -5;
     int UPDATEOPTION = -6;
-    int ADDMEMBER = -7;
+    int ADDMEMBER = -7, DELETEGR = 7;
     String channel;
     boolean notifyUpdate = false;
+    boolean update = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -378,6 +379,12 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
         if (resultCode == FINISH){
             finish();
         }
+
+        if (resultCode == DELETEGR && data != null) {
+            update = false;
+            finish();
+        }
+
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == FilePickerConst.REQUEST_CODE_PHOTO) {
                 ArrayList<Uri> images = data.getParcelableArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA);
@@ -514,7 +521,7 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
             output.putExtra("LastMessage", message);
             output.putExtra("LastTime", lastMessage.getTime());
         }
-        output.putExtra("Update", true);
+        output.putExtra("Update", update);
 
         setResult(RESULT_OK, output);
 
