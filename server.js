@@ -119,7 +119,7 @@ io.on('connection', (socket) => {
         if (socket.channel) {
             socket.channel = null;
         }
-
+        
         const [roomId, channel] = roomInfo.split('::');
 
         socket.room = roomId;
@@ -791,6 +791,27 @@ io.on('connection', (socket) => {
             messages: [{ role: "user", content: "Hello world" }],
         });
         console.log(completion.data.choices[0].message);
+    })
+    socket.on("uploadChatAvatar", async (channel, avatarImage, groupID) => {
+
+        const new_filename = await saveBase64Image(avatarImage, `assets/avatar/${channel}/${groupID}`);
+
+        if (channel === 'direct_message') {
+
+            const myDMChat = await directChat.findOne({ _id: groupID });
+
+            myDMChat.avatar = new_filename.replace('assets/', '');
+            await myDMChat.save();
+        }
+        else if (channel === 'group_chat') {
+
+            const myGroupChat = await groupChat.findOne({ _id: groupID });
+
+            myGroupChat.avatar = new_filename.replace('assets/', '');
+            await myGroupChat.save();
+        }
+
+        io.sockets.in(groupID).emit("uploadDoneChatAvatar", new_filename.replace('assets/', ''));
     })
 });
 
