@@ -151,7 +151,12 @@ public class ListMessage extends AppCompatActivity implements EasyPermissions.Pe
             enclose.setVisibility(View.GONE);
             image.setVisibility(View.GONE);
             icon.setVisibility(View.GONE);
+            memberNumber.setVisibility(View.GONE);
         }
+
+        if (typeChat.equals("globalChat"))
+            memberNumber.setVisibility(View.GONE);
+
 
 //        loadAvatar();
 

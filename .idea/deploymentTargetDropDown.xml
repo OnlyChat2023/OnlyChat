@@ -1,33 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="deploymentTargetDropDown">
-<<<<<<< HEAD
-    <targetSelectedWithDropDown>
-=======
-<<<<<<< HEAD
-    <targetSelectedWithDropDown>
-=======
     <runningDeviceTargetSelectedWithDropDown>
->>>>>>> 65566ee421d10abf1389809c1edf003a60c40b12
       <Target>
-        <type value="QUICK_BOOT_TARGET" />
+        <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="$USER_HOME$/.android/avd/Pixel_6_Pro_API_33.avd" />
+            <type value="SERIAL_NUMBER" />
+            <value value="RF8N403FADH" />
           </Key>
         </deviceKey>
       </Target>
-    </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2023-05-13T10:22:17.362603Z" />
+    </runningDeviceTargetSelectedWithDropDown>
+    <timeTargetWasSelectedWithDropDown value="2023-05-13T13:44:12.075831900Z" />
     <multipleDevicesSelectedInDropDown value="true" />
     <runningDeviceTargetsSelectedWithDialog>
       <Target>
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="$USER_HOME$/.android/avd/Pixel_6_Pro_API_33.avd" />
+            <type value="SERIAL_NUMBER" />
+            <value value="RF8N8033BVM" />
           </Key>
         </deviceKey>
       </Target>
@@ -36,27 +29,10 @@
         <deviceKey>
           <Key>
             <type value="SERIAL_NUMBER" />
-            <value value="adb-RF8N403FADH-oEdk8B._adb-tls-connect._tcp." />
+            <value value="RF8N403FADH" />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetsSelectedWithDialog>
-    <targetsSelectedWithDialog>
->>>>>>> fba2446667dbcc076bfe5579303f0e43c7e9feae
-      <Target>
-        <type value="QUICK_BOOT_TARGET" />
-        <deviceKey>
-          <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-<<<<<<< HEAD
-            <value value="C:\Users\WGMin\.android\avd\Pixel_6_Pro_API_30.avd" />
-=======
-            <value value="$USER_HOME$/.android/avd/Pixel_6_Pro_API_33.avd" />
->>>>>>> fba2446667dbcc076bfe5579303f0e43c7e9feae
-          </Key>
-        </deviceKey>
-      </Target>
-    </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2023-05-13T10:15:04.705720400Z" />
   </component>
 </project>
