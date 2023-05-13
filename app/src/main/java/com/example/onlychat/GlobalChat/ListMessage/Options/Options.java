@@ -1,15 +1,19 @@
 package com.example.onlychat.GlobalChat.ListMessage.Options;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DialogFragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +24,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,14 +32,17 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.onlychat.Async.ConvertImage;
 import com.example.onlychat.DiaLog.BasicDialog;
 import com.example.onlychat.DiaLog.ChangeGroupNameDialog;
 import com.example.onlychat.DiaLog.ChangeNickNameDialog;
 import com.example.onlychat.DirectMessage.ChattingActivity;
 import com.example.onlychat.DirectMessage.DirectMessage;
+import com.example.onlychat.EditProfile.EditProfile;
 import com.example.onlychat.GlobalChat.ListMessage.ListMessage;
 import com.example.onlychat.GroupChat.AddMember;
 import com.example.onlychat.GroupChat.GroupChat;
+import com.example.onlychat.Interfaces.ConvertListener;
 import com.example.onlychat.Interfaces.HttpResponse;
 import com.example.onlychat.Interfaces.Member;
 import com.example.onlychat.Interfaces.RoomOptions;
@@ -42,6 +50,7 @@ import com.example.onlychat.MainScreen.MainScreen;
 import com.example.onlychat.Manager.GlobalPreferenceManager;
 import com.example.onlychat.Manager.HttpManager;
 import com.example.onlychat.Manager.SocketManager;
+import com.example.onlychat.Model.ImageModel;
 import com.example.onlychat.Model.UserModel;
 import com.example.onlychat.Profile.Profile;
 import com.example.onlychat.R;
@@ -72,7 +81,7 @@ public class Options extends AppCompatActivity {
     static TextView name;
     TextView memberNumbers;
     ImageView avatar;
-    ImageView notify_icon;
+    ImageView notify_icon, upImgBtn;
     ImageView pencil_icon;
     TextView notify_txt;
     RoomOptions options;
@@ -115,6 +124,7 @@ public class Options extends AppCompatActivity {
         notify = (RelativeLayout) findViewById(R.id.global_notify);
         notify_txt = (TextView) findViewById(R.id.notify_txt);
         notify_icon = (ImageView) findViewById(R.id.imageView14);
+        upImgBtn = (ImageButton) findViewById(R.id.up_image_btn);
 //        pencil_icon = (ImageView) findViewById(R.id.pencil_ic);
         group_name = (RelativeLayout) findViewById(R.id.group_name_layout);
         delete = (RelativeLayout) findViewById(R.id.global_delete);
@@ -505,6 +515,14 @@ public class Options extends AppCompatActivity {
             }
         });
 
+        upImgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent iGallery = new Intent(Intent.ACTION_PICK);
+                iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(iGallery, 1000);
+            }
+        });
         waitSetGroupName();
     }
 
@@ -562,6 +580,53 @@ public class Options extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if(requestCode == 1000){
+//                img_in_phone = String.valueOf(data.getData());
+                avatar.setImageURI(data.getData());
+
+                ArrayList<Uri> avt = new ArrayList<>();
+                avt.add(data.getData());
+
+                new ConvertImage(this, avt, new ConvertListener() {
+
+                    @Override
+                    public void onSuccess(ImageModel result) {
+                        ArrayList<String> myAvt = result.getImagesListStr();
+                        String avtBase64 = myAvt.get(0);
+
+                        String channel = (typeChat.equals("groupChat")) ? "group_chat" : "global_chat";
+                        SocketManager.getInstance();
+                        SocketManager.uploadAvatarChat(channel, avtBase64, GroupID);
+                        avatar.setImageBitmap(result.getImagesBM().get(0));
+                    }
+
+                    @Override
+                    public void onDownloadSuccess(ArrayList<Bitmap> result) {
+
+                    }
+                }).execute();
+            }
+        }
+    }
+
+//    public static void waitSetGroupName(){
+//        SocketManager.getInstance();
+//        if(SocketManager.getSocket() !=null){
+//            SocketManager.getSocket().on("waitSetGroupName", new Emitter.Listener() {
+//                @Override
+//                public void call(Object... args) {
+//                    String newGroupName = (String) args[0];
+//
+//                    Log.i("vvvvvvvvvvvvvvvvvvv", newGroupName);
+//                    name.setText(newGroupName);
+//                }
+//            });
+//        }
+//    }
 
     public class ImageAdapterGridView extends BaseAdapter {
         private Context mContext;

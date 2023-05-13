@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="deploymentTargetDropDown">
+<<<<<<< HEAD
     <targetSelectedWithDropDown>
+=======
+<<<<<<< HEAD
+    <targetSelectedWithDropDown>
+=======
+    <runningDeviceTargetSelectedWithDropDown>
+>>>>>>> 65566ee421d10abf1389809c1edf003a60c40b12
       <Target>
         <type value="QUICK_BOOT_TARGET" />
         <deviceKey>
@@ -35,15 +42,21 @@
       </Target>
     </runningDeviceTargetsSelectedWithDialog>
     <targetsSelectedWithDialog>
+>>>>>>> fba2446667dbcc076bfe5579303f0e43c7e9feae
       <Target>
         <type value="QUICK_BOOT_TARGET" />
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
+<<<<<<< HEAD
+            <value value="C:\Users\WGMin\.android\avd\Pixel_6_Pro_API_30.avd" />
+=======
             <value value="$USER_HOME$/.android/avd/Pixel_6_Pro_API_33.avd" />
+>>>>>>> fba2446667dbcc076bfe5579303f0e43c7e9feae
           </Key>
         </deviceKey>
       </Target>
-    </targetsSelectedWithDialog>
+    </targetSelectedWithDropDown>
+    <timeTargetWasSelectedWithDropDown value="2023-05-13T10:15:04.705720400Z" />
   </component>
 </project>
