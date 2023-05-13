@@ -60,21 +60,21 @@ const saveBase64Image = async (dataString, filename) => {
 }
 
 const updateSeenMessage = async (socket, channel, roomId, userID) => {
-    if (channel === 'direct_message') {        
+    if (channel === 'direct_message') {
         const DirectMess = await directChat.findOne({ _id: roomId });
 
         if (DirectMess && DirectMess.chats && DirectMess.chats.length > 0) {
             const lastIndex = DirectMess.chats.length - 1;
             const seenedUser = DirectMess.chats[lastIndex].seen_user.indexOf(userID);
-            
+
             if (seenedUser < 0) {
                 DirectMess.chats[lastIndex].seen_user.push(userID);
-               
+
                 const members = DirectMess.members;
                 for (const member of members)
                     socket.to(basket[member.user_id]).emit('seenMessageListener', roomId, DirectMess.chats[lastIndex].seen_user);
-                
-                await DirectMess.save();
+
+                await DirectMess.updateOne({ seen_user: DirectMess.chats[lastIndex].seen_user });
             }
         }
     }
@@ -84,15 +84,15 @@ const updateSeenMessage = async (socket, channel, roomId, userID) => {
         if (GroupChat && GroupChat.chats && GroupChat.chats.length > 0) {
             const lastIndex = GroupChat.chats.length - 1;
             const seenedUser = GroupChat.chats[lastIndex].seen_user.indexOf(userID);
-            
+
             if (seenedUser < 0) {
                 GroupChat.chats[lastIndex].seen_user.push(userID);
-               
+
                 const members = GroupChat.members;
                 for (const member of members)
                     socket.to(basket[member.user_id]).emit('seenMessageListener', roomId, GroupChat.chats[lastIndex].seen_user);
-                
-                await GroupChat.save();
+
+                await GroupChat.updateOne({ seen_user: GroupChat.chats[lastIndex].seen_user });
             }
         }
     }
@@ -184,6 +184,11 @@ io.on('connection', (socket) => {
 
             const DirectMessage = await directChat.findOne({ _id: socket.room });
 
+            let nickname = '';
+            for (const member of DirectMessage.members)
+                if (member.user_id === send_user._id.toString())
+                    nickname = member.nickname;
+
             for (const member of DirectMessage.members) {
                 if (member.user_id.toString() === send_user._id.toString()) continue;
 
@@ -196,8 +201,8 @@ io.on('connection', (socket) => {
                     if (user.notify.length > 0) {
                         const messages = {
                             data: {
-                                name: send_user.nickname,
-                                message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
+                                name: nickname,
+                                message: nickname + ": " + Buffer.from(message, 'utf-8').toString()
                             },
                             tokens: user.notify
                         };
@@ -225,13 +230,18 @@ io.on('connection', (socket) => {
                 user_id: send_user._id,
                 imges: [],
                 avatar: send_user.avatar,
-                nickname: send_user.nickname,
+                nickname: send_user.name,
                 seen_user: [send_user._id],
                 time: new Date()
             }
             io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
 
             const GroupChat = await groupChat.findOne({ _id: socket.room });
+
+            let nickname = '';
+            for (const member of GroupChat.members)
+                if (member.user_id === send_user._id.toString())
+                    nickname = member.nickname;
 
             for (const member of GroupChat.members) {
 
@@ -246,8 +256,8 @@ io.on('connection', (socket) => {
                     if (user.notify.length > 0) {
                         const messages = {
                             data: {
-                                name: send_user.nickname,
-                                message: send_user.nickname + ": " + Buffer.from(message, 'utf-8').toString()
+                                name: nickname,
+                                message: nickname + ": " + Buffer.from(message, 'utf-8').toString()
                             },
                             tokens: user.notify
                         };
@@ -386,6 +396,11 @@ io.on('connection', (socket) => {
 
             const DirectMessage = await directChat.findOne({ _id: socket.room });
 
+            let nickname = '';
+            for (const member of DirectMessage.members)
+                if (member.user_id === send_user._id.toString())
+                    nickname = member.nickname;
+
             for (const member of DirectMessage.members) {
 
                 if (member.user_id === send_user._id) continue;
@@ -399,8 +414,8 @@ io.on('connection', (socket) => {
                     if (user.notify.length > 0) {
                         const messages = {
                             data: {
-                                name: send_user.nickname,
-                                message: send_user.nickname + ': Đã gửi hình ảnh'
+                                name: nickname,
+                                message: nickname + ': Đã gửi hình ảnh'
                             },
                             tokens: user.notify
                         };
@@ -426,13 +441,18 @@ io.on('connection', (socket) => {
                 user_id: send_user._id,
                 images: imagePath,
                 avatar: send_user.avatar,
-                nickname: send_user.nickname,
+                nickname: send_user.name,
                 send_user: [],
                 time: new Date()
             }
             io.sockets.in(socket.room).emit('messageListener', messageModal, position, { ...send_user, token: '' });
 
             const GroupChat = await groupChat.findOne({ _id: socket.room });
+
+            let nickname = '';
+            for (const member of GroupChat.members)
+                if (member.user_id === send_user._id.toString())
+                    nickname = member.nickname;
 
             for (const member of GroupChat.members) {
 
@@ -447,8 +467,8 @@ io.on('connection', (socket) => {
                     if (user.notify.length > 0) {
                         const messages = {
                             data: {
-                                name: send_user.nickname,
-                                message: send_user.nickname + ': Đã gửi hình ảnh'
+                                name: nickname,
+                                message: nickname + ': Đã gửi hình ảnh'
                             },
                             tokens: user.notify
                         };
@@ -532,13 +552,13 @@ io.on('connection', (socket) => {
     })
 
     socket.on('changeGroupName', async (chat_id, newGroupName) => {
-        let groupchat = await groupChat.findById(chat_id)
-        groupchat.name = newGroupName;
+        let group_chat = await groupChat.findById(chat_id)
+        group_chat.name = newGroupName;
 
-        // console.log(chat_id);
+        group_chat.members.map(val => io.to(basket[val.user_id]).emit("waitSetGroupName", newGroupName, chat_id))
 
-        socket.emit("waitSetGroupName", newGroupName, chat_id);
-        await groupchat.save()
+        // socket.emit("waitSetGroupName", newGroupName, chat_id);
+        await group_chat.save()
     })
 
     socket.on('acceptRequestAddFriend', async (id, user) => {
@@ -661,28 +681,56 @@ io.on('connection', (socket) => {
         await f.save()
     })
 
-    socket.on('blockFriend', async (id, user) => {
-        const _user = JSON.parse(user)
-        let u = await User.findOne({ _id: _user._id })
+    socket.on('blockFriend', async (id, user_id) => {
+        let u = await User.findOne({ _id: user_id })
         u.friend.splice(u.friend.indexOf(id), 1)
         let f = await User.findOne({ _id: id })
-        f.friend.splice(f.friend.indexOf(_user._id), 1)
+        f.friend.splice(f.friend.indexOf(user_id), 1)
 
-        io.to(basket[id]).emit("waitDeleteFriend", _user._id);
+
+        // io.to(basket[user_id]).emit("waitMeBlockFriend", id);
 
         u.block.push(id)
+        let dmRoom
+
+        for (let i of u.directmessage_channel) {
+            let dmId = f.directmessage_channel.filter(val => val.message_id === i.message_id)
+            if (dmId.length > 0) {
+                dmRoom = await directChat.findById(dmId[0].message_id)
+                dmRoom.options.filter(val => val.user_id !== user_id)[0].block = true
+                await dmRoom.save()
+                break
+            }
+        }
+        io.to(basket[id]).emit("waitDeleteFriend", user_id);
+        io.to(basket[id]).emit("waitBlock", user_id, dmRoom.id);
+        io.to(basket[user_id]).emit("waitBlock", user_id, dmRoom.id);
 
         await u.save()
         await f.save()
     })
 
-    socket.on('unblockFriend', async (id, user) => {
-        const _user = JSON.parse(user)
-        let u = await User.findOne({ _id: _user._id })
+    socket.on('unblockFriend', async (id, user_id) => {
+        let u = await User.findOne({ _id: user_id })
+        let f = await User.findOne({ _id: id })
 
-        // io.to(basket[id]).emit("waitUnblock", _user._id);
+
 
         u.block.splice(u.block.indexOf(id), 1)
+        let dmRoom
+
+        for (let i of u.directmessage_channel) {
+            let dmId = f.directmessage_channel.filter(val => val.message_id === i.message_id)
+            if (dmId.length > 0) {
+                dmRoom = await directChat.findById(dmId[0].message_id)
+                dmRoom.options.filter(val => val.user_id !== user_id)[0].block = false
+                await dmRoom.save()
+                break
+            }
+        }
+
+        io.to(basket[id]).emit("waitUnblock", user_id, dmRoom.id);
+        io.to(basket[user_id]).emit("waitUnblock", user_id, dmRoom.id);
 
         await u.save()
     })
